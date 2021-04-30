@@ -213,6 +213,7 @@
               base_url_count_base_url_searchDateRange:  API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
               base_url_count_base_url_searchByIdAndRangeDate : API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusTransit',
+              base_url_to_search_word_by_date_range : API_BASE_CONTROLLER + 'equipoController.php?equipo=metodoparacontarconlabusqueda',
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
