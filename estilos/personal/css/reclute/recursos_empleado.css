@@ -1,0 +1,851 @@
+/* INDICE */
+/* 1= LOGO */
+/* 2= MENU */
+/* 3= PRIMER TITULO */
+/* 4=TARGETAS  */
+/* 5=VACANTES DISPONIBLES */
+/* 6=INFORMACIÓN TARJETAS */
+/* 7= SI YA TE REGISTRASTE */
+/* 7= FOOTER */
+
+body{
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+   background: linear-gradient(0deg,#fff,#f5f5f5);
+  }
+  
+  .container-artisan{
+  
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  /* 1= LOGO */
+  .fondoimagen{
+     
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    background: white;
+    border-radius: 100%;
+    padding: 27vw 15vw 14vw 27vw ;
+    margin-top: -16vw ;
+    margin-left: 65vw ;
+    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+     
+  }
+  .logo-main{
+    display: none;
+  }
+  .logo-main-dos{
+    width: 21vw ;
+      position: absolute;
+      margin-top: -10.5vw;
+      margin-left: -19vw;
+  }
+  /* LOGO ++++END+++ */
+  
+  
+  /* 2= MENU */
+  .contenedordemenu
+  {
+    
+    display:none;
+    /*arriba  derecha abajo izquierda*/
+  }
+  
+  /* 2= MENU +++END+++ */
+  
+  
+  /* 3= PRIMER TITULO */
+  
+  
+  .titulo-escoger{
+    display: flex;
+  justify-content: center;  
+  text-align: center;
+    margin: 6rem 0 1rem 0
+  
+    }
+  
+   
+    .titulo-escoger h3 {
+  text-align: center;
+  color: #13aaf5;
+  font-weight: 645;
+    }
+  /* 3= PRIMER TITULO ++++END++++*/
+  
+  /* 4=TARGETAS  */
+  
+  .te-controlo-cartas-trabajo{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+  }
+  
+  
+  .containercarta{
+    position: relative;
+    color: rgb(15, 13, 13);
+    padding: 10px;
+    
+  }
+  .containercarta .cardcarta
+  {
+    position: relative;
+    width: 84vw;
+    min-height: 380px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  }
+  
+  .containercarta .cardcarta::before
+  {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+    clip-path: circle(150px at 80% 20%);
+    transition: 0.5s ease-in-out;
+  }
+  .containercarta .cardcarta:hover::before
+  {
+    clip-path: circle(300px at 80% 20%);
+  }
+  
+  .containercarta .cardcarta::after
+  {
+    content: 'Express';
+    position: absolute;
+    top: 57%;
+    left: 2%;
+    font-size: 5em;
+    font-weight: 800;
+    font-style: italic;
+    color: rgba(255,255,255,0.04);
+  }
+  .containercarta .cardcarta .imgBx
+  {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10000;
+    width: 100%;
+    height: 220px;
+    transition: 0.5s;
+  }
+  
+  .containercarta .cardcarta:hover .imgBx {
+    top: 0%;
+    transform: translateY(-10%); 
+    /* altura de rotacion */
+  
+  }
+  
+  .containercarta .cardcarta .imgBx img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) rotate(1deg);
+    width: 270px;
+  }
+  .containercarta .cardcarta .contentBx {
+  
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    transition: 1s;
+    z-index: 10;
+  }
+  
+  .containercarta .cardcarta:hover .contentBx
+  {
+    height: 210px;
+  }
+  
+  .containercarta .cardcarta .contentBx h2 {
+    position: relative;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: black;
+  }
+  .containercarta .cardcarta .contentBx .size,
+  .containercarta .cardcarta .contentBx .color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 20px;
+    transition: 0.5s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .containercarta .cardcarta:hover .contentBx .size{
+  
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.5s;
+  }
+  .containercarta .cardcarta:hover .contentBx .color{
+  
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0.6s;
+    }
+  .containercarta .cardcarta .contentBx .size h3,
+  .containercarta .cardcarta .contentBx .color h3 {
+    color: rgb(250, 250, 250);
+    font-weight: 300;
+    font-size: 16px;
+    position: relative;
+    top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: 10px;
+  
+  }
+  .containercarta .cardcarta .contentBx .size span {
+    width: 70px;
+    height: 26px;
+    text-align: center;
+    line-height: 26px;
+    font-size: 14px;
+    display: inline-block;
+    color: #111;
+    background: #fff;
+    margin: 0 5px;
+    color: #111;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .containercarta .cardcarta .contentBx .size span:hover
+  {
+    background: #232323;
+    color: white;
+  }
+  
+  .containercarta .cardcarta .contentBx .color span {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: -10px;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .containercarta .cardcarta .contentBx a
+  {
+   display: inline-block;
+   padding: 10px 20px;
+   background: #fff;
+   border-radius: 4px;
+   margin-top: 10px;
+   text-decoration: none;
+   font-weight: 600;
+   color: #111;
+   opacity: 0;
+   transform: translateY(50px);
+   transition: 0.3s;
+  }
+  .containercarta .cardcarta:hover .contentBx a {
+    opacity: 1;
+   transform: translateY(0px);
+   transition-delay: 0.75s;
+  }
+  
+  /* 4=TARGETAS ++++END++++  */
+  
+  
+  /* 6=INFORMACIÓN TARJETAS */
+  
+  .intro-area{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+   flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  
+       
+    }
+    
+    
+    .intro-block
+    {
+        position: relative;
+        background: #f7f7f7;
+        margin: 2rem auto;
+        text-align: center;
+        padding: 70px 25px 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.4);
+        transition: .2s;
+        width: 84vw;
+        
+    }
+    
+    .intro-block:hover, .intro-block.active
+    {
+        background: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  transform: scale(1.05);
+        
+    }
+    .intro-block:hover{ /*movimiento de la card */
+        transition: .6 ease;
+        -webkit-transition: .6 ease;
+        -moz-transition: .6 ease;
+        -o-transition: .6 ease;
+        -ms-transition: .6 ease;
+    }
+    .intro-block .intro-icon{ /*posicion del icono */
+        position: absolute;
+        top: -31px;
+        left: 50%;
+        margin-left: -31px;
+    }
+    .intro-block .fa {
+        width: 63px;
+        height: 63px;
+        font-size: 30px;
+        color: white;
+        line-height: 2;
+        background: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 10px #CCEEF9;
+    }
+    .intro-block .fas {
+        width: 63px;
+        height: 63px;
+        font-size: 30px;
+        color: white;
+        line-height: 2;
+        background: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 10px #CCEEF9;
+    }
+    
+    .intro-block:hover .fa , .intro-block.active .fa
+    {
+        background: white;
+        color: #212121;
+        box-shadow: 0px 0px 0px 10px #212121;
+        transition: .5s;
+    }
+    .intro-block:hover .fas , .intro-block.active .fas
+    {
+        background: white;
+        color: #212121;
+        box-shadow: 0px 0px 0px 10px #212121;
+        transition: .3s;
+    }
+    .intro-block h3 {
+        font-size: 18px;
+        color: #212121;
+        font-weight: 700;
+       
+        margin-bottom: 15px;
+        transition: .8s;
+    }
+    .intro-block p {
+        color: #212121;
+    }
+    .intro-block:hover h3, .intro-block:hover p
+    {
+        color: #f6f6f6;
+        transition: .8s;
+    }
+  
+  /* 6=INFORMACIÓN TARJETAS +++END++++ */
+  
+
+  /* SI YA TE REGISTRASTE COMPLETA */
+
+
+  .container-complete-info{
+
+padding: 0.1rem;
+display: flex;
+flex-direction: column;
+justify-content: center;
+margin: 0 auto 2rem auto;
+  }
+  .box-complete{
+
+    text-align: center;
+    transition: .5s;
+
+}
+  .texto-complete{
+      margin: 0.5rem auto;
+      padding: 0.5rem;
+    
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .fuente-texto{
+color: #000;
+font-weight: 500;
+  }
+  .boton-complete{
+      
+      text-align: center;
+      color: #2aa1f0;
+      padding: 0.4rem;
+      width: 50vw;
+      margin: auto;
+      border-radius: 10px;
+      font-weight: 500;
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+      transition: .5s;
+
+    }
+    .box-complete:hover,.boton-complete:hover {
+transform: scale(1.05);
+transition: .5s;
+      }
+
+
+  /* SI YA TE REGISTRASTE COMPLETA ***END** */
+  
+  
+  /*7= -----------------FOOTER------------------- */
+  
+  .site-footer {
+  background-color: #fff;
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
+  color: black;
+  font-weight: 500;
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+  }
+  .site-footer hr {
+  border-top-color: black;
+  opacity: 0.5;
+  }
+  .site-footer hr.small {
+  margin: 20px 0;
+  }
+  .site-footer h6 {
+  color: black;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 2px;
+  }
+  .site-footer a {
+  color: black;
+  font-weight: 500;
+  }
+  .site-footer a:hover {
+  color: #3366cc;
+  text-decoration: none;
+  }
+  .footer-links {
+  padding-left: 0;
+  list-style: none;
+  }
+  .footer-links li {
+  display: block;
+  }
+  .footer-links a {
+  color: black;
+  font-weight: 500;
+  }
+  .footer-links a:active,
+  .footer-links a:focus,
+  .footer-links a:hover {
+  color: #3366cc;
+  text-decoration: none;
+  }
+  .footer-links.inline li {
+  display: inline-block;
+  }
+  .site-footer .social-icons {
+  text-align: right;
+  }
+  .site-footer .social-icons a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 6px;
+  margin-right: 0;
+  border-radius: 100%;
+  background-color: #33353d;
+  }
+  .copyright-text {
+  margin: 0;
+  }
+  
+  @media (max-width: 991px) {
+  .site-footer [class^="col-"] {
+    margin-bottom: 30px;
+  }
+  }
+  @media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 0;
+  }
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center;
+  }
+  }
+  .social-icons {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  }
+  .social-icons li {
+  display: inline-block;
+  margin-bottom: 4px;
+  }
+  .social-icons li.title {
+  margin-right: 15px;
+  text-transform: uppercase;
+  color: black;
+  font-weight: 700;
+  font-size: 13px;
+  }
+  .social-icons a {
+  background-color: black;
+  color: black;
+  font-size: 16px;
+  display: inline-block;
+  line-height: 44px;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-right: 8px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  }
+  .social-icons a:active,
+  .social-icons a:focus,
+  .social-icons a:hover {
+  color: black;
+  background-color: #29aafe;
+  }
+  .social-icons.size-sm a {
+  line-height: 34px;
+  height: 34px;
+  width: 34px;
+  font-size: 14px;
+  }
+  .social-icons a.facebook:hover {
+  background-color: #3b5998;
+  }
+  .social-icons a.twitter:hover {
+  background-color: #00aced;
+  }
+  .social-icons a.linkedin:hover {
+  background-color: #007bb6;
+  }
+  .social-icons a.dribbble:hover {
+  background-color: #ea4c89;
+  }
+  @media (max-width: 767px) {
+  .social-icons li.title {
+    display: block;
+    margin-right: 0;
+    font-weight: 600;
+  }
+  }
+  
+  @media (min-width:768px){
+  
+  /* 1= LOGO */
+  
+  .logo-main{
+    display: block;
+    width: 19vw;
+   
+  }
+  .fondoimagen{
+    
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    background: 0;
+    border-radius: 0;
+    padding:0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    transform: translateX(35%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+     
+  
+  
+  /* 1= LOGO +++END+++ */
+  
+  
+  /* 2= MENU */
+  
+  .contenedordemenu
+  {
+  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  
+  background: transparent;
+  z-index: 500;
+  transform: translateY(10%);
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  .contenedordemenu li {
+  
+  list-style-type: none;
+  display: inline-block;
+  }
+  .fondocirculodelicono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:3.2rem !important;
+  height: 3rem !important;
+  border-radius: 20px;
+  background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+  /* background: #f44336; */
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+  font-size: 1.8rem !important;
+  }
+  
+  .textoicono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #212121;
+  font-size: 1.1rem !important;
+  }
+  
+  .adm {
+  background: #EF4848;
+  }
+  
+  /* 2= MENU  +++END++++ */
+  
+  /* 3= PRIMER TITULO */
+  .titulo-escoger{
+    margin: 0 0 1rem 0;
+  }
+  /* 3= PRIMER TITULO ++END+++ */
+  
+  /* 4=TARGETAS  */
+  
+  
+  
+  .containercarta .cardcarta{
+    width: 45.4vw;
+    max-height: 240px;
+  }
+  /* 4=TARGETAS +++END++++  */
+  
+  
+  
+  /* 5=VACANTES DISPONIBLES */
+  
+  
+  
+  /* 5=VACANTES DISPONIBLES +++END+++ */
+  
+  /* 6=INFORMACIÓN TARJETAS */   
+  .intro-area{
+    display: flex;
+    flex-direction: row;
+  }
+  .intro-block{
+  
+    width: 40vw;
+  }
+  
+  
+  /* 6=INFORMACIÓN TARJETAS +++END+++*/
+
+  
+  /* SI YA TE REGISTRASTE COMPLETA */
+
+
+      .box-complete{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin:auto;
+        text-align: center;
+        transition: .5s;
+        width: 40vw;
+        
+    }
+      .texto-complete{
+          margin: 0.5rem auto;
+          
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      }
+      .fuente-texto{
+    color: #000;
+    font-weight: 450;
+      }
+      .boton-complete{
+          
+        
+          width: 30vw;
+          margin: auto;
+         
+    
+        }
+      
+    
+      /* SI YA TE REGISTRASTE COMPLETA ***END** */
+      
+  
+  }
+  
+  @media (min-width:1024px){
+  
+  /* 1= LOGO */
+  
+  .logo-main{
+    width: 15vw;
+    transform: translateX(80%);
+  }
+  /* 1= LOGO ++END++*/
+  
+  
+  
+    /* 4=TARGETAS  */
+  
+  
+  
+  .containercarta .cardcarta{
+    width: 27vw;
+    height: 55vh;
+  }
+  /* 4=TARGETAS +++END++++  */
+  
+  
+  .intro-block{
+    margin: 1rem 0.6rem 1rem 0.6rem;
+    width: 27vw;
+  }
+  
+  }
+  
+  @media (min-width:1200px){
+  
+  
+    .titulo-escoger h3 {
+        text-align: center;
+        color: #13aaf5;
+        font-weight: 649;
+            }
+  
+    /* 1= LOGO */
+    
+    .logo-main{
+        width: 12vw;
+        transform: translateX(140%);
+    }
+    /* 1= LOGO ++END++*/
+    
+    
+    
+    }
+   
+  
+    @media (min-height:1200px){
+        .intro-block{
+            margin:0 0 12rem 0;
+        }
+  
+        
+    }
+  
+    @media (min-height:1500px){
+        .intro-block{
+            margin:0 0 25rem 0;
+        }
+  
+        
+    }
+  
+   
+    @media (min-width:1400px){
+  
+        /* 1= LOGO */
+        
+        .logo-main{
+            width: 9vw;
+            transform: translateX(250%);
+        }
+        /* 1= LOGO ++END++*/
+
+        
+  /* SI YA TE REGISTRASTE COMPLETA */
+
+
+          .boton-complete{
+              
+            
+              width: 20vw;
+              margin: auto;
+             
+        
+            }
+          
+        
+          /* SI YA TE REGISTRASTE COMPLETA ***END** */
+        
+        
+        
+        }
+
+        @media (min-width:1920px){
+            .intro-block{
+                margin:0.5rem 1rem
+            }
+
+            
+  /* SI YA TE REGISTRASTE COMPLETA */
+.container-complete-info{
+    margin: 2rem auto 13rem auto;
+}
+
+          
+        
+          /* SI YA TE REGISTRASTE COMPLETA ***END** */
+        }

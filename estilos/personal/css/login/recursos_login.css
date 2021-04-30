@@ -1,0 +1,837 @@
+/* INDICE */
+/* 1= MENU ICONOS   */
+/* 2= login */
+
+
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+   
+
+
+  
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   
+    background: #fff;
+
+  }
+  .container-artisan{
+  
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  }
+
+  
+  /* LOGO */
+  .fondoimagen{
+       
+      position: fixed;
+      z-index: 10;
+      top: 0;
+      background: white;
+      border-radius: 100%;
+      padding: 27vw 15vw 14vw 27vw ;
+      margin-top: -16vw ;
+      margin-left: 65vw ;
+      box-shadow: 0 10px 30px rgba(0,0,0,.1);
+       
+    }
+  .logo-main{
+      display: none;
+    }
+    .logo-main-dos{
+      width: 21vw ;
+        position: absolute;
+        margin-top: -10.5vw;
+        margin-left: -19vw;
+    }
+  /* LOGO END */
+  
+  
+  /* 1= MENU ICONOS DEL MEDIO  */
+  .contenedordemenu
+  {
+  
+  display:none;
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  
+  /* 1= MENU ++++++END+++++ */
+  
+  
+   /* login */
+.container-form {
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    margin: 8rem auto;
+   
+    
+}
+
+
+.box-form{
+display: flex;
+flex-direction: column;
+box-shadow: 0 5px 25px rgba(0,0,0,.4);
+padding: 0.8rem;
+border-radius: 10px;
+
+}
+.form-imagen {
+    margin: 1rem auto 0.4rem auto;
+}
+.form-imagen img {
+    width: 4rem;
+}
+
+.form-titulo .titulo-form{
+font-weight: 498;
+font-size: 1.5rem;
+letter-spacing: 0.5px;
+}
+.form-titulo{
+    margin: 0 auto 1rem auto;
+}
+
+
+
+.mini-box{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.iconlabel{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+   
+}
+
+.iconlabel i {
+   
+    margin: 0 0.25rem;
+    font-size: 1rem;
+   color: dodgerblue;
+  
+}
+label {
+font-size: 1rem;
+font-weight: 500;
+}
+.input{
+margin: 0.3rem 0;
+outline: 0;
+border: transparent;
+padding: 0.4rem;
+}
+.loguear{
+    margin: 0.3rem auto;
+    outline: 0;
+    border: transparent;
+    background: dodgerblue;
+    border-radius: 10px;
+    padding: 0.4rem;
+    color: #fff;
+    font-weight: 500;
+
+}
+
+ .box-form p{
+    color:#EF4848;
+    font-weight: 500;
+}
+.error {
+    display: none;
+}
+  /* login */
+  
+  
+  
+  /* MEDIA QUIERES  
+  Q
+  U
+  E
+  R
+  Y
+  S
+  Q
+  U
+  E
+  R
+  Y
+  S*/
+  
+  @media (min-width: 360px){
+  
+    /* login */
+.container-form {
+    margin: 10rem auto;
+}
+   
+.input{
+margin: 0.4rem 0;
+
+padding: 0.5rem;
+}
+.loguear{
+   
+    padding: 0.5rem;
+    font-size: 1.05rem;
+}
+  /* login */
+  
+  /* ++++++++++++++++++COLADO EN +++++++++++++++ */
+  } 
+  
+  @media (min-width: 480px){
+  
+      /* login */
+.container-form {
+    width: 75vw;
+    margin: 12rem auto;
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.5rem;
+
+}
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1.05rem;
+}
+label {
+    font-size: 1.3rem;
+}
+
+.input{
+margin: 0.4rem 0;
+
+padding: 0.5rem;
+font-size: 1rem;
+}
+.loguear{
+   
+    padding: 0.5rem;
+    font-size: 1.05rem;
+}
+  
+  
+  } 
+  
+  
+  
+  /* CAJAS BENEFICIOS END */
+  @media (min-width: 768px) /* ipad tablet-MI COMPU*/ {
+  
+  
+  /* logo */
+  
+  .logo-main{
+      display: block;
+      width: 19vw;
+     
+    }
+    .fondoimagen{
+      
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      background: 0;
+      border-radius: 0;
+      padding:0 !important;
+      margin-top: 0 !important;
+      margin-left: 0 !important;
+      background: transparent !important;
+      box-shadow: none;
+      transform: translateX(35%) !important;
+    }
+    .logo-main-dos{
+      display: none;
+     
+       }
+       
+    
+  
+  /* logo +++ */
+  /* MENU  */
+  
+  .contenedordemenu
+  {
+  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  
+  background: transparent;
+  z-index: 500;
+  transform: translateY(2%);
+  
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  .contenedordemenu li {
+    list-style-type: none;
+    display: inline-block;
+    transition: .5s;
+  }
+  .contenedordemenu li:hover {
+    transition: .5s;
+    transform: scale(1.1);
+  }
+  .contenedordemenu a {
+      text-decoration: none;
+      color: transparent;
+  }
+ 
+  
+  .fondocirculodelicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width:3.2rem !important;
+   height: 3rem !important;
+   border-radius: 20px;
+   background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+   /* background: #f44336; */
+   box-shadow: 0 10px 30px rgba(0,0,0,.4);
+   color: white;
+   font-family: 'Poppins', sans-serif;
+   margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+   font-size: 1.8rem !important;
+  }
+  
+  .textoicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: #212121;
+   font-size: 1.1rem !important;
+   text-decoration: none;
+  }
+  
+  .adm {
+   background: #EF4848;
+  }
+  
+  /* FIN MENU  */
+
+ 
+        /* login */
+.container-form {
+    width: 50vw;
+    transform: translateY(-20%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.3rem;
+
+}
+
+.box-form {
+    padding: 0 2.5rem;
+}
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1rem;
+}
+label {
+    font-size: 1rem;
+}
+
+.input{
+margin: 0.4rem 0;
+
+padding: 0.5rem;
+font-size: 1rem;
+}
+.loguear{
+   
+    padding: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+  
+   
+  
+  }
+  
+  @media (min-width: 1024px) /* ipad tablet*/ {
+  
+  /* logo */
+  
+  .fondoimagen{
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 0 8rem;
+  }
+  .logo-main{
+      width: 14vw;
+      transform: translateX(70%);
+  }
+  
+  /* logo +++ */
+  /* MENU  */
+  
+  .contenedordemenu
+  {
+  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  
+  background: transparent;
+  z-index: 500;
+  transform: translateY(2%);
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  .contenedordemenu li {
+  
+  list-style-type: none;
+  display: inline-block;
+  }
+  .fondocirculodelicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width:3.2rem !important;
+   height: 3rem !important;
+   border-radius: 20px;
+   background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+   /* background: #f44336; */
+   box-shadow: 0 10px 30px rgba(0,0,0,.4);
+   color: white;
+   font-family: 'Poppins', sans-serif;
+   margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+   font-size: 1.8rem !important;
+  }
+  
+  .textoicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: #212121;
+   font-size: 1.1rem !important;
+  }
+  
+  .adm {
+   background: #EF4848;
+  }
+  
+  /* FIN MENU  */
+  
+
+  
+        /* login */
+.container-form {
+    width: 40vw;
+    transform: translateY(-30%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.8rem;
+
+}
+.box-form img{
+    margin: 1.5rem auto 0.1rem auto;
+}
+
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1rem;
+}
+label {
+    font-size: 1rem;
+}
+
+.input{
+
+font-size: 1.1rem;
+}
+.loguear{
+   
+    margin: 0.3rem auto 0.3rem auto;
+}
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+  
+  }
+  
+  
+  @media (min-width: 1200px){
+  
+  /* logo */
+  
+  .fondoimagen{
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 0 8rem;
+  }
+  
+  /* logo +++ */
+  /* MENU  */
+  
+  .contenedordemenu
+  {
+  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  
+  background: transparent;
+  z-index: 500;
+  transform: translateY(2%);
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  .contenedordemenu li {
+  
+  list-style-type: none;
+  display: inline-block;
+  }
+  .fondocirculodelicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width:3.2rem !important;
+   height: 3rem !important;
+   border-radius: 20px;
+   background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+   /* background: #f44336; */
+   box-shadow: 0 10px 30px rgba(0,0,0,.4);
+   color: white;
+   font-family: 'Poppins', sans-serif;
+   margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+   font-size: 1.8rem !important;
+  }
+  
+  .textoicono {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: #212121;
+   font-size: 1.1rem !important;
+  }
+  
+  .adm {
+   background: #EF4848;
+  }
+  
+  /* FIN MENU  */
+
+  
+        /* login */
+.container-form {
+    width: 30vw;
+    transform: translateY(-30%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.5rem;
+
+}
+.box-form img{
+    margin: 1.5rem auto 0.1rem auto;
+}
+
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1.02rem;
+}
+label {
+    font-size: 1.1rem;
+}
+
+.input{
+
+font-size: 1.1rem;
+}
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+  
+  
+  }
+  
+  
+  
+  @media (min-width: 1400px){
+   
+      .fondoimagen{
+          display: flex;
+          justify-content: flex-start;
+          margin: 0 0 0 8rem;
+      }
+      .logo-main{
+          width: 14vw;
+          transform: translateX(100%);
+      }
+      /* logo +++ */
+      /* MENU  */
+      
+      .contenedordemenu
+      {
+      
+      position: relative;
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      width: 100%;
+      
+      background: transparent;
+      z-index: 500;
+      transform: translateY(2%);
+      /*arriba  derecha abajo izquierda*/
+      }
+      
+      .contenedordemenu li {
+      
+      list-style-type: none;
+      display: inline-block;
+      }
+      .fondocirculodelicono {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       width:3.2rem !important;
+       height: 3rem !important;
+       border-radius: 20px;
+       background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+      
+       /* background: #f44336; */
+       box-shadow: 0 10px 30px rgba(0,0,0,.4);
+       color: white;
+       font-family: 'Poppins', sans-serif;
+       margin: 15px;
+      }
+      .iconoadentrodelcirculo {
+       font-size: 1.8rem !important;
+      }
+      
+      .textoicono {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       color: #212121;
+       font-size: 1.1rem !important;
+      }
+      
+      .adm {
+       background: #EF4848;
+      }
+      
+      /* FIN MENU  */
+
+       
+        /* login */
+.container-form {
+    width: 26vw;
+    transform: translateY(-30%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.5rem;
+
+}
+.box-form img{
+    margin: 1.5rem auto 0.1rem auto;
+}
+
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1.02rem;
+}
+label {
+    font-size: 1.1rem;
+}
+
+.input{
+
+font-size: 1.1rem;
+}
+
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+      
+     
+      }
+  
+  @media (min-width:1440px)
+  {
+  
+  
+  
+  /* 7 = BENEFICIOS  ++++FINAL+++  */
+  }
+  
+  @media (min-width:1920px){
+  
+      .fondoimagen{
+         
+          display: flex;
+          
+          justify-content: flex-start;
+        
+          }
+      .logo-main{
+          width: 8vw;
+          transform: translateX(350%);
+      }
+  
+  
+  /* BOX BENEFICIOS END */
+
+
+   
+        /* login */
+.container-form {
+    width: 21vw;
+    transform: translateY(-30%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.2rem;
+
+}
+.box-form img{
+    margin: 1.5rem auto 0.1rem auto;
+}
+
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1.02rem;
+}
+label {
+    font-size: 1rem;
+}
+
+.input{
+
+font-size: 1rem;
+}
+
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+  }
+  
+  
+  @media (min-width:3500px){
+      .fondoimagen{
+          display: flex;
+          
+          justify-content: flex-start;
+          
+          }
+
+           
+        /* login */
+.container-form {
+    width: 15vw;
+    transform: translateY(-30%);
+}
+
+
+.form-titulo .titulo-form{
+font-weight: 500;
+font-size: 1.5rem;
+
+}
+
+
+.iconlabel i {
+    margin: 0 0.30rem;
+    font-size: 1rem;
+}
+label {
+    font-size: 1rem;
+}
+
+.input{
+
+font-size: 1rem;
+}
+
+
+.form-imagen img {
+    width: 6rem;
+}
+  
+      
+  
+  }
+
+  .hiddenLoader{
+    display: none;
+  }
+  
+  /* 7 = BENEFICIOS  ++++FINAL+++  */
+  

@@ -1,0 +1,278 @@
+/* INDICE */
+/* 1= LOGO */
+/* 2= MENU */
+
+body{
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+   background: linear-gradient(0deg,#fff,#f5f5f5);
+  }
+  
+  .container-artisan{
+  
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  
+  /* 1= LOGO */
+  .fondoimagen{
+     
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    background: white;
+    border-radius: 100%;
+    padding: 27vw 15vw 14vw 27vw ;
+    margin-top: -16vw ;
+    margin-left: 65vw ;
+    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+     
+  }
+  .logo-main{
+    display: none;
+  }
+  .logo-main-dos{
+    width: 21vw ;
+      position: absolute;
+      margin-top: -10.5vw;
+      margin-left: -19vw;
+  }
+  /* LOGO ++++END+++ */
+  
+  
+  /* 2= MENU */
+  .contenedordemenu
+  {
+    display:none;
+    /*arriba  derecha abajo izquierda*/
+  }
+  
+  /* 2= MENU +++END+++ */
+  
+
+.container-request{
+  
+  margin: 5rem auto 1rem auto;
+  /* background:red; */
+  padding: 0.2rem;
+  display: flex;
+}
+
+
+.informacion{
+
+
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+}
+.box-empleado{
+  margin: 0.5rem auto 0.5rem auto;
+  /* background: gray; */
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  cursor: pointer;
+}
+  .cada-caja-de-info{
+/* background: indigo; */
+width: 5rem;
+margin: 0.1rem;
+padding: 0.5rem;
+
+
+  }
+  .contenido-informacion{
+    display: flex;
+   flex-direction: column;
+  }
+  .informacion-titulo{
+/* background: green; */
+
+  }
+  
+  /*  MEDIA QUERIES */
+  
+  
+  @media (min-width: 360px) {
+   
+  
+  
+  }
+   @media (min-width: 480px) {
+    
+  } 
+  
+  
+  @media (min-width:768px){
+  
+  /* 1= LOGO */
+  
+  .logo-main{
+    display: block;
+    width: 19vw;
+   
+  }
+  .fondoimagen{
+    
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    background: 0;
+    border-radius: 0;
+    padding:0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    transform: translateX(35%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+     
+  
+  
+  /* 1= LOGO +++END+++ */
+  
+  
+  /* 2= MENU */
+  
+  .contenedordemenu
+  {
+  
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  
+  background: transparent;
+  z-index: 500;
+  transform: translateY(10%);
+  
+  /*arriba  derecha abajo izquierda*/
+  }
+  
+  .contenedordemenu a {
+    color: transparent;
+  }
+  .contenedordemenu li {
+    list-style-type: none;
+    display: inline-block;
+    transition: .5s;
+  }
+  .contenedordemenu li:hover {
+    transition: .5s;
+    transform: scale(1.1);
+  }
+  .fondocirculodelicono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:3.2rem !important;
+  height: 3rem !important;
+  border-radius: 20px;
+  background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+  
+  /* background: #f44336; */
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+  font-size: 1.8rem !important;
+  }
+  
+  .textoicono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #212121;
+  font-size: 1.1rem !important;
+  }
+  
+  .adm {
+  background: #EF4848;
+  }
+  
+
+  
+  }
+  
+  
+  
+  @media (min-width:1024px){
+  
+  /* 1= LOGO */
+    
+  .logo-main{
+    width: 15vw;
+    transform: translateX(80%);
+  }
+  /* 1= LOGO ++END++*/
+ 
+  
+  }
+    
+  
+  
+  @media (min-width:1200px){
+  
+  
+    /* 1= LOGO */
+    
+    .logo-main{
+        width: 12vw;
+        transform: translateX(140%);
+    }
+  
+  
+  
+  
+    }
+   
+  
+   
+    @media (min-width:1400px){
+  
+        /* 1= LOGO */
+        
+        .logo-main{
+            width: 9vw;
+            transform: translateX(250%);
+        }
+        /* 1= LOGO ++END++*/
+        
+        
+        
+        }
+  
+        @media (min-width: 1920px){
+  
+        
+  
+  
+        }
+  
+        @media (max-width:3500px){
+  
+  
+            }
+  
+        
+
+       
+  
+      

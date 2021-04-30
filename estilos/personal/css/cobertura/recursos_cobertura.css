@@ -1,0 +1,712 @@
+/* INDICE */
+/* 1=LOGO */
+/* 2=MENU */
+/* 3=PRIMER TITULO */
+/* 4=TARJETAS PRODUCTOS */
+/* 5=FOOTER */
+html{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body{
+margin: 0 !important;
+padding: 0 !important;
+box-sizing: border-box !important;
+background: linear-gradient(0deg,#f5f5f5,#f5f5f5);
+
+}
+.container-artisan{
+
+width: 100%;
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+}
+
+/* imagen afip */
+
+.social-icons .imgert {
+  width: 3rem;
+}
+/* imagen afip  */
+
+
+/* 1=LOGO */
+.fondoimagen{
+ 
+position: fixed;
+z-index: 10;
+top: 0;
+background: white;
+border-radius: 100%;
+padding: 27vw 15vw 14vw 27vw ;
+margin-top: -16vw ;
+margin-left: 65vw ;
+box-shadow: 0 10px 30px rgba(0,0,0,.1);
+ 
+}
+.logo-main{
+display: none;
+}
+.logo-main-dos{
+width: 21vw ;
+  position: absolute;
+  margin-top: -10.5vw;
+  margin-left: -19vw;
+}
+/* LOGO END */
+
+/* 2=MENU */
+.contenedordemenu
+{
+
+display:none;
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* 2=MENU ++end+++ */
+
+/* cobertura */
+
+.cobertura {
+    margin: 5rem auto 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  
+}
+
+
+.sub-box-cobertura .box-titulo{
+    display: flex;
+    justify-content: center;
+
+}
+
+.box-titulo{
+    color: #2678ee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.box-titulo img {
+    width: 5rem;
+}
+.titulo-pais {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.container-imagenes {
+    display: flex;
+    margin: 0.5rem auto;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+.contiene-titulo-imagen {
+  margin: 0 0.5rem;
+}
+.box-imagen {
+    display: flex;
+    justify-content: center;
+  
+    
+}
+
+.titulo-pais h4 {
+  color: #2678ee;
+}
+.contiene-titulo-imagen{
+  transition: .5s;
+}
+.contiene-titulo-imagen:hover{
+transform: scale(1.04);
+transition: .5s;
+}
+.box-imagen .argentina{
+    width: 17rem;
+}
+.box-imagen .uruguay{
+    width: 17rem;
+}
+/* cobetura **end*** */
+
+/* titulo down */
+.container-titulo-down{
+    display:flex;
+    justify-content: center;
+}
+
+.box-titulo-down h4 {
+    color:  #2678ee;
+    text-align: center;
+}
+.box-titulo-down img{
+    display: flex;
+    justify-content: center;
+    
+    margin-left: auto;
+    margin-right: auto;
+    width: 20rem;
+
+}
+
+/* titulo down ***end*** */
+
+
+
+
+
+/* 13= -----------------FOOTER------------------- */
+
+.site-footer {
+  background-color: #fff;
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
+  color: black;
+  font-weight: 500;
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+}
+.site-footer hr {
+  border-top-color: black;
+  opacity: 0.5;
+}
+.site-footer hr.small {
+  margin: 20px 0;
+}
+.site-footer h6 {
+  color: black;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+.site-footer a {
+  color: black;
+  font-weight: 500;
+}
+.site-footer a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links {
+  padding-left: 0;
+  list-style: none;
+}
+.footer-links li {
+  display: block;
+}
+.footer-links a {
+  color: black;
+  font-weight: 500;
+}
+.footer-links a:active,
+.footer-links a:focus,
+.footer-links a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links.inline li {
+  display: inline-block;
+}
+.site-footer .social-icons {
+  text-align: right;
+}
+.site-footer .social-icons a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 6px;
+  margin-right: 0;
+  border-radius: 100%;
+  background-color: #33353d;
+}
+.copyright-text {
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .site-footer [class^="col-"] {
+    margin-bottom: 30px;
+  }
+}
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 0;
+  }
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center;
+  }
+}
+.social-icons {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.social-icons li {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.social-icons li.title {
+  margin-right: 15px;
+  text-transform: uppercase;
+  color: black;
+  font-weight: 700;
+  font-size: 13px;
+}
+.social-icons a {
+  background-color: black;
+  color: black;
+  font-size: 16px;
+  display: inline-block;
+  line-height: 44px;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-right: 8px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+.social-icons a:active,
+.social-icons a:focus,
+.social-icons a:hover {
+  color: black;
+  background-color: #29aafe;
+}
+.social-icons.size-sm a {
+  line-height: 34px;
+  height: 34px;
+  width: 34px;
+  font-size: 14px;
+}
+.social-icons a.facebook:hover {
+  background-color: #3b5998;
+}
+.social-icons a.twitter:hover {
+  background-color: #00aced;
+}
+.social-icons a.linkedin:hover {
+  background-color: #007bb6;
+}
+.social-icons a.dribbble:hover {
+  background-color: #ea4c89;
+}
+@media (max-width: 767px) {
+  .social-icons li.title {
+    display: block;
+    margin-right: 0;
+    font-weight: 600;
+  }
+}
+@media (min-width:380px){
+
+    
+/* cobertura */
+
+.box-imagen .argentina{
+    width: 22rem;
+}
+.box-imagen .uruguay{
+    width: 22rem;
+}
+/* cobetura **end*** */
+
+  
+   
+}
+@media (min-width:480px){
+
+
+}
+@media (min-width:768px){
+
+
+    .logo-main{
+        display: block;
+        width: 19vw;
+       
+      }
+      .fondoimagen{
+        
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        background: 0;
+        border-radius: 0;
+        padding:0 !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        background: transparent !important;
+        box-shadow: none;
+        transform: translateX(35%) !important;
+      }
+      .logo-main-dos{
+        display: none;
+       
+         }
+         
+      
+
+    /* logo +++ */
+/* MENU  */
+
+.contenedordemenu a {
+  color: transparent;
+}
+    .contenedordemenu
+{
+    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+   
+    background: transparent;
+    z-index: 500;
+   transform: translateY(10%);
+ 
+    /*arriba  derecha abajo izquierda*/
+}
+.contenedordemenu li {
+  list-style-type: none;
+  display: inline-block;
+  transition: .5s;
+}
+.contenedordemenu li:hover {
+  transition: .5s;
+  transform: scale(1.1);
+}
+.contenedordemenu li {
+
+    list-style-type: none;
+    display: inline-block;
+ }
+ .fondocirculodelicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width:3.2rem !important;
+     height: 3rem !important;
+     border-radius: 20px;
+     background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+ 
+     /* background: #f44336; */
+     box-shadow: 0 10px 30px rgba(0,0,0,.4);
+     color: white;
+     font-family: 'Poppins', sans-serif;
+     margin: 15px;
+ }
+ .iconoadentrodelcirculo {
+     font-size: 1.8rem !important;
+ }
+ 
+ .textoicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: #212121;
+     font-size: 1.1rem !important;
+ }
+ 
+ .adm {
+     background: #EF4848;
+ }
+
+/* FIN MENU  */
+
+}
+
+@media (min-width:768px){
+
+
+    .logo-main{
+        display: block;
+        width: 19vw;
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(35%) !important;
+      }
+      .logo-main-dos{
+        display: none;
+       
+         }
+    
+
+         /* cobertura */
+
+.cobertura {
+    margin: 5rem auto 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  
+}
+
+.sub-box-cobertura .box-titulo{
+    display: flex;
+    justify-content: center;
+
+}
+.box-imagen{
+    
+  height: 32rem;
+}
+.box-titulo{
+    color: #2678ee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.box-titulo img {
+    width: 5rem;
+}
+
+.container-imagenes {
+    display: flex;
+    margin: 0.5rem auto;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 30rem;
+}
+
+/* cobetura **end*** */
+
+/* titulo down */
+.container-titulo-down{
+    display:flex;
+    justify-content: center;
+}
+
+.box-titulo-down h4 {
+    color:  #2678ee;
+    text-align: center;
+}
+.box-titulo-down img{
+    display: flex;
+    justify-content: center;
+    
+    margin-left: auto;
+    margin-right: auto;
+    width: 20rem;
+
+}
+
+/* titulo down ***end*** */
+
+ 
+}
+
+@media (min-width:1024px){
+
+
+    .logo-main{
+        display: block;
+        width: 15vw;
+        
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(100%) !important;
+      }
+      .logo-main-dos{
+        display: none;
+       
+         }
+
+         /* cobertura */
+
+.cobertura {
+    margin: 5rem auto 2rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  
+}
+
+.sub-box-cobertura{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+.box-titulo{
+    color: #00aced;
+    text-align: center;
+}
+.box-titulo{
+    color: #2678ee;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-imagenes {
+    display: flex;
+    margin: 1rem auto;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    width: 25rem;
+}
+.box-imagen {
+    display: flex;
+    justify-content: center;
+}
+.box-imagen .argentina{
+    width: 20rem;
+    height: 28rem;
+}
+.box-imagen .uruguay{
+    width: 20rem;
+}
+/* cobetura **end*** */
+    
+
+.container-titulo-down h4{
+    font-size: 1.8rem;
+
+}
+.box-titulo-down img{
+width: 30rem;
+}
+
+    
+}
+
+
+@media (min-width:1200px){
+
+
+    .logo-main{
+        display: block;
+        width: 15vw;
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(110%) !important;
+      }
+   
+           /* cobertura */
+
+           .box-titulo {
+       margin: 1rem auto;
+           }
+
+           .cobertura {
+               margin: 2rem auto;
+           }
+           .box-titulo h4{
+           font-size: 1.7rem;
+        }
+
+        .cobertura{
+            width: 51rem;
+        }
+.box-imagen {
+    display: flex;
+    justify-content: center;
+}
+.box-imagen .argentina{
+    width: 25rem;
+    height: 32rem;
+}
+.box-imagen .uruguay{
+    width: 25rem;
+}
+/* cobetura **end*** */
+    
+    
+
+}
+
+@media (min-width:1400px){
+
+
+    .logo-main{
+        display: block;
+        width: 13vw;
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(160%) !important;
+      }
+   
+    
+
+    
+}
+
+@media (min-width:1920px){
+
+
+    .logo-main{
+        display: block;
+        width: 10vw;
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(280%) !important;
+      }
+   
+
+}
+
+@media (min-width:3500px){
+
+
+    .logo-main{
+        display: block;
+        width: 6.5vw;
+       
+      }
+      .fondoimagen{
+    
+        transform: translateX(550%) !important;
+      }
+   
+    
+
+    
+    .contenedor-titulo-productos {
+        margin: 1rem 0 1rem 0;
+        
+        
+    }
+    .contenedor-productos{
+    
+        padding: 0 25rem 0 25rem;
+    }
+   
+    .box-productos{
+        background: #dde3f6;;
+        width: 25vw;
+        border-radius: 20px;
+        box-shadow: 0 0 6px 0 #3259e0eb;
+        margin: 1rem 1rem 1rem 1rem;
+        transition: .5s;
+        padding: 1rem;
+    }
+}

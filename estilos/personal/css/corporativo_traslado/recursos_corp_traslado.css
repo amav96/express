@@ -1,0 +1,3839 @@
+/* INDICE */
+/* 1= MENU ICONOS   */
+/* 2= TITULO QUE TRASLADAMOS ? */
+/* 3 = SLIDER TRASLADOS  */
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+/* 6 = TITULO BENEFICIOS */
+/* 7 = TABS CREATIVE */
+/* 8 = BENEFICIOS */
+/* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS */
+/* 10 = FOOTER */
+
+/* imagen afip */
+
+.social-icons .imgert {
+  width: 3rem;
+}
+/* imagen afip  */
+
+html{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body{
+margin: 0 !important;
+padding: 0 !important;
+box-sizing: border-box !important;
+background: linear-gradient(0deg,#fff,#f5f5f5);
+
+}
+.container-artisan{
+
+width: 100%;
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+}
+.center{
+display: none !important;
+}
+
+/* LOGO */
+.fondoimagen{
+     
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    background: white;
+    border-radius: 100%;
+    padding: 27vw 15vw 14vw 27vw ;
+    margin-top: -16vw ;
+    margin-left: 65vw ;
+    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+     
+  }
+.logo-main{
+    display: none;
+  }
+  .logo-main-dos{
+    width: 21vw ;
+      position: absolute;
+      margin-top: -10.5vw;
+      margin-left: -19vw;
+  }
+/* LOGO END */
+
+
+.para-quien{
+
+display: flex;
+justify-content: center;
+}
+.titulo-para{
+
+color: #0093f5;
+font-size: 8vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 4.8rem 0 10px 0;
+
+}
+/* 1= MENU ICONOS DEL MEDIO  */
+.contenedordemenu
+{
+
+display:none;
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* 1= MENU ++++++END+++++ */
+
+
+
+/*  3 = SLIDER CORPORATIVO */
+
+
+.ulmarvel {
+    list-style: none;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    
+  
+    padding: 0;
+    height: 270px !important;
+   
+  }
+  .ulmarvel a {
+    text-decoration: none;
+  }
+  
+  .containermarve {
+    margin: 1rem auto 1px auto !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 320px;
+    
+    
+  }
+  .item-a {
+    position: relative;
+    left: 31.5px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+  .boxmarve {
+    width: 71vw;
+    
+    height: 220px;
+    background: #fff;
+    border-radius: 15px;
+  
+    box-sizing: border-box;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+    padding: 2rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .model {
+    max-height: 100%;
+    max-width: 100%;
+    height: 180px;
+    -webkit-animation: 8s ease-in-out infinite floating;
+    animation: 8s ease-in-out infinite floating;
+    will-change: transform;
+  }
+  
+  @keyframes floating {
+    0%,
+    100% {
+      transform: translateY(-3%) rotate(1deg);
+    }
+  
+    65% {
+      transform: translateY(3%) rotate(-1deg);
+    }
+  }
+  
+  .boxmarve:hover {
+    background: #3483fa;
+    transform-style: preserve-3d;
+    transform: scale(1.02);
+    transition: all ease 0.3s;
+  }
+  .boxmarve:hover .marvel {
+    color: white;
+    transition: all ease 0.5s;
+  }
+  
+
+
+/* 3 = SLIDER CORPORATIVO   ++++FINAL+++ */
+
+
+
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+
+
+.titulo-principal-beneficios h2{
+
+font-size: 8vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 5px 0 30px 0;
+transform: translateY(-1.5rem);
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+
+
+
+/* imagen de control */
+.container-union{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  transform: translateY(-225%);
+  
+      }
+      .box-union{
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(0,0,0,.1);
+  font-size: 1.8rem;
+  margin: 1rem auto;
+ 
+      }
+
+  /* control  */
+  .container-centro{
+                    
+    display: flex;
+    justify-content: center;
+    margin: 3rem;
+    flex-direction: column;
+}
+.box-centro{
+
+display: flex;
+justify-content: center;
+
+}
+
+.box-icon-gestion {
+width: 4.2rem;
+height: 4rem;
+padding: 1rem;
+box-shadow:0 5px 20px 0 rgba(0,0,0,.1);
+display: flex;
+align-content: center;
+align-items: center;
+border-radius: 50%;
+background: #fff;
+transition: .5s;
+
+}
+
+.box-icon-gestion:hover{
+transform: scale(1.09);
+transition: .5s;
+}
+
+.box-icon-gestion i {
+display: flex;
+margin-right: auto;
+margin-left: auto;
+font-size: 1.7rem;
+
+}
+.box-texto{
+display: flex;
+justify-content: center;
+margin: 1rem auto 0 auto;
+font-weight: 500;
+}
+/* control end */
+
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+
+.imagen-del-box{
+
+display: none;
+}
+.imagen-del-box-2{
+position: relative;
+left: -25vw;
+height: 3rem;
+}
+.contenido-de-box{
+display: flex;
+justify-content: center;
+margin:-15px 0 0 0 ;
+ 
+}
+.box-proceso-de-gestion{
+    
+display: flex;
+flex-direction: column;
+justify-content: stretch;
+align-items: center;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+.circulo-mini-box{
+background: #fff;
+width: 4rem;
+height: 4rem;
+border-radius: 55px;
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+align-content: center;
+box-shadow:0 10px 16px 0 rgba(0,0,0,.1);
+position: relative;
+left:-25vw ;
+
+
+}
+.circulo-mini-box:hover{
+    transform: scale(1.2);
+    transition: .8s;
+}
+
+.icono-box  {
+font-size: 30px;
+
+}
+
+
+
+.container-texto{
+    
+position: relative;
+top: 50px;
+}
+
+.parrafo-abajo-de-circulos{
+display: flex;
+flex-direction: row;
+justify-content: center;
+
+}
+.contenedor-parrafos {
+
+display: flex;
+flex-direction: column;
+position: relative;
+top: -17rem;
+left:4rem;
+
+}
+.parrafo {
+
+
+display: flex;
+
+font-size: 0.98rem;
+font-weight: 300;
+font-style: normal;
+font-stretch: normal;
+line-height: 1.25;
+letter-spacing: normal;
+text-align: center;
+margin: 10px 0 60px 0;
+ /*arriba  derecha abajo izquierda*/
+}
+.uno{
+position: relative;
+left: -6%;
+font-weight: 500;
+}
+.dos {
+position: relative;
+left: -5%;
+font-weight: 500;
+}
+.tres {
+position: relative;
+left: -5%;
+font-weight: 500;
+}
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS  ++++FINAL+++ */
+
+.box-union {
+  transition: .5s;
+}
+.box-union:hover {
+  transition: .5s;
+  transform: scale(1.1);
+}
+
+
+ /* imagen de control */
+    
+    
+ .container-imagen-control{
+   padding: 0.7rem;
+       box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 1rem auto 2rem auto;
+
+  transform: translateY(-105%);
+  border-radius: 10px;
+  }
+  .box-imagen-control{
+     
+      display: flex;
+  justify-content: center;
+  flex-direction: column;
+  }
+  .minibox-imagen-contacto {
+    display: flex;
+    flex-direction: row;
+  }
+  .minibox-imagen {
+     margin-right: auto;
+     margin-left: auto;
+  }
+  .minibox-imagen img{
+  width: 14rem;
+ 
+  }
+
+  .metodos {
+     margin: 1rem auto;
+     border-radius: 50%;
+     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+     width: 3rem;
+     height: 3rem;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     transition: .5s;
+  }
+  .metodos:hover {
+   transform: scale(1.1);
+ }
+  .metodos img {
+      width: 1.5rem;
+  }
+  
+  /* imagen de control end */
+
+
+/* +++++++++++++++++COLADO++++++++++++++++++ */
+
+
+.contenedor-transparente{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transform: translateY(-28%);
+    margin: 0.5rem auto 0.5rem auto;
+    
+}
+.box-transparente{
+ padding: 1rem;
+    margin: 10px 0 10px 0;
+   
+    box-shadow: 0 5px 25px rgba(0,0,0,.5);
+    border-radius: 6px;
+}
+.icono-transparente{
+    font-size: 2rem;
+  
+}
+
+
+
+/* ++++++++++++++++++COLADO EN +++++++++++++++ */
+
+
+
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+    
+font-size: 7.2vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: -17rem 0 20px 0;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+/* 7 = TABS CREATIVE */
+.cuerpo-tabs{
+   
+    display: none;
+}
+
+
+
+/* 7 = BENEFICIOS */
+
+/* 7 = BENEFICIOS */
+
+
+.contenido-beneficio-uno{
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    position: relative; 
+    height:auto; 
+    flex-wrap: wrap;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+   
+
+}
+.info-uno{
+   
+    display: flex;
+    border-radius: 30px;
+    flex-direction: row;
+    margin: 1rem auto 1rem auto;
+    
+ 
+}
+.info-dos{
+    
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 92.3vw;
+    order: 5;
+   
+ 
+   /*arriba  derecha abajo izquierda*/
+}
+.info-dos .imagen-beneficio-uno {
+    
+    width: 100%;
+  height: auto;
+ 
+}
+
+.info-uno-contenedor-de-titulo{
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+    /* distancia entre cuadros */
+    
+
+}
+.caja-beneficio{
+
+    box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+     border-radius: 6px;
+    background: #fff;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: 0.3rem;
+    width: 40.9vw;
+    
+   
+    /*arriba  derecha abajo izquierda*/
+}
+
+ .caja-beneficio:hover  {
+    background: #3483fa;
+}
+
+.caja-beneficio:hover .parraforeporte
+    {
+        color: white;
+    }
+    
+
+
+.icono-adentro-de-envolvente{
+   font-size: 25px; 
+   
+    margin: 1.3rem 0 0.5rem 0; 
+    
+   /*arriba  derecha abajo izquierda*/
+}
+.info-uno-contenedor-de-titulo  {
+  display: flex;
+   position: relative;
+   margin-left: auto;
+   margin-right: auto;
+   
+}
+.parraforeporte{
+    text-align: center;
+    font-size: 0.85rem;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2;
+    
+    color: #666;
+    font-weight: 600;
+    
+    
+    margin: 0 0 20px 0;
+
+}
+
+
+
+
+
+/* TOOL TIP */
+
+.caja-beneficio .tooltip-container{
+    
+    position: absolute;
+    bottom: 350px;
+    width: 250px;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    transform: translateX(-50%) translateY(-50px);
+    box-shadow: 0 5px 10px rgba(0,0,0,.1);
+    z-index: 100;
+   
+}
+.tooltip-container{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+align-items: center;
+}
+.tooltip-container p{
+   font-size: 1rem;
+}
+
+/* caja 1 */
+.caja-beneficio:nth-child(1) .tooltip-container:before{
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+    bottom: -15px;
+    left: 50px;
+    transform: rotate(45deg);
+    box-shadow: 0 5px 5px rgba(0,0,0,.1);
+   
+}
+
+.caja-beneficio:hover:nth-child(1) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-10%) translateY(70px);
+    
+    
+}
+
+/* caja 2 */
+.caja-beneficio:hover:nth-child(2) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(70px);
+    
+    
+}
+
+.caja-beneficio:nth-child(2) .tooltip-container:before{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+      bottom: -15px;
+      left: 150px;
+      transform: rotate(45deg);
+      box-shadow: 0 5px 5px rgba(0,0,0,.1);
+  }
+
+  /* caja 3 */
+.caja-beneficio:nth-child(3) .tooltip-container:before{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+      bottom: -15px;
+      left: 50px;
+      transform: rotate(45deg);
+      box-shadow: 0 5px 5px rgba(0,0,0,.1);
+  }
+  
+  .caja-beneficio:hover:nth-child(3) .tooltip-container{
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-10%) translateY(70px);
+      
+      
+  }
+
+   /* caja 4 */
+   .caja-beneficio:hover:nth-child(4) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(70px);
+    
+    
+}
+
+.caja-beneficio:nth-child(4) .tooltip-container:before{
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+      bottom: -15px;
+      left: 150px;
+      transform: rotate(45deg);
+      box-shadow: 0 5px 5px rgba(0,0,0,.1);
+  }
+
+ 
+  
+
+.caja-beneficio .tooltip-container h4{
+   margin: 0;
+   padding: 0;
+   font-size: 1rem;
+  }
+
+/* TOOL TIP END */
+
+
+/* 7 = BENEFICIOS  ++++FINAL+++  */
+
+
+/* 8 = CARTAS INFORMATIVAS DE LO QUE HACEMOS */
+
+.intro-area{
+    
+    display: flex;
+    
+    flex-direction: column;
+    position: relative;
+    
+    height:auto; 
+    
+  
+   margin: 30px auto 100px auto;
+   
+        /*arriba  derecha abajo izquierda*/
+    }
+    
+    
+    .intro-block
+    {
+        
+           display: flex;
+           flex-direction: column;
+           text-align: center;
+           align-items: center;
+           background: #fff;
+           margin: 0.2rem 0.94rem;
+ 
+           padding: 70px 20px 40px 20px;
+           border-radius: 6px;
+           box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+           cursor: pointer;
+           
+    }
+    
+    .intro-block:hover, .intro-block.active
+    {
+        background: #3483fa;
+    }
+    .intro-block:hover{ /*movimiento de la card */
+        transition: .6 ease;
+        -webkit-transition: .6 ease;
+        -moz-transition: .6 ease;
+        -o-transition: .6 ease;
+        -ms-transition: .6 ease;
+    }
+    .intro-block .intro-icon{ /*posicion del icono */
+        
+        position: absolute;
+       
+        top: 3%;
+        
+        font-size: 25px;
+    }
+    
+    
+   
+    .intro-block h3 {
+        margin-bottom: 0.75rem;
+        font-size: 20px;
+        font-weight: 54;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        color: #04204c;
+        font-family: 'Proxima Nova',Helvetica,Arial,sans-serif ;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        /* color: #212121; */
+        text-align: center;
+        margin-top: -0.375rem;
+      margin-bottom: 0;
+        margin-bottom: 15px;
+    }
+    .intro-block p {
+        text-align: center;
+        font-size: 16px;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.2;
+        
+        color: #666;
+        font-weight: 600;
+    }
+    .intro-block:hover h3, .intro-block:hover p
+    {
+        color: #f6f6f6;
+    }
+    
+    .icono-ver-mas {
+        color: black;
+    }
+    .icono-ver-mas:hover {
+        color: white;
+    }
+    .intro-icon:hover{
+        
+            color: #f6f6f6;
+        
+    }
+
+    /* 13= -----------------FOOTER------------------- */
+
+.site-footer {
+    background-color: #fff;
+    padding: 45px 0 20px;
+    font-size: 15px;
+    line-height: 24px;
+    color: black;
+    font-weight: 500;
+    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+  }
+  .site-footer hr {
+    border-top-color: black;
+    opacity: 0.5;
+  }
+  .site-footer hr.small {
+    margin: 20px 0;
+  }
+  .site-footer h6 {
+    color: black;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    letter-spacing: 2px;
+  }
+  .site-footer a {
+    color: black;
+    font-weight: 500;
+  }
+  .site-footer a:hover {
+    color: #3366cc;
+    text-decoration: none;
+  }
+  .footer-links {
+    padding-left: 0;
+    list-style: none;
+  }
+  .footer-links li {
+    display: block;
+  }
+  .footer-links a {
+    color: black;
+    font-weight: 500;
+  }
+  .footer-links a:active,
+  .footer-links a:focus,
+  .footer-links a:hover {
+    color: #3366cc;
+    text-decoration: none;
+  }
+  .footer-links.inline li {
+    display: inline-block;
+  }
+  .site-footer .social-icons {
+    text-align: right;
+  }
+  .site-footer .social-icons a {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    margin-right: 0;
+    border-radius: 100%;
+    background-color: #33353d;
+  }
+  .copyright-text {
+    margin: 0;
+  }
+  
+  @media (max-width: 991px) {
+    .site-footer [class^="col-"] {
+      margin-bottom: 30px;
+    }
+  }
+  @media (max-width: 767px) {
+    .site-footer {
+      padding-bottom: 0;
+    }
+    .site-footer .copyright-text,
+    .site-footer .social-icons {
+      text-align: center;
+    }
+  }
+  .social-icons {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  .social-icons li {
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .social-icons li.title {
+    margin-right: 15px;
+    text-transform: uppercase;
+    color: black;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .social-icons a {
+    background-color: black;
+    color: black;
+    font-size: 16px;
+    display: inline-block;
+    line-height: 44px;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    margin-right: 8px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+  }
+  .social-icons a:active,
+  .social-icons a:focus,
+  .social-icons a:hover {
+    color: black;
+    background-color: #29aafe;
+  }
+  .social-icons.size-sm a {
+    line-height: 34px;
+    height: 34px;
+    width: 34px;
+    font-size: 14px;
+  }
+  .social-icons a.facebook:hover {
+    background-color: #3b5998;
+  }
+  .social-icons a.twitter:hover {
+    background-color: #00aced;
+  }
+  .social-icons a.linkedin:hover {
+    background-color: #007bb6;
+  }
+  .social-icons a.dribbble:hover {
+    background-color: #ea4c89;
+  }
+  @media (max-width: 767px) {
+    .social-icons li.title {
+      display: block;
+      margin-right: 0;
+      font-weight: 600;
+    }
+  }
+
+
+
+
+
+/* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS ++++FINAL+++  */
+
+
+
+/* MEDIA QUIERES  
+Q
+U
+E
+R
+Y
+S
+Q
+U
+E
+R
+Y
+S*/
+
+@media (min-width: 360px){
+
+.para-quien{
+
+    display: flex;
+    justify-content: center;
+}
+.titulo-para{
+    
+    
+    font-size: 8vw;
+font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 7rem 0 10px 0;
+
+}
+
+
+
+/* +++++++++++++++++COLADO++++++++++++++++++ */
+
+
+.contenedor-transparente{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transform: translateY(-30%);
+}
+.box-transparente{
+    padding: 1rem;
+    margin: 10px 0 20px 0;
+}
+.icono-transparente{
+    font-size: 2rem;
+  
+}
+.caja-beneficio{
+
+    box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+     border-radius: 6px;
+    background: #fff;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+   margin-left: auto;
+   margin-right: auto;
+    width: 41.9vw;
+    
+   
+    /*arriba  derecha abajo izquierda*/
+}
+
+.container-union{
+  margin: 4rem auto 1rem auto;
+}
+
+
+
+/* ++++++++++++++++++COLADO EN +++++++++++++++ */
+} 
+
+@media (min-width: 480px){
+
+
+.para-quien{
+
+    display: flex;
+    justify-content: center;
+}
+.titulo-para{
+    
+    color: #0093f5;
+    font-size: 8vw;
+font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 9rem 0 10px 0;
+
+}
+
+/* +++++++++++++++++COLADO++++++++++++++++++ */
+
+
+.contenedor-transparente{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    transform: translateY(-30%);
+}
+.box-transparente{
+    padding: 1rem;
+    margin: 10px 0 40px 0;
+}
+
+.icono-transparente{
+    font-size: 2rem;
+  
+}
+
+
+/* ++++++++++++++++++COLADO ENd+++++++++++++++ */
+
+
+
+.containermarve{
+    width: 28rem;
+}
+.item-a {
+    position: relative;
+    left: 12px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 230px;
+    height: auto;
+  }
+  .boxmarve {
+    
+    
+    height: 220px;
+    background: #fff;
+    border-radius: 15px;
+  
+    box-sizing: border-box;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+    padding: 2rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .caja-beneficio{
+    margin: 2px;
+}
+
+
+} 
+
+
+
+/* CAJAS BENEFICIOS END */
+@media (min-width: 768px) /* ipad tablet-MI COMPU*/ {
+
+    :root {
+        --col-metal-light: #f2f2f2;
+        --col-metal-medium: #a6a6a6;
+        --col-metal-dark: #737373;
+        --grad-1: 0deg, var(--col-metal-dark) 0%, var(--col-metal-light) 50%,
+          var(--col-metal-dark);
+        --grad-2: 45deg, black 0%, var(--col-metal-dark) 50%, var(--col-metal-light);
+      }
+
+    .center {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .rim {
+        width: 240px;
+        height: 440px;
+        background: red;
+        border-radius: 18px;
+        background: linear-gradient(var(--grad-1));
+        box-shadow: 0px 3px 21px rgba(0, 0, 0, 0.7);
+        
+          animation-name: rotate-phone;
+        animation-duration: 3s;
+        animation-delay: 0;
+        animation-fill-mode: both;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }
+      .rim2 {
+        width: 234px;
+        height: px;
+        background: red;
+        border-radius: 1em;
+        background: linear-gradient(var(--grad-2));
+      }
+      
+      .face {
+        width: 228px;
+        height: 428px;
+        background: red;
+        border-radius: 13px;
+        background: linear-gradient(
+          0deg,
+          rgba(37, 37, 37, 1) 0%,
+          rgba(65, 65, 65, 1) 18%,
+          rgba(14, 14, 14, 1) 100%
+        );
+        box-shadow: inset rgba(0, 0, 0, 0.78) 0px 0px 5px;
+        position: relative;
+      }
+      
+      .light{
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background:#6eff3a;
+        border-radius: 10px;
+        display: block;
+        top:10px;
+        right:26px;
+        
+        animation-name: flash;
+         animation-direction: alternate;
+        animation-duration: 1s;
+        animation-delay: 0;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      
+      .speaker {
+        position: absolute;
+        width: 100px;
+        height: 10px;
+        background: red;
+        display: block;
+        border-radius: 10px;
+        top: 10px;
+        background: linear-gradient(
+          0deg,
+          rgba(37, 37, 37, 1) 0%,
+          rgba(65, 65, 65, 1) 18%,
+          black 100%
+        );
+        border-bottom: 1px solid var(--col-metal-medium);
+      }
+      
+      .screen {
+        width: 210px;
+        height: 370px;
+        background: white;
+        overflow: hidden;
+      }
+      
+      .content {
+        animation-name: content-scroll;
+        animation-duration: 8s;
+        animation-delay: 0;
+        animation-fill-mode: both;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }
+      
+      .paragraph{
+        margin:1em;
+      }
+      
+      .line1{
+        width:10em;
+        height:10px;
+        background:var(--col-metal-dark);
+        border-radius:10px;
+        margin-bottom:1em;
+      }
+      
+      .line2{
+        width:6em;
+        height:10px;
+        background:var(--col-metal-dark);;
+        border-radius:10px;
+        margin-bottom:1em;
+      }
+      
+      .line3{
+        width:9em;
+        height:10px;
+        background:var(--col-metal-dark);;
+        border-radius:10px;
+        margin-bottom:1em;
+      }
+      
+      .picture1{
+        width:calc(100% - 2em);
+        height:160px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        margin:1em;
+        border-radius: 5px;
+      }
+      
+      .picture_row{
+        display:flex;
+         margin:1em 1em;
+        justify-content: space-between;
+      }
+      .picture2{
+        width:calc(50% - 0.5em);
+        height:5em;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+
+      }
+      .picture1 img {
+        width: 40rem;
+      }
+      .picture2 img {
+        width: 50rem;
+      }
+      
+      .picture3{
+        width:calc(50% - 0.5em);
+        height:5em;
+        background:#7dbcf3;
+       
+      }
+      
+      @keyframes content-scroll {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(0, -600px);
+        }
+      }
+      
+      @keyframes rotate-phone{
+        0% {
+          transform: rotate(-10deg);
+        }
+        100% {
+          transform: rotate(10deg);
+        }
+      }
+      
+      @keyframes flash{
+        0% {
+          background:#6eff3a;
+          box-shadow:0 0 10px 0 #6eff3a;
+        }
+        100% {
+          background:black;
+          box-shadow:0 0 0 0 #6eff3a;
+        }
+      }
+.picture1, .picture2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+      .imagen-uno-adentro{
+          transform: scale(0.25);
+      }
+      .imagen-uno-adentro-mini{
+        transform: scale(0.1);
+    }
+    .textoadentro{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        font-weight: 500;
+    }
+
+/* logo */
+
+.logo-main{
+    display: block;
+    width: 19vw;
+   
+  }
+  .fondoimagen{
+    
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    background: 0;
+    border-radius: 0;
+    padding:0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    transform: translateX(35%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+     
+  
+
+/* logo +++ */
+/* MENU  */
+
+.contenedordemenu
+{
+
+position: relative;
+display: flex;
+justify-content: center;
+flex-direction: row;
+width: 100%;
+
+background: transparent;
+z-index: 500;
+transform: translateY(2%);
+/*arriba  derecha abajo izquierda*/
+}
+.contenedordemenu a {
+  color: transparent;
+}
+.contenedordemenu li {
+  list-style-type: none;
+  display: inline-block;
+  transition: .5s;
+}
+.contenedordemenu li:hover {
+  transition: .5s;
+  transform: scale(1.1);
+}
+.fondocirculodelicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ width:3.2rem !important;
+ height: 3rem !important;
+ border-radius: 20px;
+ background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+
+ /* background: #f44336; */
+ box-shadow: 0 10px 30px rgba(0,0,0,.4);
+ color: white;
+ font-family: 'Poppins', sans-serif;
+ margin: 15px;
+}
+.iconoadentrodelcirculo {
+ font-size: 1.8rem !important;
+}
+
+.textoicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ color: #212121;
+ font-size: 1.1rem !important;
+}
+
+.adm {
+ background: #EF4848;
+}
+
+/* FIN MENU  */
+
+
+/* empresa */
+
+
+.para-quien{
+
+    display: flex;
+    justify-content: center;
+}
+.titulo-para{
+    
+    color: #0093f5;
+    font-size: 4.8vw;
+    font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 1rem 0 1rem 0;
+
+}
+/* empresa +++end+++ */
+
+
+/* 3 = SLIDER TRASLADOS   */
+/*  3= --------------------SLIDER CORPORATIVO -----------------*/
+
+.containermarve{
+    width: 40.5rem;
+}
+  .item-a {
+    position: relative;
+    left: 18px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+  .boxmarve {
+    width: 40vw;
+    
+    height: 220px;
+    background: #fff;
+    border-radius: 15px;
+  
+    box-sizing: border-box;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+    padding: 2rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  }
+
+/* 3 = SLIDER TRASLADOS   ++++FINAL+++ */
+
+
+.titulo-principal-beneficios h2{
+    color: #0093f5;
+    font-size: 4.8vw;
+    font-weight: 550;
+}
+
+
+
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+
+
+.imagen-del-box{
+
+display: flex;
+width: 9rem;
+}
+.imagen-del-box-2{
+display: none;
+}
+.contenido-de-box{
+display: flex;
+justify-content: center;
+margin:-15px 0 0 0 ;
+ 
+}
+.box-proceso-de-gestion{
+display: flex;
+flex-direction: row;
+justify-content: stretch;
+align-items: center;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+.circulo-mini-box{
+background: #fff;
+width: 4rem;
+height: 4rem;
+border-radius: 55px;
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+align-content: center;
+box-shadow:0 10px 16px 0 rgba(0,0,0,.1);
+position: relative;
+left:0.5vw ;
+
+
+}
+
+.contenedor-parrafos {
+
+display: flex;
+flex-direction: row;
+position: relative;
+top: 1rem;
+left:1rem;
+margin: 0 0 0.5rem 0;
+
+
+}
+
+
+.uno{
+position: relative;
+left: -13%;
+font-weight: 500;
+
+}
+.dos {
+position: relative;
+left: -5%;
+font-weight: 500;
+}
+.tres {
+position: relative;
+left: 4%;
+font-weight: 500;
+}
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS  ++++FINAL+++ */
+
+
+
+/* imagen de control */
+    .container-union{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+font-weight: 500;
+margin: -2rem auto 1rem auto;
+transform: translateY(0);
+
+    }
+    .box-union{
+      display: flex;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+background: #fff;
+box-shadow: 0 5px 20px rgba(0,0,0,.1);
+font-size: 1.8rem;
+margin: 1rem auto;
+    }
+    
+.container-imagen-control{
+  padding: 0.7rem;
+      box-shadow: none;
+
+ display: flex;
+ justify-content: center;
+ flex-direction: column;
+ margin: 1rem auto 2rem auto;
+
+ transform: translateY(0);
+ border-radius: 10px;
+ }
+ .box-imagen-control{
+    
+     display: flex;
+ justify-content: center;
+ flex-direction: column;
+ }
+ .minibox-imagen-contacto {
+   display: flex;
+   flex-direction: row;
+ }
+ .minibox-imagen {
+    margin-right: auto;
+    margin-left: auto;
+ }
+ .minibox-imagen img{
+ width: 14rem;
+
+ }
+
+ .metodos {
+    margin: 1rem auto;
+    border-radius: 50%;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    background: #fff;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+ }
+
+ .metodos:nth-child(1) {
+  transition: .5s;
+  transform: translateY(-170%);
+}
+.metodos:nth-child(1):hover {
+  transition: .5s;
+  transform: translateY(-170%) scale(1.1);
+}
+.metodos:nth-child(2) {
+  transform: translateY(-40%);
+}
+.metodos:nth-child(2):hover {
+  transform: translateY(-40%) scale(1.1);
+}
+ .metodos:nth-child(3) {
+   transform: translateY(20%);
+ }
+ .metodos:nth-child(3):hover {
+  transform: translateY(20%) scale(1.1);
+}
+ .metodos:nth-child(5) {
+  transform: translateY(-170%);
+}
+.metodos:nth-child(5):hover {
+  transform: translateY(-170%) scale(1.1);
+}
+.metodos:nth-child(4) {
+  transform: translateY(-40%);
+}
+.metodos:nth-child(4):hover {
+  transform: translateY(-40%) scale(1.1);
+}
+ 
+ /* imagen de control end */
+
+
+
+/* +++++++COLADO++++++ */
+
+.contenedor-transparente{
+    display: none;
+}
+
+/*+++++++++++ COLADO+++++++++ */
+/* 7 = TABS CREATIVE */
+.cuerpo-tabs{
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95vw;
+    min-height: 4vh;
+    margin: 3px 0 50px 0;
+    /*arriba  derecha abajo izquierda*/
+  
+    font-family: 'Poppins', sans-serif;
+    transform: translateX(2%);
+   
+ }
+ .contenedor-tabs {
+   
+
+     position: relative;
+     display: flex;
+     flex-wrap: wrap;
+     width: 100%;
+    
+     
+ }
+ 
+ 
+ 
+ 
+ .contenedor-tabs .icon-tabs {
+    
+
+     position: relative;
+     width: 45%;
+     text-align: center;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-wrap: wrap;
+    
+     
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs{
+     position: relative;
+     width: calc(55% - 40px);
+     margin: 4px 4px 4px 4px;
+     padding: 0 25px;
+     height: 130px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-wrap: wrap;
+     border-radius: 6px;
+     transition: 0.5s;
+     box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+     background: #fff;
+     
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs:hover{
+     box-shadow: 0 10px 16px rgba(0,0,0,.2) !important;
+     background: #3483fa;
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs img {
+     max-width: 100%;
+     filter: grayscale(1);
+     transition: 0.5s;
+     transform: scale(0.8);
+ 
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs.active img {
+     filter: grayscale(0);
+     transform: scale(1);
+ }
+ .content-tabs {
+     position: relative;
+     width: 55%;
+     overflow: hidden;
+ }
+ .content-tabs .content-box-tabs {
+     position: absolute;
+     width: 90%;
+     height: 100%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     transition: 0.5s;
+     transform: scale(0);
+     opacity: 0;
+ 
+ 
+ }
+ .contenedor-tabs .content-box-tabs.active {
+     transform: scale(1);
+     opacity: 1;
+     transition-delay: 0.5s;
+ }
+ 
+ .content-tabs .content-box-tabs h2 {
+     font-size: 3em;
+ }
+ .imagen-tabs{
+     width: 80px;
+     height: 80px;
+ }
+
+/* 7 = TABS CREATIVE END  */
+
+
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+font-size: 4.8vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 1rem 0 1px 0;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+
+
+/* 8 = BENEFICIOS */
+
+/* 7 = BENEFICIOS */
+
+
+.contenido-beneficio-uno{
+    
+    display: flex;
+    justify-content: center;
+     align-content: center;
+     align-items: center;
+    
+    /* flex-direction: row; */
+    
+    /* background:#fff; */
+   
+    border-radius: 5px;
+    margin: 2rem 0;
+    
+ 
+ }
+ .info-uno{
+    
+     display: flex;
+     justify-content: center;
+     align-content: center;
+     align-items: center;
+ }
+ 
+ 
+ .info-uno-contenedor-de-titulo{
+     
+     display: flex;
+     
+
+     flex-direction: row;
+    
+     margin: auto;
+    /* background: red;  */
+    
+ 
+ }
+ 
+ .caja-beneficio{
+  
+    background: #fff;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: 0 0.5rem;
+    padding: 5px 15px 5px 15px;
+    width: 10rem;
+    height: 9rem;
+    
+    /*arriba  derecha abajo izquierda*/
+ }
+ 
+ .icono-adentro-de-envolvente{
+   font-size: 3rem; 
+   
+    margin: 0 0 13px 0; 
+   /*arriba  derecha abajo izquierda*/
+ }
+ 
+ 
+ 
+ .info-dos{
+     display: flex;
+     justify-content: center;
+     flex-wrap: nowrap;
+     width: 51vw;
+     border-radius: 10px;
+     margin-left: auto;
+     margin-right: auto;
+     
+     
+    /*arriba  derecha abajo izquierda*/
+  }
+  .imagen-beneficio-uno {
+      display: none;
+  }
+
+  /* TOOL TIP */
+
+
+/* caja 1 */
+
+.caja-beneficio:hover:nth-child(1) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-10%) translateY(160px);
+    
+    
+}
+
+/* caja 2 */
+.caja-beneficio:hover:nth-child(2) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(160px);
+    
+    
+}
+
+  /* caja 3 */
+
+  
+  .caja-beneficio:hover:nth-child(3) .tooltip-container{
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-10%) translateY(160px);
+      
+      
+  }
+
+   /* caja 4 */
+   .caja-beneficio:hover:nth-child(4) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(160px);
+    
+    
+}
+
+
+
+
+/* TOOL TIP END */
+
+
+ 
+ /* 7 = BENEFICIOS  ++++FINAL+++  */
+
+}
+
+@media (min-width: 1024px) /* ipad tablet*/ {
+
+/* logo */
+
+.fondoimagen{
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 0 8rem;
+}
+.logo-main{
+    width: 14vw;
+    transform: translateX(70%);
+}
+
+/* logo +++ */
+/* MENU  */
+
+.contenedordemenu
+{
+
+position: relative;
+display: flex;
+justify-content: center;
+flex-direction: row;
+width: 100%;
+
+background: transparent;
+z-index: 500;
+transform: translateY(2%);
+/*arriba  derecha abajo izquierda*/
+}
+
+.contenedordemenu li {
+
+list-style-type: none;
+display: inline-block;
+}
+.fondocirculodelicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ width:3.2rem !important;
+ height: 3rem !important;
+ border-radius: 20px;
+ background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+
+ /* background: #f44336; */
+ box-shadow: 0 10px 30px rgba(0,0,0,.4);
+ color: white;
+ font-family: 'Poppins', sans-serif;
+ margin: 15px;
+}
+.iconoadentrodelcirculo {
+ font-size: 1.8rem !important;
+}
+
+.textoicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ color: #212121;
+ font-size: 1.1rem !important;
+}
+
+.adm {
+ background: #EF4848;
+}
+
+/* FIN MENU  */
+
+
+
+/* 2= TITULO QUE RECUPERAMOS PARA VOS? */
+.para-quien{
+
+    display: flex;
+    justify-content: center;
+}
+.titulo-para{
+    
+    color: #0093f5;
+    font-size: 3.5vw;
+    font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 1rem 0 1rem 0;
+
+}
+ 
+/* 2= TITULO QUE RECUPERAMOS PARA VOS?++++ FIN+++ */
+
+
+
+
+
+    /* 3= --------------------SLIDER CORPORATIVO -----------------*/
+
+    .ulmarvel {
+        list-style: none;
+      
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        
+      
+        padding: 0;
+        height: 270px !important;
+       
+      }
+      .ulmarvel a {
+        text-decoration: none;
+      }
+      
+      .containermarve {
+        margin: 0.1rem auto 0.5rem auto !important;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        height: 320px;
+        width: 61rem;
+        
+      }
+      .item-a {
+        position: relative;
+        left: 13px;
+        border: transparent;
+      
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+       
+        height: auto;
+      }
+      .boxmarve {
+        width: 20rem;
+        
+        height: 240px;
+        background: #fff;
+        border-radius: 15px;
+      
+        box-sizing: border-box;
+      
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+        padding: 2rem;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+      }
+      
+      .model {
+        max-height: 100%;
+        max-width: 100%;
+        height: 180px;
+        -webkit-animation: 8s ease-in-out infinite floating;
+        animation: 8s ease-in-out infinite floating;
+        will-change: transform;
+      }
+      
+        /* 3= SLIDER ------+++++END+++++*/
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+
+
+.titulo-principal-beneficios h2{
+
+font-size: 3.5vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 5px 0 30px 0;
+transform: translateY(-1.5rem);
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+
+
+.imagen-del-box{
+
+display: flex;
+width: 14rem;
+}
+.imagen-del-box-2{
+display: none;
+}
+.contenido-de-box{
+display: flex;
+justify-content: center;
+margin:-15px 0 0 0 ;
+
+}
+.box-proceso-de-gestion{
+display: flex;
+flex-direction: row;
+justify-content: stretch;
+align-items: center;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+.circulo-mini-box{
+background: #fff;
+width: 7rem;
+height: 7rem;
+border-radius: 55px;
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+align-content: center;
+box-shadow:0 10px 16px 0 rgba(0,0,0,.1);
+position: relative;
+left:0.5vw ;
+
+
+}
+.icono-box{
+font-size: 3rem;
+}
+
+.contenedor-parrafos {
+
+display: flex;
+flex-direction: row;
+position: relative;
+
+top: 1rem;
+left:2rem;
+margin: 0 0 -1rem 0;
+
+}
+
+.uno{
+position: relative;
+left: -13.4rem; 
+font-weight: 450;
+}
+.dos {
+position: relative;
+left: -3rem;
+font-weight: 450;
+}
+.tres {
+position: relative;
+left:9rem;
+font-weight: 450;
+}
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS  ++++FINAL+++ */
+
+
+/* control end */
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+font-size: 3.5vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 3rem 0 2rem 0;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* control */
+.minibox-imagen-contacto {
+  margin: 0 auto;
+}
+.metodos {
+  margin: 1rem 1.5rem;
+  border-radius: 50%;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  background: #fff;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+/* 7 = TABS CREATIVE */
+.cuerpo-tabs{
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 15vh;
+    margin: 30px 0 20px 0;
+    /*arriba  derecha abajo izquierda*/
+  
+    font-family: 'Poppins', sans-serif;
+    transform: translateX(5%);
+    
+    width: 90vw;
+   
+ }
+
+ .content-tabs {
+    
+     position: relative;
+     width: 45%;
+     overflow: hidden;
+ }
+
+ .contenedor-tabs .icon-tabs .icon-box-tabs{
+    position: relative;
+    width: calc(50% - 40px);
+    margin: 4px 4px 4px 4px;
+    padding: 0 25px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 6px;
+    transition: 0.5s;
+    box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+    background: #fff;
+    
+}
+ /* 7 = TABS CREATIVE  +++END+++*/
+
+/* 8 = BENEFICIOS */
+
+
+.contenido-beneficio-uno{
+    
+display: flex;
+/* flex-direction: row; */
+flex-wrap: wrap;
+/* background:#fff; */
+height: auto;
+border-radius: 5px;
+
+
+}
+
+
+.info-dos{
+display: flex;
+justify-content: center;
+flex-wrap: nowrap;
+width: 51vw;
+border-radius: 10px;
+margin-left: auto;
+margin-right: auto;
+
+/*arriba  derecha abajo izquierda*/
+}
+.info-uno-contenedor-de-titulo{
+display: flex;
+justify-content: center;
+flex-direction: row;
+flex-wrap: nowrap;
+align-items: center;
+/* background: red;  */
+margin: 0 13rem 0 0;
+
+}
+.caja-beneficio{
+
+background: #fff;
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+margin: 0.6rem 0.2rem;
+padding: 5px 15px 5px 15px;
+width: 12rem;
+height: 12rem;
+}
+
+.icono-adentro-de-envolvente{
+font-size: 3rem; 
+
+margin: 0 0 13px 0; 
+/*arriba  derecha abajo izquierda*/
+}
+.info-uno-contenedor-de-titulo  {
+display: flex;
+position: relative;
+left: 11.5%
+
+}
+
+/* TOOL TIP */
+
+
+/* caja 1 */
+
+.caja-beneficio:hover:nth-child(1) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-10%) translateY(110px);
+    
+    
+}
+
+/* caja 2 */
+.caja-beneficio:hover:nth-child(2) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(110px);
+    
+    
+}
+
+  /* caja 3 */
+
+  
+  .caja-beneficio:hover:nth-child(3) .tooltip-container{
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-10%) translateY(110px);
+      
+      
+  }
+
+   /* caja 4 */
+   .caja-beneficio:hover:nth-child(4) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(110px);
+    
+    
+}
+
+
+
+
+
+/* TOOL TIP END */
+
+/* 7 = BENEFICIOS  ++++FINAL+++  */
+
+
+}
+
+
+@media (min-width: 1200px){
+
+/* logo */
+
+.fondoimagen{
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 0 8rem;
+}
+
+/* logo +++ */
+/* MENU  */
+
+.contenedordemenu
+{
+
+position: relative;
+display: flex;
+justify-content: center;
+flex-direction: row;
+width: 100%;
+
+background: transparent;
+z-index: 500;
+transform: translateY(2%);
+/*arriba  derecha abajo izquierda*/
+}
+
+.contenedordemenu li {
+
+list-style-type: none;
+display: inline-block;
+}
+.fondocirculodelicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ width:3.2rem !important;
+ height: 3rem !important;
+ border-radius: 20px;
+ background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+
+ /* background: #f44336; */
+ box-shadow: 0 10px 30px rgba(0,0,0,.4);
+ color: white;
+ font-family: 'Poppins', sans-serif;
+ margin: 15px;
+}
+.iconoadentrodelcirculo {
+ font-size: 1.8rem !important;
+}
+
+.textoicono {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ color: #212121;
+ font-size: 1.1rem !important;
+}
+
+.adm {
+ background: #EF4848;
+}
+
+/* FIN MENU  */
+
+
+/* empresa */
+
+
+.para-quien{
+
+display: flex;
+justify-content: center;
+}
+.titulo-para{
+
+color: #0093f5;
+font-size: 2.5vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 1rem 0 2rem 0;
+
+}
+/* empresa +++end+++ */
+
+
+
+/* 3= --------------------SLIDER CORPORATIVO -----------------*/
+
+  
+.containermarve {
+    margin:  -0.5rem auto 1rem auto !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 320px;
+    width: 61rem;
+    
+  }
+  .item-a {
+    position: relative;
+    left: 13px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+   
+    height: auto;
+  }
+ 
+  
+  
+  
+    /* 3= SLIDER ------+++++END+++++*/
+
+
+
+
+
+
+
+/* 3 = SLIDER TRASLADOS   ++++FINAL+++ */
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+
+
+.titulo-principal-beneficios h2{
+
+font-size: 1.9rem;
+font-weight: 600;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+transform: translateY(-150%);
+margin: 0 10rem;
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+
+
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+
+
+.imagen-del-box{
+
+display: flex;
+width: 14rem;
+}
+.imagen-del-box-2{
+display: none;
+}
+.contenido-de-box{
+display: flex;
+justify-content: center;
+margin:-15px 0 0 0 ;
+
+}
+.box-proceso-de-gestion{
+display: flex;
+flex-direction: row;
+justify-content: stretch;
+align-items: center;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+
+.circulo-mini-box{
+background: #fff;
+width: 4.1rem;
+height: 4.1rem;
+border-radius: 55px;
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+align-content: center;
+box-shadow:0 10px 16px 0 rgba(0,0,0,.1);
+position: relative;
+left:0.5vw ;
+
+
+}
+.icono-box{
+font-size: 1.7rem;
+}
+
+.contenedor-parrafos {
+
+display: flex;
+flex-direction: row;
+position: relative;
+
+top: 1rem;
+left:2rem;
+margin: -2rem 0 -1rem 0;
+
+}
+.parrafo{
+font-size: 1.2rem;
+}
+
+.uno{
+position: relative;
+left: -9rem; 
+font-weight: 450;
+}
+.dos {
+position: relative;
+left: -3.5rem;
+font-weight: 450;
+}
+.tres {
+position: relative;
+left: 3.9rem;
+font-weight: 450;
+}
+
+/* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS  ++++FINAL+++ */
+
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{ 
+
+font-weight: 550;
+margin: 3rem 0 1.3rem 0;
+font-size: 1.9rem;
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+
+
+/* 8 = BENEFICIOS */
+
+
+.contenido-beneficio-uno{
+
+display: flex;
+justify-content:space-evenly;
+/* flex-direction: row; */
+flex-wrap: nowrap;
+flex-direction: row;
+height: auto;
+border-radius: 5px;
+
+}
+
+.info-uno-contenedor-de-titulo{
+
+display: flex;
+justify-content: center;
+flex-direction: row;
+flex-wrap: wrap;
+align-items: center;
+width: 35vw;
+
+}
+.caja-beneficio{
+
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+
+
+padding: 5px 15px 5px 15px;
+width: 11rem;
+height: 11rem;
+margin: 3.8px 3.8px;
+
+/*arriba  derecha abajo izquierda*/
+}
+
+.icono-adentro-de-envolvente{
+font-size: 3rem; 
+
+margin: 0 0 13px 0; 
+/*arriba  derecha abajo izquierda*/
+}
+.info-uno-contenedor-de-titulo  {
+display: flex;
+position: relative;
+
+
+}
+
+.info-dos{
+
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+width: 80vw;
+border-radius: 10px;
+order: 0 !important;
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* TOOL TIP */
+
+
+/* caja 1 */
+
+.caja-beneficio:hover:nth-child(1) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-10%) translateY(-50px);
+    
+    
+}
+
+/* caja 2 */
+.caja-beneficio:hover:nth-child(2) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(-50px);
+    
+    
+}
+
+  /* caja 3 */
+
+  
+  .caja-beneficio:hover:nth-child(3) .tooltip-container{
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-10%) translateY(-50px);
+      
+      
+  }
+
+   /* caja 4 */
+   .caja-beneficio:hover:nth-child(4) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(-50px);
+    
+    
+}
+
+
+
+
+
+/* TOOL TIP END */
+/* 7 = BENEFICIOS  ++++FINAL+++  */
+
+
+/* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS */
+
+.intro-area{
+
+display: flex;
+
+flex-direction: column;
+position: relative;
+width: 80vw;
+height:auto; 
+
+
+margin: 30px auto 100px auto;
+
+    /*arriba  derecha abajo izquierda*/
+}
+
+
+.intro-block
+{
+       display: flex;
+       flex-direction: column;
+       text-align: center;
+       align-items: center;
+       background: #fff;
+       margin: 1px 0 0.7rem 0;
+
+       padding: 70px 25px 40px 25px;
+       border-radius: 6px;
+       box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+       cursor: pointer
+}
+
+.intro-block:hover, .intro-block.active
+{
+    background: #3483fa;
+}
+.intro-block:hover{ /*movimiento de la card */
+    transition: .6 ease;
+    -webkit-transition: .6 ease;
+    -moz-transition: .6 ease;
+    -o-transition: .6 ease;
+    -ms-transition: .6 ease;
+}
+.intro-block .intro-icon{ /*posicion del icono */
+    
+    position: absolute;
+   
+    top: 3%;
+    
+    font-size: 25px;
+}
+
+
+
+.intro-block h3 {
+    margin-bottom: 0.75rem;
+    font-size: 20px;
+    font-weight: 54;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #04204c;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif ;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* color: #212121; */
+    text-align: center;
+    margin-top: -0.375rem;
+  margin-bottom: 0;
+    margin-bottom: 15px;
+}
+.intro-block p {
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2;
+    
+    color: #666;
+    font-weight: 600;
+}
+.intro-block:hover h3, .intro-block:hover p
+{
+    color: #f6f6f6;
+}
+
+.icono-ver-mas {
+    color: black;
+}
+.icono-ver-mas:hover {
+    color: white;
+}
+.intro-icon:hover{
+    
+        color: #f6f6f6;
+    
+}
+
+
+/* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS ++++FINAL+++  */
+
+}
+
+
+
+@media (min-width: 1400px){
+ 
+    .fondoimagen{
+        display: flex;
+        justify-content: flex-start;
+        margin: 0 0 0 8rem;
+    }
+    .logo-main{
+        width: 14vw;
+        transform: translateX(100%);
+    }
+    /* logo +++ */
+    /* MENU  */
+    
+    .contenedordemenu
+    {
+    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    
+    background: transparent;
+    z-index: 500;
+    transform: translateY(2%);
+    /*arriba  derecha abajo izquierda*/
+    }
+    
+    .contenedordemenu li {
+    
+    list-style-type: none;
+    display: inline-block;
+    }
+    .fondocirculodelicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width:3.2rem !important;
+     height: 3rem !important;
+     border-radius: 20px;
+     background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+    
+     /* background: #f44336; */
+     box-shadow: 0 10px 30px rgba(0,0,0,.4);
+     color: white;
+     font-family: 'Poppins', sans-serif;
+     margin: 15px;
+    }
+    .iconoadentrodelcirculo {
+     font-size: 1.8rem !important;
+    }
+    
+    .textoicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: #212121;
+     font-size: 1.1rem !important;
+    }
+    
+    .adm {
+     background: #EF4848;
+    }
+    
+    /* FIN MENU  */
+    
+    
+    /* empresa */
+    
+    
+    .para-quien{
+    
+    display: flex;
+    justify-content: center;
+    }
+    .titulo-para{
+    
+    color: #0093f5;
+    font-size: 2.5vw;
+    font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 1rem 0 2rem 0;
+    
+    }
+    /* empresa +++end+++ *
+
+
+    /* 3= --------------------SLIDER CORPORATIVO -----------------*/
+
+  
+  .containermarve {
+    margin: -0.7rem auto 3.5rem auto !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 320px;
+    width: 61rem;
+    
+  }
+  .item-a {
+    position: relative;
+    left: 13px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+   
+    height: auto;
+  }
+ 
+  
+  
+  
+    /* 3= SLIDER ------+++++END+++++*/
+
+
+    
+    
+    /* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+    
+  
+    
+    .titulo-principal-beneficios h2{
+       
+          font-size: 2.8vw;
+          font-weight: 550;
+          margin: -1rem 10rem;
+        
+        /*arriba  derecha abajo izquierda*/
+    }
+    
+    /* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+    
+    
+    
+      /* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS*/
+    
+      
+    .contenedor-parrafos {
+      
+       display: flex;
+       flex-direction: row;
+       position: relative;
+    
+       top: 1rem;
+       left:2rem;
+       margin: -1.5rem 0 -1rem 0;
+    
+    }
+    .parrafo{
+        font-size: 1.3rem;
+    }
+    
+    .uno{
+    position: relative;
+    left: -8rem; 
+    font-weight: 450;
+    }
+    .dos {
+       position: relative;
+    left: -3rem;
+    font-weight: 450;
+    }
+    .tres {
+       position: relative;
+    left: 3rem;
+    font-weight: 450;
+    }
+    
+    /* 5 =  TAREAS SIMPLIFICADAS 3 ITEMS  ++++FINAL+++ */
+
+    .contenedor-tabs .icon-tabs .icon-box-tabs{
+        position: relative;
+        width: calc(40% - 40px);
+        margin: 4px 4px 4px 4px;
+        padding: 0 25px;
+        height: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        border-radius: 6px;
+        transition: 0.5s;
+        box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+        background: #fff;
+        
+    }
+    
+    /* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+font-size: 3vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 3rem 0 0.5rem 0;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+/* 8 = BENEFICIOS */
+
+
+
+.caja-beneficio{
+
+ 
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+
+padding: 5px 15px 5px 15px;
+width: 13rem;
+height: 12rem;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* TOOL TIP */
+
+
+/* caja 1 */
+
+.caja-beneficio:hover:nth-child(1) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-10%) translateY(-84px);
+    
+    
+}
+
+/* caja 2 */
+.caja-beneficio:hover:nth-child(2) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(-84px);
+    
+    
+}
+
+  /* caja 3 */
+
+  
+  .caja-beneficio:hover:nth-child(3) .tooltip-container{
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-10%) translateY(-84px);
+      
+      
+  }
+
+   /* caja 4 */
+   .caja-beneficio:hover:nth-child(4) .tooltip-container{
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-60%) translateY(-84px);
+    
+    
+}
+
+
+
+
+
+/* TOOL TIP END */
+
+
+/* 7 = BENEFICIOS  ++++FINAL+++  */
+    
+    /* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS */
+    
+    .intro-area{
+        
+        display: flex;
+        
+        flex-direction: column;
+        position: relative;
+        width: 80vw;
+        height:auto; 
+        
+      
+       margin: 30px auto 100px auto;
+       
+            /*arriba  derecha abajo izquierda*/
+        }
+
+        .intro-icon
+    {
+        margin-top: 0.5rem;
+       
+    }
+        
+        
+        .intro-block
+        {
+               display: flex;
+               flex-direction: column;
+               text-align: center;
+               align-items: center;
+               background: #fff;
+               margin: 1px 0 0.7rem 0;
+     
+               padding: 85px 25px 60px 25px;
+               border-radius: 6px;
+               box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+               cursor: pointer;
+               
+        }
+        
+    
+        
+       
+        .intro-block h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+            
+            margin-top: -1rem;
+            margin-bottom: 0;
+            margin-bottom: 1.5rem;
+        }
+        .intro-block p {
+            text-align: center;
+            font-size: 16px;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 1.2;
+            
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        .intro-block:hover h3, .intro-block:hover p
+        {
+            color: #f6f6f6;
+        }
+        
+        .icono-ver-mas {
+            color: black;
+        }
+        .icono-ver-mas:hover {
+            color: white;
+        }
+        .intro-icon:hover{
+            
+                color: #f6f6f6;
+            
+        }
+    
+    
+    /* 9 = CARTAS INFORMATIVAS DE LO QUE HACEMOS ++++FINAL+++  */
+    
+    }
+
+@media (min-width:1440px)
+{
+
+
+ /* empresa */
+
+ .para-quien{
+
+    display: flex;
+    justify-content: center;
+   
+    text-align: center;
+}
+.titulo-para{
+    
+    color: #0093f5;
+    font-size: 2.2vw;
+    font-weight: 550;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    color: #0093f5;
+    text-align: center;
+    font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    margin: 0.5rem 0 2rem 0;
+
+}
+/* empresa +++end+++ */
+.titulo-principal-beneficios h2{
+    font-size: 2rem;
+}
+
+.titulo-secundario-beneficios h3 {
+    font-size: 2.3rem;
+}
+
+
+
+/* 1 titulo del slider ++++fin ++++ */
+
+/* 3= --------------------SLIDER CORPORATIVO -----------------*/
+
+  
+.containermarve {
+    margin: -1.5rem auto 2.5rem auto !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 320px;
+    width: 81rem;
+    
+  }
+  .item-a {
+    position: relative;
+    left: 13px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+   
+    height: auto;
+  }
+ 
+  
+  
+  
+    /* 3= SLIDER ------+++++END+++++*/
+
+
+
+/* 8 = BENEFICIOS */
+
+
+
+.caja-beneficio{
+
+ 
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+
+padding: 5px 15px 5px 15px;
+width: 14rem;
+height: 12rem;
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+
+/* 7 = BENEFICIOS  ++++FINAL+++  */
+}
+
+@media (min-width:1920px){
+
+    .fondoimagen{
+       
+        display: flex;
+        
+        justify-content: flex-start;
+      
+        }
+    .logo-main{
+        width: 8vw;
+        transform: translateX(350%);
+    }
+/* empresa */
+
+
+.para-quien{
+
+display: flex;
+justify-content: center;
+}
+.titulo-para{
+   
+color: #0093f5;
+font-size: 1.8vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+margin: 2rem 0 2rem 0;
+
+}
+/* empresa +++end+++ */
+
+
+
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+
+
+.titulo-principal-beneficios h2{
+
+font-size: 1.9vw;
+font-weight: 550;
+font-style: normal;
+font-stretch: normal;
+line-height: 1;
+letter-spacing: normal;
+color: #0093f5;
+text-align: center;
+font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+font-size: 2vw;
+font-weight: 550;
+transform: translateY(60%);
+
+
+/*arriba  derecha abajo izquierda*/
+}
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+/* 7 = TABS CREATIVE */
+/* 7 = TABS CREATIVE */
+.cuerpo-tabs{
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    min-height: 15vh;
+    margin: 30px 5rem 20px 15rem;
+    /*arriba  derecha abajo izquierda*/
+  
+    font-family: 'Poppins', sans-serif;
+   
+    
+    width: 60vw;
+   
+ }
+
+ .content-tabs {
+    
+     position: relative;
+     width: 55%;
+     overflow: hidden;
+     
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs{
+    position: relative;
+    width: calc(45% - 40px);
+    margin: 4px 4px 4px 4px;
+    padding: 0 25px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 6px;
+    transition: 0.5s;
+    box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+    background: #fff;
+    
+}
+/* 7 = TABS CREATIVE END  */
+
+/* BOX BENIFICIOS */
+
+
+.info-uno{
+   
+    margin: 1.5rem 15rem;
+}
+.info-uno-contenedor-de-titulo{
+  
+    padding: 0 3rem;
+    width: 30vw;
+    
+}
+.caja-beneficio{
+    
+    width: 10vw;
+    
+    margin: 0.2rem 0.2rem;
+}
+
+.info-dos{
+    
+    margin: 0 0 0 10rem;
+    transform: translateX(30%);
+        
+}
+.imagen-beneficio-uno{
+    
+    display: none;
+    
+}
+
+/* BOX BENEFICIOS END */
+}
+
+
+@media (min-width:3500px){
+    .fondoimagen{
+        display: flex;
+        
+        justify-content: flex-start;
+        
+        }
+    
+
+ /* 2= TITULO QUE RECUPERAMOS PARA VOS? */
+
+.para-quien{
+   
+   display: flex;
+   justify-content: center;
+}
+.logo-main{
+    width: 7vw;
+    transform: translateX(460%);
+}
+.titulo-para{
+       
+   color: #0093f5;
+   font-size: 1.8vw;
+   font-weight: 550;
+   font-style: normal;
+   font-stretch: normal;
+   line-height: 1;
+   letter-spacing: normal;
+   color: #0093f5;
+   text-align: center;
+   font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   margin: 2rem 0 2rem 0;
+
+}
+
+
+/* 2= TITULO QUE RECUPERAMOS PARA VOS?++++ FIN+++ */
+
+.containermarve{
+   
+    margin: 2rem auto 10rem auto !important;
+}
+ 
+
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS */
+
+
+.titulo-principal-beneficios h2{
+   
+   font-size: 1.9vw;
+   font-weight: 550;
+   font-style: normal;
+   font-stretch: normal;
+   line-height: 1;
+   letter-spacing: normal;
+   color: #0093f5;
+   text-align: center;
+   font-family: 'Proxima Nova',Helvetica,Arial,sans-serif;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   margin: 50px;
+  
+   /*arriba  derecha abajo izquierda*/
+}
+
+/* 4 = TITULO PRINCIPAL COMO LO HACEMOS   ++++FINAL+++ */
+
+/* 6 = TITULO BENEFICIOS */
+
+.titulo-secundario-beneficios h3{
+   font-size: 2vw;
+   font-weight: 550;
+   transform: translateY(60%);
+
+
+   /*arriba  derecha abajo izquierda*/
+}
+
+/* 6 = TITULO SECUNDARIO BENEFICIOS  ++++FINAL+++  */
+
+
+/* 7 = TABS CREATIVE */
+.cuerpo-tabs{
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    min-height: 15vh;
+    margin: 30px 5rem 20px 15rem;
+    /*arriba  derecha abajo izquierda*/
+  
+    font-family: 'Poppins', sans-serif;
+   
+    
+    width: 60vw;
+   
+ }
+
+ .content-tabs {
+    
+     position: relative;
+     width: 35%;
+     overflow: hidden;
+     transform: translateX(80%);
+ }
+ .icon-box-tabs{
+     transform: translateX(150%);
+     
+ }
+ .contenedor-tabs .icon-tabs .icon-box-tabs{
+    position: relative;
+    width: calc(40% - 40px);
+    margin: 4px 4px 4px 4px;
+    padding: 0 25px;
+    height: 245px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 6px;
+    transition: 0.5s;
+    box-shadow:0 0.1rem 0.4rem 0 rgba(50,50,50,.5);
+    background: #fff;
+    
+}
+/* 7 = TABS CREATIVE END  */
+
+.titulo-secundario-beneficios{
+    margin: 2rem 0 -14rem 0;
+}
+/* BOX BENIFICIOS */
+
+
+.info-uno{
+   
+    margin: 1.5rem 15rem;
+    transform: translateX(-40%);
+}
+.info-uno-contenedor-de-titulo{
+  
+    padding: 0 3rem;
+    width: 30vw;
+    
+    
+}
+.caja-beneficio{
+  
+    width: 10vw;
+  
+    margin: 0.2rem 0.2rem;
+    
+}
+
+.info-dos{
+   
+    margin: 0 0 0 10rem;
+  
+    transform: translateX(20%) scale(0.6);
+}
+.imagen-beneficio-uno{
+    
+    display: flex;
+    transform: translateX(-5%);
+    
+}
+
+/* BOX BENEFICIOS END */
+
+}
+
+/* 7 = BENEFICIOS  ++++FINAL+++  */

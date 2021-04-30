@@ -1,0 +1,68 @@
+.spinner-border {
+    margin: 0rem 3rem;
+}
+
+.hiddenLoader{
+    display: none;
+}
+
+.borderRadius {
+    border-radius: 15px;
+}
+.padding6{
+    padding: 6px;
+}
+
+.inside{
+    margin: auto;
+}
+
+
+/* selection */
+
+.code-check {
+    cursor: pointer;
+}
+
+.txtBlue {
+    color : #0093f5;
+    font-weight: 500;
+}
+
+.textGreen {
+
+    color : #2fc033;
+    font-weight: 500;
+
+}
+
+.textBlack {
+
+    color : #000;
+    font-weight: 500;
+
+}
+
+/* input coverage save */
+
+
+.input-cp-coverage{
+    margin: 0 0.2rem;
+}
+
+.input-dinamic {
+    width: 10rem;
+}
+
+
+#title-table {
+  
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.shadow-edit {
+    box-shadow: 0 5px 35px rgba(0,0,0,0.25) !important; 
+}
+
+

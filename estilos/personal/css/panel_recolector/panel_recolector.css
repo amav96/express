@@ -1,0 +1,767 @@
+  #mantenerEnvioDeRemito{
+      display: none;
+  }
+  
+  @media (min-width:280px){
+	  .contenedor-box-cosas{
+		  display: flex;
+		  flex-direction: column;
+		 
+		  align-content: center;
+			align-items: center;
+	  }
+	  /* .mini box{
+
+	  } */
+
+	.eleccion-terminal {
+		background: #007bff;
+		color: white;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		margin: 0.9rem 0.2rem;
+		padding: 0.15rem;
+		border-radius: 15px;
+	}
+	.mini-box-cosas{
+		margin: 0.5rem 0;
+	}
+
+	.subspinner{
+		display: none;
+	}
+	
+	.caja-titulo{
+		
+		margin: 2rem auto 2rem auto;
+	}
+	.caja-titulo{
+		
+		display: flex;
+		align-content: center;
+		flex-direction: column;
+		color: white;
+		padding: 0.45rem;
+		width: 20rem;
+		
+		border-radius: 15px ;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+	}
+	.box-reco-info {
+	  
+		display: flex; 
+		margin: 0.4rem auto;
+	  
+	}
+
+	/* botonera */
+	.botonera{
+		
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+
+	}
+    .sub-botonera{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		align-self: center;
+		flex-direction: row;
+		flex-wrap: wrap !important;
+		width: 24rem;
+		
+
+	 }
+	 
+	 .sub-botonera button{
+		 margin: 0.05rem 0.3rem;
+	 }
+	 .caja-buscador{
+		 margin: 0.5rem auto;
+
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+	 }
+	 .caja-buscador input{
+			width: 13rem;
+	}
+	 #cont-firma{
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+		margin: auto;
+			}
+
+
+			#modelosDisponibles{
+				display:flex;
+				justify-content:center;
+				flex-wrap:wrap;
+				/* background:blue; */
+			
+			}
+			
+			.contenedor-imagen{
+			
+				display:flex;
+				justify-content:center;
+				flex-direction:column;
+				
+				text-align:center;
+				/* background:red; */
+				margin:2rem 2rem;
+				transition: 0.5s;
+				font-weight: bold;
+				
+			}
+			
+			.cont-adentro{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				flex-direction: column;
+			}
+			.cont-adentro:hover{
+			
+				transform: scale(1.5);
+				align-items: center;
+				margin: auto;
+				background: white;
+				color: black;
+				font-weight: bold;
+				font-size: 15px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+				border-radius: 15px;
+				transition: 0.5s;
+				padding:5px;
+				
+			}
+				.img-model{
+					width:180px;
+					height:180px;
+				}
+				
+
+  }
+
+
+  @media (min-width:320px){
+	.caja-titulo{
+		
+		margin: 2rem auto 2rem auto;
+	}
+	.eleccion-terminal {
+		background: #007bff;
+		color: white;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		margin: 0.9rem 0.4rem;
+		padding: 0.15rem;
+		border-radius: 15px;
+	}
+
+	
+
+	/* botonera */
+	.botonera{
+		
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+		
+
+	}
+    .sub-botonera{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+	 }
+	 
+	 .sub-botonera button{
+		 margin: 0.05rem 0.3rem;
+	 }
+
+	 .caja-buscador{
+		 margin: 0.5rem auto;
+
+display: flex;
+justify-content: center;
+align-content: center;
+align-items: center;
+	 }
+	 .caja-buscador input{
+width: 13rem;
+	}
+
+	#cont-firma{
+
+display: flex;
+justify-content: center;
+align-items: center;
+align-content: center;
+margin: auto;
+	}
+  /* loader buscar  */
+	.contspinner{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+	}
+	 
+#firmar {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+	  
+	      /* loader firmar */
+	.contspinner-firmar{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+	}
+	    #subspinner-firmar{
+		  display: none;
+	  }  
+
+	  /* loader remito */
+	  .contspinner-remito{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+	}
+	    #subspinner-remito{
+		  display: none;
+	  }  
+
+	  
+	  /* loader consignacion remito */
+	  .contspinner-consignacion-remito{
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		
+	}
+	    #subspinner-consignacion-remito{
+		  display: none;
+	  } 
+  }
+
+  @media (min-width:370px) {
+	.check-estilo {
+		width: 15rem;
+		
+	}
+
+}
+	@media (min-width:380px){
+		#cont-firma{
+			
+			display: flex;
+			align-items: center;
+			align-content: center;
+			margin: auto;
+	
+		}
+		.contenedor-box-cosas{
+			display: flex;
+			flex-direction: row;
+			
+			align-content: center;
+			align-content: center;
+		}
+
+		.eleccion-terminal {
+			background: #007bff;
+			color: white;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			margin: 0.9rem 0.5rem;
+			padding: 0.30rem;
+			border-radius: 15px;
+		}
+	
+
+		
+	}
+
+	@media (min-width:720px){
+
+		.caja-titulo{
+			display: flex;
+			align-content: center;
+			flex-direction: column;
+			color: white;
+			padding: 0.45rem;
+			
+			border-radius: 15px ;
+			
+		  
+		}
+		.box-reco-info {
+		  
+			display: flex; 
+			margin: 0.4rem auto;
+			
+		  
+		}
+
+		#modelosDisponibles{
+			display:flex;
+			justify-content:center;
+			flex-direction: column;
+			/* background:blue; */
+		
+		}
+		
+		.contenedor-imagen{
+		
+			display:flex;
+			justify-content:center;
+			flex-direction:column;
+			text-align:center;
+			/* background:red; */
+			margin:2rem 4rem;
+			transition: 0.5s;
+			font-weight: bold;
+			
+		}
+		
+		.cont-adentro{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			flex-direction: column;
+		}
+		.cont-adentro:hover{
+		
+			transform: scale(1.5);
+			align-items: center;
+			margin: auto;
+			background: white;
+			color: black;
+			font-weight: bold;
+			font-size: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			border-radius: 15px;
+			transition: 0.5s;
+			padding:5px;
+			
+		}
+			.img-model{
+				width:180px;
+				height:180px;
+			}
+	}
+
+
+
+
+#color,#puntero,#exito-firmar,#debes-recuperar,
+#table,#abrir-caja-equipos,#abrirfirmar,#motivo
+#nroChip,#cont-input-chip-alt,
+#cont-opcion-coincide-chip {
+    display: none;
+  }
+ 
+  #errorAclaracion {
+    display: none;
+    color: #c44a4a;
+  }
+
+  #errorDocumento {
+    display: none;
+    color: #c44a4a;
+  }
+
+  .mensaje-exito-firma {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex-direction: row;
+  }
+
+  .box-mensaje-exito-firma {
+    padding: 0.5rem;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+  }
+
+ 
+
+  .container-mensaje-debes-recuperar {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin: 0 auto;
+    flex-direction: row;
+  }
+
+  .box-mensaje-debes-recuperar {
+    padding: 0.5rem;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+  }
+
+ 
+/* base serie */
+
+
+  /* MODAL EQUIPOS EN BASE */
+
+	.check-estilo {
+
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		text-align: center;
+		margin: 0 auto;
+		
+
+	}
+
+	
+
+	.check-estilo .form-group {
+
+		margin: 0.5rem auto;
+		background: #536dfe;
+		padding: 0.3rem;
+		color: white;
+		font-weight: 500;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		border-radius: 15px;
+		width: 8rem;
+
+	}
+	
+
+	/* MOTIVO DE BAJA */
+
+	
+
+	.chipopciones {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		margin: 0 auto;
+
+	}
+
+	
+
+	.opcionchip {
+		background: #D6EAF8;
+
+
+		width: 2.5rem;
+		height: 2.5rem;
+
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+		align-self: center;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 50%;
+
+
+	}
+
+
+	.opcionchip {
+		margin: 0.5rem auto;
+	}
+
+	.chip {
+
+
+		padding: 0 3.5rem;
+	}
+
+
+	/* serie_base posnet */
+
+	
+
+/* input de datos guias  */
+
+
+#guia-id-local,#guia-nro-orden,#guia-nro-orden-pass,#guia-identificacion,
+#guia-nombre,#guia-recolector,#abrir-caja-equipos
+{
+	display: none;
+}
+
+
+/* modal firmal */
+
+#siguiente {
+    display: none;
+  }
+
+  #siguienteNormal {
+    display: none;
+  }
+
+
+ 
+  .loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+   
+    width: 100%;
+    height: 100%;
+  
+    z-index: 9999;
+    background: url('../../../../estilos/imagenes/loader.gif') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+}
+.imgRemito{
+	width: 20px;
+	height: 20px;
+}
+.icon-recu{
+	transition: 0.6s;
+	font-size: 25px;
+	/* position: relative;
+    top: 20px */
+}
+/* .icon-recu:hover{
+	transition: 0.6s;
+	transform: scale(1.2);
+	border: none !important;
+} */
+.complete {
+	height: auto;
+
+}
+.count-equipos-panel{
+	background:white;
+	color:#4b3c5f;
+	font-weight: 500;
+	box-shadow:0 10px 30px rgba(0,0,0,0.3);
+	padding:5px 13px;
+	border-radius:50px;
+	transition: 0.5s;
+	margin: 0 0.5rem;
+
+}
+.count-equipos-modal{
+	background:#536dfe;
+	color:white;
+	font-weight: 500;
+	box-shadow:0 10px 30px rgba(0,0,0,0.6);
+	padding:5px 13px;
+	border-radius:50px;
+	transition: 0.5s;
+	margin: 0 0.5rem;
+
+}
+
+.lista{
+	box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+	padding: 7px;
+	border-radius: 15px;
+	margin: 1rem auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.lista span{
+	margin: 0 5px;
+}
+
+.caja{
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+}
+
+#iniciar{
+
+	transition: 0.8s;
+	
+	}
+	
+	#iniciar:hover{
+	
+	transition: 0.8s;
+	transform: scale(1.1);  
+	}
+	
+	.car{
+	
+	  display: flex;
+	  justify-content: center;
+	  align-content: center;
+	  margin: 2rem auto;
+	}
+	.car img {
+	  width: 290px;
+	  height: 160px;
+	  transition: 0.8s;
+	}
+	.car img:hover{
+	  transition: 0.8s;
+	  transform: translateX(15%);
+	
+	}
+
+
+
+	.bg-white {
+		background: white;
+	}
+
+	.text-bg{
+		font-size: 18.5px;
+	}
+
+	.btn-size{
+		width: 260px;
+		margin-top: 3px !important;
+		margin-bottom: 3px !important;
+	}
+
+
+
+	
+	
+
+	/* minituara de items para guia */
+
+	.pointer-custom {
+		cursor: pointer !important;
+		transition: 0.5s;
+	}
+	.pointer-custom:hover {
+		transform: scale(1.05);
+	   
+	}
+
+
+	/* circulo pequeno-miniatura */
+
+	.circle-icon-small-mini {
+		border-radius: 100%;
+		padding: 6.5px 8px;
+		background:#DEDDDD;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		align-content: center;
+		align-self: center;
+	}
+
+	.img-aviso-small-mini {
+		width: 1.3rem;
+	
+	}
+
+
+	.caja-box-circle-small-mini{
+		
+		width: 5rem;
+	
+	}
+
+	/* input guia */
+
+	.input-guia{
+
+		width: 10rem;
+		border-radius: 20px;
+		text-decoration: none;
+		background: white;
+		border: none;
+    	outline: none;
+		text-align: center;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	}
+
+	/* buscador  */
+
+	.buscador-guia {
+		background: #536dfe;
+		padding: 8px;
+		border-radius: 20px;
+		color: white;
+		
+	}
+
+	/* seleccionar  */
+
+	.seleccionar-guia{
+
+		background: #536dfe;
+		padding: 8px;
+	
+		color: white;
+	}
+
+	.link-modelos {
+		margin: 19px auto;
+		padding: 3px 5px;
+		color: white;
+		border-radius: 15px;
+		background: #f74e4e;
+		text-decoration: none !important;
+		transform: translateX(-5px);
+	}
+
+	#gestion-nueva .boton-new {
+	
+		margin: 15px auto;
+		padding: 5px 8px;
+		color: white;
+		border-radius: 8px;
+		background: #f74e4e;
+		text-decoration: none !important;
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+	}
+	 .botonAnimation-guia {
+		font-weight: 500 !important;
+		background: #f74e4e !important;
+	 }
+
+	 
+
+
+
+	

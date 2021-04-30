@@ -1,0 +1,436 @@
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+   
+  }
+
+
+.soli-credencial{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    margin: 5rem auto 5rem auto;
+    width: 20rem;
+   
+   
+    
+}
+.caja-obten{
+    box-shadow:  0 10px 30px rgba(0,0,0,0.2);
+    padding: 4px;
+    background: #0093f5;
+    color: white;
+    border-radius: 5px;
+    margin: 2rem auto;
+  
+    
+}
+.caja-obten{
+    text-align: center;
+    
+}
+
+.credencial-contenedor {
+    /* background: red; */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    width: 85vw;
+    height:25rem;
+    margin: 4rem auto;
+   
+   
+}
+.credencial-contenedor-post {
+    /* background: red; */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+   
+    width: 85vw;
+    height:25rem;
+    margin: 4rem auto;
+   
+   
+}
+
+
+.card-credencial {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    background: rgb(255, 255, 255);
+    color:#0093f5;
+    font-weight: 600;
+    font-family:Arial, Helvetica, sans-serif;
+    border-radius: 1rem;
+    padding: 0.5rem 0.5rem; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    background-image: url("../../../imagenes/finabajal.png");
+    background-position: cover center;
+    width: auto;
+    height: 25rem;
+    margin: auto;
+    /* background: greenyellow; */
+   
+   
+    
+}
+.cont-img{
+     /* background: red;   */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    /* background: pink; */
+    
+}
+.cont-img img {
+     /* background: blue;  */
+    margin: 0.5rem auto;
+}
+
+.img-cre {
+    
+    width: 10rem;
+    height: 8rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transform: translateY(-20%);
+   
+    
+}
+.img-cre-empre{
+   
+    width: 6rem;
+    height: 6rem;
+    transform: translateY(10%);
+    
+    
+}
+
+.credencial-contenido {
+     /* background: gray;   */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width: 10rem;
+    height: 15rem;
+   
+    margin: 0 0.6rem;
+    padding:0 0.5rem;
+    /* background: rgb(101, 122, 139); */
+  
+}
+
+.datos-cre {
+     /* background: green;   */
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: left;
+    border-radius: 20px;
+    padding: 0.3rem;
+    /* background: rgb(196, 135, 44); */
+       
+}
+
+.datos-cre span {
+   
+    line-height: 0.50rem;
+}
+
+.titulo {
+    color: black;
+    
+    width: 6rem;
+    height: 1rem;
+    font-size: 1rem;
+    letter-spacing: 0.05rem;
+    
+    padding: 0.2rem;
+    border-radius: 15px;
+    text-align: left;
+    
+
+    margin: 0.3rem 0;
+    /* background: pink;   */
+}
+
+.respuesta {
+ 
+    font-size: 1rem;
+    text-align: left;
+    font-weight: 700;
+    margin: 4px 2px;
+     /* background: yellow;  */
+     /* background: blue; */
+
+    
+}
+.vence{
+    transform: translateY(32%) translateX(-10%);
+    /* background: red; */
+  
+
+}
+
+
+/* credencial posterio  */
+
+
+
+.soli-dorso{
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    margin: 5rem auto 5rem auto;
+    /* background: hotpink; */
+   
+    
+    
+}
+
+
+.card-credencial-post{
+    display: flex;
+justify-content: center;
+align-items: center;
+align-content: center;
+flex-direction: row;
+background: rgb(255, 255, 255);
+color:#0093f5;
+font-weight: 600;
+font-family:Arial, Helvetica, sans-serif;
+border-radius: 1rem;
+padding: 1rem 0.5rem; 
+box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    background-image: url("../../../imagenes/fondotraslado4.png");
+    background-position: cover center;
+    width: auto;
+    height: 25rem;
+    margin: auto;
+    
+
+}
+
+
+
+.credencial-contenido-post{
+
+    display: flex ;
+    flex-direction: row;
+    flex-wrap: wrap  ;
+    justify-content: center ;
+
+}
+.credencial-contenido-post img{
+  
+    width: 10rem;
+    height: 3rem;
+    margin: 0.8rem 0.5rem;
+
+   
+}
+
+.img-dorso-cont{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+ 
+  height: 2rem;
+  width: 3rem;
+  margin: 1.8rem 3.1rem;
+  
+  
+ 
+ 
+}
+.container-dorsal-cre{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    background: white;
+}
+
+
+ @media (min-width:720px){
+	.credencial-contenedor {
+        /* background: red; */
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        
+    
+        width: 45rem;
+        height:25rem;
+        margin: 1rem auto;
+       
+    
+    }
+    .credencial-contenedor-post {
+        /* background: red; */
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    
+        width: 45rem;
+        height:25rem;
+        margin: 1rem auto;
+       
+    }
+
+    .card-credencial {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        flex-direction: row;
+        background: rgb(255, 255, 255);
+        color:#0093f5;
+        font-weight: 600;
+        font-family:Arial, Helvetica, sans-serif;
+        border-radius: 1rem;
+        padding: 2rem 3rem; 
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        background-image: url("../../../imagenes/finabajal.png");
+        background-position: cover center;
+        width: 40rem;
+        height: 25rem;
+        margin: auto;
+       
+       
+        
+    }
+    .card-credencial-post{
+        display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    background: rgb(255, 255, 255);
+    color:#0093f5;
+    font-weight: 600;
+    font-family:Arial, Helvetica, sans-serif;
+    border-radius: 1rem;
+    padding: 2rem 3rem; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        background-image: url("../../../imagenes/fondotraslado4.png");
+        background-position: cover center;
+    width: 40rem;
+    height: 25rem;
+    margin: auto;
+    
+    }
+
+    .img-dorso-cont{
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: center;
+        align-items: center;
+      
+        height: 2.1rem;
+        
+        margin: 1.8rem 3rem;
+       
+       
+      }
+
+      
+.img-cre {
+    
+    width: 14rem;
+    height: 10rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transform: translateY(-20%);
+   
+    
+}
+.img-cre-empre{
+   
+    width: 6rem;
+    height: 6rem;
+    transform: translateY(10%);
+    
+    
+}
+.datos-cre span {
+   
+    line-height: 0.95rem;
+}
+
+.titulo {
+    color: black;
+    
+    width: 6rem;
+    height: 1rem;
+    font-size: 1.3rem;
+    letter-spacing: 0.05rem;
+    
+    padding: 0.2rem;
+    border-radius: 15px;
+    text-align: left;
+   
+    margin: 0.5rem 0;
+}
+
+.respuesta {
+ 
+    font-size: 1.3rem;
+    text-align: left;
+    font-weight: 700;
+    margin: 6px 4px;
+     /* background: yellow;  */
+   
+
+    
+}
+.vence{
+    transform: translateY(32%) translateX(-10%);
+   
+  
+
+}
+
+.credencial-contenido {
+    /* background: gray;   */
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-content: center;
+   width: 15rem;
+   height: 15rem;
+  
+   margin: 0 0.9rem;
+   padding:0 0.9rem;
+   /* background: rgb(101, 122, 139); */
+ 
+}
+} 
+

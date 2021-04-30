@@ -1,0 +1,369 @@
+
+body {
+    background: white !important;
+    /* background: #f4ec99 !important; */
+}
+/* buton buscar */
+
+.c-Button-search {
+    padding: 10px 15px;
+    border-radius: 20px;
+    outline: none !important;
+}
+
+.c-Button-input {
+    border-radius: 18px;
+    border: none !important;
+    outline: none !important;
+}
+
+/* aviso-visita */
+
+.c-Button{
+    padding: 10px 10px;
+    /* #90caf9 */
+    border-radius:25px;
+    border:none;
+    color:white;
+    transition: 0.5s;
+    outline: none !important;
+}
+
+.buttonLarge {
+    width: 12rem;
+}
+
+.shadowCustom {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,0.3)!important;
+}
+
+.c-Button:hover{
+   
+    border:none;
+    transform: scale(1.05);
+  
+}
+
+.c-Button span {
+
+    margin-right:5px;
+}
+
+
+
+.c-Input-medio{
+
+    width: 170px;
+
+}
+
+/* modal */
+
+.modal-mask{
+
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    display: table;
+    transition: opacity .3s ease;
+
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* indigo */
+
+
+.bg-indigo{
+    
+    background:#536dfe;
+    transition: 0.5s;
+    border: none;
+    outline: none;
+}
+
+.bg-indigo-static{
+    background:#536dfe;
+    transition: 0.5s;
+    border: none;
+    outline: none;
+}
+
+.bg-indigo:hover{
+    transform: scale(1.05);
+}
+
+.color-indigo {
+    color: #536dfe;
+}
+
+/* purple */
+
+.bg-deep-purple{
+    background: #b39ddb;
+    border: none;
+    transition: 0.5s;
+}
+.bg-deep-purple:hover{
+    transform: scale(1.05);
+}
+/* violet-vitage */
+
+.bg-violet-vintage {
+    background: #4b3c5f;
+    border: none;
+    transition: 0.5s;
+}
+
+.bg-violet-vintage:hover {
+
+    transform: scale(1.05);
+
+    
+}
+
+.bg-violet-vintage-static {
+    background: #4b3c5f;
+    border: none;
+    transition: 0.5s;
+}
+
+
+/* blue-vitage */
+
+.bg-blue-vintage{
+    background: #26b5ae;
+    border: none;
+    transition: 0.5s;
+}
+
+.bg-blue-vintage:hover {
+
+    transform: scale(1.05);
+
+    
+}
+
+/* green-vitage */
+
+.bg-green-vintage {
+
+    background: #46d08f;
+    border: none;
+    transition: 0.5s;
+
+    
+}
+.bg-green-vintage:hover {
+
+    transform: scale(1.05);
+
+    
+}
+
+.bg-green-vintage-chillon {
+    background: #01e675;
+    border: none;
+    transition: 0.5s;
+}
+
+.bg-green-vintage-chillon:hover {
+    transform: scale(1.05);
+}
+
+/* beige.vintage */
+
+.bg-beige-vintage {
+    background: #d4c069;
+    border: none;
+    transition: 0.5s;
+
+}
+
+.bg-beige-vintage:hover {
+
+    transform: scale(1.05);
+
+    
+}
+
+
+/* red-vintage */
+
+.bg-red-vintage {
+    background: #f74e4e;
+    border: none;
+    transition: 0.5s;
+}
+
+
+
+.hidden{
+    display: none;
+}
+/* color de letras */
+
+.gray-strong {
+    color: #4F4545 !important;
+}
+.gray-easy {
+    color:#938989 !important;
+}
+
+/* tamaè´–o de letras */
+
+.text-small-sm {
+    font-size: 14px !important;
+}
+
+.text-small {
+    font-size: 16px !important;
+}
+
+.text-medium{
+    font-size: 19px !important;
+}
+.text-large{
+    font-size: 25px !important;
+}
+
+/* grosor de letras */
+
+.grueso-medium {
+    font-weight: 500 !important;
+}
+
+
+/* redondeo */
+
+.r-rounded-bg{
+    border-radius: 18px;
+}
+.rounded-full{
+    border-radius: 100%;
+}
+
+/* vue efects */
+
+/* aparicion lenta normal */
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0
+  }
+
+/* imagen */
+
+.img-gestion-visita{
+    width: 1.7rem;
+}
+
+.img-aviso {
+    width: 3rem;
+}
+
+/* margenes y paddin */
+
+
+.margin-bg {
+     margin-top: 6rem;
+}
+
+
+
+/* input buscar */
+
+.in-buscar-modern{
+    background: #DEDDDD;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding:10px 8px 10px 8px;
+    text-align: center !important;
+    width: 15rem;
+    font-size: 23px !important;
+}
+
+/* circle-icon */
+
+.circle-icon{
+    border-radius: 100%;
+    padding: 28px 28px;
+    background:#DEDDDD;
+}
+
+
+/* errores */
+
+.error{
+    margin:10px auto;
+    padding: 18px !important;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+/* circulo mediano  */
+
+
+.circle-icon-medium {
+    border-radius: 100%;
+    padding: 18px 18px;
+    background:#DEDDDD;
+}
+
+.img-aviso-medium {
+    width: 2.5rem;
+}
+
+/* circulo pequeno */
+
+.circle-icon-small {
+    border-radius: 100%;
+    padding: 16px 16px;
+    background:#DEDDDD;
+}
+
+.img-aviso-small {
+    width: 2rem;
+}
+
+
+.caja-box-circle{
+    
+    width: 8rem;
+}
+
+
+.box-visita {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 20rem;
+}
+
+/* accesorios envio d evisita */
+
+
+.spinner-custom {
+    width: 13px;
+    height: 13px;
+}
+
+.enviado {
+    background: green;
+    border-radius: 15px;
+    padding: 3px 5px;
+}
+

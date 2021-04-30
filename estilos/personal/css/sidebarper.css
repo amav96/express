@@ -1,0 +1,159 @@
+
+
+
+
+.completo{
+   
+    top: 0%;
+    margin: 0;  /*sube hacia arriba*/
+    padding: 0; /*lo pega todo a al margen*/
+    list-style: none ;
+    text-decoration: none;
+
+}
+.completo i {
+    margin: 0 0.5rem;
+}
+.sidebarper{
+    position: fixed;
+    z-index: 1;
+    left: -250px; /*decide la ubicacion derecha o izquierda|| arranca con 0 para que veas la ubicacion inicial*/
+    width: 250px;
+    height: 100%;
+    background: #0093f5;; /*el color del rectangulo*/
+    transition: all .5s ease;
+    word-wrap: break-word;
+}
+
+.sidebarper header{
+font-size: 18px;  /* tamaño de letra */
+
+color: #0093f5;
+text-align: center;
+line-height: 70px; /* posicion del elemento header con respecto al rectangulo en la zona del header  */
+font-weight: 500;
+background: #fff;  /* color de la zona del header */
+
+user-select: none; /* no se selecciona el header */
+
+
+}
+
+
+.sidebarper ul a{ /*accedemos al ul y a los a*/
+    display: block;
+    height: 56px;
+    line-height: 56px; /*espacio entre lineas*/
+    font-size: 13px;
+    font-weight: 500;
+    color: #fff;
+    padding-left: 20px; /*distancia de las letras hasta el margen y a los iconos*/
+    box-sizing: border-box; /*convierte en caja cada elemento*/
+    margin: 0.2rem auto;
+box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+
+transition: .6s; /*tiempo de la transicioon al moverse*/
+text-decoration: none;
+background: #0093f5;
+
+}
+
+.completo li:hover a { /*los elementos del ul y del a cuando sombrees con el mouse*/
+   
+    padding-left: 20px; /*al pasar mouse se mueva con respecto al margen*/
+
+}
+
+.sidebarper ul li a svg  { /*elemtos del sidebarper, entra al ul, al a y al i */
+    margin-right: 10px; /*distancia de los iconos respecto al margen y a las palabras*/
+    font-size: .8rem;
+    
+
+}
+#cuadraditocheck{ /*cuadradito check q se convierte en menu*/
+    display: none; /*lo escondemos*/
+    
+}
+label #boton,label #cancel{ /*accedemos al boton y al cancel adentro del label*/
+    position: absolute; /*posicion del check atras de todo */
+    margin-left: 55px;
+    width:60px ;
+    height:45px ;
+   
+    cursor: pointer;
+   
+   
+}
+label #cancel{
+    right: -54.5px;  /*distancia con respecto al margen del boton cancelar*/
+top: 90px;  /*posicion vertical*/
+font-size: 30px;  /*tamaño del check*/
+/* color: #0a5275;   color */
+padding: 4px 9px;   /*tamaño del elemento completo*/
+border-radius: 20px;
+transition: all .6s ease;
+word-wrap: break-word;
+    
+}
+
+label #boton{
+    position: fixed;
+    z-index: 500;
+    left: -54.5px;
+    top: 25px;
+    font-size: 35px;
+    color: #050505;
+    padding:6px 12px; /*tamaño*/
+    transition: all .50s ease;/*desaparicion del boton*/
+   
+}
+
+label #cancel{  /*el check*/
+    
+left: -100px;  /*distancia con respecto al margen del boton cancelar*/
+top: 14.5px;  /*posicion vertical*/
+font-size: 30px;  /*tamaño del check*/
+/* color: #0a5275;   color */
+padding: 4px 9px;   /*tamaño del elemento completo*/
+border-radius: 20px;
+transition: all .50s ease;
+color: #0093f5;
+
+}
+label #cancel:hover{  /*el check*/
+transform: scale(1.1);
+
+    }
+
+#cuadraditocheck:checked ~.sidebarper{ /*el check, checked=al hacerle click, adentro del elemento sidebarper*/
+
+    left:0; /*al hacer click en menu, se despliega. funciona e checked*/
+  
+
+}
+#cuadraditocheck:checked ~label #boton{ /*el check, checked=al hacerle click, adentro del label apretando el boton para abrir*/
+
+    left: 150px; /*distancia del boton al margen al hacer click*/
+     opacity: 0; /*al ser clickado lo opacamos y desaparecemos*/
+     pointer-events: none;
+     
+}
+#cuadraditocheck:checked ~label #cancel{ /*el check, checked=al hacerle click, adentro del label apretando el boton para cancelar*/
+    position: fixed;
+    display: block;
+    z-index: 500;
+    right: 160px;
+    left: 145px;  /*distancia con respecto al margen del boton cancelar*/
+top: 27px;  /*posicion vertical*/
+font-size: 30px;  /*tamaño del check*/
+/* color: #0a5275;   color */
+padding: 4px 9px;   /*tamaño del elemento completo*/
+border-radius: 20px;
+transition: all .50s ease;
+}
+.segundo{
+    position: fixed;
+    z-index: 1500;
+}
+
+

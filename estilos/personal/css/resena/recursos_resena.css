@@ -1,0 +1,767 @@
+/* INDICE */
+/* 1= IMAGEN LOGO */
+/* 2= MENU */
+/* 3=TITULO BIENVENIDOS */
+/* 4=PARRAFO NOSOTROS */
+/* 5=SEGUNDO TITULO SOMOS EXPRESS */
+/* 6= IMAGENES */
+/* 7= TITULO IMAGEN */
+/* 8= PARRAFO IMAGEN */
+
+
+body{
+    
+    background: #f5f5f5 fixed no-repeat 50% 50%;
+    background-size: cover;
+    background-image:url(../../../imagenes/personal/finabajal.png);
+   }
+
+   
+
+   /*  #EXPRESS  */
+
+.container-artisan{
+  
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* imagen afip */
+
+.social-icons .imgert {
+  width: 3rem;
+}
+/* imagen afip  */
+
+
+/* 1= LOGO */
+
+.fondoimagen{
+     
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    background: white;
+    border-radius: 100%;
+    padding: 27vw 15vw 14vw 27vw ;
+    margin-top: -16vw ;
+    margin-left: 65vw ;
+    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+     
+  }
+.logo-main{
+    display: none;
+  }
+  .logo-main-dos{
+    width: 21vw ;
+      position: absolute;
+      margin-top: -10.5vw;
+      margin-left: -19vw;
+  }
+/* 1= LOGO +++++END+++++*/
+
+/* 2= MENU */
+
+.contenedordemenu
+{
+    
+    display:none;
+    /*arriba  derecha abajo izquierda*/
+}
+/* 2= MENU +++END++++*/
+
+
+/* 3=TITULO BIENVENIDOS */
+
+.contenedor-nosotros-resena{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 80px 0 10px 0;
+ 
+   
+}
+.color-titulo-resena{
+    color:  #2678ee;
+    margin: 1.5rem 0 1rem 0;
+
+}
+/* 3=TITULO BIENVENIDOS  ++end+++ */
+
+
+/* 4=PARRAFO NOSOTROS */
+
+.parrafo-bienvenido {
+    display: flex;
+    justify-content: center;
+    line-height: 2;
+    text-align: center;
+    
+    font-size: 4vw;
+    font-weight: 500;
+    margin: 0 0rem 0 -2.5rem;
+}
+.parrafo-bienvenido ul {
+    list-style-type:none;
+    margin-right: 0px;
+}
+/* 4=PARRAFO NOSOTROS  +++end++++*/
+
+
+/* 5=SEGUNDO TITULO SOMOS EXPRESS */
+.somos-express{
+    display: flex;
+    justify-content: center;
+}
+/* 5=SEGUNDO TITULO SOMOS EXPRESS +++END++++ */
+
+
+.contenedor-imagenes-resena{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 0 1rem 0;
+}
+.caja-imagen-uno{
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+}
+.tamano-imagen-resena{
+    width: 95px;
+    height: 95px;
+    margin: 20px 0 1px 0;
+}
+.caja-imagen-uno h4{
+color: #ed334c;
+font-size: 16px;
+}
+.caja-imagen-uno h4{
+    
+    margin: 1px;
+    font-weight: 700;
+    line-height: 1.5rem;
+    }
+    .caja-imagen-uno p{
+        font-size: 15px;
+        margin: -5px 1px 1px 1px;
+        font-weight: 600;
+        line-height: 1.5rem;
+        
+        }
+
+      
+       
+.contenedor-imagenes-resena{
+    margin: 1rem 0 2rem 0;
+}
+
+        
+
+/*-----------------FOOTER------------------- */
+
+.site-footer {
+  background-color: #fff;
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
+  color: black;
+  font-weight: 500;
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+}
+.site-footer hr {
+  border-top-color: black;
+  opacity: 0.5;
+}
+.site-footer hr.small {
+  margin: 20px 0;
+}
+.site-footer h6 {
+  color: black;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+.site-footer a {
+  color: black;
+  font-weight: 500;
+}
+.site-footer a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links {
+  padding-left: 0;
+  list-style: none;
+}
+.footer-links li {
+  display: block;
+}
+.footer-links a {
+  color: black;
+  font-weight: 500;
+}
+.footer-links a:active,
+.footer-links a:focus,
+.footer-links a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links.inline li {
+  display: inline-block;
+}
+.site-footer .social-icons {
+  text-align: right;
+}
+.site-footer .social-icons a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 6px;
+  margin-right: 0;
+  border-radius: 100%;
+  background-color: #33353d;
+}
+.copyright-text {
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .site-footer [class^="col-"] {
+    margin-bottom: 30px;
+  }
+}
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 0;
+  }
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center;
+  }
+}
+.social-icons {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.social-icons li {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.social-icons li.title {
+  margin-right: 15px;
+  text-transform: uppercase;
+  color: black;
+  font-weight: 700;
+  font-size: 13px;
+}
+.social-icons a {
+  background-color: black;
+  color: black;
+  font-size: 16px;
+  display: inline-block;
+  line-height: 44px;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-right: 8px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+.social-icons a:active,
+.social-icons a:focus,
+.social-icons a:hover {
+  color: black;
+  background-color: #29aafe;
+}
+.social-icons.size-sm a {
+  line-height: 34px;
+  height: 34px;
+  width: 34px;
+  font-size: 14px;
+}
+.social-icons a.facebook:hover {
+  background-color: #3b5998;
+}
+.social-icons a.twitter:hover {
+  background-color: #00aced;
+}
+.social-icons a.linkedin:hover {
+  background-color: #007bb6;
+}
+.social-icons a.dribbble:hover {
+  background-color: #ea4c89;
+}
+@media (max-width: 767px) {
+  .social-icons li.title {
+    display: block;
+    margin-right: 0;
+    font-weight: 600;
+  }
+}
+
+/* @media (min-width:1920px) and (min-height:1635px){
+  .site-footer{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+ 
+  width:100%;
+}
+
+
+
+  
+}
+@media (min-width:1920px) and (min-height:1900px){
+  .site-footer{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+ 
+  width:100%;
+}
+
+
+
+  
+}
+
+@media (min-width:1920px) and (min-height:2100px){
+  .site-footer{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+ 
+  width:100%;
+}
+
+
+
+  
+} */
+
+/* MEDIAS QUERIES */
+
+@media (min-width:480px){
+
+    /* 6= IMAGENES */
+    .contenedor-imagenes-resena{
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 6= IMAGENES +++END+++ */
+
+    .tamano-imagen-resena{
+        min-width: 10vw;
+        min-height: 15vh ;
+    }
+  
+
+
+}
+
+@media (min-width:768px){
+
+     /* logo */
+
+     .logo-main{
+        display: block;
+        width: 19vw;
+       
+      }
+      .fondoimagen{
+        
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        background: 0;
+        border-radius: 0;
+        padding:0 !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        background: transparent !important;
+        box-shadow: none;
+        transform: translateX(35%) !important;
+      }
+      .logo-main-dos{
+        display: none;
+       
+         }
+      
+         
+      
+
+    /* logo +++ */
+/* MENU  */
+.contenedordemenu a {
+  color: transparent;
+}
+
+    .contenedordemenu
+{
+    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+   
+    background: transparent;
+    z-index: 500;
+   transform: translateY(10%);
+    /*arriba  derecha abajo izquierda*/
+}
+
+.contenedordemenu li {
+  list-style-type: none;
+  display: inline-block;
+  transition: .5s;
+}
+.contenedordemenu li:hover {
+  transition: .5s;
+  transform: scale(1.1);
+}
+ .fondocirculodelicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width:3.2rem !important;
+     height: 3rem !important;
+     border-radius: 20px;
+     background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee);
+ 
+     /* background: #f44336; */
+     box-shadow: 0 10px 30px rgba(0,0,0,.4);
+     color: white;
+     font-family: 'Poppins', sans-serif;
+     margin: 15px;
+ }
+ .iconoadentrodelcirculo {
+     font-size: 1.8rem !important;
+ }
+ 
+ .textoicono {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: #212121;
+     font-size: 1.1rem !important;
+ }
+ 
+ .adm {
+     background: #EF4848;
+ }
+
+/* FIN MENU  */
+
+    /* 6= IMAGENES */
+    .contenedor-imagenes-resena{
+        display: flex;
+        flex-direction: row;
+    }
+    .contenedor-imagenes-resena p{
+        margin: 0 1.5rem 0 1.5rem ;
+        }
+        
+        .contenedor-nosotros-resena{
+            margin: 13rem 0 1rem 0;
+        }
+
+        
+        .contenedor-imagenes-resena h4{
+            font-size: 2rem;
+            line-height: 2rem;
+        }
+        .contenedor-imagenes-resena p{
+            font-size: 1.3rem;
+            line-height: 2rem;
+        }
+
+    /* 6= IMAGENES ++end+++*/
+
+    /* TITULOS */
+    .titulo-nosotros h3{
+        margin: -10rem 0 0 0 ;
+    }
+    .titulo-nosotros h3,
+    .somos-express h3{
+font-size: 3rem;
+    }
+    /* TITULOS +++END+++ */
+    
+    .tamano-imagen-resena{
+        width: 10rem;
+        height: 4rem ;
+    }
+
+
+}
+
+@media (min-width:1024px){
+
+  
+     
+  
+.logo-main{
+  width: 10rem;
+    transform: translateX(40%);
+  }
+
+    .parrafo-bienvenido{
+        margin: -3rem 0 0 0 ;
+    }
+
+    /* 6= IMAGENES */
+    .contenedor-imagenes-resena{
+        display: flex;
+        flex-direction: row;
+        margin: 1rem 0 10rem 0;
+    }
+    .contenedor-imagenes-resena p{
+        margin: 0 1.5rem 0 1.5rem ;
+        }
+        
+        .contenedor-nosotros-resena{
+            margin: 13rem 0 5rem 0;
+        }
+
+        .tamano-imagen-resena{
+            width: 13rem;
+            height: 12rem;
+        }
+        .contenedor-imagenes-resena h4{
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+        }
+        .contenedor-imagenes-resena p{
+            font-size: 1.8rem !important;
+            font-size: 1.5rem;
+            line-height: 2.5rem;
+        }
+
+    /* 6= IMAGENES ++end+++*/
+
+  
+}
+
+
+@media (min-width:1200px){
+
+
+    /* logo */
+
+    .logo-main{
+        width: 10rem;
+        height: 8rem;
+        transform: translateX(100%);
+      }
+    /* logo +++end+++ */
+
+     /* TITULOS */
+     .titulo-nosotros h3{
+        margin: -10rem 0 0 0 ;
+    }
+    .titulo-nosotros h3,
+    .somos-express h3{
+font-size: 2rem;
+    }
+    /* TITULOS +++END+++ */
+
+
+    /* 4=PARRAFO NOSOTROS */
+
+.parrafo-bienvenido {
+    display: flex;
+    justify-content: center;
+    line-height: 2;
+    text-align: center;
+    
+    font-size: 1.5vw;
+    font-weight: 500;
+    margin: -6rem 0rem 0 -2.5rem;
+}
+.parrafo-bienvenido ul {
+    list-style-type:none;
+    margin-right: 12rem;
+    margin-left: 12rem;
+}
+/* 4=PARRAFO NOSOTROS  +++end++++*/
+
+
+    /* 6= IMAGENES */
+    .contenedor-imagenes-resena{
+        display: flex;
+        flex-direction: row;
+        margin: 1rem 0 15rem 0 ;
+    }
+    
+        
+        .contenedor-nosotros-resena{
+            margin: 13rem 0 0 0;
+        }
+  
+      
+    /* 6= IMAGENES ++end+++*/
+
+  /* 7= TITULO IMAGEN */
+/* 8= PARRAFO IMAGEN */
+
+    .contenedor-imagenes-resena h4{
+
+        font-size: 1.5rem;
+    }
+    
+    .contenedor-imagenes-resena p{
+
+        font-size: 1.3rem !important;
+    }
+    
+    /*  */
+}
+ 
+@media (min-height:1350px){
+  .site-footer{
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    
+    width:100%;
+   
+  }
+}
+  
+
+@media (min-width:1400px){
+
+
+    /* logo */
+
+    .logo-main{
+        width: 10rem;
+        height: 8rem;
+        transform: translateX(170%);
+      }
+    /* logo +++end+++ */
+
+     /* TITULOS */
+     .titulo-nosotros h3{
+        margin: -10rem 0 0 0 ;
+    }
+    .titulo-nosotros h3,
+    .somos-express h3{
+font-size: 2rem;
+    }
+    /* TITULOS +++END+++ */
+
+
+    /* 4=PARRAFO NOSOTROS */
+
+.parrafo-bienvenido {
+    display: flex;
+    justify-content: center;
+    line-height: 2;
+    text-align: center;
+    
+    font-size: 1.5vw;
+    font-weight: 500;
+    margin: -6rem 0rem 0 -2.5rem;
+}
+.parrafo-bienvenido ul {
+    list-style-type:none;
+    margin-right: 12rem;
+    margin-left: 12rem;
+}
+/* 4=PARRAFO NOSOTROS  +++end++++*/
+
+
+    /* 6= IMAGENES */
+    .contenedor-imagenes-resena{
+        display: flex;
+        flex-direction: row;
+    }
+    .contenedor-imagenes-resena p{
+        margin: 0 1.5rem 0 1.5rem ;
+        }
+        
+        .contenedor-nosotros-resena{
+            margin: 13rem 0 0 0;
+        }
+
+
+        .tamano-imagen-resena{
+            width: 14rem;
+            min-height: 11px;
+        }
+
+    /* 6= IMAGENES ++end+++*/
+
+  /* 7= TITULO IMAGEN */
+/* 8= PARRAFO IMAGEN */
+
+    .contenedor-imagenes-resena h4{
+
+        font-size: 1.5rem;
+    }
+    
+    .contenedor-imagenes-resena p{
+
+        font-size: 1.4rem !important;
+    }
+    /*  */
+}
+
+@media (min-width:1920px){
+  .logo-main{
+    width: 10rem;
+      transform: translateX(300%);
+    }
+  .contenedor-imagenes-resena{
+    margin: 1rem 0 5rem;
+  }
+
+  .tamano-imagen-resena{
+    width: 16rem;
+    height: 14rem;
+  }
+  
+  
+}
+
+@media (min-width:3500px){
+  .logo-main{
+    width: 10rem;
+      transform: translateX(800%);
+    }
+
+.contenedor-imagenes-resena{
+  margin: 1rem 0 30rem 0;
+}
+  .tamano-imagen-resena{
+height: 300px;
+  }
+  .caja-imagen-uno h4{
+    font-size: 2rem;
+      }
+      .caja-imagen-uno p{
+        font-size: 2rem !important;
+          }
+  
+
+
+}
+
+
+
+

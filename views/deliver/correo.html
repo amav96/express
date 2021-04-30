@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <script src="../../estilos/personal/js/jquery.min.js"></script>
+
+    
+    <script src="../../estilos/personal/js/bootstrap.min.js"></script>
+  
+    <link rel="stylesheet" href="../../estilos/personal/css/lightslider.css">
+    <link rel="stylesheet" href="../../estilos/personal/fontawesome/css/all.css">
+   
+    
+    <link rel="stylesheet" href="../../estilos/personal/css/bootstrap/mdb.min.css">
+    <link rel="stylesheet" href="../../estilos/personal/css/bootstrap/bootstrap.min.css">
+
+    <!-- <link rel="stylesheet" href="estilos/personal/css/menuicons.css"> -->
+    <link rel="stylesheet" href="../../estilos/personal/css/sidebarper.css">
+   <link rel="stylesheet" href="../../estilos/personal/css/recursos_para_mostrar.css">
+   <link rel="stylesheet" href="../../estilos/personal/css/entregas/correo.css">
+   <!-- ---------SCRIPT------- -->
+  
+</head>
+
+<body>
+  
+    <div class="fondoimagen">
+        <img src="../../estilos/imagenes/logo1.png" alt="">
+            </div>
+            <nav>
+            <div class="contenedordemenu">
+                <ul>
+                    <li>
+                        <a href="../../index.html">
+            
+                            <div class="fondocirculodelicono">
+                                <i class="iconoadentrodelcirculo fas fa-home"></i>
+                            </div>
+                            
+                            <p class="textoicono">Inicio</p>
+                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../../nosotros.html">
+            
+                            <div class="fondocirculodelicono">
+                                <i class="iconoadentrodelcirculo fas fa-box-open"></i>
+                            </div>
+                            
+                            <p class="textoicono">#Express</p>
+                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../../productos.html">
+            
+                            <div class="fondocirculodelicono">
+                                <i class="iconoadentrodelcirculo fas fa-mobile-alt"></i>
+                            </div>
+                            
+                            <p class="textoicono">Productos</p>
+                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../../contacto.html">
+            
+                            <div class="fondocirculodelicono">
+                                <i class="iconoadentrodelcirculo fas fa-phone"></i>
+                            </div>
+                           
+                            <p class="textoicono">Contacto</p>
+                        
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+        
+                            <div class="fondocirculodelicono adm">
+                                <i class="iconoadentrodelcirculo fas fa-user"></i>
+                            </div>
+        
+                            <p class="textoicono">Login</p>
+        
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+    <aside>
+        <input type="checkbox" id="cuadraditocheck">
+    <label for="cuadraditocheck">
+        <i class="fas fa-bars" id="boton"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebarper completo">
+        <header>Express</header>
+        <ul class="completo">
+            <li>
+                <a href=""><i class="fas fa-qrcode"></i>Dashboard</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-link"></i>Shortcuts</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-stream"></i>Overview</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-calendar-week"></i>Events</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-question-circle"></i>About</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-sliders-h"></i>Services</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-envelope"></i>Contact</a>
+            </li>
+
+        </ul>
+
+
+    </div>
+   
+
+
+    <div class="container d-flex justify-content-center align-items-center">
+        <!-- LA CLASE CARD NOS SERVIRA PARA AGREGAR LA ANIMACION -->
+        <div class="card">
+            <div class="card-header text-center h4 font-weight-bolder text-warning">
+              Provincias
+            </div>
+            <div class="card-body">
+                <!-- select para el departamento -->
+                <div class="form-group">
+                    <label for="provincias" class="text-uppercase text-primary">Provincias</label>
+                    <select class="custom-select form-control" id="provincias">
+                        <!-- cargar con js -->
+                    </select>
+                </div>
+                <!-- select para la provincia -->
+                <div class="form-group">
+                    <label for="localidades" class="text-uppercase text-primary">Localidades</label>
+                    <select class="custom-select form-control" id="localidades">
+                        <!-- cargar con js dependiendo del departamento -->
+                    </select>
+                </div>
+                <!-- select para el distrito -->
+                <div class="form-group">
+                    <label for="" class="text-uppercase text-primary">Nombre</label>
+                    <input class=" form-control" id="nombre">
+                        <!-- cargar con js dependiendo de la provincia -->
+                </div>
+                <div class="form-group">
+                    <label for="" class="text-uppercase text-primary">Apellido</label>
+                    <input class=" form-control" id="apellido">
+                        <!-- cargar con js dependiendo de la provincia -->
+                </div>
+            </div>
+        </div>          
+    </div>
+    <script src="../../assets/shipping/select.js"></script>
+    <script src="../../estilos/personal/js/jquery.js"></script>
+   
+
+</body>
+
+</html>

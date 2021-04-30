@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Express | ¡Entrega tus equipos!</title>
+
+
+    <script src="../../estilos/personal/js/jquery.min.js"></script>
+    <script src="../../estilos/personal/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../estilos/personal/fontawesome/css/all.css">
+
+
+    <link rel="stylesheet" href="../../estilos/personal/css/lightslider.css">
+
+
+    <link rel="stylesheet" href="../../estilos/personal/css/bootstrap/mdb.min.css">
+    <link rel="stylesheet" href="../../estilos/personal/css/bootstrap/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../../estilos/personal/css/sidebarper.css">
+    <link rel="stylesheet" href="../../estilos/personal/css/deliver/recursos_deliver.css">
+
+
+</head>
+
+<body>
+
+
+    <div class="fondoimagen" id="comienzo">
+
+        <img class="logo-main" src="../../estilos/imagenes/logo2.png" alt="">
+        <img class="logo-main-dos" src="../../estilos/imagenes/logo.png" alt="">
+
+    </div>
+
+
+
+    <div class="contenedordemenu">
+        <ul>
+            <li>
+                <a href="index.html">
+
+                    <div class="fondocirculodelicono">
+                        <i class="iconoadentrodelcirculo fas fa-home"></i>
+                    </div>
+
+                    <p class="textoicono">Inicio</p>
+
+                </a>
+            </li>
+            <li>
+                <a href="views/company/nosotros.html">
+
+                    <div class="fondocirculodelicono">
+                        <i class="iconoadentrodelcirculo fas fa-box-open"></i>
+                    </div>
+
+                    <p class="textoicono">#Express</p>
+
+                </a>
+            </li>
+            <li>
+                <a href="views/products/productos.html">
+
+                    <div class="fondocirculodelicono">
+                        <i class="iconoadentrodelcirculo fas fa-mobile-alt"></i>
+                    </div>
+
+                    <p class="textoicono">Productos</p>
+
+                </a>
+            </li>
+            <li>
+                <a href="views/company/contacto.html">
+
+                    <div class="fondocirculodelicono">
+                        <i class="iconoadentrodelcirculo fas fa-phone"></i>
+                    </div>
+
+                    <p class="textoicono">Contacto</p>
+
+                </a>
+            </li>
+            <li>
+                <a href="views/adm/panel.php">
+
+                    <div class="fondocirculodelicono adm">
+                        <i class="iconoadentrodelcirculo fas fa-user"></i>
+                    </div>
+
+                    <p class="textoicono">Login</p>
+
+                </a>
+            </li>
+        </ul>
+    </div>
+    </nav>
+
+
+
+    <input type="checkbox" id="cuadraditocheck">
+    <label for="cuadraditocheck">
+        <i class="fas fa-bars" id="boton"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebarper completo">
+        <header>Express</header>
+        <ul class="completo">
+            <li>
+                <a href=""><i class="fas fa-qrcode"></i>Dashboard</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-link"></i>Shortcuts</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-stream"></i>Overview</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-calendar-week"></i>Events</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-question-circle"></i>About</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-sliders-h"></i>Services</a>
+            </li>
+            <li>
+                <a href=""><i class="fas fa-envelope"></i>Contact</a>
+            </li>
+
+        </ul>
+
+
+
+    </div>
+
+    <style>
+        #buscaCliente {
+            display: none;
+        }
+    </style>
+
+
+    <div class="container-artisan">
+        <div class="main-director" id="main-director">
+            <div class="container-buscador-cliente" id="buscaCliente">
+                <div class="box-buscador-cliente">
+                    <input type="text" id="identificacionIngresada" placeholder="Ingrese identificacion">
+                    <button id="buscarCliente" class="buscarCliente">Empezar</button>
+                </div>
+            </div>
+
+
+            <div class="container-titulo" id="container-titulo">
+                <div class="box-titulo" id="box-titulo">
+
+                </div>
+            </div>
+
+            <div class="container-opciones" id="container-opciones">
+            </div>
+
+
+
+
+
+
+
+            <div class="table-responsive" id="tabladatos">
+                <div class="container-titulo-tabla">
+                    <span>Equipos a devolver</span>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Serie</th>
+                            <th scope="col">Equipo</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Tarjeta</th>
+                            <th scope="col">Localidad</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Codigo postal</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <!-- <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                
+              </tr> -->
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container-boton-entregar">
+                <div class="box-boton-entregar">
+                    <button class="boton-entregar" id="boton-entregar">Entregar</button>
+                </div>
+            </div>
+
+            <div class="container-artisan">
+
+
+
+
+                <div class="container-box-recolector" id="container-box-recolector">
+
+                    <div class="sub-box-auto">
+                        <div class="box-auto">
+                            <div class="box-info">
+
+
+                                <span>Un Recolecotor pasara por tu domicilio</span>
+
+                            </div>
+                            <div class="box-info">
+
+
+                                <span>Que hora prefieres?</span>
+                                <select name="horario_rec" id="horario_rec">
+                                    <option value="8:00 am - 10:00 am">8:00 am - 10:00 am</option>
+                                    <option value="10:00 am - 12:00 am">10:00 am - 12:00 am</option>
+                                    <option value="12:00 am - 14:00 am">12:00 am - 14:00 am</option>
+                                    <option value="14:00 am - 16:00 am">14:00 am - 16:00 am</option>
+                                    <option value="16:00 am - 18:00 am">16:00 am - 18:00 am</option>
+                                    <option value="9:00 am - 11:00 am">9:00 am - 11:00 am</option>
+                                    <option value="11:00 am - 13:00 am">11:00 am - 13:00 am</option>
+                                    <option value="13:00 am - 15:00 am">13:00 am - 15:00 am</option>
+                                    <option value="15:00 am - 17:00 am">15:00 am - 17:00 am</option>
+                                    <option value="17:00 am - 18:00 am">17:00 am - 18:00 am</option>
+                                </select>
+                            </div>
+                            <div class="box-info">
+                                <span>Que dia prefieres?</span>
+                                <select name="dia_rec" id="dia_rec">
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miercoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sabado</option>
+                                    <option value="Domingo">Domingo</option>
+                                </select>
+
+                            </div>
+                            <div class="box-info">
+                                <span>¿Cuantos equipos entregaras?</span>
+                                <input type="text" id="cantidadEquipos" placeholder="Ingrese cantidad de equipos">
+                            </div>
+                            <div class="box-info">
+                                <div class="optimizo">
+                                    <span>Un numero de contacto </span>
+                                    <select name="caracteristicaContacto" id="caracteristicaContacto">
+                                        <option value="+54">+54</option>
+                                        <option value="+598">+598</option>
+                                    </select>
+                                    <input id="numeroContacto" type="text" placeholder="ingrese numero">
+
+                                </div>
+                            </div>
+                            <div class="box-info">
+                                <div class="optimizo">
+                                    <style>
+                                        #domiContacto {
+                                            display: none;
+                                        }
+                                    </style>
+                                    <span>Si tienes otro domicilio.</span>
+                                    <span id="abrirdomicilio">Indicanos!</span>
+
+                                    <input type="text" id="domiContacto" placeholder="Domicilio alternativo">
+                                </div>
+                            </div>
+                            <div class="box-info">
+                                <div class="optimizo">
+                                    <span>Confirmanos tu email.</span>
+                                </div>
+                                <input type="text" id="emailalternativo" placeholder="Email para contactarte">
+                            </div>
+                            <div class="box-info">
+                                <button id="enviarinfo">Enviar </button>
+                            </div>
+                            <div class="spinner-border" role="status" id="procesando">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <div class="box-info">
+                                <div class="boton-descargar" id="boton-descargar">
+                                    <div id="DescargarAviso"> Descargar </div>
+                            </div>
+                            </div>
+                            
+                        </div>
+                        
+
+                    </div>
+                </div>
+                <style>
+                    #procesando {
+                        display: none;
+                    }
+
+                    #DescargarAviso{
+                        display:none;
+                    }
+                </style>
+
+                <div class="container-correo-argentino" id="container-correo-argentino">
+                    <div class="sub-box-correo">
+                        <div class="box-correo">
+                            <div class="item-correo">
+                                <span>Gratuitamente con este cupón podes devolver el quipo</span>
+                                <div id="descargar"> Descargar cupón</div>
+                            </div>
+                            <div class="item-correo">
+                                <a href="https://www.correoargentino.com.ar/formularios/sucursales"
+                                    target="_blank">Buscar
+                                    sucursal cercana a mi domicilio</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <style>
+        #mensaje-exito-pactado {
+            display: none;
+        }
+    </style>
+    <div class="container-artisan">
+        <div class="mensaje-exito-pactado" id="mensaje-exito-pactado">
+            <div class="sub-exito">
+                <div class="box-exito">
+                    <span>Ha sido un exito! bla bla </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="" id="modalRel">
+        
+    </div>
+
+    <div class="" id="body-rel">
+
+    </div>
+
+
+
+
+    <!-- Site footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6>About</h6>
+                    <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative to help the
+                        upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or .
+                    </p>
+
+                </div>
+
+
+                <div class="col-xs-6 col-md-3">
+                    <h6>Categories</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/category/c-language/">C</a></li>
+                        <li><a href="http://scanfcode.com/category/front-end-development/">UI Design</a></li>
+                        <li><a href="http://scanfcode.com/category/back-end-development/">PHP</a></li>
+                        <li><a href="http://scanfcode.com/category/java-programming-language/">Java</a></li>
+                        <li><a href="http://scanfcode.com/category/android/">Android</a></li>
+                        <li><a href="http://scanfcode.com/category/templates/">Templates</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links">
+                        <li><a href="http://scanfcode.com/about/">About Us</a></li>
+                        <li><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+                        <li><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></li>
+                        <li><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></li>
+                        <li><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by
+                        <a href="#">Scanfcode</a>.
+                    </p>
+                </div>
+
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <ul class="social-icons">
+                        <li><a class="facebook" href="#"><i class=""></i></a></li>
+                        <li><a class="twitter" href="#"><i class=""></i></a></li>
+                        <li><a class="dribbble" href="#"><i class=""></i></a></li>
+                        <li><a class="linkedin" href="#"><i class=""></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="../../estilos/personal/js/jquery.js"></script>
+    <script src="../../assets/deliver/deliver-item.js"  ></script>
+  
+ 
+
+
+
+
+
+
+
+</body>
+
+</html>

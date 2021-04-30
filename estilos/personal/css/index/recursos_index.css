@@ -1,0 +1,3760 @@
+/* INDICE */
+/* 1= LOGO */
+/* 2= MENU */
+/* POINT MODAL */
+/* 3= TITULO ADENTRO DE RADIO */
+/* 4= RADIO ITEMS */
+/* 5= PRIMER TITULO  */
+/* 6= SLIDER */
+
+/* TRUCK MOVING */
+/* 7= BENEFICIO TITULO */
+/* 8= BENEFICIOS BOX */
+/* 9= MINI ITEMS */
+/* 10=ITEMS RAPY CUADRADO TEXTO */
+/* 11=TIRA FINAL */
+/* 12= ACORDION */
+/* 13= FOOTER */
+
+
+/* MODAL */
+.modal-container-per{
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  z-index: 600;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.modal-per{
+  width: 90%;
+  height: 500px;
+  background: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  /* overflow: hidden; */
+  position: relative;
+  transition-duration: 1s;
+  transform: translateY(0%);
+  border-radius: 10px;
+  
+
+   
+}
+
+.modal-close-per {
+  transform: translateY(-200%);
+}
+
+.modal-per > img {
+  height: 50%;
+  
+} 
+
+.close-per {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  
+  width: 25px;
+  height: 25px;
+  background: #c44a4a;
+  color: #fff;
+  line-height: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.box-empleos {
+  margin: 0.2rem auto;
+  
+  width: 14rem;
+  display: flex;
+  flex-direction: row ;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  background: #0093f5;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: .4s;
+box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+.box-empleos:hover {
+  transform: scale(1.05);
+  transition: .4s;
+}
+.sub-box-empleo-imagen img {
+  width: 80px;
+}
+
+.sub-box-empleo{
+
+width: 5rem;
+}
+
+.link-modal{
+  text-decoration: none;
+  color: #fff;
+}
+.equis{
+  margin: auto;
+  
+  
+}
+
+/* MODAL ****END**** */
+
+
+
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  /* box-sizing: border-box !important; */
+  background: #f4ec99 !important;
+  
+ 
+}
+.container-artisan {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* 1= ----------------------LOGO------------------------ */
+.fondoimagen {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  background: white;
+  border-radius: 100%;
+  padding: 27vw 15vw 14vw 27vw;
+  margin-top: -16vw;
+  margin-left: 65vw;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.logo-main {
+  display: none;
+}
+.logo-main-dos {
+  width: 21vw;
+  position: absolute;
+  margin-top: -10.5vw;
+  margin-left: -19vw;
+}
+
+/* 1= ---------------------- LOGO ------------------------ */
+
+/* 2= ----------------------MENU------------------------ */
+.contenedordemenu {
+  display: none;
+  /*arriba  derecha abajo izquierda*/
+}
+
+/* 2= ----------------------MENU ++END+++------------------------*/
+
+/* POINT MODAL */
+.container-point{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5rem auto -4rem auto;
+
+}
+
+.sub-box-point {
+  margin: 0 0.5rem;
+}
+
+.box-point {
+  background: #fff;
+  color: #0093f5;
+  padding: 0.35rem;
+  border-radius: 10px;
+  font-weight: 500;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, .2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  transition: .5s;
+  cursor: pointer;
+}
+.box-point:hover {
+  transform: scale(1.03);
+ transition: .5s;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, .3);
+  
+}
+
+.img-point img {
+  width: 5rem;
+  margin: 0.5rem auto;
+}
+
+/* modal pointer  uno */
+
+
+.modal-container-point-uno{
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  z-index: 600;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.modal-point-uno{
+  width: 90%;
+  height: 500px;
+  background: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  /* overflow: hidden; */
+  position: relative;
+  transition-duration: 1s;
+  transform: translateY(0%);
+  border-radius: 10px;
+  
+
+   
+}
+
+.modal-close-point-uno {
+  transform: translateY(-200%);
+}
+
+.modal-point-uno > img {
+  height: 50%;
+  
+} 
+
+.close-point-uno {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  
+  width: 25px;
+  height: 25px;
+  background: #c44a4a;
+  color: #fff;
+  line-height: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* adentro del modal */
+.container-titulo{
+  margin: 1rem auto;
+  padding: 0.5rem;
+  border-radius: 7px;
+ box-shadow: 0 5px 25px rgba(0, 0, 0, .2);
+ color: #0093f5;
+}
+.container-titulo span{
+  
+  font-weight: 500;
+ 
+}
+.container-titulo img {
+  width: 3rem;
+}
+
+.container-items-point{
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.sub-box-items-point{
+  
+  margin: -0.1rem auto;
+  padding: 0.2rem;
+ 
+  display: flex;
+ 
+  text-align: left;
+}
+.box-items-point{
+  background: #0093f5;
+  padding: 0.3rem;
+ border-radius: 5px;
+ width: 17.5rem;
+ display: flex;
+ align-items: center;
+ align-content: center;
+ align-self: center;
+ color: #fff;
+
+}
+.escritura{
+ 
+ font-weight: 500;
+ 
+}
+
+.box-items-point img {
+  width: 1.2rem;
+  margin: auto 0.3rem;
+}
+
+.container-titulo:hover{
+  background:#0093f5;
+  color: #fff;
+  }
+
+.box-items-point:hover{
+  background:#fff;
+  color: #0093f5;
+  transition: .5s;
+}
+
+
+/* modal pointer  dos */
+
+
+.modal-container-point-dos{
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  z-index: 600;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.modal-point-dos{
+  width: 90%;
+  height: 500px;
+  background: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  /* overflow: hidden; */
+  position: relative;
+  transition-duration: 1s;
+  transform: translateY(0%);
+  border-radius: 10px;
+  
+
+   
+}
+
+.modal-close-point-dos {
+  transform: translateY(-200%);
+}
+
+.modal-point-dos > img {
+  height: 50%;
+  
+} 
+
+.close-point-dos {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  
+  width: 25px;
+  height: 25px;
+  background: #c44a4a;
+  color: #fff;
+  line-height: 25px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+
+
+
+/* modal pointer adentro */
+
+
+
+/* POINT MODAL ***END** */
+
+
+
+/* LISTA A LOS COSTADOS */
+
+.container-lista {
+  display: none;
+}
+
+/* LISTA A LOS COSTADOS */
+
+/* 3= ----------------------TITULO ADENTRO DE RADIO------------------------ */
+
+.titulo-main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  transform: translateY(273%);
+  margin-left: auto;
+  margin-right: auto;
+  width: 120px;
+}
+.titulo-main h2 {
+  font-size: 0.86rem;
+}
+
+/* 3= ----------------------TITULO ADENTRO DE RADIO +++END+++------------------------*/
+
+/*--------------- 3= RADIO ITEMS --------------- */
+
+
+
+.iconoadentrodelcirculo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.contenidodeicono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+  width: 60px;
+  height: 65px;
+  font-size: 13px;
+
+  border-radius: 19px;
+}
+
+/*------------------------ 3= RADIO ITEMS -------------------------- */
+
+/*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+.container-box-boxes {
+  margin: 1rem 0 15rem 0;
+}
+
+.boxes {
+  margin: auto;
+  position: relative;
+  top: 5.5rem;
+  bottom: 3rem;
+  left: 0;
+  right: 0;
+  width: 115px;
+  height: 115px;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 26px;
+}
+
+.box {
+  position: relative;
+  z-index: 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 200px;
+  -webkit-animation: 8s ease-in-out infinite floatingbox;
+  animation: 8s ease-in-out infinite floatingbox;
+  will-change: transform;
+  width: 6rem;
+  height: 6rem;
+  margin: 0 !important;
+  border-radius: 100%;
+  width: 90px !important;
+  height: 90px !important;
+  margin-left: -43px;
+  position: absolute;
+  text-align: center;
+  transform: translate3d(7px, 7px, 0);
+  transition: transform 0.2s ease-out;
+  transition-duration: 0.18s;
+  cursor: pointer;
+  background: #fff;
+  /* background-image: linear-gradient(to right top, #2678ee, #0093f5, #13aaf5, #53c0f1, #85d3ee); */
+}
+
+/* .boxes .box:hover {
+  transform: scale(1.15);
+  transition: .5s;
+} */
+
+.box h3 {
+  font-size: 0.7rem;
+}
+
+.imagenes-svg {
+  margin: 0.2rem 0 0.1rem 0;
+  transform: scale(0.04);
+  display: flex;
+  text-align: center;
+  align-content: center;
+  justify-content: center;
+}
+.letraachetres {
+  margin: -0.5rem 0 0 0;
+  color: #0093f5;
+  font-weight: 500;
+}
+.vinculodelicono {
+  color: #212121;
+}
+.vinculodelicono:hover {
+  color: white;
+  transition: all 0.1s;
+}
+
+.box:nth-child(1) {
+  
+  transform: translate3d(12px, 126px, 0px);
+}
+
+.box:nth-child(2) {
+  
+  transform: translate3d(-77.1288px, 83.0778px, 0px);
+}
+.box:nth-child(3) {
+  transform: translate3d(-99.1418px, -13.3674px, 0px);
+}
+.box:nth-child(4) {
+
+    transform: translate3d(-37.4627px, -90.7105px, 0px);
+}
+
+.box:nth-child(5) {
+  transform: translate3d(61.4627px, -90.7105px, 0px);
+}
+.box:nth-child(6) {
+ 
+  transform: translate3d(123.142px, -13.3674px, 0px);
+}
+.box:nth-child(7) {
+
+  transform: translate3d(101.129px, 83.0778px, 0px);
+}
+
+.botonAnimation{
+  background: #0093f5;
+  transition: all ease 0.9s;
+ 
+ }
+ .botonAnimationLetra{
+   color: white;
+   transition: all ease 0.5s;
+ }
+ 
+
+/*------------------------ 3= RADIO ITEMS ------------------+++END+++----- */
+
+/* 5= --------------------PRIMER TITULO-----------------  */
+.titulo-primary {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.titulo-primary h3 {
+  color: #0093f5;
+}
+
+/* 5= --------------------PRIMER TITULO +++END+++----------------- */
+
+/*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+.ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  
+}
+.item-a {
+  position: relative;
+  left: 31.5px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+}
+.boxmarve {
+  width: 71vw;
+  
+  height: 220px;
+  background: #fff;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+.boxmarve h5{
+  font-size: 15px;
+}
+
+.model {
+  max-height: 100%;
+  max-width: 100%;
+  height: 180px;
+  -webkit-animation: 8s ease-in-out infinite floating;
+  animation: 8s ease-in-out infinite floating;
+  will-change: transform;
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translateY(-3%) rotate(1deg);
+  }
+
+  65% {
+    transform: translateY(3%) rotate(-1deg);
+  }
+}
+
+.boxmarve:hover {
+  background: #3483fa;
+  color: white;
+  transform-style: preserve-3d;
+  transform: scale(1.02);
+  transition: all ease 0.3s;
+}
+.boxmarve:hover .marvel {
+  color: white;
+  transition: all ease 0.5s;
+}
+
+/* 6= --------------------SLIDER CORPORATIVO   ++++FINAL+++----------------- */
+
+
+
+  /* TRUCK MOVING */
+
+  
+
+  .car-wrapper {
+    display: flex;
+    flex-direction: row;
+     
+     width: 100%;
+     
+    
+   }
+   
+   /* humo de atras */
+   
+   .wind {
+     position: absolute;
+     z-index: -1;
+    
+   }
+   .wind .p {
+     position: absolute;
+     background: #0093f5;
+     border-radius: 0.625em;
+     height: 0.400em;
+   }
+   .wind .p1 {
+     width: 4.275em;
+     position: absolute;
+     right: 0;
+     top: 1.5625em;
+     animation: wind 1s -1s linear infinite;
+   }
+   .wind .p2 {
+     width: 6.25em;
+     right: 2.5em;
+     top: 3.75em;
+     animation: wind 1s -2s linear infinite;
+   }
+   .wind .p3 {
+     width: 3.125em;
+     right: 0;
+     top: 6.5625em;
+     animation: wind 1s -1s linear infinite;
+   }
+   .wind .p4 {
+     width: 3.75em;
+     right: 6.25em;
+     top: 5em;
+     animation: wind 1s 1s linear infinite;
+   }
+   .wind .p5 {
+     width: 4.375em;
+     right: 1.875em;
+     top: 6em;
+     animation: wind 1s -1.5s linear infinite;
+   }
+   
+   .car-wrapper_inner {
+     position: relative;
+     z-index: 4;
+   }
+   
+   .car-moving {
+       
+     position: relative;
+     opacity: 1;
+     margin-left: auto;
+     margin-right: auto;
+     z-index: 4;
+     -webkit-animation: carMove 0.3s infinite;
+     -moz-animation: carMove 0.3s infinite;
+     -ms-animation: carMove 0.3s infinite;
+     -o-animation: carMove 0.3s infinite;
+     animation: carMove 0.3s infinite;
+   }
+   /* el carro saltando */
+   @keyframes carMove {
+     0% {
+       transform: translateY(0px);
+     }
+     50% {
+       transform: translateY(-1px);
+     }
+     100% {
+       transform: translateY(0px);
+     }
+   }
+   /* el humo de atras */
+   @keyframes wind {
+     0% {
+       transform: translateX(100%);
+       opacity: 1;
+     }
+     100% {
+       transform: translateX(-400%);
+       opacity: 0;
+     }
+   }
+   
+   /* movimiento de ruta */
+   .box-car-wrapper {
+    -webkit-transform: translateX(-250%);
+    -moz-transform: translateX(-250%);
+    -ms-transform: translateX(-250%);
+    -o-transform: translateX(-250%);
+    transform: translateX(-250%);
+    position: relative;
+    animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+  }
+  
+  @keyframes carDrive {
+    0% {
+      transform: translateX(-250%);
+      
+    }
+    25% {
+      transform: translateX(0%);
+    }
+    70% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(130%);
+     
+    }
+  }
+   .car-moving{
+       width: 200px;
+   }
+   .box-car-wrapper{
+       display: flex;
+   justify-content: center;
+   margin: 1rem auto;
+   
+   }
+   .car-wrapper{
+      
+       display: flex;
+       flex-direction: row;
+       justify-content: center;
+       align-items: center;
+       align-content: center;
+       
+   }
+   
+  
+    /* TRUCK MOVING +++END+++ */
+
+/* 8= -------------------BENEFICIOS BOX------------------- */
+
+.director-contenedor-beneficios {
+  display: flex;
+  flex-direction: column;
+}
+/*----- CONTENEDOR NUMERO 1---- */
+.contenedor-beneficio-total {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* background: url(../../../imagenes/front/curva5.png); */
+  margin: 3.5rem 0 0 0;
+  border-radius: 3% !important;
+  height: 470px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+/*----- CONTENEDOR NUMERO 2---- */
+.contenedor-beneficio-total-dos {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 3.5rem 0 0 0;
+  border-radius: 3% !important;
+  height: 470px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+/*----- CONTENEDOR NUMERO 3---- */
+.contenedor-beneficio-total-tres {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 3.5rem 0 0 0;
+  border-radius: 3% !important;
+  height: 470px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* imagen del beneficio */
+
+.imagen-beneficio-total {
+  display: flex;
+
+  width: 290px;
+  height: 300px;
+
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: -5rem;
+  transform: translateY(-28%);
+}
+
+/* titulos */
+.contenedor-texto-beneficio {
+  padding: 0.2rem auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80vw;
+}
+
+.contenedor-texto-beneficio h4 {
+  font-size: 24px;
+  line-height: 27px;
+  text-align: center;
+  color: black;
+  line-height: 1.4rem;
+}
+
+.cambio-color-beneficio {
+  color: #0093f5;
+  font-weight: 700;
+  line-height: 2.4rem;
+}
+
+.titulo-beneficio-total {
+  text-align: center;
+  margin: -6.5rem 0 0 0;
+}
+
+.parrafo-total {
+  text-align: center;
+  color: black;
+  font-weight: 480;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.boton-beneficio {
+  background: #0093f5;
+  text-align: center;
+
+  width: 100px;
+  height: 35px;
+  margin-top: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-radius: 16px 16px;
+  color: #fff;
+  font-weight: 550;
+}
+
+.img-contacto {
+  text-align: center;
+  margin: 0.7rem 1rem 0 0.5rem;
+  width: 19px;
+  height: 19.5px;
+}
+
+.contenedor-texto-beneficio a {
+  color: transparent;
+}
+
+/* ----- CONTENEDOR NUMERO 2---- */
+
+/* BENEFICIO DOS +++END+++ */
+
+/*------------------- 8= BENEFICIOS BOX+++end+++---------------- */
+
+/* 9=----------------- MINI ITEMS--------------------- */
+
+.contenedor-mini-beneficios {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1rem auto;
+
+  padding: 0 1.4rem;
+}
+
+.box-mini-beneficios {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, .1);
+
+  border-radius: 6px;
+  padding: 11px 15px;
+  margin: 12px;
+  cursor: pointer;
+  transition: .5s;
+}
+.imagen-mini-beneficios {
+  margin: 0.2rem auto;
+}
+.imagen-mini-beneficios .img-bene {
+  font-size: 1.8rem;
+  color: #13aaf5;
+}
+.box-mini-beneficios:hover{
+
+  transform: scale(1.06);
+  transition: .5s;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+}
+/* box-item-texto */
+
+/* 9=----------------- MINI ITEMS--------+++END++++------------- */
+
+/* 10=----------------ITEMS RAPY CUADRADO TEXTO-------------- */
+
+.contenedor-item-texto {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin: 4rem auto 2rem auto;
+}
+
+.sub-contenedor-item-texto {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 1rem auto;
+}
+.box-item-texto {
+  display: flex;
+
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem 1.5rem;
+  font-size: 2rem;
+  border-radius: 5px;
+  color: #13aaf5;
+  transition: .5s;
+}
+
+.box-item-texto:hover{
+
+  transform: scale(1.08);
+  transition: .5s;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+}
+.box-titulo-parrafo {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.sub-contenedor-item-texto h3 {
+  font-size: 20px;
+  font-weight: bold;
+ 
+  
+}
+
+.texto-item {
+  display: flex;
+
+  text-align: left;
+  margin: auto 0.5rem auto 0.5rem;
+
+  
+}
+.parrafo-en-texto {
+  text-align: left;
+  margin: auto 0.5rem auto 0.5rem;
+  color: #706967;
+  font-weight: 500;
+  
+ 
+}
+
+/* 10=----------------ITEMS RAPY CUADRADO TEXTO-------------- */
+
+/* 11=-----------------------TIRA FINAL -------------------------*/
+.contenedor-tira-final {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 0 1rem 0;
+  margin: 2.5rem 0 1rem 0;
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+}
+
+.sub-box-tira-fina {
+  display: flex;
+  flex-direction: column;
+}
+.tira-final-texto {
+  margin: 0 auto 1rem auto;
+}
+.tira-final-texto h3 {
+  font-size: 23px;
+}
+
+/* boton */
+
+.boton-tira-final {
+  background: black;
+  color: #fff;
+  padding: 0.7rem;
+  margin: 0 auto 1rem auto;
+  border-radius: 1rem 1rem 1rem 1rem;
+  width: 8rem;
+  transition: .5s;
+}
+.tira-final-texto a {
+  color: transparent;
+}
+.boton-tira-final:hover{
+ transform: scale(1.08);
+ transition: .5s;
+ 
+}
+
+.imagen-tira-final {
+  width: 220px;
+  height: 140px;
+}
+/* 11=------------TIRA FINAL---------------++++END+++++ */
+
+/* 12= ---------------------ACORDION---------------------- */
+
+.accordion {
+  width: 100%;
+  max-width: 1000px;
+  margin: 3rem auto;
+}
+.accordion-item {
+  background-color: #fff;
+  color: #111;
+  margin: 1rem 0;
+  border-radius: 1rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+}
+.accordion-item-header {
+  padding: 0.5rem 3rem 0.5rem 1rem;
+  min-height: 3.5rem;
+  line-height: 1.25rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+.accordion-item-header::after {
+  content: "\002B";
+  font-size: 2rem;
+  position: absolute;
+  right: 1rem;
+}
+.accordion-item-header.active::after {
+  content: "\2212";
+}
+.accordion-item-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.accordion-item-body-content {
+  padding: 1rem;
+  line-height: 1.5rem;
+  border-top: 1px solid;
+  border-image: linear-gradient(to right, transparent, #34495e, transparent) 1;
+  margin: 0 10px 0 15px;
+}
+
+/* 12= --------------------------ACORDION-------------------- */
+
+/* imagen afip */
+
+.social-icons .imgert {
+  width: 3rem;
+}
+/* imagen afip  */
+
+/* 13= -----------------FOOTER------------------- */
+
+.site-footer {
+  background-color: #fff;
+  padding: 45px 0 20px;
+  font-size: 15px;
+  line-height: 24px;
+  color: black;
+  font-weight: 500;
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
+}
+.site-footer hr {
+  border-top-color: black;
+  opacity: 0.5;
+}
+.site-footer hr.small {
+  margin: 20px 0;
+}
+.site-footer h6 {
+  color: black;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+.site-footer a {
+  color: black;
+  font-weight: 500;
+}
+.site-footer a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links {
+  padding-left: 0;
+  list-style: none;
+}
+.footer-links li {
+  display: block;
+}
+.footer-links a {
+  color: black;
+  font-weight: 500;
+}
+.footer-links a:active,
+.footer-links a:focus,
+.footer-links a:hover {
+  color: #3366cc;
+  text-decoration: none;
+}
+.footer-links.inline li {
+  display: inline-block;
+}
+.site-footer .social-icons {
+  text-align: right;
+}
+.site-footer .social-icons a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 6px;
+  margin-right: 0;
+  border-radius: 100%;
+  background-color: #33353d;
+}
+.copyright-text {
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .site-footer [class^="col-"] {
+    margin-bottom: 30px;
+  }
+}
+@media (max-width: 767px) {
+  .site-footer {
+    padding-bottom: 0;
+  }
+  .site-footer .copyright-text,
+  .site-footer .social-icons {
+    text-align: center;
+  }
+}
+.social-icons {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.social-icons li {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.social-icons li.title {
+  margin-right: 15px;
+  text-transform: uppercase;
+  color: black;
+  font-weight: 700;
+  font-size: 13px;
+}
+.social-icons a {
+  background-color: black;
+  color: black;
+  font-size: 16px;
+  display: inline-block;
+  line-height: 44px;
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  margin-right: 8px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+.social-icons a:active,
+.social-icons a:focus,
+.social-icons a:hover {
+  color: black;
+  background-color: #29aafe;
+}
+.social-icons.size-sm a {
+  line-height: 34px;
+  height: 34px;
+  width: 34px;
+  font-size: 14px;
+}
+.social-icons a.facebook:hover {
+  background-color: #3b5998;
+}
+.social-icons a.twitter:hover {
+  background-color: #00aced;
+}
+.social-icons a.linkedin:hover {
+  background-color: #007bb6;
+}
+.social-icons a.dribbble:hover {
+  background-color: #ea4c89;
+}
+@media (max-width: 767px) {
+  .social-icons li.title {
+    display: block;
+    margin-right: 0;
+    font-weight: 600;
+  }
+}
+
+/* 13= -----------------------FOOTER -------------------*/
+
+/* M
+ E
+ D
+ I
+ A
+ Q
+ U
+ E
+ R
+ I
+ E
+ S*/
+
+@media (min-width: 360px) {
+  /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+  .ulmarvel {
+    list-style: none;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    padding: 0;
+    height: 270px !important;
+  }
+  .ulmarvel a {
+    text-decoration: none;
+  }
+
+  .containermarve {
+    margin: 1rem auto 1px auto !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 320px;
+  }
+  .item-a {
+    position: relative;
+    left: 40px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+  .boxmarve {
+    width: 71vw;
+    
+    height: 220px;
+    background: #fff;
+    border-radius: 15px;
+  
+    box-sizing: border-box;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+    padding: 2rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .model {
+    max-height: 100%;
+    max-width: 100%;
+    height: 180px;
+    -webkit-animation: 8s ease-in-out infinite floating;
+    animation: 8s ease-in-out infinite floating;
+    will-change: transform;
+  }
+
+  /* 5= --------------------PRIMER TITULO-----------------  */
+  .titulo-primary {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto 1rem auto;
+  }
+  .titulo-primary h3 {
+    color: #0093f5;
+  }
+
+  /* 5= --------------------PRIMER TITULO +++END+++----------------- */
+
+  /* TRUCK MOVING */
+
+  .box-car-wrapper {
+    -webkit-transform: translateX(-250%);
+    -moz-transform: translateX(-250%);
+    -ms-transform: translateX(-250%);
+    -o-transform: translateX(-250%);
+    transform: translateX(-250%);
+    position: relative;
+    animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+  }
+  
+  @keyframes carDrive {
+    0% {
+      transform: translateX(-250%);
+      
+    }
+    25% {
+      transform: translateX(0%);
+    }
+    70% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(150%);
+     
+    }
+  }
+  /* TRUCK MOVING END++++ */
+
+  /* LOGISTICA BOX */
+
+  .container-point{
+    margin: 7rem auto -4rem auto;
+
+  }
+  /* LOGISTICA BOX **END** */
+
+  /* 8= -------------------BENEFICIOS BOX------------------- */
+
+  .director-contenedor-beneficios {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /*----- CONTENEDOR NUMERO 1---- */
+  .contenedor-beneficio-total {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 20rem;
+  }
+  /*----- CONTENEDOR NUMERO 2---- */
+  .contenedor-beneficio-total-dos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 20rem;
+  }
+  /*----- CONTENEDOR NUMERO 3---- */
+  .contenedor-beneficio-total-tres {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 20rem;
+  }
+
+  .imagen-beneficio-total {
+    display: flex;
+
+    width: 290px;
+    height: 300px;
+
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: -2rem;
+    transform: translateY(-38%);
+  }
+
+  .contenedor-texto-beneficio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+  }
+
+  /* 8= -------------------BENEFICIOS BOX------------++++END++++----- */
+
+  /* 9= MINI ITEMS */
+
+  .contenedor-mini-beneficios {
+    margin: 2rem auto 3rem auto;
+  }
+  /* 9=------ MINI ITEMS------+++END+++ */
+
+  /* 10=ITEMS RAPY CUADRADO TEXTO */
+  .contenedor-item-texto {
+    margin: 2rem auto 3rem auto;
+  }
+  /* 10=----------ITEMS RAPY CUADRADO TEXTO------- +++END+++*/
+}
+@media (min-width: 480px) {
+  /* 5= --------------------PRIMER TITULO-----------------  */
+  .titulo-primary {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0.1rem auto 2rem auto;
+  }
+  .titulo-primary h3 {
+    color: #0093f5;
+  }
+
+  /* 5= --------------------PRIMER TITULO +++END+++----------------- */
+
+  /* modal trabajo */
+
+  
+.modal-per{
+  width: 70%;
+ 
+}
+
+  /* modal trabajo end */
+
+
+  .item-a {
+    position: relative;
+    left: 18px;
+    border: transparent;
+  
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+  }
+  .boxmarve {
+    width: 50vw;
+    
+    height: 220px;
+    background: #fff;
+    border-radius: 15px;
+  
+    box-sizing: border-box;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+    padding: 2rem;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  }
+
+/* TRUCK MOVING */
+
+.box-car-wrapper {
+  -webkit-transform: translateX(-250%);
+  -moz-transform: translateX(-250%);
+  -ms-transform: translateX(-250%);
+  -o-transform: translateX(-250%);
+  transform: translateX(-250%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-250%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(180%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+
+
+/* POINT MODAL */
+.container-point{
+  margin: 8rem auto -4rem auto;
+}
+
+.img-point img {
+  width: 5.5rem;
+}
+
+/* modal pointer  uno */
+
+/* adentro del modal */
+.container-titulo{
+font-size: 1.1rem;
+}
+
+.container-titulo img {
+  width: 3.6rem;
+}
+
+
+.box-items-point{
+
+  padding: 0.4rem;
+ width: 20rem;
+ transition: .5s;
+
+}
+
+.box-items-point img {
+  width: 1.25rem;
+  margin: auto 0.3rem;
+}
+
+
+
+
+
+/* modal pointer adentro */
+
+
+
+/* POINT MODAL ***END** */
+
+
+
+
+
+
+
+
+
+  /* 8= -------------------BENEFICIOS BOX------------------- */
+
+  /*----- CONTENEDOR NUMERO 1---- */
+  .contenedor-beneficio-total {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+  /*----- CONTENEDOR NUMERO 2---- */
+  .contenedor-beneficio-total-dos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+  /*----- CONTENEDOR NUMERO 3---- */
+  .contenedor-beneficio-total-tres {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+
+  /* 8= -------------------BENEFICIOS BOX------------++++END++++----- */
+}
+
+@media (min-width: 570px) {
+  /* 8= -------------------BENEFICIOS BOX------------------- */
+
+  /*----- CONTENEDOR NUMERO 1---- */
+  .contenedor-beneficio-total {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 26rem;
+  }
+  /*----- CONTENEDOR NUMERO 2---- */
+  .contenedor-beneficio-total-dos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 26rem;
+  }
+  /*----- CONTENEDOR NUMERO 3---- */
+  .contenedor-beneficio-total-tres {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 26rem;
+  }
+
+  .contenedor-texto-beneficio {
+    padding: 0.2rem auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+  }
+
+  .contenedor-mini-beneficios {
+    width: 300px;
+  }
+
+  /* 8= -------------------BENEFICIOS BOX------------++++END++++----- */
+}
+
+@media (min-width: 768px) {
+
+.boton-l{
+
+  transform: translateY(-30px);
+}
+  
+  /* 1= LOGO */
+
+  .logo-main{
+    display: block;
+    width: 19vw;
+   
+  }
+  .fondoimagen{
+    
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    background: 0;
+    border-radius: 0;
+    padding:0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    transform: translateX(35%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+     
+
+  /* 1= --------------LOGO----------------+++++END+++++++++ */
+  /* 2= MENU */
+
+  .contenedordemenu {
+    
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+
+    background: transparent;
+    z-index: 500;
+    transform: translateY(10%);
+    /*arriba  derecha abajo izquierda*/
+  }
+
+  .contenedordemenu li {
+    list-style-type: none;
+    display: inline-block;
+    transition: .5s;
+  }
+  .contenedordemenu li:hover {
+    transition: .5s;
+    transform: scale(1.1);
+  }
+  .contenedordemenu a {
+    color: transparent;
+  }
+  .fondocirculodelicono {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.2rem !important;
+    height: 3rem !important;
+    border-radius: 20px;
+    background-image: linear-gradient(
+      to right top,
+      #2678ee,
+      #0093f5,
+      #13aaf5,
+      #53c0f1,
+      #85d3ee
+    );
+
+    /* background: #f44336; */
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-family: "Poppins", sans-serif;
+    margin: 15px;
+  }
+  .iconoadentrodelcirculo {
+    font-size: 1.8rem !important;
+  }
+
+  .textoicono {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #212121;
+    font-weight: 495;
+    font-size: 1.1rem !important;
+  }
+
+  .adm {
+    background: #ef4848;
+  }
+
+/* MODAL TRABAJO */
+
+
+.modal-per{
+  width: 70%;
+ 
+}
+
+.box-empleos {
+  margin: 0.2rem auto;
+  
+  width: 14rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  background: #0093f5;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: .4s;
+box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.equis{
+  margin: auto;
+  font-size: 1.5rem;
+  display: flex;
+}
+
+.box-empleos {
+  margin: 0.1rem auto;
+  height: 5rem;
+  width: 45vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  background: #0093f5;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 500;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+  transition: .4s;
+
+}
+
+.sub-box-empleo-imagen img {
+  width: 60px;
+  margin: 0.5rem;
+}
+
+.sub-box-empleo{
+
+width: 10rem;
+}
+
+/* MODAL TRABAJO ++++END+++ */
+
+/* director del pantallazo */
+.main-trailer{
+  display: flex;
+  flex-direction: row;
+  /* background: chocolate; */
+}
+
+/* director del pantallazo ***end***/
+
+/* director del glov */
+.central{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* background: red; */
+  width: 19rem;
+}
+/* director del glov ****end****/
+
+/* director de las listas  */
+.container-lista{
+  display: flex;
+  margin: 0 .1rem;
+ 
+  /* background: red; */
+}
+.items-lista img {
+  width: 1.5rem;
+}
+
+
+.taitel-lista img {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 4rem;
+  margin-top: 0.5rem;
+  margin-bottom: -1rem;
+ 
+}
+
+
+.container-lista:nth-child(3) .box-lista{
+  /* color: violet; */
+  /* background: aqua; */
+  text-align: right;
+}
+
+
+.titulo-lista {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+  padding: 0.5rem;
+  margin: 0.5rem auto;
+  color: #0093f5;
+  background: #fff;
+  font-weight: 500;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.sub-box-lista span {
+  margin: 0 0.3rem;
+}
+.items-lista{
+
+
+  width: 15.5rem;
+  padding: 0.5rem;
+  margin: 0.2rem auto;
+  background: #0093f5;
+  font-weight: 500;
+  transition: .5s;
+ 
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+  color:#fff;
+
+}
+.container-lista .titulo-lista{
+  
+  transition: .5s;
+ 
+}
+.container-lista:hover .titulo-lista{
+  transform: translateX(10%);
+  border-radius: 0 18px 18px 0;
+  transition: .5s;
+ 
+}
+.container-lista .items-lista{
+  background: #0093f5;
+  transition: .5s;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  
+
+}
+
+.items-lista:hover{
+  background: #fff;
+  transition: .5s;
+  color: #0093f5;
+  transform: translateX(10%);
+  border-radius: 0 18px 18px 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+.box-lista {
+  background: #0093f5;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.container-lista:nth-child(3) .items-lista{
+  background: #0093f5;
+  transition: .5s;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+  
+
+}
+
+.container-lista:nth-child(3) .items-lista:hover{
+  background: #fff;
+  transition: .5s;
+  color: #0093f5;
+  transform: translateX(-10%);
+  border-radius: 18px 0 0 18px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+}
+
+.container-lista:nth-child(3) .titulo-lista{
+  
+  transition: .5s;
+ 
+}
+.container-lista:nth-child(3):hover .titulo-lista{
+  transform: translateX(-10%);
+  border-radius: 18px 0 0 18px;
+  transition: .5s;
+ 
+}
+
+
+/* director de las listas end */
+
+/* modal logistica e box */
+.container-point {
+  display: none;
+}
+/* modal logistica */
+
+
+  /* 3= ----------------------TITULO ADENTRO DE RADIO------------------------ */
+
+  .titulo-main {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    transform: none;
+    width: auto;
+    /* background: cornflowerblue; */
+  }
+  .titulo-main h2 {
+    font-size: 1.5rem;
+  }
+
+  /* 3= ----------------------TITULO ADENTRO DE RADIO +++END+++------------------------*/
+
+
+
+
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .container-box-boxes {
+    margin: 1rem 0 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-left:auto;
+    margin-right: auto;
+    width: 17rem;
+    /* background: blue; */
+    
+    
+  }
+
+  .boxes {
+    position: relative;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: center;
+    box-sizing: none !important;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin: 1rem 1.5rem;
+padding: 0;
+    /* background: violet; */
+   
+  }
+  /* container-box-boxes
+boxes */
+
+  .box {
+    position: relative;
+    z-index: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 200px;
+    -webkit-animation: 8s ease-in-out infinite floatingbox;
+    animation: 8s ease-in-out infinite floatingbox;
+    /* will-change: transform; */
+    border-radius: 100%;
+    transform: none;
+    transition: transform 0.2s ease-out;
+    transition-duration: 0.18s;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 3.1rem;
+    margin: 0.1rem 0.4rem !important;
+    /* background: greenyellow; */
+   
+  }
+
+  .box h3 {
+    font-size: 0.8rem;
+  }
+
+  .imagenes-svg {
+    margin: 0;
+    transform: scale(0.04) translateY(-13%) translateX(-31%);
+    display: flex;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    
+  }
+  .letraachetres {
+    color: black;
+    margin: 0;
+    transform: translateY(-100%);
+
+    height: 15px;
+  }
+ 
+   .espe {
+    transform: translateY(-100%);
+    font-size: 0.75rem !important;
+  }
+  .vinculodelicono {
+    color: #212121;
+  }
+  .vinculodelicono:hover {
+    color: white;
+    transition: all 0.1s;
+  }
+
+  .box:nth-child(1) {
+    transform: none;
+   
+    
+  }
+  .box:nth-child(1):hover,.box:nth-child(2):hover,.box:nth-child(3):hover,.box:nth-child(4):hover,.box:nth-child(5):hover,.box:nth-child(6):hover,.box:nth-child(7):hover {
+  transition: .5s;
+    transform: scale(1.1);
+    
+  }
+  .box:nth-child(2) {
+    transform: none;
+   
+  }
+ 
+  .box:nth-child(3) {
+    transform: none;
+    
+  }
+  .box:nth-child(4) {
+    transform: none;
+   
+  }
+  .box:nth-child(5) {
+    transform: none;
+   
+  }
+  .box:nth-child(6) {
+    transform: none;
+  
+  }
+  .box:nth-child(7) {
+    transform: none;
+   
+   
+  }
+
+
+  .botonAnimation{
+    background: #0093f5;
+    transition: all ease 0.9s;
+   
+   }
+   .botonAnimationLetra{
+     color: white;
+     transition: all ease 0.5s;
+   }
+   
+  /*------------------------ 3= RADIO ITEMS ------------------+++END+++----- */
+
+
+  /* TRUCK MOVING */
+
+  .box-car-wrapper {
+    -webkit-transform: translateX(-250%);
+    -moz-transform: translateX(-250%);
+    -ms-transform: translateX(-250%);
+    -o-transform: translateX(-250%);
+    transform: translateX(-250%);
+    position: relative;
+    animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+  }
+  
+  @keyframes carDrive {
+    0% {
+      transform: translateX(-250%);
+      
+    }
+    25% {
+      transform: translateX(0%);
+    }
+    70% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(250%);
+     
+    }
+  }
+  /* TRUCK MOVING END++++ */
+
+
+  /* 5= --------------------PRIMER TITULO-----------------  */
+  .titulo-primary {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+  }
+  .titulo-primary h3 {
+    color: #0093f5;
+  }
+
+  /* 5= --------------------PRIMER TITULO +++END+++----------------- */
+
+  /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+.ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  
+}
+.item-a {
+  position: relative;
+  left: 31.5px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+}
+.boxmarve {
+  width:15rem ;
+  
+  height: 220px;
+  background: #fff;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+.model {
+  max-height: 100%;
+  max-width: 100%;
+  height: 180px;
+  -webkit-animation: 8s ease-in-out infinite floating;
+  animation: 8s ease-in-out infinite floating;
+  will-change: transform;
+}
+  /* 8= -------------------BENEFICIOS BOX------------------- */
+  .director-contenedor-beneficios {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /*----- CONTENEDOR NUMERO 1---- */
+  .contenedor-beneficio-total {
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+  /*----- CONTENEDOR NUMERO 2---- */
+  .contenedor-beneficio-total-dos {
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+  /*----- CONTENEDOR NUMERO 3---- */
+  .contenedor-beneficio-total-tres {
+    margin: 3.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 24rem;
+  }
+
+  /* 8= -------------------BENEFICIOS BOX------------++++END++++----- */
+
+  /* 11=-----------------------TIRA FINAL -------------------------*/
+  .contenedor-tira-final {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 0 1rem 0;
+    margin: 2.5rem 0 1rem 0;
+  }
+}
+
+/* 11=-----------------------TIRA FINAL --------------+++END´´-----------*/
+
+@media (min-width: 1024px) {
+
+  .boton-l{
+
+    transform: translateY(-90px);
+  }
+
+   /* logo */
+
+  
+   .logo-main{
+    display: block;
+    width: 11vw;
+   
+  }
+  .fondoimagen{
+    
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    background: 0;
+    border-radius: 0;
+    padding:0 !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    transform: translateX(150%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+
+/* logo +++ */
+  .boxes {
+    padding: 0 11rem;
+  }
+
+  /* MODAL TRABAJO */
+
+  .modal-per{
+    width: 50%;
+  
+  }
+
+  
+  .box-empleos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 0.2rem auto;
+    width: 40vw;
+    padding: 0.1rem;
+   
+
+  }
+  .box-empleos:hover {
+    transform: scale(1.05);
+    transition: .4s;
+  }
+  .sub-box-empleo-imagen img {
+    width: 70px;
+    margin: 0.5rem;
+  }
+  
+  .sub-box-empleo{
+  
+  width: 8rem;
+  }
+  .equis{
+    font-size: 0.8rem;
+  }
+  
+  
+
+  /* MODAL TRABAJO ****END*** */
+
+  
+/* director del pantallazo */
+.main-trailer{
+  display: flex;
+  flex-direction: row;
+  
+}
+
+/* director del pantallazo ***end***/
+
+/* director del glov */
+.central{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  
+  width: 30rem;
+}
+/* director del glov ****end****/
+
+/* director de las listas  */
+
+
+
+/*  main trailer */
+
+.main-trailer {
+  display: flex;
+  flex-direction: row;
+}
+
+
+  .container-box-boxes{
+   
+    width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* main trailer  ***end*** */
+
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .container-box-boxes {
+    margin: 1rem 0 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-left:auto;
+    margin-right: auto;
+    width: 30rem;
+    
+    
+    
+  }
+
+  .boxes {
+    position: relative;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: center;
+    box-sizing: none !important;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin: 1rem 1.5rem;
+padding: 0;
+  
+    
+   
+  }
+  /* container-box-boxes
+boxes */
+
+  .box {
+    position: relative;
+    z-index: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 200px;
+    -webkit-animation: 8s ease-in-out infinite floatingbox;
+    animation: 8s ease-in-out infinite floatingbox;
+    /* will-change: transform; */
+    border-radius: 100%;
+    transform: none;
+    transition: transform 0.2s ease-out;
+    transition-duration: 0.18s;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 3.1rem;
+    margin: 0.1rem 0.4rem !important;
+   
+   
+  }
+
+  /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+.ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  
+}
+.item-a {
+  position: relative;
+  left: 13px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+}
+.boxmarve {
+  width: 14rem;
+  
+  height: 200px;
+  background: #fff;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+.model {
+  max-height: 100%;
+  max-width: 100%;
+  height: 180px;
+  -webkit-animation: 8s ease-in-out infinite floating;
+  animation: 8s ease-in-out infinite floating;
+  will-change: transform;
+}
+
+  /* 6= SLIDER ------+++++END+++++*/
+
+
+  /* TRUCK MOVING */
+
+  .box-car-wrapper {
+    -webkit-transform: translateX(-390%);
+    -moz-transform: translateX(-390%);
+    -ms-transform: translateX(-390%);
+    -o-transform: translateX(-390%);
+    transform: translateX(-390%);
+    position: relative;
+    animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+  }
+  
+  @keyframes carDrive {
+    0% {
+      transform: translateX(-390%);
+      
+    }
+    25% {
+      transform: translateX(0%);
+    }
+    70% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(360%);
+     
+    }
+  }
+  /* TRUCK MOVING END++++ */
+
+  /* 8= -------------------BENEFICIOS BOX------------------- */
+  .director-contenedor-beneficios {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 3rem auto 2rem auto;
+    
+  }
+
+
+  /*----- CONTENEDOR NUMERO 1---- */
+  .contenedor-beneficio-total {
+    margin: 0.5em auto 0 auto;
+    border-radius: 5px;
+    width: 19rem;
+    height: auto;
+    
+    order: -3;
+    padding: 0.5rem;
+  }
+
+  /*----- CONTENEDOR NUMERO 2---- */
+  .contenedor-beneficio-total-dos {
+    margin: 0.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 19rem;
+    height: auto;
+
+   
+    order: -2;
+    padding: 0.5rem;
+
+  }
+  /*----- CONTENEDOR NUMERO 3---- */
+  .contenedor-beneficio-total-tres {
+    margin: 0.5rem auto 0 auto;
+    border-radius: 5px;
+    width: 19rem;
+    height: auto;
+
+order: -1;
+padding: 0.5rem;
+
+  }
+
+  .contenedor-beneficio-total:hover {
+  box-shadow: 0 1px 5px #2678ee;
+  transition: .5s;
+  transform: scale(1.01);
+}
+.contenedor-beneficio-total-dos:hover {
+  box-shadow: 0 1px 5px #2678ee;
+  transition: .5s;
+  transform: scale(1.01);
+}
+.contenedor-beneficio-total-tres:hover {
+  box-shadow: 0 1px 5px #2678ee;
+  transition: .5s;
+  transform: scale(1.01);
+}
+.contenedor-texto-beneficio h4{
+font-size: 1.6rem;
+}
+.parrafo-total{
+font-size: 0.95rem;
+}
+.imagen-beneficio-total{
+  transform: translateY(-18%) scale(0.9);
+  margin: 0 auto 1rem auto;
+}
+.boton-beneficio{
+  margin: 1rem auto;
+}
+
+ 
+
+  /* 8= -------------------BENEFICIOS BOX------------++++END++++----- */
+
+  /* 9= ----------MINI ITEMS----------- */
+  .contenedor-mini-beneficios {
+    
+    order: 0;
+width: 40rem;
+margin: 3.5em auto 0.5rem auto;
+  }
+  .box-mini-beneficios {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  /* 9=----------- MINI ITEMS --------++++END++++ */
+
+  /* 10=---------ITEMS RAPY CUADRADO TEXTO---------- */
+
+  .contenedor-item-texto {
+    display: flex;
+    flex-direction: row;  
+    order: 1;
+    padding: 0 5rem;
+  }
+  
+
+  .sub-contenedor-item-texto h3 {
+    font-size: 20px;
+    font-weight: bold;
+   
+    
+  }
+  .parrafo-en-texto {
+    text-align: left;
+    margin: auto 0.5rem auto 0.5rem;
+    color: #706967;
+    font-weight: 500;
+    
+    
+  }
+  /* 10=---------ITEMS RAPY CUADRADO TEXTO ---------+++END+++++++++*/
+
+  
+
+  /* -----------11=TIRA FINAL----------- */
+
+  .contenedor-tira-final {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+  .contenedor-tira-final {
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .tira-final-texto {
+    width: 40rem;
+  }
+  /* .titulo-tira-final{background: palevioletred;} */
+
+  .sub-contenedor-tira-final {
+    display: flex;
+    flex-direction: row;
+  }
+  /* 11=----------TIRA FINAL-------++++END----- */
+
+  
+}
+
+@media (min-width:1200px){
+
+    /* logo */
+
+    .fondoimagen{
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 0 8rem;
+  }
+
+  /* logo +++ */
+
+  /* modal trabajo */
+
+  
+  .modal-per{
+    width: 43%;
+  
+  }
+  .box-empleos {
+    margin: 0.2rem auto; 
+    width: 30vw;  
+  }
+  
+  .sub-box-empleo{
+  width: 10rem;
+  }
+  
+  /* modal tarbajo ***END*** */
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .central{
+
+width: 35rem;
+  }
+  .container-box-boxes{
+  
+    width: 35rem;
+  }
+  
+  
+
+
+
+   /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+.ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  
+}
+.item-a {
+  position: relative;
+  left: 13px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+}
+.boxmarve {
+  width: 14rem;
+  
+  height: 200px;
+  background: rgb(255, 255, 255);
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+.model {
+  
+  height: 180px;
+  -webkit-animation: 8s ease-in-out infinite floating;
+  animation: 8s ease-in-out infinite floating;
+  will-change: transform;
+  transform: scale(1.4) !important;
+}
+
+  /* 6= SLIDER ------+++++END+++++*/
+
+
+
+  /* TRUCK MOVING */
+
+  .box-car-wrapper {
+    -webkit-transform: translateX(-360%);
+    -moz-transform: translateX(-360%);
+    -ms-transform: translateX(-360%);
+    -o-transform: translateX(-360%);
+    transform: translateX(-360%);
+    position: relative;
+    animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+  }
+  
+  @keyframes carDrive {
+    0% {
+      transform: translateX(-360%);
+      
+    }
+    25% {
+      transform: translateX(0%);
+    }
+    70% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(350%);
+     
+    }
+  }
+  /* TRUCK MOVING END++++ */
+
+
+
+  
+
+
+  .contenedor-beneficio-total{
+    margin: 0 1.8rem;
+width: 20rem;
+  }
+  .contenedor-beneficio-total-dos{
+    margin: 0 1.8rem;
+    width: 20rem;
+  }
+  .contenedor-beneficio-total-tres{
+    margin: 0 1.8rem;
+    width: 20rem;
+  }
+  .imagen-beneficio-total{
+    transform: scale(1) translateY(-22%);
+    margin: 0 auto 2rem auto;
+  }
+
+
+  /* ITEMS RAPY */
+
+  .sub-contenedor-item-texto h3 {
+    font-size: 20px;
+    font-weight: bold;
+    
+    
+  }
+  .parrafo-en-texto {
+    text-align: left;
+    margin: auto 0.5rem auto 0.5rem;
+    color: #706967;
+    font-weight: 500;
+   
+    
+  }
+
+
+}
+
+@media (min-width:1400px){
+
+    /* logo */
+
+    .fondoimagen{
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 0 12rem;
+      transform: translateX(200%) !important;
+  }
+
+  /* logo +++ */
+  
+/* MODAL trabajo */
+
+.close-per {
+  width: 2rem;
+  height: 2rem;
+ 
+}
+.equis {
+
+  font-size: 1rem;
+  font-weight: 500;
+}
+/* modal trabajo ***end*** */
+
+/*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+.boxes {
+  position: relative;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  text-align: center;
+  box-sizing: none !important;
+  font-size: 26px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  
+}
+
+
+ /* TRUCK MOVING */
+
+ .box-car-wrapper {
+  -webkit-transform: translateX(-400%);
+  -moz-transform: translateX(-400%);
+  -ms-transform: translateX(-400%);
+  -o-transform: translateX(-400%);
+  transform: translateX(-400%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-400%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(400%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+
+
+  .contenedor-beneficio-total{
+    margin: 0 1.8rem;
+width: 21rem;
+padding: 0.5rem;
+  }
+  .contenedor-beneficio-total-dos{
+    margin: 0 1.8rem;
+    width: 21rem;
+    padding: 0.5rem;
+
+  }
+  .contenedor-beneficio-total-tres{
+    margin: 0 1.8rem;
+    width: 21rem;
+    padding: 0.5rem;
+
+  }
+  .imagen-beneficio-total{
+    transform: scale(1) translateY(-18%);
+    margin: 0 auto 2.5rem auto;
+  }
+
+  /* 10=---------ITEMS RAPY CUADRADO TEXTO---------- */
+
+  .contenedor-item-texto {
+    display: flex;
+    flex-direction: row;  
+    order: 1;
+    padding: 0 10rem;
+  }
+  
+
+  .sub-contenedor-item-texto h3 {
+    font-size: 20px;
+    font-weight: bold;
+   
+    
+  }
+}
+
+
+@media (min-width:1440px){
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+
+
+
+
+
+ /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+ .ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+  
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  
+  width: 88rem;
+}
+.item-a {
+  position: relative;
+  left: 13px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+  
+}
+.boxmarve {
+  width: 16rem;
+  
+  height: 240px;
+  background: #fff;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+ /* TRUCK MOVING */
+
+ .box-car-wrapper {
+  -webkit-transform: translateX(-520%);
+  -moz-transform: translateX(-520%);
+  -ms-transform: translateX(-520%);
+  -o-transform: translateX(-520%);
+  transform: translateX(-520%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-520%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(470%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+
+
+
+
+  .director-contenedor-beneficios{
+    
+    width: 80rem;
+  }
+
+  
+  
+}
+
+@media (min-width:1700px){
+  /* TRUCK MOVING */
+
+ .box-car-wrapper {
+  -webkit-transform: translateX(-590%);
+  -moz-transform: translateX(-590%);
+  -ms-transform: translateX(-590%);
+  -o-transform: translateX(-590%);
+  transform: translateX(-590%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-590%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(550%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+}
+
+@media (min-width:1920px){
+
+
+  /* LOGO */
+  
+  .fondoimagen{
+    width: 10vw !important;
+    transform: translateX(270%) !important;
+}
+
+/* LOGO ++++END++++ */
+
+/* MODAL trabajo */
+
+.modal-per{
+  width: 30vw;
+}
+.box-empleos{
+  width: 20vw;
+}
+
+.close-per {
+  width: 2rem;
+  height: 2rem;
+ 
+}
+.equis {
+
+  font-size: 1rem;
+  font-weight: 500;
+}
+/* modal trabajo ***end*** */
+  /*  6= --------------------SLIDER CORPORATIVO -----------------*/
+
+.ulmarvel {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  
+
+  padding: 0;
+  height: 270px !important;
+ 
+}
+.ulmarvel a {
+  text-decoration: none;
+}
+
+.containermarve {
+  margin: 1rem auto 1px auto !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 320px;
+  width: 101.55rem;
+  
+}
+.item-a {
+  position: relative;
+  left: 13px;
+  border: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 300px;
+  height: auto;
+}
+.boxmarve {
+  width: 30rem;
+  
+  height: 275px;
+  background: #fff;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* box-shadow: 0 0 1px 0 rgba(0,0,0,.1); */
+  padding: 2rem;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+}
+
+.model {
+  max-height: 100%;
+  max-width: 100%;
+  height: 180px;
+  -webkit-animation: 8s ease-in-out infinite floating;
+  animation: 8s ease-in-out infinite floating;
+  will-change: transform;
+  transform: scale(1.5) !important;
+}
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .box{
+    width: 135px !important;
+    height: 135px !important;
+  }
+  .box h3 {
+    font-size: 1.2rem;
+  }
+
+  
+/* director del pantallazo */
+.main-trailer{
+  display: flex;
+  flex-direction: row;
+  
+}
+
+/* director del pantallazo ***end***/
+
+/* director del glov */
+.central{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+   
+  width: 50rem;
+}
+/* director del glov ****end****/
+
+/* director de las listas  */
+
+
+
+/*  main trailer */
+
+.main-trailer {
+  display: flex;
+  flex-direction: row;
+}
+
+
+  .container-box-boxes{
+   
+    width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* main trailer  ***end*** */
+
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .container-box-boxes {
+    margin: 1rem 0 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-left:auto;
+    margin-right: auto;
+    width: 50rem;
+     
+    
+    
+  }
+
+  .boxes {
+    position: relative;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: center;
+    box-sizing: none !important;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin: 1rem 1.5rem;
+padding: 0;
+    
+    
+   
+  }
+  /* container-box-boxes
+boxes */
+
+  .box {
+    position: relative;
+    z-index: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 200px;
+    -webkit-animation: 8s ease-in-out infinite floatingbox;
+    animation: 8s ease-in-out infinite floatingbox;
+    /* will-change: transform; */
+    border-radius: 100%;
+    transform: none;
+    transition: transform 0.2s ease-out;
+    transition-duration: 0.18s;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    padding: 3.1rem;
+    margin: 0.1rem 0.4rem !important;
+   
+   
+  }
+  
+.contenidodeicono {
+  transform: translateX(25%);
+}
+
+
+ /* TRUCK MOVING */
+
+ .box-car-wrapper {
+  -webkit-transform: translateX(-650%);
+  -moz-transform: translateX(-650%);
+  -ms-transform: translateX(-650%);
+  -o-transform: translateX(-650%);
+  transform: translateX(-650%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-650%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(620%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+
+
+
+
+
+/* BENEFICIOS */
+.director-contenedor-beneficios{
+
+  width: 100rem;
+}
+
+.contenedor-beneficio-total{
+
+width: 25rem;
+padding: 1.5rem;
+
+}
+
+.contenedor-beneficio-total-dos{
+ 
+  width: 25rem;
+  padding: 1.5rem;
+  }
+  .contenedor-beneficio-total-tres{
+  
+  width: 25rem;
+  padding: 1.5rem;
+
+  }
+
+  .contenedor-texto-beneficio h4{
+ 
+    font-size: 2rem;
+    }
+    .parrafo-total{
+      font-size: 1.3rem;
+    }
+
+
+    /* BENEFICIOS ++END++ */
+
+    /* RAPY BOX */
+  .sub-contenedor-item-texto{
+    margin: 0 1rem;
+  }
+
+.box-titulo-parrafo h3{
+font-size: 1.5rem;
+line-height: 2.5rem;
+}
+.box-titulo-parrafo p{
+font-size: 1.2rem;
+}
+
+
+
+.contenedor-item-texto {
+  display: flex;
+  flex-direction: row;  
+  order: 1;
+  padding: 0 10rem;
+}
+
+
+.sub-contenedor-item-texto h3 {
+  font-size: 20px;
+  font-weight: bold;
+ 
+  
+}
+
+/* RAPY BOX */
+}
+
+
+@media (min-width:3500px){
+
+  /* LOGO */
+
+  .logo-main{
+    display: block;
+    width: 5vw;
+   
+  }
+  .fondoimagen{
+  
+    transform: translateX(380%) !important;
+  }
+  .logo-main-dos{
+    display: none;
+   
+     }
+
+  /* LOGO +++END+++ */
+
+  /*----- CIRCULOS INDEX PRODUCTOS-------- */
+
+  .box{
+    width: 150px !important;
+    height: 150px !important;
+  }
+  .box h3 {
+    font-size: 1.2rem;
+  }
+
+
+  .container-box-boxes{
+
+    width: 77rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .boxes {
+    position: relative;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: center;
+    box-sizing: none !important;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  
+  }
+
+
+
+  /* TRUCK MOVING */
+
+.box-car-wrapper {
+  -webkit-transform: translateX(-950%);
+  -moz-transform: translateX(-950%);
+  -ms-transform: translateX(-950%);
+  -o-transform: translateX(-950%);
+  transform: translateX(-950%);
+  position: relative;
+  animation: carDrive 5s 1s cubic-bezier(0.88, 0.08, 0.16, 1.1) infinite;
+}
+
+@keyframes carDrive {
+  0% {
+    transform: translateX(-950%);
+    
+  }
+  25% {
+    transform: translateX(0%);
+  }
+  70% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(950%);
+   
+  }
+}
+/* TRUCK MOVING END++++ */
+
+
+/* BENEFICIOS */
+.director-contenedor-beneficios{
+
+padding: 0 40rem;
+}
+.contenedor-beneficio-total{
+
+width: 30rem;
+padding: 1.5rem;
+
+}
+
+.contenedor-beneficio-total-dos{
+ 
+  width: 30rem;
+  padding: 1.5rem;
+  }
+  .contenedor-beneficio-total-tres{
+
+  width: 30rem;
+  padding: 1.5rem;
+
+  }
+
+  
+/* RAPY BOX */
+}
+
+.loader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+ 
+  width: 100%;
+  height: 100%;
+
+  z-index: 9999;
+  background: url('../../../../estilos/imagenes/loader.gif') 50% 50% no-repeat rgb(249,249,249);
+  opacity: .8;
+}
