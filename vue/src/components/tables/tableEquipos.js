@@ -18,13 +18,10 @@ Vue.component('table-equipos', {
                         v-for="row in dataResponseDB"
                         >
                         <td>{{row.identificacion}}</td>
-                        <td>{{row.estado}}</td>
+                        <td><strong>{{row.estado}}</strong></td>
                         <td>{{row.empresa}}</td>
                         <td>{{row.terminal}}</td>
                         <td>{{row.serie}}</td>
-                        <td>{{row.orden}}</td>
-                        <td>{{row.recolector}}</td>
-                        <td>{{row.name}}</td>
                         <td>{{row.serie_base}}</td>
                         <td>{{row.tarjeta}}</td>
                         <td>{{row.chip_alternativo}}</td>
@@ -34,6 +31,8 @@ Vue.component('table-equipos', {
                         <td>{{row.accesorio_cuatro}}</td>
                         <td>{{row.motivo}}</td>
                         <td>{{row.created_at}}</td>
+                        <td>{{row.recolector}}</td>
+                        <td>{{row.name}}</td>
                         <td>{{row.nombre_cliente}}</td>
                         <td>{{row.direccion}}</td>
                         <td>{{row.provincia}}</td>

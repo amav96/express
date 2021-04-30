@@ -21,6 +21,7 @@
 <script  src="<?=base_url?>vue/src/components/form/formSearchByIdAndDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/formSearchId.js"></script>
+<script src="<?=base_url?>vue/src/components/form/searchWithPagination.js"></script>
 
 <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/sub-headers.js"></script>
@@ -162,6 +163,14 @@
                     :subheaders="subheaders"
                     />
                 </template>
+
+                <template v-if="table">
+                    <search-withPagination
+                    :urlCount = ""
+                    :urlGetData = ""
+                    :pagination = "pagination"
+                    />
+                </template>
            
                 <template v-if="table">
                     <table-equipos
@@ -219,14 +228,11 @@
               sortBy: 'created_at',
               sortDesc: true,
               columns: [
-                { text: 'Aviso'  },
-                { text: 'Detalle' },
                 { text: 'Identificacion'},
                 { text: 'Estado'},
                 { text: 'Empresa'},
                 { text: 'Terminal'},
                 { text: 'Serie'},
-                { text: 'Recolector'},
                 { text: 'Serie Base',},
                 { text: 'Tarjeta/C.Red'},
                 { text: 'Chip alternativo'},
@@ -236,15 +242,14 @@
                 { text: 'Control/Base'},
                 { text: 'Motivo'},
                 { text: 'Fecha'},
+                { text: 'ID Recolector'},
+                { text: 'Nombre Recolector'},
                 { text: 'Nombre'},
                 { text: 'Direccion'},
                 { text: 'Provincia'},
                 { text: 'Localidad'},
                 { text: 'Codigo postal'},
                 { text: 'Remito'},
-                { text: 'N.Recolector'},
-                { text: 'Lat'},
-                { text: 'Lng'},
                 // means
                 // contacto
                 // fecha_aviso_visita
