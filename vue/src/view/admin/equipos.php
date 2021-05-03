@@ -187,13 +187,25 @@
                 </template>
 
                 <template v-if="table">
-                    <excel-export
-                    :dataResponseDB="dataResponseDB"
-                    :columnExport="columnExport"
-                    />
+                  <div>
+                    <v-row class="justify-center align-items-center align-content-center">
+                      <excel-export
+                      :base_url_export="base_url_export"
+                      :columnExport="columnExport"
+                      :dynamicDataToSearch="dynamicDataToSearch"
+                      />
+                      <div>
+                        Total Registros <strong>{{pagination.totalCountResponse}}</strong>
+                      </div>
+                      <a href="../resources/excel/nombre_del_documento.xlsx" >descargar</a>
+                      
+                    </v-row>
+                  </div>
+                 
                 </template>
         
                 <template v-if="table">
+                 
                     <table-equipos
                       :dataResponseDB="dataResponseDB" 
                       :columns="columns"
@@ -236,6 +248,7 @@
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusTransit',
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
+              base_url_export: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 

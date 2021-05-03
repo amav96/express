@@ -1,6 +1,8 @@
 <?php
 
-
+require_once "../vendor/autoload.php";
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 if (isset($_GET['equipo'])) {
 
@@ -1322,6 +1324,58 @@ class equipoController
         }
     } 
     
+    public function exportEquipos(){
+        
+
+        if($_GET){
+
+            $dataRequest = json_decode($_GET['dataRequest']);
+            
+            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+            $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
+
+            if($dateStart && $dateEnd && !$word){
+
+                $exportEquipos =  new Equipos();
+                $exportEquipos->setFechaStart($dateStart);
+                $exportEquipos->setFechaEnd($dateEnd);
+                $exportEquipos =  $exportEquipos->getDataManagementExportByDateRange();
+            }
+
+            if(!$dateStart && !$dateEnd && $word){
+                echo "buscar solo por palabra";
+            }
+
+
+            if(is_object($exportEquipos)){
+
+                $documento = new Spreadsheet();
+                $documento
+                    ->getProperties()
+                    ->setCreator("Aquí va el creador, como cadena")
+                    ->setLastModifiedBy('Parzibyte') // última vez modificado por
+                    ->setTitle('Mi primer documento creado con PhpSpreadSheet')
+                    ->setSubject('El asunto')
+                    ->setDescription('Este documento fue generado para parzibyte.me')
+                    ->setKeywords('etiquetas o palabras clave separadas por espacios')
+                    ->setCategory('La categoría');
+                
+                $writer = new Xlsx($documento);
+                
+                # Le pasamos la ruta de guardado
+
+                $writer->save('../resources/excel/nombre_del_documento.xlsx');
+
+                1) crear archivo con el objeto devuelto por la consulta
+                2) guardar archivo con nombre fecha y hora especifico en resources/excel 
+                3) devolver link al front para hacer click en descargar 
+
+            }
+
+             
+        }
+    }
 
     public function informeRecolectoresYFecha()
     {

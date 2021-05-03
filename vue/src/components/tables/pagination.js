@@ -9,6 +9,7 @@ template : //html
                 :length="pagination.totalPage"
                 @input="paginate"
             ></v-pagination>
+           
         </v-container>
       </div>
     `,

@@ -970,6 +970,35 @@ class Equipos
     }
 
     // end search word
+
+    // export
+
+    public function getDataManagementExportByDateRange(){
+
+        $dateStart = !empty($this->getFechaStart()) ? $this->getFechaStart() : false ;
+        $dateEnd = !empty($this->getFechaEnd()) ? $this->getFechaEnd() : false ;
+
+        $sql ="";
+        $sql.= "SELECT g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
+        g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
+        g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
+        $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
+        LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
+        $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at";
+
+        $getDataManagementExportByDateRange = $this->db->query($sql);
+        if($getDataManagementExportByDateRange->num_rows>0){
+            $result = $getDataManagementExportByDateRange;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    //export
+
     public function getCountEstadoTransito(){
 
 
