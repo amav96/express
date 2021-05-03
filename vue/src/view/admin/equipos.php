@@ -48,7 +48,7 @@
         store,
         template : //html 
         `
-        <v-app class=" empujarParaArriba elevation" >
+        <v-app class="empujarParaArriba elevation" >
           <div >
               <v-row  
                 class=" bg-blue-custom justify-center align-items-center  flex-column m-0 py-2"
@@ -62,7 +62,6 @@
                         class="d-flex justify-center flew-row "
                         height="auto"
                         wrap
-                      
                         > 
                         <div class="d-flex justify-center flex-row flex-wrap" >
                           <div  
@@ -128,9 +127,16 @@
                     @setSubHeadersLoader="subheaders.loader = $event"
                     :subheaders="subheaders"
                     :base_url_header="base_url_header"
+                    :searchWord="searchWord"
+                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setUrlSearchController="searchWord.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
+                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
                     />
                     </v-col>
                 </template>
+               
                 
                 <template v-if="formIdAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
@@ -166,12 +172,12 @@
 
                 <template v-if="table">
                     <search-withPagination
-                    :urlCount = ""
-                    :urlGetData = ""
                     :pagination = "pagination"
+                    :searchWord="searchWord"
+                    @setCountPagination="pagination= $event"
                     />
                 </template>
-           
+           {{pagination}}
                 <template v-if="table">
                     <table-equipos
                       :dataResponseDB="dataResponseDB" 
@@ -213,7 +219,9 @@
               base_url_count_base_url_searchDateRange:  API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
               base_url_count_base_url_searchByIdAndRangeDate : API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusTransit',
-              base_url_to_search_word_by_date_range : API_BASE_CONTROLLER + 'equipoController.php?equipo=metodoparacontarconlabusqueda',
+              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
+              base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
+    
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -313,10 +321,13 @@
                 dataResponseDB : [],
                 loader : false
               },
-              searchAll: true,
-              dataToSearchAll : [],
-              url_searchController: '',
-              url_searchGetData: ''
+              searchWord : {
+                searchAll: true,
+                dynamicDataToSearchWordAll : [],
+                url_searchCountController: '',
+                url_searchGetDataController: ''
+              },
+              
     
             }
         },

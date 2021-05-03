@@ -1,0 +1,14 @@
+{
+	
+	 "Print to console": {
+	 	"scope": "php",
+	 	"prefix": "php",
+	 	"body": [
+	 		"echo '<pre>';",
+			"print_r();",
+			"echo '</pre>';",
+			"die();"
+	 	],
+	 	"description": "Log output to console"
+	 }
+}

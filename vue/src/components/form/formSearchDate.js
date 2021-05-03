@@ -4,7 +4,7 @@ Vue.component('form-search-date',{
     `      
             <div>
             
-                <form 
+                <v-form
                  @submit.prevent="countSearchInRangeDate" 
                  id="sendFormRangeDate" 
                  class="d-flex justify-center flex-row align-center  flex-wrap ">
@@ -42,11 +42,11 @@ Vue.component('form-search-date',{
                         <v-icon>mdi-magnify</v-icon>
                         </v-btn>
                     </div>
-                </form>
+                </v-form>
                 
             </div>
     `,
-    props:['base_url_searchDateRange','titleFormRangeDate','base_url_count_base_url_searchDateRange','dataResponseDB','pagination','subheaders','base_url_header','base_url_controller_search_range_date','base_url_search_get_range_date','searchAll'],
+    props:['base_url_searchDateRange','titleFormRangeDate','base_url_count_base_url_searchDateRange','dataResponseDB','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','searchWord'],
     data() {
         return {
            dateStart: '',
@@ -82,14 +82,14 @@ Vue.component('form-search-date',{
                             this.subheaders.active ? this.showStatus(this.base_url_header) :  true;
 
                             // if searchALL is true, activate
-                            if(this.searchAll){
-                                this.$emit('setUrlSearchController',this.base_url_controller_search_range_date)
-                                this.$emit('setUrlSearchGetRangeDate',this.base_url_search_get_range_date)
+                            if(this.searchWord.searchAll){
+                                this.$emit('setUrlSearchController',this.base_url_to_count_search_word_controller)
+                                this.$emit('setUrlGetDataSearchController',this.base_url_to_get_search_word_controller)
                                 const search = {
                                     dateStart : this.dateStart,
                                     dateEnd :  this.dateEnd
                                 }
-                                this.$emit('setDataToSearchAll',search) 
+                                this.$emit('setDataDynamicToSearchWord',search) 
                             }
                         })
                     

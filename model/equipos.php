@@ -812,7 +812,7 @@ class Equipos
             'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
         }
 
-      
+        
 
         $countGetTransitByCollectorAndDate = $this->db->query($sql);
         if($countGetTransitByCollectorAndDate && $countGetTransitByCollectorAndDate->fetch_object()->count > 0){
@@ -823,12 +823,9 @@ class Equipos
         
         return $result;
     }
- 
-    
+   
     public function getTransitByCollectorAndDate(){
-
-
-                
+           
                 // este id se usa para el id del recolector
                 $id = ($this->getId_recolector())?$this->getId_recolector() : false ;
                 $dateStart = ($this->getfechaStart())?$this->getfechaStart() : false ;
@@ -867,7 +864,7 @@ class Equipos
 
      // search word
 
-    public function countSearchWordByGestionByRangeDate(){
+    public function countSearchWordToGestionByDateAndWord(){
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
         $word = !empty($this->getWord()) ? $this-> getWord(): false ;
@@ -879,24 +876,20 @@ class Equipos
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
         $sql.="  ( ";
-        $sql.="MATCH (e.identificacion,e.emailcliente,e.empresa,e.localidad,e.provincia, ";
-        $sql.="e.direccion,e.codigo_postal,e.estado) AGAINST ";
+        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,e.direccion,e.codigo_postal,
+        e.emailcliente,e.estado) ";
+        $sql.="AGAINST ";
         $sql.="('".$word."' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('".$word."' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$word%') and g.created_at
-        BETWEEN('$dateStart') AND ('$dateStart 23:59:59')";
+        BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        echo '<pre>';
-        print_r($sql);
-        echo '</pre>';
-        die();
-
-        $countSearchWordByGestionByRangeDate =  $this->db->query($sql);
-        if($countSearchWordByGestionByRangeDate->num_rows>0){
-            $result = $countSearchWordByGestionByRangeDate;
+        $countSearchWordToGestionByDateAndWord =  $this->db->query($sql);
+        if($countSearchWordToGestionByDateAndWord->num_rows>0){
+            $result = $countSearchWordToGestionByDateAndWord;
         }else {
             $result = false;
         }

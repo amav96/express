@@ -886,6 +886,8 @@ class equipoController
     public function transitoRecolectoresYFecha()
     {
 
+        
+
         if($_GET){
 
             $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
@@ -966,6 +968,7 @@ class equipoController
          echo $jsonstring;
        
     }
+
     public function transito()
     {
      
@@ -1105,6 +1108,62 @@ class equipoController
         }
     }
 
+    public function countSearchWordGestionController(){
+
+        if($_GET){
+
+            $search = json_decode($_GET['search']);
+
+            $dateStart = isset($search->dateStart) ? $search->dateStart : false ; 
+            $dateEnd = isset($search->dateEnd) ? $search->dateEnd : false ; 
+            $search = isset($search->search) ? $search->search : false ; 
+
+            if($dateStart && $dateEnd && $search){
+                $countSearchWordGestionController =  new Equipos();
+                $countSearchWordGestionController->setFechaStart($dateStart);
+                $countSearchWordGestionController->setFechaEnd($dateEnd);
+                $countSearchWordGestionController->setWord($search);
+                $countSearchWordGestionController = $countSearchWordGestionController->countSearchWordToGestionByDateAndWord();
+            }
+
+            if(!$dateStart && !$dateEnd && $search){
+                echo "contar solo por palabra";
+            }
+
+            if(is_object($countSearchWordGestionController)){
+               
+                 foreach ($countSearchWordGestionController as $element) {
+                   
+                     $objeto = array(
+    
+                         'result' => true,
+                         'count' => $element["count"]
+                     );
+                 }
+    
+
+            }else {
+                $objeto = array(
+    
+                    'result' => false,
+            
+                );
+            }
+
+            $jsonString = json_encode($objeto);
+            echo $jsonString;
+
+          
+
+            
+        }
+       
+    }
+
+    public function getDataSearchWordGestionController(){
+
+    } 
+    
 
     public function informeRecolectoresYFecha()
     {
