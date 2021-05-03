@@ -774,11 +774,12 @@ class Equipos
         $sql = "SELECT g.id_equipo,g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie, g.serie_base,g.tarjeta,
         g.chip_alternativo,g.accesorio_uno, g.accesorio_dos, g.accesorio_tres,g.accesorio_cuatro,g.estado, 
         g.motivo,g.created_at,g.identificacion,e.nombre_cliente, e.direccion, e.provincia, e.localidad, e.empresa, 
-        e.codigo_postal,e.telefono2,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat,n.lng,n.means,n.contacto,n.created_at as 'fecha_aviso_visita' from gestion g 
+        e.codigo_postal,e.telefono2,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso' ,n.means,n.contacto,n.created_at as 'fecha_aviso_visita' from gestion g 
         inner join equipos e on e.identificacion = g.identificacion
         LEFT JOIN users u ON u.id = g.id_user
         LEFT JOIN notice n ON g.id_orden_pass = n.id_orden 
         WHERE g.status_gestion !='OUT' AND  g.identificacion= '{$this->getIdentificacionCliente()}' OR g.terminal= '{$this->getIdentificacionCliente()}' OR g.serie= '{$this->getIdentificacionCliente()}'  GROUP BY g.id;";
+      
         $transito = $this->db->query($sql);
         if($transito && $transito->num_rows>0){
         
@@ -839,16 +840,20 @@ class Equipos
                     $sql ="";
                     $sql.= "SELECT g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
                     g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
-                    g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat,n.lng,n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
+                    g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
                     $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
                     LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
                     $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
 
+                    
+
                     if( $id && $dateStart && $dateEnd){
-                        $sql.="and g.id_user = '{$this->getId_recolector()}' and g.created_at >= '{$this->getFechaStart()}' AND g.created_at <= '{$this->getFechaEnd()}%' GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
+                        $sql.="and g.id_user = '{$this->getId_recolector()}' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
                     } if(!$id && $dateStart && $dateEnd){
-                        $sql.="and g.created_at >= '{$this->getFechaStart()}' AND g.created_at <= '{$this->getFechaEnd()}%' GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
+                        $sql.="and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
                     }
+
+       
                    
                     $transito = $this->db->query($sql);
                     
@@ -869,20 +874,32 @@ class Equipos
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
         $word = !empty($this->getWord()) ? $this-> getWord(): false ;
 
+        $wordArray = explode(' ',$word);
+
+        if(is_array($wordArray)){
+            $wordPush = [];
+            for($i=0;$i<count($wordArray);$i++){
+                array_push($wordPush,'+"'.$wordArray[$i].'"');
+            }
+            $wordFinally = implode(",",$wordPush);
+            $wordClean = str_replace(","," ",$wordFinally);
+        }
+
         $sql ="";
         $sql.="SELECT COUNT(*) as 'count' ";
         $sql.="FROM  ";
         $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
+        $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
         $sql.="  ( ";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,e.direccion,e.codigo_postal,
-        e.emailcliente,e.estado) ";
+        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
+        e.direccion,e.codigo_postal,e.emailcliente,e.estado) ";
         $sql.="AGAINST ";
-        $sql.="('".$word."' IN BOOLEAN MODE) ";
+        $sql.="('$wordClean' IN BOOLEAN MODE) ";
         $sql.="OR  ";
-        $sql.="MATCH (g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('".$word."' IN BOOLEAN MODE) ";
+        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$word%') and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
@@ -897,40 +914,54 @@ class Equipos
         return $result;
     }
 
-    public function getManagementEquipamentByRangeDate(){
+    public function getDataSearchWordToGestionByDateAndWord(){
+
             $dateStart = !empty($this->getFechaStart()) ? $this->getFechaStart() : false ;
             $dateEnd = !empty($this->getFechaEnd()) ? $this->getFechaEnd() : false ;
             $word = !empty($this->getWord()) ? $this->getWord() : false ;
-    
+            $fromRow = !empty($this->getFromRow()) ? $this->getFromRow() : false ;
+            $limit = !empty($this->getLimit()) ? $this->getLimit() : false ;
+            if(gettype($fromRow) !==  'string'){
+                $fromRow = '0';
+            }
+
+        
+            $wordArray = explode(' ',$word);
+
+            if(is_array($wordArray)){
+                $wordPush = [];
+                for($i=0;$i<count($wordArray);$i++){
+                    array_push($wordPush,'+"'.$wordArray[$i].'"');
+                }
+                $wordFinally = implode(",",$wordPush);
+                $wordClean = str_replace(","," ",$wordFinally);
+            }
+           
+           
             $sql ="";
-            $sql.="SELECT e.identificacion,g.serie,g.terminal,g.serie_base,g.tarjeta,g.accesorio_uno,g.accesorio_dos
-            ,g.accesorio_tres,g.accesorio_cuatro,e.emailcliente,e.empresa,
-            e.localidad,e.provincia,e.direccion,
-            e.codigo_postal,e.estado,u.name ";
+            $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,
+            g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
+            n.created_at AS 'fecha_aviso_visita' ";
             $sql.="FROM  ";
             $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
             $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
+            $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
             $sql.="WHERE ";
-            $sql.="  ( ";
-            $sql.="MATCH (e.identificacion,e.emailcliente,e.empresa,e.localidad,e.provincia, ";
-            $sql.="e.direccion,e.codigo_postal,e.estado,e.created_at) AGAINST ";
-            $sql.="('".$word."' IN BOOLEAN MODE) ";
+            $sql.="(";
+            $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
+            e.direccion,e.codigo_postal,e.emailcliente,e.estado) AGAINST ";
+            $sql.="('$wordClean' IN BOOLEAN MODE) ";
             $sql.="OR  ";
-            $sql.="MATCH (g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.estado, ";
-            $sql.="g.created_at) AGAINST ('".$word."' IN BOOLEAN MODE) ";
+            $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+            $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
             $sql.="OR "; 
             $sql.="u.name LIKE '%$word%') and g.created_at
             BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+            $sql.="limit $fromRow,$limit ";
 
-            echo '<pre>';
-            print_r($sql);
-            echo '</pre>';
-            die();
-
-
-            $countSearchWordByGestionByRangeDate =  $this->db->query($sql);
-            if($countSearchWordByGestionByRangeDate->num_rows>0){
-                $result = $countSearchWordByGestionByRangeDate;
+            $getDataSearchWordToGestionByDateAndWord =  $this->db->query($sql);
+            if($getDataSearchWordToGestionByDateAndWord->num_rows>0){
+                $result = $getDataSearchWordToGestionByDateAndWord;
             }else {
                 $result = false;
             }

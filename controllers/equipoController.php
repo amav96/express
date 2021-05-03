@@ -947,8 +947,8 @@ class equipoController
                      'codigo_postal' => $element["codigo_postal"],
                      'remito' => $element["id_orden_pass"],
                      'name' => $element["name"],
-                     'lat' => $element["lat"],
-                     'lng' => $element["lng"],
+                     'latAviso' => $element["latAviso"],
+                     'lngAviso' => $element["lngAviso"],
                      'latGestion' => $element["latGestion"],
                      'lngGestion' => $element["lngGestion"],
                      'means' => $element["means"],
@@ -1159,9 +1159,167 @@ class equipoController
         }
        
     }
+    public function test(){
+        
+        if($_GET){
+
+            $dataRequest = json_decode($_GET['dataRequest']);
+
+            echo '<pre>';
+            print_r($dataRequest);
+            echo '</pre>';
+            die();
+
+
+            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+            $word = isset($dataRequest->search) ? $dataRequest->search : false ; 
+            $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
+            $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ; 
+
+            if($dateStart && $dateEnd && $dataRequest){
+
+                $getDataSearchWordGestionController =  new Equipos();
+                $getDataSearchWordGestionController->setFechaStart($dateStart);
+                $getDataSearchWordGestionController->setFechaEnd($dateEnd);
+                $getDataSearchWordGestionController->setWord($word);
+                $getDataSearchWordGestionController->setFromRow($fromRow);
+                $getDataSearchWordGestionController->setLimit($limit);
+                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByDateAndWord();
+            }
+
+            if(!$dateStart && !$dateEnd && $dataRequest){
+                echo "buscar solo por palabra";
+            }
+
+            if (is_object($getDataSearchWordGestionController)) {
+
+                 foreach ($getDataSearchWordGestionController as $element) {
+                   
+                      $objeto[] = array(
+    
+                          'result' => true,
+                          'identificacion' => $element["identificacion"],
+                          'estado' => $element["estado"],
+                          'empresa' => $element["empresa"],
+                          'terminal' => $element["terminal"],
+                          'serie' => $element["serie"],
+                          'orden' => $element["id_orden"],
+                          'recolector' => $element["id_user"],
+                          'serie_base' => $element["serie_base"],
+                          'tarjeta' => $element["tarjeta"],
+                          'chip_alternativo' => $element["chip_alternativo"],
+                          'accesorio_uno' => $element["accesorio_uno"],
+                          'accesorio_dos' => $element["accesorio_dos"],
+                          'accesorio_tres' => $element["accesorio_tres"],
+                          'accesorio_cuatro' => $element["accesorio_cuatro"],
+                          'motivo' => $element["motivo"],
+                          'created_at' => $element["created_at"],
+                          'nombre_cliente' => $element["nombre_cliente"],
+                          'direccion' => $element["direccion"],
+                          'provincia' => $element["provincia"],
+                          'localidad' => $element["localidad"],
+                          'codigo_postal' => $element["codigo_postal"],
+                          'remito' => $element["id_orden_pass"],
+                          'name' => $element["name"],
+                          'latAviso' => $element["latAviso"],
+                          'lngAviso' => $element["lngAviso"],
+                          'latGestion' => $element["latGestion"],
+                          'lngGestion' => $element["lngGestion"],
+                          'means' => $element["means"],
+                          'contacto' => $element["contacto"],
+                          'fecha_aviso_visita' => $element["fecha_aviso_visita"],
+                         
+                      );
+                 }
+            } else {
+                $objeto[] = array(
+                    'result' => false,
+                );
+            }
+
+            $jsonString = json_encode($objeto);
+            echo $jsonString;  
+        }
+    } 
 
     public function getDataSearchWordGestionController(){
+        
+        if($_GET){
 
+            $dataRequest = json_decode($_GET['dataRequest']);
+
+
+            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+            $word = isset($dataRequest->search) ? $dataRequest->search : false ; 
+            $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
+            $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ; 
+
+            if($dateStart && $dateEnd && $dataRequest){
+
+                $getDataSearchWordGestionController =  new Equipos();
+                $getDataSearchWordGestionController->setFechaStart($dateStart);
+                $getDataSearchWordGestionController->setFechaEnd($dateEnd);
+                $getDataSearchWordGestionController->setWord($word);
+                $getDataSearchWordGestionController->setFromRow($fromRow);
+                $getDataSearchWordGestionController->setLimit($limit);
+                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByDateAndWord();
+            }
+
+            if(!$dateStart && !$dateEnd && $dataRequest){
+                echo "buscar solo por palabra";
+            }
+
+            if (is_object($getDataSearchWordGestionController)) {
+
+                 foreach ($getDataSearchWordGestionController as $element) {
+                   
+                      $objeto[] = array(
+    
+                          'result' => true,
+                          'identificacion' => $element["identificacion"],
+                          'estado' => $element["estado"],
+                          'empresa' => $element["empresa"],
+                          'terminal' => $element["terminal"],
+                          'serie' => $element["serie"],
+                          'orden' => $element["id_orden"],
+                          'recolector' => $element["id_user"],
+                          'serie_base' => $element["serie_base"],
+                          'tarjeta' => $element["tarjeta"],
+                          'chip_alternativo' => $element["chip_alternativo"],
+                          'accesorio_uno' => $element["accesorio_uno"],
+                          'accesorio_dos' => $element["accesorio_dos"],
+                          'accesorio_tres' => $element["accesorio_tres"],
+                          'accesorio_cuatro' => $element["accesorio_cuatro"],
+                          'motivo' => $element["motivo"],
+                          'created_at' => $element["created_at"],
+                          'nombre_cliente' => $element["nombre_cliente"],
+                          'direccion' => $element["direccion"],
+                          'provincia' => $element["provincia"],
+                          'localidad' => $element["localidad"],
+                          'codigo_postal' => $element["codigo_postal"],
+                          'remito' => $element["id_orden_pass"],
+                          'name' => $element["name"],
+                          'latAviso' => $element["latAviso"],
+                          'lngAviso' => $element["lngAviso"],
+                          'latGestion' => $element["latGestion"],
+                          'lngGestion' => $element["lngGestion"],
+                          'means' => $element["means"],
+                          'contacto' => $element["contacto"],
+                          'fecha_aviso_visita' => $element["fecha_aviso_visita"],
+                         
+                      );
+                 }
+            } else {
+                $objeto[] = array(
+                    'result' => false,
+                );
+            }
+
+            $jsonString = json_encode($objeto);
+            echo $jsonString;  
+        }
     } 
     
 

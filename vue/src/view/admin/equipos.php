@@ -6,8 +6,7 @@
 <!-- VUE -->
 
 <!-- component  avisos -->
-    
-<script src="<?=base_url?>vue/src/components/helpers/VueExcelXlsx.js"></script>
+  
 
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
@@ -16,6 +15,7 @@
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/tableEquipos.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/formSearchByIdAndDate.js"></script>
@@ -174,10 +174,25 @@
                     <search-withPagination
                     :pagination = "pagination"
                     :searchWord="searchWord"
-                    @setCountPagination="pagination= $event"
+                    @setCountPagination="pagination = $event"
+                    @dynamicDataToSearch="dynamicDataToSearch = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    :dataResponseDB="dataResponseDB" 
+                    @setAfterDataResponse="dataResponseDB = $event"
+                    @restoreBeforeDataResponse="dataResponseDB = $event"
+                    :dynamicDataToSearch="dynamicDataToSearch"
+                    @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
+                    @restorePagination="pagination = $event"
                     />
                 </template>
-           {{pagination}}
+
+                <template v-if="table">
+                    <excel-export
+                    :dataResponseDB="dataResponseDB"
+                    :columnExport="columnExport"
+                    />
+                </template>
+        
                 <template v-if="table">
                     <table-equipos
                       :dataResponseDB="dataResponseDB" 
@@ -221,7 +236,6 @@
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusTransit',
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
-    
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -264,31 +278,28 @@
                 // fecha_aviso_visita
               ],
               columnExport : [
-                {  label: 'Detalle', field: 'actions' },
-                {  label: 'Identificacion', field:'identificacion', width: 100,},
-                {  label: 'Estado', field:'estado'},
-                {  label: 'Empresa', field:'empresa'},
-                {  label: 'Terminal', field:'terminal'},
-                {  label: 'Serie', field:'serie'},
-                {  label: 'Recolector', field:'recolector', width: 130},
-                {  label: 'Serie Base', field:'serie_base' , align: ' d-none'},
-                {  label: 'Tarjeta', field:'tarjeta', align: ' d-none'},
-                {  label: 'Chip alternativo', field:'chip_alternativo', width: 100},
-                {  label: 'HDMI/C.TLF', field:'accesorio_uno'},
-                {  label: 'AV/Sim', field:'accesorio_dos'},
-                {  label: 'Fuente/Cargador', field:'accesorio_tres'},
-                {  label: 'Control/Base', field:'accesorio_cuatro'},
-                {  label: 'Motivo', field:'motivo'},
-                {  label: 'Fecha', field:'created_at'},
-                {  label: 'Nombre', field:'nombre_cliente'},
-                {  label: 'Direccion', field:'direccion'},
-                {  label: 'Provincia', field:'provincia'},
-                {  label: 'Localidad', field:'localidad'},
-                {  label: 'Codigo postal', field:'codigo_postal'},
-                {  label: 'Remito', field:'remito'},
-                {  label: 'N.Recolector', field:'name'},
-                {  label: 'Lat', field:'latGestion'},
-                {  label: 'Lng', field:'lngGestion'},
+                { text: 'Identificacion'},
+                { text: 'Estado'},
+                { text: 'Empresa'},
+                { text: 'Terminal'},
+                { text: 'Serie'},
+                { text: 'Serie Base',},
+                { text: 'Tarjeta/C.Red'},
+                { text: 'Chip alternativo'},
+                { text: 'HDMI/C.TLF'},
+                { text: 'AV/Sim'},
+                { text: 'Fuente/Cargador'},
+                { text: 'Control/Base'},
+                { text: 'Motivo'},
+                { text: 'Fecha'},
+                { text: 'ID Recolector'},
+                { text: 'Nombre Recolector'},
+                { text: 'Nombre'},
+                { text: 'Direccion'},
+                { text: 'Provincia'},
+                { text: 'Localidad'},
+                { text: 'Codigo postal'},
+                { text: 'Remito'},
                 ],
               nameExport: 'Gestion de avisos',
               loadingTable : false,
@@ -327,8 +338,6 @@
                 url_searchCountController: '',
                 url_searchGetDataController: ''
               },
-              
-    
             }
         },
         methods:{
