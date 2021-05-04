@@ -37,9 +37,8 @@ methods : {
                 fromRow : this.pagination.fromRow,
                 limit : this.limit
             }
-           
             const pagination = {...this.dynamicDataToSearch,...paginationCurrent}
-
+            this.$emit('updateDynamicParametersToCall',pagination)
             this.tryFetch(pagination)
               
         },
@@ -79,10 +78,7 @@ watch: {
       // the callback will be called immediately after the start of the observation
       immediate: true, 
       handler (val, oldVal) {
-   
-          this.page = 1
-         
-         
+          this.page = val.pageCurrent
          
       }
     }

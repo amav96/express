@@ -133,11 +133,12 @@
                     @setUrlSearchController="searchWord.url_searchCountController = $event"
                     @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
                     @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
+                    @filtering="searchWord.filtering = $event"
+                   
                     />
                     </v-col>
                 </template>
-               
-                
+  
                 <template v-if="formIdAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
                     <form-search-by-id-and-range-date 
@@ -177,12 +178,18 @@
                     @setCountPagination="pagination = $event"
                     @dynamicDataToSearch="dynamicDataToSearch = $event"
                     @urlTryPagination="urlTryPagination = $event"
+                    :urlTryPagination="urlTryPagination"
                     :dataResponseDB="dataResponseDB" 
                     @setAfterDataResponse="dataResponseDB = $event"
                     @restoreBeforeDataResponse="dataResponseDB = $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
-                    @restorePagination="pagination = $event"
+                    @setFlagFiltering ="searchWord.filtering = $event"
+                    @restoreOldDataResponse="dataResponseDB = $event"
+                    @restoreOldPagination="pagination = $event"
+                    @restoreOldParametersToCall="dynamicDataToSearch = $event"
+                    @restoreUrlPagination="urlTryPagination = $event"
+
                     />
                 </template>
 
@@ -225,10 +232,10 @@
                     :loaderLine="loaderLine"
                     @setPageCurrent= "pagination.pageCurrent = $event"
                     @setFromRow="pagination.fromRow = $event"
-                    @setDynamicDataToSearchFromPager="dynamicDataToSearch = $event"
                     @updateDataResponseDB="dataResponseDB = $event"
                     @showLoaderLine="loaderLine =  $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
+                    @updateDynamicParametersToCall="dynamicDataToSearch = $event"
                     />
                 </template>
           </v-app>
@@ -349,7 +356,8 @@
                 searchAll: true,
                 dynamicDataToSearchWordAll : [],
                 url_searchCountController: '',
-                url_searchGetDataController: ''
+                url_searchGetDataController: '',
+                filtering: false
               },
             }
         },

@@ -1367,9 +1367,9 @@ class equipoController
 
                 $writer->save('../resources/excel/nombre_del_documento.xlsx');
 
-                1) crear archivo con el objeto devuelto por la consulta
-                2) guardar archivo con nombre fecha y hora especifico en resources/excel 
-                3) devolver link al front para hacer click en descargar 
+                // 1) crear archivo con el objeto devuelto por la consulta
+                // 2) guardar archivo con nombre fecha y hora especifico en resources/excel 
+                // 3) devolver link al front para hacer click en descargar 
 
             }
 

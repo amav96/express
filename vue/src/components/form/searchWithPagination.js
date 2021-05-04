@@ -39,17 +39,16 @@ template : //html
 
         </div>
     `,
-    props:['searchWord','pagination','dataResponseDB','dynamicDataToSearch'],
+    props:['searchWord','pagination','dataResponseDB','dynamicDataToSearch','urlTryPagination'],
 data (){
 return {
     data : '',
     objectSearch: [],
-    responseDataDbAfter: [],
-    dataDynamicAfter: [],
-    paginationBefore : [],
+    oldParametersToCall: [],
+    oldDataResponseDB: [],
+    oldUrl:[],
+    oldPagination : [],
     alert_flag : false
-    
-
 }
 },
 methods : {
@@ -67,7 +66,6 @@ methods : {
         }
         this.objectSearch = {...dynamicData,...word}
         const search = this.objectSearch
-        
         axios.get(this.searchWord.url_searchCountController,{
             params : {
                 search
@@ -75,29 +73,33 @@ methods : {
         })
         .then(res => {
            if(res.data.count > '0'){
-            //    settins value before the update
-              this.dataDynamicAfter = this.dynamicDataToSearch
-              this.paginationBefore = this.pagination
-               // settings values for pagination after to fetch count
-               const totalCountResponse = parseInt(res.data.count)
-               const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-               const pagination = {
-                totalPage,
-                rowForPage:10,
-                pageCurrent: 1,
-                totalCountResponse,
-                fromRow:0,
-                limit:10
-               }
+                //    settins value before the update
+                if(this.searchWord.filtering){
+                    this.oldParametersToCall = this.dynamicDataToSearch
+                    this.oldUrl = this.urlTryPagination
+                     //setting values for pagination before to fetch new count 
+                    this.oldPagination = this.pagination
+                }
+                
+                // settings values for pagination after to fetch count
+                const totalCountResponse = parseInt(res.data.count)
+                const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+                const pagination = {
+                 totalPage,
+                 rowForPage:10,
+                 pageCurrent: 1,
+                 totalCountResponse,
+                 fromRow:0,
+                 limit:10
+                }
         
-               //  settings url to fetch from pagination
-               this.$emit('urlTryPagination',this.searchWord.url_searchGetDataController)
+                //  settings url to fetch from pagination
+                this.$emit('urlTryPagination',this.searchWord.url_searchGetDataController)
 
-               this.emit('setCountPagination',pagination)
-                    .then(()=>{
-                        this.getWord();
-                    })
-
+                this.emit('setCountPagination',pagination)
+                     .then(()=>{
+                         this.getWord();
+                     })
            }else {
             this.alert_flag = true
                 setTimeout(() => {
@@ -128,10 +130,13 @@ methods : {
         })
         .then(res => {
             if(res.data[0].result){
-                this.responseDataDbAfter = res.data 
-                this.$emit('setAfterDataResponse', this.responseDataDbAfter)
+                if(this.searchWord.filtering){
+                    this.oldDataResponseDB = this.dataResponseDB
+                    this.$emit('setFlagFiltering',false)
+                }
+                const newDataResponse = res.data
+                this.$emit('setAfterDataResponse', newDataResponse)
             }
-
         })
         .catch(err => {
             console.log(err)
@@ -139,17 +144,17 @@ methods : {
     }
         
 },
-//  watch : {
-//      data(value) {
-//          if(value === ''){
-//              if(this.responseDataDbAfter.length > 0){
-                
-//                  this.$emit('restorePagination', this.paginationBefore)
-//                  this.$emit('restoreDynamicDataToSearch',this.dataDynamicAfter)
-//                  this.$emit('restoreBeforeDataResponse', this.responseDataDbBefore)
-//              }
-           
-//          }
-//      }
-//  }
+  watch : {
+      data(value) {
+          if(value === ''){
+              if(this.oldDataResponseDB.length > 0){
+                this.$emit('restoreUrlPagination',this.oldUrl)
+                this.$emit('restoreOldPagination',this.oldPagination)
+                this.$emit('restoreOldParametersToCall',this.oldParametersToCall)
+                this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
+                this.$emit('setFlagFiltering',true)
+              }
+          }
+      }
+  }
 })

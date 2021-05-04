@@ -143,13 +143,15 @@ Vue.component('form-search-date',{
                      
                     //  settings url to fetch from pagination
                     this.$emit('urlTryPagination',this.base_url_searchDateRange)
+
+                    // setting flag filtering
+                    this.$emit('filtering',true)
                     
                  })
                  .catch(err =>{
                      const error = {type: 'no-exist',text: err,time: 4000}
                      this.error(error); return;
                  })
-
         },
         async showStatus(base_url){
             this.$emit('setSubHeadersLoader',true)
