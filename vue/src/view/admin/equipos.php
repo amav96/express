@@ -13,9 +13,12 @@
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
 <!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
+
+<!-- dialog component -->
+<script src="<?=base_url?>vue/src/components/dialog/dialogEquipos.js"></script>
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/formSearchByIdAndDate.js"></script>
@@ -196,29 +199,35 @@
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
                       :base_url_export="base_url_export"
-                      :columnExport="columnExport"
+                      :base_url_delete="base_url_delete"
                       :dynamicDataToSearch="dynamicDataToSearch"
+                      :base_url_donwload_excel="base_url_donwload_excel"
                       />
                       <div>
-                        Total Registros <strong>{{pagination.totalCountResponse}}</strong>
-                      </div>
-                      <a href="../resources/excel/nombre_del_documento.xlsx" >descargar</a>
-                      
+                      <v-btn
+                      color="primary"
+                      >
+                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
+                      </v-btn>
+                        
+                      </div> 
                     </v-row>
                   </div>
                  
                 </template>
         
                 <template v-if="table">
-                 
                     <table-equipos
                       :dataResponseDB="dataResponseDB" 
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
+                      :base_url_showRemito="base_url_showRemito"
+                      
                     />
                 </template>
 
+                
                 <template v-if="loaderLine" >
                   <loader-line />
                 </template>
@@ -254,6 +263,9 @@
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
               base_url_export: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+              base_url_donwload_excel : API_BASE_EXCEL,
+              base_url_delete : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+              base_url_showRemito : API_BASE_URL + 'equipo/remito',
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -290,36 +302,13 @@
                 { text: 'Provincia'},
                 { text: 'Localidad'},
                 { text: 'Codigo postal'},
-                { text: 'Remito'},
+                { text: 'Enviar'},
+                { text: 'Ver'},
+                { text: 'Accion'},
                 // means
                 // contacto
                 // fecha_aviso_visita
               ],
-              columnExport : [
-                { text: 'Identificacion'},
-                { text: 'Estado'},
-                { text: 'Empresa'},
-                { text: 'Terminal'},
-                { text: 'Serie'},
-                { text: 'Serie Base',},
-                { text: 'Tarjeta/C.Red'},
-                { text: 'Chip alternativo'},
-                { text: 'HDMI/C.TLF'},
-                { text: 'AV/Sim'},
-                { text: 'Fuente/Cargador'},
-                { text: 'Control/Base'},
-                { text: 'Motivo'},
-                { text: 'Fecha'},
-                { text: 'ID Recolector'},
-                { text: 'Nombre Recolector'},
-                { text: 'Nombre'},
-                { text: 'Direccion'},
-                { text: 'Provincia'},
-                { text: 'Localidad'},
-                { text: 'Codigo postal'},
-                { text: 'Remito'},
-                ],
-              nameExport: 'Gestion de avisos',
               loadingTable : false,
               table: false,
               dialog: false,

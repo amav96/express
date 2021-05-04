@@ -138,7 +138,7 @@
                 
                 :dataResponseDB="dataResponseDB" 
                 :columns="columns"
-                :columnExport="columnExport"
+    
                 :nameExport="nameExport"
                 :loadingTable="loadingTable"
                 :table="table"

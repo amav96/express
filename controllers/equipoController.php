@@ -1,8 +1,7 @@
 <?php
 
-require_once "../vendor/autoload.php";
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+
 
 if (isset($_GET['equipo'])) {
 
@@ -10,13 +9,19 @@ if (isset($_GET['equipo'])) {
     session_start();
     require_once '../model/equipos.php';
     require_once '../config/db.php';
+    require_once "../vendor/autoload.php";
 
     $accion = $_GET['equipo'];
     $usuario = new equipoController();
     $usuario->$accion();
 } else {
+
     require_once 'model/equipos.php';
+    require_once "vendor/autoload.php";
 }
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class equipoController
 {
@@ -719,6 +724,7 @@ class equipoController
     }
     public function remito()
     {
+      
         if (isset($_GET["cd"]) && isset($_GET["tp"])) {
             if (!preg_match("/^[0-9A-Za-z]+$/", $_GET["cd"])) {
                 echo "Error 404: KFKCWWDFDFW(EX-RE-G);";
@@ -1276,6 +1282,11 @@ class equipoController
                             'result' => true,
                             'path' => $response
                         );
+                    }else{
+                        $objectResponse = array(
+                            'result' => false
+                            
+                        );
                     }
                 }
 
@@ -1383,10 +1394,11 @@ class equipoController
         $momento = date('d-m-Y H-i-s');
         //Este formato de hora esta asi para poder crear el archivo
         $path = '../resources/excel/reporteGestion'.$momento.'.xlsx';
+        $pathFront = 'reporteGestion'.$momento.'.xlsx';
         $writer->save($path);
 
         if(file_exists($path)){
-            $result = $path;
+            $result = $pathFront;
         }else {
             $result = false;
         }

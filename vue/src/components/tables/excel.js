@@ -9,17 +9,35 @@ Vue.component('excel-export', {
             >
             excel
             </v-btn>
+            <v-progress-circular
+            v-if="flagLoader"
+            indeterminate
+            color="primary"
+            ></v-progress-circular>
+            <v-btn
+            v-if="download"
+            color="error"
+            class="text-white my-2"
+            :href="path"
+            @click="deleteFile"
+            >
+            Descargar
+            </v-btn>
         </v-container>
     </div>
     `,
-    props: ['base_url_export', 'dynamicDataToSearch', 'columnExport'],
+    props: ['base_url_export', 'dynamicDataToSearch','base_url_donwload_excel','base_url_delete'],
     data() {
         return {
-
+            download : false,
+            path : '',
+            flagLoader : false,
+            clickDownload : true
         }
     },
     methods: {
         exportExcel() {
+            this.flagLoader = true
             const dataRequest = this.dynamicDataToSearch
             
             const url = this.base_url_export
@@ -29,14 +47,48 @@ Vue.component('excel-export', {
                 }
             })
             .then(res => {
-                console.log(res)
+                if(!res.data.result){
+                    alertNegative("Mensaje CODIGO 54")
+                    return
+                }
+                    this.flagLoader = false
+                    this.path = this.base_url_donwload_excel+res.data.path
+                    this.download = true
+                setTimeout(() => {
+                    this.download = false
+                }, 60000);
+
             })
             .catch(err => {
                 console.log(err)
             })
+        },
+        deleteFile(){
+            if(this.clickDownload){
+               this.clickDownload = false;
+            setTimeout(() => {
 
-
+                const url = this.base_url_delete
+                axios.get(url,{
+                    params:{
+                        path : this.path
+                    }
+                })
+                .then(res => {
+                    if(!res.data.result){
+                        alertNegative("Mensaje CODIGO 53");
+                    }
+                    this.clickDownload = true;
+                    this.download = false;
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+                
+            }, 6000);
         }
-
+            
+        }
     },
+   
 })

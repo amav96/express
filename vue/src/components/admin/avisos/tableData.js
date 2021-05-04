@@ -5,7 +5,7 @@ Vue.component('table-data', {
            <div>
            <vue-excel-xlsx
             :data="dataResponseDB"
-            :columnExport="columnExport"
+
             :filename="nameExport"
             :sheetname="'sheetname'"
             class="success text-white btn-base"

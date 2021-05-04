@@ -1,8 +1,8 @@
 Vue.component('table-equipos', {
     template: /*html*/ 
     `
-          
            <div>
+           <dialog-equipos> <dialog-equipos/>
            <template>
                 <v-simple-table>
                     <template v-slot:default>
@@ -38,16 +38,38 @@ Vue.component('table-equipos', {
                         <td>{{row.provincia}}</td>
                         <td>{{row.localidad}}</td>
                         <td>{{row.codigo_postal}}</td>
-                        <td>{{row.remito}}</td>  
+                        
+                        <td>
+                            <v-btn 
+                            v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
+                            color="blue-grey"
+                            class="white--text"
+                            @click="urlRemito(row.remito)"
+                            >
+                            Ver remito
+                            </v-btn>
+                            <span
+                            v-else
+                            >
+                            Codigo de orden {{row.remito}}
+                            </span>
+                        </td>  
+                        
+                        <td>
+                        <v-btn color="warning" >Enviar </v-btn>
+                        </td>
+                        <td>
+                        <v-btn color="error" class="ma-1" >Eliminar </v-btn>
+                        <v-btn color="success" class="ma-1" >Editar </v-btn>
+                        </td>  
                         </tr>
                     </tbody>
                     </template>
                 </v-simple-table>
             </template>
              </div>
-          
     `,
-    props:['dataResponseDB','columns','dialog'],
+    props:['dataResponseDB','columns','dialog','base_url_showRemito'],
     data() {
         return {
             search: '',
@@ -71,11 +93,15 @@ Vue.component('table-equipos', {
             // This closes the dialog when clicking outside of its container.
             this.$emit('childrenDialog',false)
          },
+         urlRemito (remito){
+            window.open(this.base_url_showRemito+'&cd='+remito+'&tp=rmkcmmownloqwld', '_blank');
+        }
         
     },
     computed: {
         headers () {
             return this.columns
           },
+       
     }
 })

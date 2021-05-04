@@ -29,7 +29,7 @@ template : //html
                         <v-alert 
                         v-if="alert_flag"
                         type="info"
-                        >No se hay coincidencias para <strong>"{{data}}"</strong>
+                        >No hay coincidencias para <strong>"{{data}}"</strong>
                         </v-alert>
                         </v-col>
                     </transition>
