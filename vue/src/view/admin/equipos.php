@@ -134,7 +134,6 @@
                     @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
                     @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
                     @filtering="searchWord.filtering = $event"
-                   
                     />
                     </v-col>
                 </template>
@@ -189,7 +188,6 @@
                     @restoreOldPagination="pagination = $event"
                     @restoreOldParametersToCall="dynamicDataToSearch = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
-
                     />
                 </template>
 

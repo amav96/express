@@ -796,24 +796,20 @@ class Equipos
         if( $id && $dateStart && $dateEnd){
             $sql ="SELECT COUNT(DISTINCT(g.id)) as 'count' FROM gestion g
             inner join equipos e on e.identificacion = g.identificacion 
-            WHERE g.created_at >= '$dateStart' AND g.created_at <= '$dateEnd%'
-            AND g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE',
-            'RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE',
-            'TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT',
-            'DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-            'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito'  AND id_user = $id";
+            WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+            'N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
+            'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
+            'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' 
+            and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') AND id_user = $id";
         } if(!$id && $dateStart && $dateEnd){
             $sql = "SELECT COUNT(DISTINCT(g.id)) as 'count' FROM gestion g
             inner join equipos e on e.identificacion = g.identificacion 
-            WHERE g.created_at >= '$dateStart' AND g.created_at <= '$dateEnd%'
-            AND g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE',
-            'RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE',
-            'TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT',
-            'DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-            'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
+            WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+            'N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
+            'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
+            'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' 
+            and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59');";
         }
-
-        
 
         $countGetTransitByCollectorAndDate = $this->db->query($sql);
         if($countGetTransitByCollectorAndDate && $countGetTransitByCollectorAndDate->fetch_object()->count > 0){
@@ -845,16 +841,12 @@ class Equipos
                     LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
                     $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
 
-                    
-
                     if( $id && $dateStart && $dateEnd){
                         $sql.="and g.id_user = '{$this->getId_recolector()}' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
                     } if(!$id && $dateStart && $dateEnd){
                         $sql.="and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
                     }
 
-       
-                   
                     $transito = $this->db->query($sql);
                     
                     if($transito && $transito->num_rows>0){
@@ -969,6 +961,7 @@ class Equipos
             return $result;
     }
 
+    
     // end search word
 
     // export
@@ -994,6 +987,53 @@ class Equipos
         }
 
         return $result;
+
+    }
+
+    public function getDataManagementExportByDateRangeAndWord(){
+        $dateStart = !empty($this->getFechaStart()) ? $this->getFechaStart() : false ;
+        $dateEnd = !empty($this->getFechaEnd()) ? $this->getFechaEnd() : false ;
+        $word = !empty($this->getWord()) ? $this->getWord() : false ;
+
+        $wordArray = explode(' ',$word);
+        if(is_array($wordArray)){
+            $wordPush = [];
+            for($i=0;$i<count($wordArray);$i++){
+                array_push($wordPush,'+"'.$wordArray[$i].'"');
+            }
+            $wordFinally = implode(",",$wordPush);
+            $wordClean = str_replace(","," ",$wordFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,
+        g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
+        n.created_at AS 'fecha_aviso_visita' ";
+        $sql.="FROM  ";
+        $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
+        $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
+        $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
+        $sql.="WHERE ";
+        $sql.="(";
+        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
+        e.direccion,e.codigo_postal,e.emailcliente,e.estado) AGAINST ";
+        $sql.="('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="OR  ";
+        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="OR "; 
+        $sql.="u.name LIKE '%$word%') and g.created_at
+        BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+
+        $getDataSearchWordToGestionByDateAndWord =  $this->db->query($sql);
+        if($getDataSearchWordToGestionByDateAndWord->num_rows>0){
+            $result = $getDataSearchWordToGestionByDateAndWord;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
 
     }
 
@@ -1286,7 +1326,6 @@ class Equipos
 
 }
 
-
     class EquiposExtra extends Equipos
     {
        
@@ -1356,16 +1395,13 @@ class Equipos
             return $this->direccion;
         }
     
-
         public function getCodigoPostal()
         {
                 return $this->codigoPostal;
         }
 
-
         //set::::::
 
-        
         public function setTelefonoNuevo($telefonoNuevo)
         {
             $this->telefonoNuevo = $this->db->real_escape_string($telefonoNuevo);

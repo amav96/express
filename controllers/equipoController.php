@@ -1161,89 +1161,6 @@ class equipoController
         }
        
     }
-    public function test(){
-        
-        if($_GET){
-
-            $dataRequest = json_decode($_GET['dataRequest']);
-
-            echo '<pre>';
-            print_r($dataRequest);
-            echo '</pre>';
-            die();
-
-
-            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
-            $word = isset($dataRequest->search) ? $dataRequest->search : false ; 
-            $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
-            $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ; 
-
-            if($dateStart && $dateEnd && $dataRequest){
-
-                $getDataSearchWordGestionController =  new Equipos();
-                $getDataSearchWordGestionController->setFechaStart($dateStart);
-                $getDataSearchWordGestionController->setFechaEnd($dateEnd);
-                $getDataSearchWordGestionController->setWord($word);
-                $getDataSearchWordGestionController->setFromRow($fromRow);
-                $getDataSearchWordGestionController->setLimit($limit);
-                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByDateAndWord();
-            }
-
-            if(!$dateStart && !$dateEnd && $dataRequest){
-                echo "buscar solo por palabra";
-            }
-
-            if (is_object($getDataSearchWordGestionController)) {
-
-                 foreach ($getDataSearchWordGestionController as $element) {
-                   
-                      $objeto[] = array(
-    
-                          'result' => true,
-                          'identificacion' => $element["identificacion"],
-                          'estado' => $element["estado"],
-                          'empresa' => $element["empresa"],
-                          'terminal' => $element["terminal"],
-                          'serie' => $element["serie"],
-                          'orden' => $element["id_orden"],
-                          'recolector' => $element["id_user"],
-                          'serie_base' => $element["serie_base"],
-                          'tarjeta' => $element["tarjeta"],
-                          'chip_alternativo' => $element["chip_alternativo"],
-                          'accesorio_uno' => $element["accesorio_uno"],
-                          'accesorio_dos' => $element["accesorio_dos"],
-                          'accesorio_tres' => $element["accesorio_tres"],
-                          'accesorio_cuatro' => $element["accesorio_cuatro"],
-                          'motivo' => $element["motivo"],
-                          'created_at' => $element["created_at"],
-                          'nombre_cliente' => $element["nombre_cliente"],
-                          'direccion' => $element["direccion"],
-                          'provincia' => $element["provincia"],
-                          'localidad' => $element["localidad"],
-                          'codigo_postal' => $element["codigo_postal"],
-                          'remito' => $element["id_orden_pass"],
-                          'name' => $element["name"],
-                          'latAviso' => $element["latAviso"],
-                          'lngAviso' => $element["lngAviso"],
-                          'latGestion' => $element["latGestion"],
-                          'lngGestion' => $element["lngGestion"],
-                          'means' => $element["means"],
-                          'contacto' => $element["contacto"],
-                          'fecha_aviso_visita' => $element["fecha_aviso_visita"],
-                         
-                      );
-                 }
-            } else {
-                $objeto[] = array(
-                    'result' => false,
-                );
-            }
-
-            $jsonString = json_encode($objeto);
-            echo $jsonString;  
-        }
-    } 
 
     public function getDataSearchWordGestionController(){
         
@@ -1325,56 +1242,161 @@ class equipoController
     } 
     
     public function exportEquipos(){
-        
-
         if($_GET){
-
             $dataRequest = json_decode($_GET['dataRequest']);
-            
-            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
-            $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
+            $dateStart = !empty($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+            $dateEnd = !empty($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+            $word = !empty($dataRequest->search) ? $dataRequest->search : false ; 
+            $metodo = '';
 
             if($dateStart && $dateEnd && !$word){
 
+                $metodo = 'getDataManagementExportByDateRange';
                 $exportEquipos =  new Equipos();
                 $exportEquipos->setFechaStart($dateStart);
                 $exportEquipos->setFechaEnd($dateEnd);
                 $exportEquipos =  $exportEquipos->getDataManagementExportByDateRange();
             }
 
-            if(!$dateStart && !$dateEnd && $word){
-                echo "buscar solo por palabra";
+            if($dateStart && $dateEnd && $word){
+                $metodo = 'getDataManagementExportByDateRangeAndWord';
+                $exportEquipos =  new Equipos();
+                $exportEquipos->setFechaStart($dateStart);
+                $exportEquipos->setFechaEnd($dateEnd);
+                $exportEquipos->setWord($word);
+                $exportEquipos =  $exportEquipos->getDataManagementExportByDateRangeAndWord();
             }
-
 
             if(is_object($exportEquipos)){
 
-                $documento = new Spreadsheet();
-                $documento
-                    ->getProperties()
-                    ->setCreator("Aquí va el creador, como cadena")
-                    ->setLastModifiedBy('Parzibyte') // última vez modificado por
-                    ->setTitle('Mi primer documento creado con PhpSpreadSheet')
-                    ->setSubject('El asunto')
-                    ->setDescription('Este documento fue generado para parzibyte.me')
-                    ->setKeywords('etiquetas o palabras clave separadas por espacios')
-                    ->setCategory('La categoría');
-                
-                $writer = new Xlsx($documento);
-                
-                # Le pasamos la ruta de guardado
-
-                $writer->save('../resources/excel/nombre_del_documento.xlsx');
-
-                // 1) crear archivo con el objeto devuelto por la consulta
-                // 2) guardar archivo con nombre fecha y hora especifico en resources/excel 
-                // 3) devolver link al front para hacer click en descargar 
+                if($metodo === 'getDataManagementExportByDateRange' ||  $metodo === 'getDataManagementExportByDateRangeAndWord'){
+                    $response = $this->excelEquipmentManagement($exportEquipos);
+                    if($response){
+                        $objectResponse = array(
+                            'result' => true,
+                            'path' => $response
+                        );
+                    }
+                }
 
             }
-
-             
+            $jsonString = json_encode($objectResponse);
+            echo $jsonString;
         }
+    }
+
+    public function excelEquipmentManagement($exportEquipos){
+
+        foreach($exportEquipos as $element){
+            $arrayRow[] =  array(
+                'identificacion' => $element["identificacion"],
+                'estado' => $element["estado"],
+                'empresa' => $element["empresa"],
+                'terminal' => $element["terminal"],
+                'serie' => $element["serie"],
+                'serie_base' => $element["serie_base"],
+                'tarjeta' => $element["tarjeta"],
+                'chip_alternativo' => $element["chip_alternativo"],
+                'accesorio_uno' => $element["accesorio_uno"],
+                'accesorio_dos' => $element["accesorio_dos"],
+                'accesorio_tres' => $element["accesorio_tres"],
+                'accesorio_cuatro' => $element["accesorio_cuatro"],
+                'motivo' => $element["motivo"],
+                'created_at' => $element["created_at"],
+                'id_recolector' =>  $element["id_user"],
+                'nombre_recolector'  => $element["name"],
+                'nombre_cliente' => $element["nombre_cliente"],
+                'direccion' => $element["direccion"],
+                'provincia' => $element["provincia"],
+                'localidad' => $element["localidad"],
+                'codigo_postal' => $element["codigo_postal"],
+                'remito' => $element["id_orden_pass"],
+                'means' => $element["means"],
+                'contacto' => $element["contacto"],
+                'fecha_aviso_visita' => $element["fecha_aviso_visita"],
+            );
+        }
+            $header=array(
+                'identificacion',
+                'estado',
+                'empresa',
+                'terminal',
+                'serie',
+                'serie_base',
+                'tarjeta/C.Red',
+                'chip_alternativo',
+                'HDMI/C.Tlf',
+                'AV/Sim',
+                'fuente/cargador',
+                'control/base',
+                'motivo',
+                'fecha',
+                'id_recolector',
+                'nombre_recolector',
+                'nombre_cliente',
+                'direccion',
+                'provincia',
+                'localidad',
+                'codigo_postal',
+                'remito',
+                'medio de contacto',
+                'contacto',
+                'fecha aviso visita'
+            );
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->fromArray([$header], NULL, 'A1');
+        
+                $columnArray = array_chunk($arrayRow, 1);
+                $rowCount = 1;
+                foreach($columnArray as $element){
+                    $rowCount++;
+                    $sheet->setCellValue('A'.$rowCount, $element[0]["identificacion"]);
+                    $sheet->setCellValue('B'.$rowCount, $element[0]["estado"]);
+                    $sheet->setCellValue('C'.$rowCount, $element[0]["empresa"]);
+                    $sheet->setCellValue('D'.$rowCount, $element[0]["terminal"]);
+                    $sheet->setCellValue('E'.$rowCount, $element[0]["serie"]);
+                    $sheet->setCellValue('F'.$rowCount, $element[0]["serie_base"]);
+                    $sheet->setCellValue('G'.$rowCount, $element[0]["tarjeta"]);
+                    $sheet->setCellValue('H'.$rowCount, $element[0]["chip_alternativo"]);
+                    $sheet->setCellValue('I'.$rowCount, $element[0]["accesorio_uno"]);
+                    $sheet->setCellValue('J'.$rowCount, $element[0]["accesorio_dos"]);
+                    $sheet->setCellValue('K'.$rowCount, $element[0]["accesorio_tres"]);
+                    $sheet->setCellValue('L'.$rowCount, $element[0]["accesorio_cuatro"]);
+                    $sheet->setCellValue('M'.$rowCount, $element[0]["motivo"]);
+                    $sheet->setCellValue('N'.$rowCount, $element[0]["created_at"]);
+                    $sheet->setCellValue('O'.$rowCount, $element[0]["nombre_recolector"]);
+                    $sheet->setCellValue('P'.$rowCount, $element[0]["id_recolector"]);
+                    $sheet->setCellValue('Q'.$rowCount, $element[0]["nombre_cliente"]);
+                    $sheet->setCellValue('R'.$rowCount, $element[0]["direccion"]);
+                    $sheet->setCellValue('S'.$rowCount, $element[0]["provincia"]);
+                    $sheet->setCellValue('T'.$rowCount, $element[0]["localidad"]);
+                    $sheet->setCellValue('U'.$rowCount, $element[0]["codigo_postal"]);
+                    $sheet->setCellValue('V'.$rowCount, $element[0]["remito"]);
+                    $sheet->setCellValue('W'.$rowCount, $element[0]["means"]);
+                    $sheet->setCellValue('X'.$rowCount, $element[0]["contacto"]);
+                    $sheet->setCellValue('Y'.$rowCount, $element[0]["fecha_aviso_visita"]);
+                }
+        $writer = new Xlsx($spreadsheet);
+        # Le pasamos la ruta de guardado
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $momento = date('d-m-Y H-i-s');
+        //Este formato de hora esta asi para poder crear el archivo
+        $path = '../resources/excel/reporteGestion'.$momento.'.xlsx';
+        $writer->save($path);
+
+        if(file_exists($path)){
+            $result = $path;
+        }else {
+            $result = false;
+        }
+
+        return $result ;
+        
+        // 1) crear archivo con el objeto devuelto por la consulta
+        // 2) consultar cuando exista archivo, enviar response con true y ubicacion del archivo
+        // 3) guardar archivo con nombre fecha y hora especifico en resources/excel 
+        // 4) devolver link al front para hacer click en descargar 
     }
 
     public function informeRecolectoresYFecha()

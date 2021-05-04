@@ -21,6 +21,7 @@ Vue.component('excel-export', {
     methods: {
         exportExcel() {
             const dataRequest = this.dynamicDataToSearch
+            
             const url = this.base_url_export
             axios.get(url, {
                 params: {
