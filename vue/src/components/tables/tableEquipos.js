@@ -2,7 +2,47 @@ Vue.component('table-equipos', {
     template: /*html*/ 
     `
            <div>
-           <dialog-equipos> <dialog-equipos/>
+
+            <template>
+                <dialog-equipos-update
+                :dialogUpdate="dialogUpdate"
+                :editedItem="editedItem"
+                :title="title"
+                @openDialog="dialogUpdate = $event"
+                @updateRow="updateRow"
+                :status="status" 
+                :accesorios="accesorios"
+                :message="message"
+                :alert_flag="alert_flag"
+                @message="message = $event"
+                @alert_flag="alert_flag = $event"
+                />
+           </template>
+           
+            <template>
+                <dialog-equipos-delete
+                :dialogDelete="dialogDelete"
+                :title="title"
+                @openDialog="dialogDelete = $event"
+                @deleteRow="deleteRow"
+                />
+            </template>
+
+           <template>
+            <dialog-send-invoice
+                @openDialog="sendInvoice.dialog = $event"
+                :sendInvoice="sendInvoice"
+                :admin = "admin"
+                :country_admin = "country_admin"
+            />
+           </template>
+
+            <template>
+                <message-snack
+                :snackbar="snackbar"
+                />
+            </template>
+
            <template>
                 <v-simple-table>
                     <template v-slot:default>
@@ -56,11 +96,28 @@ Vue.component('table-equipos', {
                         </td>  
                         
                         <td>
-                        <v-btn color="warning" >Enviar </v-btn>
+                            <v-btn  color="warning" 
+                            @click="openDialogSendInvoice(true,row)"
+                            > 
+                                <v-icon left>
+                                mdi-email-plus
+                                </v-icon>
+                                Enviar Remito
+                            </v-btn>
                         </td>
                         <td>
-                        <v-btn color="error" class="ma-1" >Eliminar </v-btn>
-                        <v-btn color="success" class="ma-1" >Editar </v-btn>
+                        <v-btn color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
+                            <v-icon left>
+                                    mdi-trash-can-outline
+                            </v-icon>
+                            Eliminar 
+                        </v-btn>
+                        <v-btn color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
+                            <v-icon left>
+                                        mdi-pencil
+                            </v-icon>
+                            Editar 
+                        </v-btn>
                         </td>  
                         </tr>
                     </tbody>
@@ -69,11 +126,33 @@ Vue.component('table-equipos', {
             </template>
              </div>
     `,
-    props:['dataResponseDB','columns','dialog','base_url_showRemito'],
+    props:['dataResponseDB','columns','base_url_showRemito','base_url_estados','base_url_update_gestion','base_url_delete_gestion','admin','country_admin'],
     data() {
         return {
             search: '',
-            page : 1
+            page : 1,
+            editedItem :[],
+            dialogUpdate: false,
+            dialogDelete: false,
+            accesorios : ['si entrego','no entrego'],
+            status: [],
+            message : '',
+            alert_flag : false,
+            title: '',
+            snackbar : {
+                snack : false,
+                textSnack: '',
+                timeout: 2000,
+            },
+            sendInvoice : {
+                dialog:false,
+                title: '',
+                data : [],
+                characteristic : [
+                    { number: '+54'},
+                    { number: '+598'},
+                ]
+            }
         }
     },
     methods: {
@@ -95,7 +174,135 @@ Vue.component('table-equipos', {
          },
          urlRemito (remito){
             window.open(this.base_url_showRemito+'&cd='+remito+'&tp=rmkcmmownloqwld', '_blank');
-        }
+         },
+         openDialogEdit(bool,data){
+            this.editedItem = data
+            this.dialogUpdate =  bool
+            this.title = 'Editar equipos gestionados'
+            if(this.status.length === 0){
+
+                const url = this.base_url_estados
+                axios.get(url)
+                    .then(res => {
+                        if(!res.data[0].result){
+                            alertNegative("Mensaje CODIGO 53");
+                            return
+                        }
+                        this.status = res.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+
+            }
+            
+         },
+         openDialogDelete(bool,data){
+            this.editedItem = data
+            this.dialogDelete = bool
+            this.title = '¿Estas seguro/a?'
+         },
+         openDialogSendInvoice(bool,data){
+
+            this.sendInvoice.data = data
+            this.sendInvoice.dialog = bool
+            this.sendInvoice.title = 'Enviar remito'
+         },
+         updateRow(){
+             var hoy = new Date();
+             var getMinutos = hoy.getMinutes();
+             var getSegundos = hoy.getSeconds()
+             var getHora = hoy.getHours()
+           
+             if(getMinutos<10){getMinutos = '0' + hoy.getMinutes()}
+             if(getSegundos<10){getSegundos = '0' + hoy.getSeconds()}
+             if(getHora<10){getHora = '0' + hoy.getHours()}
+        
+             var created_at = hoy.getFullYear() + '-' + ("0" +(hoy.getMonth() + 1)).slice(-2) + '-' +
+             ("0" + hoy.getDate()).slice(-2)+ ' ' + getHora + ':' + getMinutos + ':' + getSegundos;
+
+
+             const dataRequest = {
+                 id : this.editedItem.id,
+                 estado : this.editedItem.estado,
+                 serie : this.editedItem.serie,
+                 terminal : this.editedItem.terminal,
+                 accesorio_uno : this.editedItem.accesorio_uno,
+                 accesorio_dos : this.editedItem.accesorio_dos,
+                 accesorio_tres : this.editedItem.accesorio_tres,
+                 accesorio_cuatro : this.editedItem.accesorio_cuatro,
+                 created_at,
+                 id_user_update : this.admin 
+             }
+             const url = this.base_url_update_gestion
+
+             axios.get(url,{
+                 params : {
+                     dataRequest
+                 }
+             })
+             .then(res => {
+                if(!res.data.result){
+                    alertNegative("Mensaje CODIGO 51");
+                    return 
+                }
+                
+                this.message = 'Actualizado correctamente'
+                this.alert_flag = true;
+
+             })
+             .catch(err => {
+                console.log(err)
+             })
+             
+         },
+         deleteRow(){
+             const id = this.editedItem.id
+             const data = this.dataResponseDB
+             
+             var hoy = new Date();
+             var getMinutos = hoy.getMinutes();
+             var getSegundos = hoy.getSeconds()
+             var getHora = hoy.getHours()
+           
+             if(getMinutos<10){getMinutos = '0' + hoy.getMinutes()}
+             if(getSegundos<10){getSegundos = '0' + hoy.getSeconds()}
+             if(getHora<10){getHora = '0' + hoy.getHours()}
+        
+             var created_at = hoy.getFullYear() + '-' + ("0" +(hoy.getMonth() + 1)).slice(-2) + '-' +
+             ("0" + hoy.getDate()).slice(-2)+ ' ' + getHora + ':' + getMinutos + ':' + getSegundos;
+
+             const url = this.base_url_delete_gestion
+             const dataRequest = {
+                 id,
+                 created_at,
+                 id_user_update : this.admin 
+             }
+             axios.get(url,{
+                 params : {
+                    dataRequest
+                 }
+             })
+             .then(res => {
+                 if(!res.data.result){
+                    alertNegative("Mensaje CODIGO 50")
+                    return
+                 }
+
+                const found = data.filter(data => data.id !== id)
+                this.$emit('updateDelete',found)
+                this.dialogDelete = false
+
+                this.snackbar.snack = true
+                this.snackbar.textSnack = 'Eliminado correctamente'
+                this.snackbar.timeout = 2500
+               
+             })
+             .catch(err => {
+                console.log(err)
+             })
+        
+         }
         
     },
     computed: {

@@ -932,6 +932,7 @@ class equipoController
                  $objeto[] = array(
 
                      'result' => true,
+                     'id' => $element["id"],
                      'identificacion' => $element["identificacion"],
                      'estado' => $element["estado"],
                      'empresa' => $element["empresa"],
@@ -1203,6 +1204,7 @@ class equipoController
                       $objeto[] = array(
     
                           'result' => true,
+                          'id' => $element["id"],
                           'identificacion' => $element["identificacion"],
                           'estado' => $element["estado"],
                           'empresa' => $element["empresa"],
@@ -1411,6 +1413,32 @@ class equipoController
         // 4) devolver link al front para hacer click en descargar 
     }
 
+    public function estados(){
+     
+
+         $estados = new Equipos();
+         $estados = $estados->getStatus();
+
+         if($estados){
+            
+            foreach($estados as $element){
+                $object[]= array(
+                    'result' => true,
+                    'estado' => $element["estado"]
+                );
+               
+            }
+         }else {
+            $object[]= array(
+                'result' => false
+            );
+         }
+
+         $jsonstring = json_encode($object);
+         echo $jsonstring;
+      
+    }
+
     public function informeRecolectoresYFecha()
     {
 
@@ -1493,79 +1521,78 @@ class equipoController
         }
     }
 
-    public function modifyTransito()
+    public function updateGestion()
     {
 
-        if ($_POST) {
+        $dataRequest = json_decode($_GET['dataRequest']);
+      
+        $id = isset($dataRequest->id) ?$dataRequest->id : false ; 
+        $estado = isset($dataRequest->estado) ?$dataRequest->estado : false ; 
+        $serie = isset($dataRequest->serie) ?$dataRequest->serie : false ; 
+        $terminal = isset($dataRequest->terminal) ?$dataRequest->terminal : false ; 
+        $accesorio_uno = isset($dataRequest->accesorio_uno) ?$dataRequest->accesorio_uno : false ; 
+        $accesorio_dos = isset($dataRequest->accesorio_dos) ?$dataRequest->accesorio_dos : false ; 
+        $accesorio_tres = isset($dataRequest->accesorio_tres) ?$dataRequest->accesorio_tres : false ; 
+        $accesorio_cuatro = isset($dataRequest->accesorio_cuatro) ?$dataRequest->accesorio_cuatro : false ; 
+        $fecha_update = isset($dataRequest->created_at) ?$dataRequest->created_at : false ; 
+        $id_user_update = isset($dataRequest->id_user_update) ?$dataRequest->id_user_update : false ;
 
-            $id_guia_equipo = isset($_POST["id_guia_equipo"]) ? $_POST["id_guia_equipo"] : false;
-            $id_equipo = isset($_POST["id_equipo"]) ? $_POST["id_equipo"] : false;
-            $terminal = isset($_POST["terminal"]) ? $_POST["terminal"] : false;
-            $serie = isset($_POST["serie"]) ? $_POST["serie"] : false;
-            $accesorioUno =  isset($_POST["accesorioUno"]) ? $_POST["accesorioUno"] : false;
-            $accesorioDos =  isset($_POST["accesorioDos"]) ? $_POST["accesorioDos"] : false;
-            $accesorioTres =  isset($_POST["accesorioTres"]) ? $_POST["accesorioTres"] : false;
-            $accesorioCuatro =  isset($_POST["accesorioCuatro"]) ? $_POST["accesorioCuatro"] : false;
-            $estado = isset($_POST["estado"]) ? $_POST["estado"] : false;
-            $id_user_update = isset($_POST["id_user_update"]) ? $_POST["id_user_update"] : false;
-            $fecha_update  = isset($_POST["fecha_update"]) ? $_POST["fecha_update"] : false;
+        $updateGestion = new Equipos();
+        $updateGestion->setId_equipo($id);
+        $updateGestion->setId_user_update($id_user_update);
+        $updateGestion->setFecha_momento($fecha_update);
+        $updateGestion->setTerminal($terminal);
+        $updateGestion->setSerie($serie);
+        $updateGestion->setAccesorioUno($accesorio_uno);
+        $updateGestion->setAccesorioDos($accesorio_dos);
+        $updateGestion->setAccesorioTres($accesorio_tres);
+        $updateGestion->setAccesorioCuatro($accesorio_cuatro);
+        $updateGestion->setEstado($estado);
+        $updateGestion = $updateGestion->updateGestion();
 
-            if (
-                //sacar equipo de gestion / eliminar con update
-                $id_guia_equipo &&  $id_user_update && $fecha_update && !$terminal && !$serie && !$accesorioUno && !$accesorioDos &&
-                !$accesorioTres && !$accesorioCuatro && !$estado
-            ) {
+        if($updateGestion){
+            $object = array(
+                'result' => true
+            );
+        }else {
 
-                $modify = new Equipos();
-                $modify->setGuiaEquipo($id_guia_equipo);
-                $modify->setId_equipo($id_equipo);
-                $modify->setId_user_update($id_user_update);
-                $modify->setFecha_momento($fecha_update);
-                
-                $modify = $modify->setEquipment();
-                if (!$modify) {
-                    $objeto[] = array(
-                        'result' => '2',
-                    );
-                } else {
-                    $objeto[] = array(
-                        'result' => '1',
-                    );
-                }
-            } else if (
-                //modificar equipo en gestion
-                $id_guia_equipo &&  $id_user_update && $fecha_update && $accesorioUno && $accesorioDos &&
-                $accesorioTres && $accesorioCuatro && $estado
-            ) {
+            $object = array(
+                'result' => false
+            );
 
-                $modify = new Equipos();
-                $modify->setGuiaEquipo($id_guia_equipo);
-                $modify->setId_equipo($id_equipo);
-                $modify->setId_user_update($id_user_update);
-                $modify->setFecha_momento($fecha_update);
-                $modify->setTerminal($terminal);
-                $modify->setSerie($serie);
-                $modify->setAccesorioUno($accesorioUno);
-                $modify->setAccesorioDos($accesorioDos);
-                $modify->setAccesorioTres($accesorioTres);
-                $modify->setAccesorioCuatro($accesorioCuatro);
-                $modify->setEstado($estado);
-                $modify = $modify->setEquipment();
-
-                if (!$modify) {
-                    $objeto[] = array(
-                        'result' => '2',
-                    );
-                } else {
-                    $objeto[] = array(
-                        'result' => '1',
-                    );
-                }
-            }
-
-            $jsonstring = json_encode($objeto);
-            echo $jsonstring;
         }
+            $jsonstring = json_encode($object);
+            echo $jsonstring;
+    }
+
+    public function deleteGestion(){
+
+        $dataRequest = json_decode($_GET['dataRequest']);
+
+        $id = isset($dataRequest->id) ?$dataRequest->id : false ; 
+        $fecha_update = isset($dataRequest->created_at) ?$dataRequest->created_at : false ; 
+        $id_user_update = isset($dataRequest->id_user_update) ?$dataRequest->id_user_update : false ;
+
+        $deleteGestion = new Equipos();
+        $deleteGestion->setId_equipo($id);
+        $deleteGestion->setId_user_update($id_user_update);
+        $deleteGestion->setFecha_momento($fecha_update);
+
+        $deleteGestion = $deleteGestion->deleteGestion();
+
+        if($deleteGestion){
+            $object= array(
+                'result' => true
+            );
+        }else {
+            $object= array(
+                'result' => false
+            );
+        }
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+        
     }
 
     public function gestionRecolectores(){

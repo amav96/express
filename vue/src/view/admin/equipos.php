@@ -12,13 +12,17 @@
 <script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
-<!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
 
 <!-- dialog component -->
-<script src="<?=base_url?>vue/src/components/dialog/dialogEquipos.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposUpdate.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposDelete.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js"></script>
+
+<!-- table component -->
+<script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js"></script>
+
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/formSearchByIdAndDate.js"></script>
@@ -31,6 +35,10 @@
 
 <!-- pagination component -->
 <script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+
+<!-- helpers component -->
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
 <!-- Store -->
 <script src="<?=base_url?>vue/src/store/index.js?v=05042021"></script>
@@ -218,12 +226,17 @@
         
                 <template v-if="table">
                     <table-equipos
+                      :admin="admin"
+                      :country_admin="country_admin"
                       :dataResponseDB="dataResponseDB" 
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
                       :base_url_showRemito="base_url_showRemito"
-                      
+                      :base_url_estados="base_url_estados"
+                      :base_url_update_gestion="base_url_update_gestion"
+                      :base_url_delete_gestion="base_url_delete_gestion"
+                      @updateDelete="dataResponseDB = $event"
                     />
                 </template>
 
@@ -249,6 +262,8 @@
         `,
         data(){
             return {
+              admin : 0,
+              country_admin : '',
               formId :true,
               formRangeDate:false,
               formIdAndRangeDate:false,
@@ -266,6 +281,9 @@
               base_url_donwload_excel : API_BASE_EXCEL,
               base_url_delete : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
               base_url_showRemito : API_BASE_URL + 'equipo/remito',
+              base_url_estados : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+              base_url_update_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
+              base_url_delete_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -302,8 +320,8 @@
                 { text: 'Provincia'},
                 { text: 'Localidad'},
                 { text: 'Codigo postal'},
-                { text: 'Enviar'},
                 { text: 'Ver'},
+                { text: 'Enviar'},
                 { text: 'Accion'},
                 // means
                 // contacto
@@ -311,10 +329,11 @@
               ],
               loadingTable : false,
               table: false,
-              dialog: false,
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
-              templateDialog: [],
+              templateDialog: [
+
+              ],
               actionsDialog : {
                 close : {
                   flag:true,
@@ -434,8 +453,24 @@
               this.itemsButtons[2].active = true
             
             
+          },
+          $_getAdmin(){
+
+            if(document.getElementById("id_user_default") === null){
+              alertNegative("Mensage Codigo 52")
+              return
+            }else {
+              let admin =  document.getElementById("id_user_default").value
+              let country = document.getElementById("id_admin").value
+              this.admin = admin
+              this.country_admin = country
+            }
+            
           }
         },
+        created(){
+          this.$_getAdmin()
+        }
        
     })
 </script>

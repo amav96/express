@@ -702,15 +702,13 @@ class Equipos
         as 'sim_alternativo',g.accesorio_uno as 'accesorio_uno', g.accesorio_dos as 'accesorio_dos',g.accesorio_tres 
         as 'accesorio_tres', g.accesorio_cuatro as 'accesorio_cuatro', g.estado as 'estado', g.motivo as 'motivo',
         g.created_at ,g.accesorios as 'accesorios'
-          from gestion g
-          left join equipos e on e.id= g.id_equipo
-          where g.estado IN('RECUPERADO','AUTORIZAR') AND g.id_orden_pass = '{$this->getOrden()}'
-          GROUP BY g.id ;";
+        from gestion g
+        left join equipos e on e.id= g.id_equipo
+        where g.estado IN('RECUPERADO','AUTORIZAR') AND g.id_orden_pass = '{$this->getOrden()}'
+        and g.status_gestion = 'transito' GROUP BY g.id ;";
          
-         
-
-          $result = $this->db->query($sql);
-          return $result;
+        $result = $this->db->query($sql);
+        return $result;
     }
 
     public function getSignatureData()
@@ -834,7 +832,7 @@ class Equipos
                 }
                     $result = false;
                     $sql ="";
-                    $sql.= "SELECT g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
+                    $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
                     g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
                     g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
                     $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
@@ -931,7 +929,7 @@ class Equipos
            
            
             $sql ="";
-            $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,
+            $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
             g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
             n.created_at AS 'fecha_aviso_visita' ";
             $sql.="FROM  ";
@@ -961,7 +959,6 @@ class Equipos
             return $result;
     }
 
-    
     // end search word
 
     // export
@@ -1039,8 +1036,18 @@ class Equipos
 
     //export
 
-    public function getCountEstadoTransito(){
+    public function getStatus(){
+        $sql = "select estado from estado";
+        $getstatus = $this->db->query($sql);
+        if($getstatus->num_rows>0){
+            $result = $getstatus;
+        }else {
+            $result = false;
+        }
+        return $result;
+    }
 
+    public function getCountEstadoTransito(){
 
             $id = !empty($this->getId_recolector())?$this->getId_recolector() : false;
             $dateStart = !empty($this->getfechaStart())?$this->getfechaStart() : false;
@@ -1073,63 +1080,47 @@ class Equipos
            
     }
     
-    public function setEquipment(){
-        //actualizar en panel
-        
-        if($_POST){
+    public function updateGestion(){
 
-            $id_guia_equipo = !empty($this->getGuiaEquipo()) ?$this->getGuiaEquipo() :false ;
-            //este id es para actualizar base original cuando se actualize o se "elimine de gestion"
             $id_equipo = !empty($this->getId_equipo()) ?$this->getId_equipo() :false ;
             $id_user_update = !empty($this->getId_user_update()) ?$this->getId_user_update() :false ;
             $fecha_update = !empty($this->getFecha_momento()) ?$this->getFecha_momento() :false ;
             $terminal = !empty($this->getTerminal()) ?$this->getTerminal() :false ;
             $serie = !empty($this->getSerie()) ?$this->getSerie() :false ;
-            $accesorioUno = !empty($this->getAccesorioUno()) ?$this->getAccesorioUno() :false ;
-            $accesorioDos = !empty($this->getAccesorioDos()) ?$this->getAccesorioDos() :false ;
-            $accesorioTres = !empty($this->getAccesorioTres()) ?$this->getAccesorioTres() :false ;
-            $accesorioCuatro = !empty($this->getAccesorioCuatro()) ?$this->getAccesorioCuatro() :false ;
+            $accesorio_uno = !empty($this->getAccesorioUno()) ?$this->getAccesorioUno() :false ;
+            $accesorio_dos = !empty($this->getAccesorioDos()) ?$this->getAccesorioDos() :false ;
+            $accesorio_tres = !empty($this->getAccesorioTres()) ?$this->getAccesorioTres() :false ;
+            $accesorio_cuatro = !empty($this->getAccesorioCuatro()) ?$this->getAccesorioCuatro() :false ;
             $estado = !empty($this->getEstado()) ?$this->getEstado() :false ;
-            
 
-            $result = false;
-            if($id_guia_equipo && $id_user_update && $fecha_update && !$terminal && !$accesorioUno && !$accesorioDos && !$accesorioTres && !$accesorioCuatro  && !$estado){
-         
-                //lo saca de gestion function(eliminar)
+            $sql ="UPDATE gestion set updated_at='$fecha_update', id_user_update='$id_user_update', terminal='$terminal',serie='$serie',accesorio_uno= '$accesorio_uno', accesorio_dos='$accesorio_dos', accesorio_tres='$accesorio_tres', accesorio_cuatro='$accesorio_cuatro',estado='$estado' where id = $id_equipo";
 
-                $sql ="UPDATE gestion set status_gestion='OUT' , updated_at='{$this->getFecha_momento()}', id_user_update='{$this->getId_user_update()}' where id = '{$this->getGuiaEquipo()}'";
-            
-              $set = $this->db->query($sql);
-
-                if($set){ 
-                    $this->updateCurrentClientStatus('', $this->getFecha_momento(), $this->getId_equipo());
-                    $result = true;
-                }else{
-                    $result = false;
-                }
-
-           }
-             else if($id_guia_equipo &&  $id_user_update && $fecha_update  && $accesorioUno && $accesorioDos && 
-             $accesorioTres && $accesorioCuatro && $estado){
-               //lo saca de gestion function(editar)
-
-               $sql ="UPDATE gestion set updated_at='{$this->getFecha_momento()}', id_user_update='{$this->getId_user_update()}', terminal='{$this->getTerminal()}',serie='{$this->getSerie()}',accesorio_uno= '{$this->getAccesorioUno()}', accesorio_dos='{$this->getAccesorioDos()}', accesorio_tres='{$this->getAccesorioTres()}', accesorio_cuatro='{$this->getAccesorioCuatro()}',estado='{$this->getEstado()}' where id = '{$this->getGuiaEquipo()}'";
-                
-                    $set = $this->db->query($sql);
-
-                    if($set){
-                       $this->updateCurrentClientStatus($this->getEstado(), $this->getFecha_momento(), $this->getId_equipo());
-                    $result = true;
-                    }else{
-                        $result = false;
-                    }
-                        
-                    }
-
+            $updateGestion = $this->db->query($sql);
+            if($updateGestion){
+                $result = true;
+            }else {
+                $result = false;
+            }
 
             return $result;
-        }
 
+    }
+
+    public function deleteGestion(){
+        $id_equipo = !empty($this->getId_equipo()) ?$this->getId_equipo() :false ;
+        $id_user_update = !empty($this->getId_user_update()) ?$this->getId_user_update() :false ;
+        $fecha_update = !empty($this->getFecha_momento()) ?$this->getFecha_momento() :false ;
+
+        $sql ="UPDATE gestion set status_gestion='OUT' , updated_at='$fecha_update', id_user_update=$id_user_update where id = $id_equipo";
+
+        $deleteGestion = $this->db->query($sql);
+        if($deleteGestion){
+            $result = true;
+        }else {
+            $result = false;
+        }
+        return $result;
+        
     }
 
     public function getStatusCustomer(){
