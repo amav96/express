@@ -18,8 +18,8 @@ Vue.component('excel-export', {
             v-if="download"
             color="error"
             class="text-white my-2"
-            :href="path"
-            @click="deleteFile"
+            
+            @click="donwloadFile"
             >
             Descargar
             </v-btn>
@@ -63,9 +63,12 @@ Vue.component('excel-export', {
                 console.log(err)
             })
         },
-        deleteFile(){
+        donwloadFile(){
             if(this.clickDownload){
                this.clickDownload = false;
+
+               window.open(this.path)
+
             setTimeout(() => {
 
                 const url = this.base_url_delete
