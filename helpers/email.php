@@ -28,6 +28,7 @@ class emailController{
       
         if($_POST){
             
+            
             $destino = $_POST["emailDestino"];
             $orden = $_POST["codCapture"];
             $host = isset($_POST["host"])? $_POST["host"] : 'smtp.gmail.com';

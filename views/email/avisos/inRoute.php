@@ -349,7 +349,7 @@
                         <td>
                           <h4><strong>Aviso de Visita / Equipos en comodato / Cliente: '.$identificacion.'</strong></h4>
                           <hr>
-                          <p style="color:black;" >Como le anticipamos y por indicación de '.$empresa.' visitaremos en la fecha  su domicilio para realizar el retiro de los equipos. Recuerde disponer dicho equipo a mano. Ante dudas responder a este número o consulte al '.$footer.'</p>
+                          <p style="color:black;" >Como le anticipamos y por indicación de '.$empresa.' visitaremos en la fecha  su domicilio para realizar el retiro de los equipos. Recuerde disponer dicho equipo a mano. Ante dudas responder a este email o consulte al '.$footer.'</p>
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                             <tbody>
                               <tr>

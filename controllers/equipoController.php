@@ -781,6 +781,8 @@ class equipoController
                     $datosCliente = $remito->getDataCustomerOnConsignment();
                     $datosEquipo = $remito->getDataEquipmentOnConsignment();
 
+                    
+
                     if ($datosCliente->num_rows > 0) {
                         $getCliente = $datosCliente->fetch_object();
                         require_once 'views/remitos/consignacion.php';

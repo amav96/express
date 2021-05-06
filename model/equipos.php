@@ -481,9 +481,7 @@ class Equipos
         }
     }
 
-    private function getOneTransaccion($string)
-    {
-
+    private function getOneTransaccion($string){
         $sql = "SELECT id,created_at,id_user from ordenes where id_user='$string' ORDER BY id DESC LIMIT 1";
         
         $result = $this->db->query($sql);
@@ -497,8 +495,7 @@ class Equipos
     }
 
 
-    public function getAllEmpresa()
-    {
+    public function getAllEmpresa(){
 
         $sql = "SELECT empresa,id FROM empresas";
         $modelos = $this->db->query($sql);
@@ -515,8 +512,7 @@ class Equipos
     }
 
 
-    public function getAllModelo()
-    {
+    public function getAllModelo(){
 
 
         $sql = "SELECT modelo,id from modelos_equipos where id_empresa='{$this->getModelo()}'";
@@ -534,8 +530,7 @@ class Equipos
         return $result;
     }
 
-    public function gettersSerieTerminal()
-    {
+    public function gettersSerieTerminal(){
 
         $terminal = !empty($this->getTerminal()) ? $this->getTerminal() : false ;
         $serie = !empty($this->getSerie()) ? $this->getSerie() : false ;
@@ -567,7 +562,6 @@ class Equipos
 
 
     public function gettersValidateID(){
-
         $id_local =  !empty($this->getGuiaEquipo()) ?$this->getGuiaEquipo() : false;
         if($id_local){
             $result = false;
@@ -601,8 +595,6 @@ class Equipos
     }
 
     public function gettersValidateTerminalBase(){
-
-
         $terminal =  !empty($this->getTerminal()) ?$this->getTerminal() : false;
         if($terminal){
             $result = false;
@@ -620,8 +612,7 @@ class Equipos
 
     }
 
-    public function settersFirma()
-    {
+    public function settersFirma(){
 
             $sentinelaFirma = false;
 
@@ -662,8 +653,7 @@ class Equipos
             return $sentinelaFirma;
     }
 
-    private function setfirma($orden, $fecha, $aclaracion, $documento)
-    {
+    private function setfirma($orden, $fecha, $aclaracion, $documento){
 
             $result = false;
             
@@ -679,8 +669,7 @@ class Equipos
             return  $result;
     }
 
-    public function obtainCustomerDataToIssueInvoice()
-    {
+    public function obtainCustomerDataToIssueInvoice(){
           
         $sql= "SELECT e.emailcliente AS 'email',e.identificacion as 'identificacion', e.nombre_cliente as 'nombre', e.direccion as 'direccion', e.provincia as 'provincia', e.localidad as 'localidad',
         e.codigo_postal as 'codigo_postal',e.telefono1 AS 'telefono1', g.id_orden_pass as 'id_orden_pass', g.id_orden as 'orden', g.estado as 'estado', g.motivo as 'motivo',
@@ -696,8 +685,7 @@ class Equipos
           return $result;
     }
 
-    public function obtainEquipmentDataToIssueInvoice()
-    {
+    public function obtainEquipmentDataToIssueInvoice(){
         $sql = "SELECT e.equipo as 'equipo', e.tipo as 'tipo', g.terminal as 'terminal', g.serie as 'serie', g.serie_base as 'serie_base', g.tarjeta as 'tarjeta', g.chip_alternativo
         as 'sim_alternativo',g.accesorio_uno as 'accesorio_uno', g.accesorio_dos as 'accesorio_dos',g.accesorio_tres 
         as 'accesorio_tres', g.accesorio_cuatro as 'accesorio_cuatro', g.estado as 'estado', g.motivo as 'motivo',
@@ -711,8 +699,7 @@ class Equipos
         return $result;
     }
 
-    public function getSignatureData()
-    {
+    public function getSignatureData(){
         $sql ="SELECT f.pass_id AS 'orden_general', f.created_at , f.aclaracion,
         f.documento from firmas f 
         left join gestion g on g.id_orden_pass = f.pass_id 
@@ -724,16 +711,13 @@ class Equipos
   
     }
 
-    public function getDataCustomerOnConsignment()
-    {
-
+    public function getDataCustomerOnConsignment(){
         $sql = "SELECT documento,numero_documento ,nombre,apellido,direccion,provincia,localidad,
         codigo_postal,telefono,email,
         empresa,created_at,id_user from clientes_consignacion 
         where numero_documento = '{$this->getIdentificacionCliente()}'";
         $result = $this->db->query($sql);
-        return $result;
-                    
+        return $result;          
     }
             
     public function getDataEquipmentOnConsignment(){
@@ -863,7 +847,6 @@ class Equipos
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
         $word = !empty($this->getWord()) ? $this-> getWord(): false ;
-
         $wordArray = explode(' ',$word);
 
         if(is_array($wordArray)){
@@ -900,7 +883,6 @@ class Equipos
         }else {
             $result = false;
         }
-
         return $result;
     }
 
@@ -914,8 +896,6 @@ class Equipos
             if(gettype($fromRow) !==  'string'){
                 $fromRow = '0';
             }
-
-        
             $wordArray = explode(' ',$word);
 
             if(is_array($wordArray)){
@@ -1517,7 +1497,7 @@ class Equipos
 
             $sql ="";
             $sql.="INSERT INTO datos_digitales (id_user,identificacion,id_orden,telefono,mail,created_at,elemento) values ($id_recolector,'$identificacionCliente','$orden','$telefono','$email','$fecha','$elemento')";
-            
+        
             $this->db->query($sql);
 
         }

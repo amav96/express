@@ -349,7 +349,7 @@
                         <td>
                           <h4><strong>Aviso de Visita /Cliente: '.$identificacion.' / '.$empresa.' </strong></h4>
                           <hr>
-                          <p style="color:black;" >En el dia de la fecha hemos visitado su domicilio, para realizar el retiro de los equipos. Por tal solicitamos, tener a mano <strong>NUEVAMENTE</strong>. Responda por este medio o consulte al '.$footer.'</p>
+                          <p style="color:black;" >En el dia de la fecha hemos visitado su domicilio, para realizar el retiro de los equipos. Por tal solicitamos, tener a mano <strong>NUEVAMENTE</strong>. Responda a este email o consulte al '.$footer.'</p>
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                             <tbody>
                               <tr>

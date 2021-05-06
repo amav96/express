@@ -17,6 +17,7 @@
 <script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposUpdate.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposDelete.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js"></script>
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -237,10 +238,11 @@
                       :base_url_update_gestion="base_url_update_gestion"
                       :base_url_delete_gestion="base_url_delete_gestion"
                       @updateDelete="dataResponseDB = $event"
+                      :base_url_send_invoice="base_url_send_invoice"
+                      :base_url_save_data_costumer="base_url_save_data_costumer"
                     />
                 </template>
 
-                
                 <template v-if="loaderLine" >
                   <loader-line />
                 </template>
@@ -284,6 +286,8 @@
               base_url_estados : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
               base_url_update_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
               base_url_delete_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
+              base_url_send_invoice : API_BASE_URL + 'helpers/email.php?email=remito',
+              base_url_save_data_costumer : API_BASE_CONTROLLER + 'equipoController.php?equipo=saveDataCustomer',
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -299,6 +303,7 @@
               sortBy: 'created_at',
               sortDesc: true,
               columns: [
+                { text: 'Aviso visita'},
                 { text: 'Identificacion'},
                 { text: 'Estado'},
                 { text: 'Empresa'},
@@ -332,17 +337,8 @@
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [
-
               ],
-              actionsDialog : {
-                close : {
-                  flag:true,
-                  text:'Cerrar'
-                  } , 
-                save : {
-                  flag:false,
-                  text:'Guardar'
-                }},
+  
               itemsButtons: [
                   { title: 'Identificación', icon: 'mdi-view-dashboard', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-forum', methods : '$_formRangeDate', active : false },
@@ -477,7 +473,7 @@
 
 
 <style>
-    .sacarOutline{
+     .sacarOutline{
         outline: none !important;
         border: none !important;
     }
@@ -496,9 +492,6 @@
         margin: 0 1rem;
     }
 
-    .empujarParaArriba{
-      transform: translateY(-22px);
-    }
     /* botones */
     .btn-base{
       display:flex;
