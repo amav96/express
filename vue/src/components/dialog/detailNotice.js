@@ -75,7 +75,7 @@ Vue.component('dialog-detail-notice',{
                                             block
                                             @click="showMap"
                                             >
-                                            Ver mapa
+                                            Ubicación de envio
                                                 <v-icon right>
                                                     mdi-crosshairs-gps
                                                 </v-icon>

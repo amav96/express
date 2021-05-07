@@ -26,9 +26,9 @@
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/formSearchByIdAndDate.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
-<script src="<?=base_url?>vue/src/components/form/formSearchId.js"></script>
+<script src="<?=base_url?>vue/src/components/form/formSearchWord.js"></script>
 <script src="<?=base_url?>vue/src/components/form/searchWithPagination.js"></script>
 
 <!-- headers component -->
@@ -80,7 +80,6 @@
                             v-for="item in itemsButtons"
                             :key="item.title"
                             link
-                          
                             >
                             <v-btn
                               @click="handle_function_call(item.methods)"
@@ -109,39 +108,54 @@
                 </transition>
                 
                 <template v-if="formId">
-                  <v-col  class=" altura d-flex justify-center my-0"  cols="12" lg="6"  >
-                    <form-search-id
-                    :base_url_searchId="base_url_searchId" 
-                    @dataChildsearchId="dataResponseDB = $event"
-                    @childrenLoadingData="loadingTable = $event"
-                    @childrenTable="table = $event"
-                    @childrenError="error = $event"
-                    :error="error"/>
-                    </v-col>
-                </template>
-                      
-                <template v-if="formRangeDate">
-                  <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
-                    <form-search-date
-                    :pagination="pagination"
-                    :base_url_searchDateRange="base_url_searchDateRange"
-                    :base_url_count_base_url_searchDateRange="base_url_count_base_url_searchDateRange"
+                  <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                    <form-search-word
+                    :searchByWord="searchByWord"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
                     @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @responseRangeDate="dataResponseDB = $event"
+                    @response="dataResponseDB = $event"
                     @loadingTable="loadingTable = $event"
                     @showTable="table = $event"
+                    @urlTryPagination="urlTryPagination = $event"
                     @setErrorGlobal="error = $event"
-                    :dataResponseDB="dataResponseDB"
                     @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
                     @setSubHeadersLoader="subheaders.loader = $event"
+                    :pagination="pagination"
                     :subheaders="subheaders"
                     :base_url_header="base_url_header"
                     :searchWord="searchWord"
                     :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
                     :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setShowSearchWord="searchWord.searchAll = $event"
+                    @setUrlSearchController="searchWord.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
+                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
+                    @filtering="searchWord.filtering = $event"
+                     />
+                    </v-col>
+                </template>
+                <template v-if="formRangeDate">
+                  <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
+                    <form-search-date
+                    :searchByRangeDate="searchByRangeDate"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="dataResponseDB = $event"
+                    @loadingTable="loadingTable = $event"
+                    @showTable="table = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                    @setSubHeadersLoader="subheaders.loader = $event"
+                    :pagination="pagination"
+                    :subheaders="subheaders"
+                    :base_url_header="base_url_header"
+                    :searchWord="searchWord"
+                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setShowSearchWord="searchWord.searchAll = $event"
                     @setUrlSearchController="searchWord.url_searchCountController = $event"
                     @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
                     @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
@@ -150,19 +164,36 @@
                     </v-col>
                 </template>
   
-                <template v-if="formIdAndRangeDate">
+                <template v-if="formWordAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
-                    <form-search-by-id-and-range-date 
+                    <form-search-by-word-and-range-date 
+                    :searchByWordAndRangeDate="searchByWordAndRangeDate"
                     :base_url_data_select="base_url_data_select" 
-                    :base_url_searchByIdAndRangeDate="base_url_searchByIdAndRangeDate"
-                    :base_url_count_base_url_searchByIdAndRangeDate="base_url_count_base_url_searchByIdAndRangeDate"
-                    @dataChildsearchByIDAndRangeDate="dataResponseDB = $event"
-                    @childrenTable="table = $event"
-                    @childrenLoadingData="loadingTable = $event"
                     @childrenProcessDataSelect="processDataSelect($event)"
                     :dataSelect="dataSelect"
                     :showDataSelect="showDataSelect"
-                    @childrenError="error = $event"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="dataResponseDB = $event"
+                    @loadingTable="loadingTable = $event"
+                    @showTable="table = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                    @setSubHeadersLoader="subheaders.loader = $event"
+                    :pagination="pagination"
+                    :subheaders="subheaders"
+                    :base_url_header="base_url_header"
+                    :searchWord="searchWord"
+                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setShowSearchWord="searchWord.searchAll = $event"
+                    @setUrlSearchController="searchWord.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
+                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
+                    @filtering="searchWord.filtering = $event"
+
                       />
                       </v-col>
                 </template>   
@@ -181,8 +212,8 @@
                     :subheaders="subheaders"
                     />
                 </template>
-
-                <template v-if="table">
+                
+                <template v-if="searchWord.searchAll">
                     <search-withPagination
                     :pagination = "pagination"
                     :searchWord="searchWord"
@@ -207,10 +238,8 @@
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
-                      :base_url_export="base_url_export"
-                      :base_url_delete="base_url_delete"
+                      :url_actions="url_actions"
                       :dynamicDataToSearch="dynamicDataToSearch"
-                      :base_url_donwload_excel="base_url_donwload_excel"
                       />
                       <div>
                       <v-btn
@@ -218,7 +247,6 @@
                       >
                       Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
                       </v-btn>
-                        
                       </div> 
                     </v-row>
                   </div>
@@ -228,18 +256,12 @@
                 <template v-if="table">
                     <table-equipos
                       :admin="admin"
-                      :country_admin="country_admin"
                       :dataResponseDB="dataResponseDB" 
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
-                      :base_url_showRemito="base_url_showRemito"
-                      :base_url_estados="base_url_estados"
-                      :base_url_update_gestion="base_url_update_gestion"
-                      :base_url_delete_gestion="base_url_delete_gestion"
+                      :url_actions="url_actions"
                       @updateDelete="dataResponseDB = $event"
-                      :base_url_send_invoice="base_url_send_invoice"
-                      :base_url_save_data_costumer="base_url_save_data_costumer"
                     />
                 </template>
 
@@ -265,29 +287,40 @@
         data(){
             return {
               admin : 0,
-              country_admin : '',
               formId :true,
               formRangeDate:false,
-              formIdAndRangeDate:false,
+              formWordAndRangeDate:false,
               dataSelect:[],
-              base_url_searchId: API_BASE_CONTROLLER + 'equipoController.php?equipo=transito',
-              base_url_searchDateRange:  API_BASE_CONTROLLER + 'equipoController.php?equipo=transitoRecolectoresYFecha',
+              searchByWord : {
+                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
+                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
+                filteringSearchWord : false, 
+              },
+              searchByRangeDate : {
+                filteringSearchWord : true, 
+                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionRangeDate',
+                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionRangeDate',
+              },
+              searchByWordAndRangeDate: {
+                filteringSearchWord : true, 
+                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWordAndDateRange',
+                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionWordAndRangeDate',
+              },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
-              base_url_searchByIdAndRangeDate:  API_BASE_CONTROLLER + 'equipoController.php?equipo=transitoRecolectoresYFecha',
-              base_url_count_base_url_searchDateRange:  API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
-              base_url_count_base_url_searchByIdAndRangeDate : API_BASE_CONTROLLER + 'equipoController.php?equipo=countTransitoRecolectoresYFecha',
-              base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusTransit',
+              base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
-              base_url_export: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
-              base_url_donwload_excel : API_BASE_EXCEL,
-              base_url_delete : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
-              base_url_showRemito : API_BASE_URL + 'equipo/remito',
-              base_url_estados : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
-              base_url_update_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
-              base_url_delete_gestion : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
-              base_url_send_invoice : API_BASE_URL + 'helpers/email.php?email=remito',
-              base_url_save_data_costumer : API_BASE_CONTROLLER + 'equipoController.php?equipo=saveDataCustomer',
+              url_actions : {
+                export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                download_excel : API_BASE_EXCEL,
+                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                showInvoice : API_BASE_URL + 'equipo/remito',
+                status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+                update_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
+                delete_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
+                send_invoice : API_BASE_URL + 'helpers/email.php?email=remito',
+                save_data_customer : API_BASE_CONTROLLER + 'equipoController.php?equipo=saveDataCustomer',
+              },
               urlTryPagination:'',
               pagination : {
                   totalPage : 0, 
@@ -340,9 +373,9 @@
               ],
   
               itemsButtons: [
-                  { title: 'Identificación', icon: 'mdi-view-dashboard', methods: '$_formId', active : true },
-                  { title: 'Rango fecha', icon: 'mdi-forum', methods : '$_formRangeDate', active : false },
-                  { title: 'Recolector y Rango fecha', icon: 'mdi-forum' ,methods: '$_formIdAndRangeDate', active : false },
+                  { title: 'Gestión', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
+                  { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
+                  { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },
                 ],
               error: {
                 type: null,
@@ -355,7 +388,7 @@
                 loader : false
               },
               searchWord : {
-                searchAll: true,
+                searchAll: false,
                 dynamicDataToSearchWordAll : [],
                 url_searchCountController: '',
                 url_searchGetDataController: '',
@@ -421,34 +454,43 @@
           $_formId(){
               this.formId = true
               this.formRangeDate = false
-              this.formIdAndRangeDate = false
+              this.formWordAndRangeDate = false
               this.itemsButtons[0].active = true
               this.itemsButtons[1].active = false
               this.itemsButtons[2].active = false
-              
-            
+
+              if(this.table){
+                this.table= false
+                this.searchWord.searchAll= false
+              }
           },
           $_formRangeDate(){
               this.formId = false
               this.formRangeDate = true
-              this.formIdAndRangeDate = false
+              this.formWordAndRangeDate = false
 
               this.itemsButtons[0].active = false
               this.itemsButtons[2].active = false
               this.itemsButtons[1].active = true
             
-            
+              if(this.table){
+                this.table= false
+                this.searchWord.searchAll= false
+              } 
           },
-          $_formIdAndRangeDate(){
+          $_formWordAndRangeDate(){
               this.formId = false
               this.formRangeDate = false
-              this.formIdAndRangeDate = true
+              this.formWordAndRangeDate = true
 
               this.itemsButtons[0].active = false
               this.itemsButtons[1].active = false
               this.itemsButtons[2].active = true
-            
-            
+
+              if(this.table){
+                this.table= false
+                this.searchWord.searchAll= false
+              }
           },
           $_getAdmin(){
 
@@ -470,7 +512,6 @@
        
     })
 </script>
-
 
 <style>
      .sacarOutline{
@@ -519,8 +560,6 @@
     .color-blue-custom {
       color:#0093f5 !important ;
     }
-
-
 
     .color-white-custom {
       color: white !important ;

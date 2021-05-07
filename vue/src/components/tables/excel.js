@@ -26,7 +26,7 @@ Vue.component('excel-export', {
         </v-container>
     </div>
     `,
-    props: ['base_url_export', 'dynamicDataToSearch','base_url_donwload_excel','base_url_delete'],
+    props: ['dynamicDataToSearch','url_actions'],
     data() {
         return {
             download : false,
@@ -40,7 +40,7 @@ Vue.component('excel-export', {
             this.flagLoader = true
             const dataRequest = this.dynamicDataToSearch
             
-            const url = this.base_url_export
+            const url = this.url_actions.export
             axios.get(url, {
                 params: {
                     dataRequest
@@ -52,12 +52,8 @@ Vue.component('excel-export', {
                     return
                 }
                     this.flagLoader = false
-                    this.path = this.base_url_donwload_excel+res.data.path
+                    this.path = this.url_actions.download_excel+res.data.path
                     this.download = true
-                setTimeout(() => {
-                    this.download = false
-                }, 60000);
-
             })
             .catch(err => {
                 console.log(err)
@@ -66,12 +62,10 @@ Vue.component('excel-export', {
         donwloadFile(){
             if(this.clickDownload){
                this.clickDownload = false;
-
                window.open(this.path)
 
             setTimeout(() => {
-
-                const url = this.base_url_delete
+                const url = this.url_actions.delete_excel
                 axios.get(url,{
                     params:{
                         path : this.path

@@ -10,6 +10,7 @@ class deleteController{
     public function deleteExcelFile(){
 
         if($_GET){
+
             $path = $_GET["path"];
             $arrayPath = explode('/',$path);
             $url = '../resources/excel/';

@@ -47,7 +47,7 @@ if(class_exists($nombre_controlador)){
 ?>
 
 <script>
- const base_url = "https://localhost/express/";
+ const base_url = "http://localhost/express/";
  
 
 

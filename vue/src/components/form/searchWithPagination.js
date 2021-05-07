@@ -20,6 +20,7 @@ template : //html
                         primary
                         form="form-search"
                         type="submit"
+                        :disabled="data === ''"
                         >
                             <v-icon>mdi-magnify</v-icon>
                         </v-btn>
@@ -65,10 +66,12 @@ methods : {
             search : this.data
         }
         this.objectSearch = {...dynamicData,...word}
-        const search = this.objectSearch
-        axios.get(this.searchWord.url_searchCountController,{
+        const dataRequest = this.objectSearch
+        const url = this.searchWord.url_searchCountController
+       
+        axios.get(url,{
             params : {
-                search
+                dataRequest
             }
         })
         .then(res => {
@@ -141,8 +144,7 @@ methods : {
         .catch(err => {
             console.log(err)
         })
-    }
-        
+    }      
 },
   watch : {
       data(value) {

@@ -33,10 +33,7 @@ Vue.component("table-equipos", {
                     @openDialog="sendInvoice.dialog = $event"
                     :sendInvoice="sendInvoice"
                     :admin = "admin"
-                    :country_admin = "country_admin"
-                    :base_url_send_invoice="base_url_send_invoice"
-                    :base_url_save_data_costumer="base_url_save_data_costumer"
-
+                    :url_actions="url_actions"
                 />
             </template>
 
@@ -162,14 +159,9 @@ Vue.component("table-equipos", {
         props: [
             "dataResponseDB",
             "columns",
-            "base_url_showRemito",
-            "base_url_estados",
-            "base_url_update_gestion",
-            "base_url_delete_gestion",
+            "url_actions",
             "admin",
-            "country_admin",
-            "base_url_send_invoice",
-            "base_url_save_data_costumer"
+            "country_admin"
         ],
         data() {
             return {
@@ -219,30 +211,30 @@ Vue.component("table-equipos", {
             this.$emit("childrenDialog", false);
             },
             urlRemito(remito) {
-            window.open(
-                this.base_url_showRemito + "&cd=" + remito + "&tp=rmkcmmownloqwld",
-                "_blank"
-            );
+                window.open(
+                    this.url_actions.showInvoice + "&cd=" + remito + "&tp=rmkcmmownloqwld",
+                    "_blank"
+                );
             },
             openDialogEdit(bool, data) {
-            this.editedItem = data;
-            this.dialogUpdate = bool;
-            this.title = "Editar equipos gestionados";
-            if (this.status.length === 0) {
-                const url = this.base_url_estados;
-                axios
-                .get(url)
-                .then((res) => {
-                    if (!res.data[0].result) {
-                    alertNegative("Mensaje CODIGO 53");
-                    return;
-                    }
-                    this.status = res.data;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            }
+                this.editedItem = data;
+                this.dialogUpdate = bool;
+                this.title = "Editar equipos gestionados";
+                if (this.status.length === 0) {
+                    const url = this.url_actions.status;
+                    axios
+                    .get(url)
+                    .then((res) => {
+                        if (!res.data[0].result) {
+                        alertNegative("Mensaje CODIGO 53");
+                        return;
+                        }
+                        this.status = res.data;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+                }
             },
             openDialogDelete(bool, data) {
             this.editedItem = data;
@@ -299,7 +291,7 @@ Vue.component("table-equipos", {
                 created_at,
                 id_user_update: this.admin,
             };
-            const url = this.base_url_update_gestion;
+            const url = this.url_actions.update_management
 
             axios
                 .get(url, {
@@ -352,7 +344,7 @@ Vue.component("table-equipos", {
                 ":" +
                 getSegundos;
 
-            const url = this.base_url_delete_gestion;
+            const url = this.url_action.delete_management;
             const dataRequest = {
                 id,
                 created_at,

@@ -99,7 +99,7 @@ template : //html
            
         </div>
     `,
-props:['sendInvoice','admin','country_admin','base_url_send_invoice','base_url_save_data_costumer'],
+props:['sendInvoice','admin','url_actions'],
 data (){
 return {
     characteristic : '',
@@ -131,7 +131,7 @@ methods : {
     },
     sendEmail(){
         this.sendingEmail = true
-        const url = this.base_url_send_invoice
+        const url = this.url_actions.send_invoice
         const email = this.email
         const remito = this.sendInvoice.data.remito
         var form = new FormData();
@@ -156,7 +156,7 @@ methods : {
         
     },
     saveDataCustomer(data,tipo){
-        const url = this.base_url_save_data_costumer
+        const url = this.url_actions.save_data_customer
         let id_user = this.admin
         let id_orden = data.remito
         let identificacion = data.identificacion

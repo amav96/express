@@ -125,7 +125,7 @@ template : //html
                 color="primary"
                 @click="update"
                 >
-                Guardar
+                Guardar Cambios
                 </v-btn>
             </v-card-actions>
             </v-card>
