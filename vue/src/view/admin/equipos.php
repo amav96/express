@@ -29,7 +29,7 @@
 <script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/formSearchWord.js"></script>
-<script src="<?=base_url?>vue/src/components/form/searchWithPagination.js"></script>
+<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js"></script>
 
 <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/sub-headers.js"></script>
@@ -124,14 +124,14 @@
                     :pagination="pagination"
                     :subheaders="subheaders"
                     :base_url_header="base_url_header"
-                    :searchWord="searchWord"
+                    :filter="filter"
                     :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
                     :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowSearchWord="searchWord.searchAll = $event"
-                    @setUrlSearchController="searchWord.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
-                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
-                    @filtering="searchWord.filtering = $event"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
                      />
                     </v-col>
                 </template>
@@ -152,14 +152,14 @@
                     :pagination="pagination"
                     :subheaders="subheaders"
                     :base_url_header="base_url_header"
-                    :searchWord="searchWord"
+                    :filter="filter"
                     :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
                     :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowSearchWord="searchWord.searchAll = $event"
-                    @setUrlSearchController="searchWord.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
-                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
-                    @filtering="searchWord.filtering = $event"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
                     />
                     </v-col>
                 </template>
@@ -185,14 +185,14 @@
                     :pagination="pagination"
                     :subheaders="subheaders"
                     :base_url_header="base_url_header"
-                    :searchWord="searchWord"
+                    :filter="filter"
                     :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
                     :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowSearchWord="searchWord.searchAll = $event"
-                    @setUrlSearchController="searchWord.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="searchWord.url_searchGetDataController = $event"
-                    @setDataDynamicToSearchWord="searchWord.dynamicDataToSearchWordAll = $event"
-                    @filtering="searchWord.filtering = $event"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
 
                       />
                       </v-col>
@@ -212,11 +212,11 @@
                     :subheaders="subheaders"
                     />
                 </template>
-                
-                <template v-if="searchWord.searchAll">
-                    <search-withPagination
+          
+                <template v-if="filter.display">
+                    <filter-with-pagination
                     :pagination = "pagination"
-                    :searchWord="searchWord"
+                    :filter="filter"
                     @setCountPagination="pagination = $event"
                     @dynamicDataToSearch="dynamicDataToSearch = $event"
                     @urlTryPagination="urlTryPagination = $event"
@@ -226,7 +226,7 @@
                     @restoreBeforeDataResponse="dataResponseDB = $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
-                    @setFlagFiltering ="searchWord.filtering = $event"
+                    @setFlagFiltering ="filter.filtering = $event"
                     @restoreOldDataResponse="dataResponseDB = $event"
                     @restoreOldPagination="pagination = $event"
                     @restoreOldParametersToCall="dynamicDataToSearch = $event"
@@ -308,7 +308,7 @@
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
-              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countSearchWordGestionController',
+              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countFilterSearchController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
               url_actions : {
                 export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
@@ -371,7 +371,6 @@
               titleDialog: 'Detalle del aviso',
               templateDialog: [
               ],
-  
               itemsButtons: [
                   { title: 'Gestión', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
@@ -387,9 +386,9 @@
                 dataResponseDB : [],
                 loader : false
               },
-              searchWord : {
-                searchAll: false,
-                dynamicDataToSearchWordAll : [],
+              filter : {
+                display: false,
+                dynamicDataToFilter : [],
                 url_searchCountController: '',
                 url_searchGetDataController: '',
                 filtering: false
@@ -461,7 +460,7 @@
 
               if(this.table){
                 this.table= false
-                this.searchWord.searchAll= false
+                this.filter.display= false
               }
           },
           $_formRangeDate(){
@@ -475,7 +474,7 @@
             
               if(this.table){
                 this.table= false
-                this.searchWord.searchAll= false
+                this.filter.display= false
               } 
           },
           $_formWordAndRangeDate(){
@@ -489,7 +488,7 @@
 
               if(this.table){
                 this.table= false
-                this.searchWord.searchAll= false
+                this.filter.display= false
               }
           },
           $_getAdmin(){

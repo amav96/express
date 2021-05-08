@@ -56,7 +56,7 @@ Vue.component('form-search-by-word-and-range-date',{
         </div>
        
     `,
-    props:['base_url_data_select','showDataSelect','dataSelect','searchByWordAndRangeDate','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','searchWord',],
+    props:['base_url_data_select','showDataSelect','dataSelect','searchByWordAndRangeDate','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','filter',],
     data() {
         return {
            dateStart: '',
@@ -93,9 +93,9 @@ Vue.component('form-search-by-word-and-range-date',{
                             // show status if is true
                             this.subheaders.active ? this.showStatus(this.base_url_header) :  true;
 
-                            // if searchALL is true, activate
+                            // if filter is true, activate
                             if(this.searchByWordAndRangeDate.filteringSearchWord){
-                                this.$emit('setShowSearchWord',true)
+                                this.$emit('setShowFilter',true)
                                 this.$emit('setUrlSearchController',this.base_url_to_count_search_word_controller)
                                 this.$emit('setUrlGetDataSearchController',this.base_url_to_get_search_word_controller)
                                 const search = {
@@ -103,7 +103,7 @@ Vue.component('form-search-by-word-and-range-date',{
                                     dateEnd :  this.dateEnd,
                                     word : this.word,
                                 }
-                                this.$emit('setDataDynamicToSearchWord',search) 
+                                this.$emit('setDataDynamicToFilter',search) 
                             }
                         })
                 })

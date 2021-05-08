@@ -34,7 +34,7 @@ Vue.component('form-search-word',{
        </div>
     
     `,
-    props:['titleFormId','pagination','searchByWord','subheaders','base_url_header','searchWord','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller'],
+    props:['titleFormId','pagination','searchByWord','subheaders','base_url_header','filter','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller'],
     data() {
         return {
            word:'',
@@ -69,13 +69,13 @@ Vue.component('form-search-word',{
 
                              // if searchALL is true, activate
                               if(this.searchByWord.filteringSearchWord){
-                                    this.$emit('setShowSearchWord',true)
+                                    this.$emit('setShowFilter',true)
                                     this.$emit('setUrlSearchController',this.base_url_to_count_search_word_controller)
                                     this.$emit('setUrlGetDataSearchController',this.base_url_to_get_search_word_controller)
                                     const search = {
                                         word : this.word,
                                     }
-                                    this.$emit('setDataDynamicToSearchWord',search) 
+                                    this.$emit('setDataDynamicToFilter',search) 
                               }
                         })
                     

@@ -45,7 +45,7 @@ Vue.component('form-search-date',{
                 
             </div>
     `,
-    props:['titleFormRangeDate','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','searchWord','searchByRangeDate'],
+    props:['titleFormRangeDate','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','filter','searchByRangeDate'],
     data() {
         return {
            dateStart: '',
@@ -79,16 +79,16 @@ Vue.component('form-search-date',{
                             // show status if is true
                             this.subheaders.active ? this.showStatus(this.base_url_header) :  true;
 
-                            // if searchALL is true, activate
+                            // if filter is true, activate
                             if(this.searchByRangeDate.filteringSearchWord){
-                                this.$emit('setShowSearchWord',true)
+                                this.$emit('setShowFilter',true)
                                 this.$emit('setUrlSearchController',this.base_url_to_count_search_word_controller)
                                 this.$emit('setUrlGetDataSearchController',this.base_url_to_get_search_word_controller)
                                 const search = {
                                     dateStart : this.dateStart,
                                     dateEnd :  this.dateEnd
                                 }
-                                this.$emit('setDataDynamicToSearchWord',search) 
+                                this.$emit('setDataDynamicToFilter',search) 
                             }
                         })
                     
@@ -180,7 +180,6 @@ Vue.component('form-search-date',{
         
     },
     computed: {
-        ...Vuex.mapState('admin-avisos',['data']),
         validateForm(){
             let dateStart = this.dateStart
             let dateEnd = this.dateEnd

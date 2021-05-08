@@ -1,4 +1,4 @@
-Vue.component('search-withPagination',{
+Vue.component('filter-with-pagination',{
 template : //html 
     `
         <div>
@@ -40,11 +40,11 @@ template : //html
 
         </div>
     `,
-    props:['searchWord','pagination','dataResponseDB','dynamicDataToSearch','urlTryPagination'],
+    props:['filter','pagination','dataResponseDB','dynamicDataToSearch','urlTryPagination'],
 data (){
 return {
     data : '',
-    objectSearch: [],
+    objectFilter: [],
     oldParametersToCall: [],
     oldDataResponseDB: [],
     oldUrl:[],
@@ -61,14 +61,13 @@ methods : {
            })
     },
     tryCountSearch(){
-        const dynamicData = JSON.parse(JSON.stringify(this.searchWord.dynamicDataToSearchWordAll)) 
-        const word = {
-            search : this.data
+        const dynamicData = JSON.parse(JSON.stringify(this.filter.dynamicDataToFilter)) 
+        const buildFilter = {
+            filter : this.data
         }
-        this.objectSearch = {...dynamicData,...word}
-        const dataRequest = this.objectSearch
-        const url = this.searchWord.url_searchCountController
-       
+        this.objectFilter = {...dynamicData,...buildFilter}
+        const dataRequest = this.objectFilter
+        const url = this.filter.url_searchCountController
         axios.get(url,{
             params : {
                 dataRequest
@@ -77,7 +76,7 @@ methods : {
         .then(res => {
            if(res.data.count > '0'){
                 //    settins value before the update
-                if(this.searchWord.filtering){
+                if(this.filter.filtering){
                     this.oldParametersToCall = this.dynamicDataToSearch
                     this.oldUrl = this.urlTryPagination
                      //setting values for pagination before to fetch new count 
@@ -97,11 +96,11 @@ methods : {
                 }
         
                 //  settings url to fetch from pagination
-                this.$emit('urlTryPagination',this.searchWord.url_searchGetDataController)
+                this.$emit('urlTryPagination',this.filter.url_searchGetDataController)
 
                 this.emit('setCountPagination',pagination)
                      .then(()=>{
-                         this.getWord();
+                         this.getFilter();
                      })
            }else {
             this.alert_flag = true
@@ -115,15 +114,15 @@ methods : {
             console.log(err)
         })
     },
-    getWord(){
+    getFilter(){
         // tengo que pedir datos al controlador de datos. Cuando devuelva datos tengo que setear la 
         // dynamicDataToSearch del componente pagination
-        const url = this.searchWord.url_searchGetDataController
+        const url = this.filter.url_searchGetDataController
         const pagination = {
             fromRow : this.pagination.fromRow,
             limit : this.pagination.limit
         }
-        const dynamicDataToSearch = this.objectSearch
+        const dynamicDataToSearch = this.objectFilter
         const dataRequest = {...pagination,...dynamicDataToSearch}
         this.$emit('dynamicDataToSearch',dataRequest)
         axios.get(url,{
@@ -133,7 +132,7 @@ methods : {
         })
         .then(res => {
             if(res.data[0].result){
-                if(this.searchWord.filtering){
+                if(this.filter.filtering){
                     this.oldDataResponseDB = this.dataResponseDB
                     this.$emit('setFlagFiltering',false)
                 }

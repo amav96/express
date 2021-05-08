@@ -40,6 +40,7 @@ class Equipos
     protected $fromRow;
     protected $limit;
     protected $word;
+    protected $filter;
    
 
     public function __construct()
@@ -222,6 +223,11 @@ class Equipos
         return $this->word;
     }
 
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
 
 
     public function setId_recolector($id_recolector)
@@ -375,15 +381,19 @@ class Equipos
     }
     public function setFromRow($fromRow)
     {
-        $this->fromRow = (string)$fromRow;
+        $this->fromRow = $fromRow;
     }
     public function setLimit($limit)
     {
-        $this->limit = (string)$limit;
+        $this->limit = $limit;
     }
     public function setWord($word)
     {
-        $this->word = (string)$word;
+        $this->word = $word;
+    }
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
     }
    
 
@@ -792,8 +802,7 @@ class Equipos
         $sql.="WHERE ";
         $sql.="( MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
-
-        
+       
         $countGestionByWord = $this->db->query($sql);
         if($countGestionByWord && $countGestionByWord->num_rows>0){
             $result = $countGestionByWord;
@@ -849,17 +858,18 @@ class Equipos
         return $result;
     }
 
-    public function countSearchWordToGestionByWord(){
-        $word = !empty($this->getWord()) ? $this-> getWord(): false ;
-        $wordArray = explode(' ',$word);
+    public function countSearchWordToGestionByFilter(){
+        $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
 
-        if(is_array($wordArray)){
-            $wordPush = [];
-            for($i=0;$i<count($wordArray);$i++){
-                array_push($wordPush,'+"'.$wordArray[$i].'"');
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
             }
-            $wordFinally = implode(",",$wordPush);
-            $wordClean = str_replace(","," ",$wordFinally);
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
         }
 
         $sql ="";
@@ -871,7 +881,7 @@ class Equipos
         $sql.="WHERE ";
         $sql.="  ( ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
         $sql.=" )";
 
         $countSearchWordToGestionByWord =  $this->db->query($sql);
@@ -883,20 +893,20 @@ class Equipos
         return $result;
     }
 
-    public function countSearchWordToGestionByDateAndWord(){
+    public function countSearchWordToGestionByDateAndFilter(){
 
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
-        $word = !empty($this->getWord()) ? $this-> getWord(): false ;
-        $wordArray = explode(' ',$word);
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $filterArray = explode(' ',$filter);
 
-        if(is_array($wordArray)){
-            $wordPush = [];
-            for($i=0;$i<count($wordArray);$i++){
-                array_push($wordPush,'+"'.$wordArray[$i].'"');
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
             }
-            $wordFinally = implode(",",$wordPush);
-            $wordClean = str_replace(","," ",$wordFinally);
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
         }
 
         $sql ="";
@@ -910,16 +920,17 @@ class Equipos
         $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente,e.estado) ";
         $sql.="AGAINST ";
-        $sql.="('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR "; 
-        $sql.="u.name LIKE '%$word%') and g.created_at
+        $sql.="u.name LIKE '%$filter%') and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
-        $countSearchWordToGestionByDateAndWord =  $this->db->query($sql);
-        if($countSearchWordToGestionByDateAndWord->num_rows>0){
-            $result = $countSearchWordToGestionByDateAndWord;
+        
+        $countSearchWordToGestionByDateAndFilter =  $this->db->query($sql);
+        if($countSearchWordToGestionByDateAndFilter->num_rows>0){
+            $result = $countSearchWordToGestionByDateAndFilter;
         }else {
             $result = false;
         }
@@ -1034,6 +1045,7 @@ class Equipos
                     $wordFinally = implode(",",$wordPush);
                     $wordClean = str_replace(","," ",$wordFinally);
                 }
+
                 
                 $sql ="";
                 $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
@@ -1122,26 +1134,26 @@ class Equipos
     }
      // search word
 
-    public function getDataSearchWordToGestionByDateAndWord(){
+    public function getDataSearchWordToGestionByDateAndFilter(){
 
             $dateStart = !empty($this->getFechaStart()) ? $this->getFechaStart() : false ;
             $dateEnd = !empty($this->getFechaEnd()) ? $this->getFechaEnd() : false ;
-            $word = !empty($this->getWord()) ? $this->getWord() : false ;
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
             $fromRow = !empty($this->getFromRow()) ? $this->getFromRow() : false ;
             $limit = !empty($this->getLimit()) ? $this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){
                 $fromRow = '0';
             }
-            $wordArray = explode(' ',$word);
+            $filterArray = explode(' ',$filter);
 
-            if(is_array($wordArray)){
-                $wordPush = [];
-                for($i=0;$i<count($wordArray);$i++){
-                    array_push($wordPush,'+"'.$wordArray[$i].'"');
+                if(is_array($filterArray)){
+                    $filterPush = [];
+                    for($i=0;$i<count($filterArray);$i++){
+                        array_push($filterPush,'+"'.$filterArray[$i].'"');
+                    }
+                    $filterFinally = implode(",",$filterPush);
+                    $filterClean = str_replace(","," ",$filterFinally);
                 }
-                $wordFinally = implode(",",$wordPush);
-                $wordClean = str_replace(","," ",$wordFinally);
-            }
            
            
             $sql ="";
@@ -1156,19 +1168,18 @@ class Equipos
             $sql.="(";
             $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
             e.direccion,e.codigo_postal,e.emailcliente,e.estado) AGAINST ";
-            $sql.="('$wordClean' IN BOOLEAN MODE) ";
+            $sql.="('$filterClean' IN BOOLEAN MODE) ";
             $sql.="OR  ";
             $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-            $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
+            $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
             $sql.="OR "; 
-            $sql.="u.name LIKE '%$word%') and g.created_at
+            $sql.="u.name LIKE '%$filter%') and g.created_at
             BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
             $sql.="limit $fromRow,$limit ";
-
-        
-            $getDataSearchWordToGestionByDateAndWord =  $this->db->query($sql);
-            if($getDataSearchWordToGestionByDateAndWord->num_rows>0){
-                $result = $getDataSearchWordToGestionByDateAndWord;
+            
+            $getDataSearchWordToGestionByDateAndFilter =  $this->db->query($sql);
+            if($getDataSearchWordToGestionByDateAndFilter->num_rows>0){
+                $result = $getDataSearchWordToGestionByDateAndFilter;
             }else {
                 $result = false;
             }
@@ -1247,20 +1258,21 @@ class Equipos
 
     }
 
-    public function getDataManagementExportByDateRangeAndWord(){
+    public function getDataManagementExportByDateRangeAndFilter(){
         $dateStart = !empty($this->getFechaStart()) ? $this->getFechaStart() : false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this->getFechaEnd() : false ;
-        $word = !empty($this->getWord()) ? $this->getWord() : false ;
+        $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
 
-        $wordArray = explode(' ',$word);
-        if(is_array($wordArray)){
-            $wordPush = [];
-            for($i=0;$i<count($wordArray);$i++){
-                array_push($wordPush,'+"'.$wordArray[$i].'"');
-            }
-            $wordFinally = implode(",",$wordPush);
-            $wordClean = str_replace(","," ",$wordFinally);
-        }
+        $filterArray = explode(' ',$filter);
+
+                if(is_array($filterArray)){
+                    $filterPush = [];
+                    for($i=0;$i<count($filterArray);$i++){
+                        array_push($filterPush,'+"'.$filterArray[$i].'"');
+                    }
+                    $filterFinally = implode(",",$filterPush);
+                    $filterClean = str_replace(","," ",$filterFinally);
+                }
 
         $sql ="";
         $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,
@@ -1274,17 +1286,17 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente,e.estado) AGAINST ";
-        $sql.="('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ";
+        $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR "; 
-        $sql.="u.name LIKE '%$word%') and g.created_at
+        $sql.="u.name LIKE '%$filter%') and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        $getDataSearchWordToGestionByDateAndWord =  $this->db->query($sql);
-        if($getDataSearchWordToGestionByDateAndWord->num_rows>0){
-            $result = $getDataSearchWordToGestionByDateAndWord;
+        $getDataManagementExportByDateRangeAndFilter =  $this->db->query($sql);
+        if($getDataManagementExportByDateRangeAndFilter->num_rows>0){
+            $result = $getDataManagementExportByDateRangeAndFilter;
         }else {
             $result = false;
         }
@@ -1318,7 +1330,7 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) )";
-    
+
         $getDataManagementExportByWord =  $this->db->query($sql);
         if($getDataManagementExportByWord->num_rows>0){
             $result = $getDataManagementExportByWord;
@@ -1344,7 +1356,6 @@ class Equipos
         return $result;
     }
 
-    
     
     public function updateGestion(){
 
