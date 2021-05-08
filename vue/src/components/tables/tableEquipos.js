@@ -344,7 +344,7 @@ Vue.component("table-equipos", {
                 ":" +
                 getSegundos;
 
-            const url = this.url_action.delete_management;
+            const url = this.url_actions.delete_management;
             const dataRequest = {
                 id,
                 created_at,

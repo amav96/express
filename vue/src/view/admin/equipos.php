@@ -287,6 +287,7 @@
         data(){
             return {
               admin : 0,
+              formBaseOriginal : false,
               formId :true,
               formRangeDate:false,
               formWordAndRangeDate:false,
@@ -372,6 +373,7 @@
               templateDialog: [
               ],
               itemsButtons: [
+                  { title: 'Base Original', icon: 'mdi-database', methods: '$_formBaseOriginal', active : false },
                   { title: 'Gestión', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
                   { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },
@@ -450,13 +452,35 @@
           handle_function_call(function_name) {
             this[function_name]()
           },
-          $_formId(){
-              this.formId = true
-              this.formRangeDate = false
-              this.formWordAndRangeDate = false
+          $_formBaseOriginal(){
+
+            this.formBaseOriginal = true
+            this.formId = false
+            this.formRangeDate = false
+            this.formWordAndRangeDate = false
+              
               this.itemsButtons[0].active = true
               this.itemsButtons[1].active = false
               this.itemsButtons[2].active = false
+              this.itemsButtons[3].active = false
+
+              if(this.table){
+                this.table= false
+                this.filter.display= false
+              }
+
+          },
+          $_formId(){
+
+              this.formBaseOriginal = false
+              this.formId = true
+              this.formRangeDate = false
+              this.formWordAndRangeDate = false
+            
+              this.itemsButtons[0].active = false
+              this.itemsButtons[1].active = true
+              this.itemsButtons[2].active = false
+              this.itemsButtons[3].active = false
 
               if(this.table){
                 this.table= false
@@ -464,13 +488,15 @@
               }
           },
           $_formRangeDate(){
+              this.formBaseOriginal = false
               this.formId = false
               this.formRangeDate = true
               this.formWordAndRangeDate = false
 
               this.itemsButtons[0].active = false
-              this.itemsButtons[2].active = false
-              this.itemsButtons[1].active = true
+              this.itemsButtons[1].active = false
+              this.itemsButtons[3].active = false
+              this.itemsButtons[2].active = true
             
               if(this.table){
                 this.table= false
@@ -478,18 +504,21 @@
               } 
           },
           $_formWordAndRangeDate(){
-              this.formId = false
-              this.formRangeDate = false
-              this.formWordAndRangeDate = true
+              
+            this.formBaseOriginal = false
+            this.formId = false
+            this.formRangeDate = false
+            this.formWordAndRangeDate = true
 
-              this.itemsButtons[0].active = false
-              this.itemsButtons[1].active = false
-              this.itemsButtons[2].active = true
+            this.itemsButtons[0].active = false
+            this.itemsButtons[1].active = false
+            this.itemsButtons[2].active = false
+            this.itemsButtons[3].active = true
 
-              if(this.table){
-                this.table= false
-                this.filter.display= false
-              }
+            if(this.table){
+              this.table= false
+              this.filter.display= false
+            }
           },
           $_getAdmin(){
 

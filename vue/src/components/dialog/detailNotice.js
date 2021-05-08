@@ -65,6 +65,15 @@ Vue.component('dialog-detail-notice',{
                                                         </v-list-item-subtitle>
                                                     </v-col>
 
+                                                    <v-col cols="12" lg="6">
+                                                        <v-list-item-title class="caption mb-1">
+                                                            <strong>Recolector</strong>
+                                                        </v-list-item-title>
+                                                        <v-list-item-subtitle>
+                                                            {{detailNotice.data.name}}
+                                                        </v-list-item-subtitle>
+                                                    </v-col>
+
                                                 </v-row>
                                             </v-list-item-content>
                                         </v-list-item>
@@ -112,6 +121,7 @@ Vue.component('dialog-detail-notice',{
             this.$emit('openDialog', false)
         },
         showMap(){
+            
             const lat = this.detailNotice.data.latAviso
             const lng = this.detailNotice.data.lngAviso
             const coordinates = lat +','+ lng

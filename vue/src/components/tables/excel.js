@@ -8,6 +8,7 @@ Vue.component('excel-export', {
             @click="exportExcel"
             >
             excel
+            <v-icon right >mdi-file-excel</v-icon>
             </v-btn>
             <v-progress-circular
             v-if="flagLoader"
@@ -18,10 +19,11 @@ Vue.component('excel-export', {
             v-if="download"
             color="error"
             class="text-white my-2"
-            
             @click="donwloadFile"
             >
+           
             Descargar
+            <v-icon right >mdi-download</v-icon>
             </v-btn>
         </v-container>
     </div>
@@ -87,5 +89,10 @@ Vue.component('excel-export', {
             
         }
     },
+    watch : {
+        dynamicDataToSearch(){
+            this.download = false
+        }
+    }
    
 })

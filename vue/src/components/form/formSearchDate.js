@@ -7,40 +7,45 @@ Vue.component('form-search-date',{
                  @submit.prevent="countSearchInRangeDate" 
                  id="sendFormRangeDate" 
                  class="d-flex justify-center flex-row align-center  flex-wrap ">
-                    <div class="mx-1 ">
-                        <v-text-field
-                        label="Desde"
-                        hide-details="auto"
-                        type="date"
-                        v-model="dateStart"
-                        >
-                        </v-text-field >
-                    </div>
+                    <v-container fluid>
+                        <v-row align="center"  class="d-flex justify-center" >
+                            <v-col class="d-flex justify-center" cols="12" sm="5">
+                                <v-text-field
+                                label="Desde"
+                                hide-details="auto"
+                                type="date"
+                                v-model="dateStart"
+                                >
+                                </v-text-field >
+                            </v-col>
 
-                    <div class="mx-1 ">
-                        <v-text-field
-                        label="Hasta"
-                        hide-details="auto"
-                        type="date"
-                        v-model="dateEnd"
-                        >
-                        </v-text-field >
-                    </div>
+                            <v-col class="d-flex justify-center" cols="12" sm="5">
+                                <v-text-field
+                                label="Hasta"
+                                hide-details="auto"
+                                type="date"
+                                v-model="dateEnd"
+                                >
+                                </v-text-field >
+                            </v-col>
 
-                    <div class="mx-1 ">
-                        <v-btn
-                        color="primary"
-                        fab
-                        small
-                        primary
-                        class="sacarOutline"
-                        type="submit"
-                        form="sendFormRangeDate"
-                        :disabled="validateForm"
-                        >
-                        <v-icon>mdi-magnify</v-icon>
-                        </v-btn>
-                    </div>
+                            <v-col class="d-flex justify-center" cols="12" sm="2">
+                                <v-btn
+                                color="primary"
+                                fab
+                                small
+                                primary
+                                class="sacarOutline"
+                                type="submit"
+                                form="sendFormRangeDate"
+                                :disabled="validateForm"
+                                >
+                                <v-icon>mdi-magnify</v-icon>
+                                </v-btn>
+                            </v-col>
+                           
+                        </v-row>
+                    </v-container>
                 </v-form>
                 
             </div>

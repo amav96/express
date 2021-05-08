@@ -162,8 +162,8 @@ Vue.component('form-search-word',{
     },
     computed: {
         validateForm(){
-            var validateID = this.id
-            if(validateID === ''){
+            
+            if(this.word === ''){
                 return true
             }else{
                 return false

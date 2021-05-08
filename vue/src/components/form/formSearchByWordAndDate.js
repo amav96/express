@@ -6,52 +6,56 @@ Vue.component('form-search-by-word-and-range-date',{
             @submit.prevent="countSearchByWordAndRangeDate"
             id="sendFormWordAndRange"
             class="d-flex justify-center flex-row align-center  flex-wrap ">
-                <div class=" mx-1 ">
-                    <v-select
-                    :items="dataSelect"
-                    :item-text="showDataSelect"
-                    item-value="id"
-                    label="Recolector"
-                    v-model="word"
-                    attach
-                    ></v-select>
-                </div>
+                <v-container fluid>
+                    <v-row align="center"  class="d-flex justify-center" >
+                        <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
+                            <v-select
+                            style="height:50px;"
+                            :items="dataSelect"
+                            :item-text="showDataSelect"
+                            item-value="id"
+                            label="Recolector"
+                            v-model="word"
+                            ></v-select>
+                        </v-col>
 
-                <div class="mx-1 ">
-                    <v-text-field
-                    label="Desde"
-                    hide-details="auto"
-                    type="date"
-                    v-model="dateStart"
-                    >
-                    </v-text-field >
-                </div>
+                        <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
+                            <v-text-field
+                            label="Desde"
+                            hide-details="auto"
+                            type="date"
+                            v-model="dateStart"
+                            >
+                            </v-text-field >
+                        </v-col>
 
-                <div class="mx-1 ">
-                    <v-text-field
-                    label="Hasta"
-                    hide-details="auto"
-                    type="date"
-                    v-model="dateEnd"
-                    >
-                    </v-text-field >
-                </div>
+                        <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
+                            <v-text-field
+                            label="Hasta"
+                            hide-details="auto"
+                            type="date"
+                            v-model="dateEnd"
+                            >
+                            </v-text-field >
+                        </v-col>
 
-                <div class="mx-1 ">
-                    <v-btn
-                    color="primary"
-                    fab
-                    small
-                    primary
-                    class="sacarOutline"
-                    type="submit"
-                    form="sendFormWordAndRange"
-                    :disabled="validateForm"
-                    >
-                    <v-icon>mdi-magnify</v-icon>
-                    </v-btn>
-                </div>
-
+                        <v-col class="d-flex justify-center" cols="12"  lg="2" md ="2">
+                            <v-btn
+                            color="primary"
+                            fab
+                            small
+                            primary
+                            class="sacarOutline"
+                            type="submit"
+                            form="sendFormWordAndRange"
+                            :disabled="validateForm"
+                            >
+                            <v-icon>mdi-magnify</v-icon>
+                            </v-btn>
+                        </v-col>
+                    
+                    </v-row>
+                </v-container>
             </form>
         </div>
        

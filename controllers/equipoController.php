@@ -883,7 +883,7 @@ class equipoController
             $countGestionRangeDate = new Equipos();
             $countGestionRangeDate->setFechaStart($dateStart);
             $countGestionRangeDate->setFechaEnd($dateEnd);
-            $countGestionRangeDate =$countGestionRangeDate->countGetGestionRangeDate();
+            $countGestionRangeDate =$countGestionRangeDate->countGestionRangeDate();
         
             if (is_object($countGestionRangeDate)) {
                 foreach ($countGestionRangeDate as $element) {
@@ -1088,37 +1088,40 @@ class equipoController
 
     public function countFilterSearchController(){
 
+       
         
         if($_GET){
+
             $dataRequest = json_decode($_GET['dataRequest']);
             $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
             $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ;
             $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ;  
             $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
 
-            // if($dateStart && $dateEnd && $word && $search){
-               
-            //     $countFilterSearchController =  new Equipos();
-            //     $countFilterSearchController->setFechaStart($dateStart);
-            //     $countFilterSearchController->setFechaEnd($dateEnd);
-            //     $countFilterSearchController->setId_recolector($word);
-            //     $countFilterSearchController->setWord($search);
-            //     $countFilterSearchController = $countFilterSearchController->countSearchWordToGestionByDateAndWord();
-            // }
 
             if($dateStart && $dateEnd  && $filter){
                 $countFilterSearchController =  new Equipos();
                 $countFilterSearchController->setFechaStart($dateStart);
                 $countFilterSearchController->setFechaEnd($dateEnd);
                 $countFilterSearchController->setFilter($filter);
-                $countFilterSearchController = $countFilterSearchController->countSearchWordToGestionByDateAndFilter();
+                $countFilterSearchController = $countFilterSearchController->countFilterToGestionByDateAndFilter();
             }
 
             if(!$dateStart && !$dateEnd && $word && $filter){
                 $countFilterSearchController =  new Equipos();
                 $countFilterSearchController->setFilter($filter);
-                $countFilterSearchController= $countFilterSearchController->countSearchWordToGestionByFilter();
+                $countFilterSearchController= $countFilterSearchController->countFilterToGestionByFilter();
 
+            }
+
+            if($dateStart && $dateEnd && $word && $filter){
+               
+                $countFilterSearchController =  new Equipos();
+                $countFilterSearchController->setFechaStart($dateStart);
+                $countFilterSearchController->setFechaEnd($dateEnd);
+                $countFilterSearchController->setId_recolector($word);
+                $countFilterSearchController->setFilter($filter);
+                $countFilterSearchController = $countFilterSearchController->countFilterToGestionByWordAndDateAndFilter();
             }
 
            
@@ -1362,7 +1365,7 @@ class equipoController
     }
 
     public function getDataSearchWordGestionController(){
-       
+
         if($_GET){
 
             $dataRequest = json_decode($_GET['dataRequest']);
@@ -1381,7 +1384,7 @@ class equipoController
                 $getDataSearchWordGestionController->setFilter($filter);
                 $getDataSearchWordGestionController->setFromRow($fromRow);
                 $getDataSearchWordGestionController->setLimit($limit);
-                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByDateAndFilter();
+                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToGestionByDateAndFilter();
             }
             if($dateStart && $dateEnd && $filter && $word){
                 
@@ -1392,7 +1395,7 @@ class equipoController
                 $getDataSearchWordGestionController->setFilter($filter);
                 $getDataSearchWordGestionController->setFromRow($fromRow);
                 $getDataSearchWordGestionController->setLimit($limit);
-                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByDateAndWord();
+                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToGestionByDateAndWordAndFilter();
             }
 
             if(!$dateStart && !$dateEnd && $filter){
@@ -1401,7 +1404,7 @@ class equipoController
                 $getDataSearchWordGestionController->setFilter($filter);
                 $getDataSearchWordGestionController->setFromRow($fromRow);
                 $getDataSearchWordGestionController->setLimit($limit);
-                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataSearchWordToGestionByWord();
+                $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToGestionByWord();
             }
 
           
@@ -1458,8 +1461,6 @@ class equipoController
     } 
     
     public function exportEquipos(){
-
-       
         if($_GET){
 
             $dataRequest = json_decode($_GET['dataRequest']);
@@ -1468,15 +1469,24 @@ class equipoController
             $filter = !empty($dataRequest->filter) ? $dataRequest->filter : false ; 
             $word = !empty($dataRequest->word) ? $dataRequest->word : false ; 
 
-            if($dateStart && $dateEnd && !$filter){
-              
+            if($word && !$dateStart && !$dateEnd && !$filter){
+                //busqueda input word(identificacion,terminal,serie,etc)
+                 $exportEquipos =  new Equipos();
+                 $exportEquipos->setWord($word);
+                 $exportEquipos =  $exportEquipos->getDataManagementExportByWord();
+             }
+
+            if($dateStart && $dateEnd && !$filter && !$word){
+                //busqueda inputs rango de fecha
                 $exportEquipos =  new Equipos();
                 $exportEquipos->setFechaStart($dateStart);
                 $exportEquipos->setFechaEnd($dateEnd);
                 $exportEquipos =  $exportEquipos->getDataManagementExportByDateRange();
             }
-
+           
              if($dateStart && $dateEnd && $filter){
+                 //busqueda inputs rango de fecha y filtro
+                
                  $exportEquipos =  new Equipos();
                  $exportEquipos->setFechaStart($dateStart);
                  $exportEquipos->setFechaEnd($dateEnd);
@@ -1484,15 +1494,26 @@ class equipoController
                  $exportEquipos =  $exportEquipos->getDataManagementExportByDateRangeAndFilter();
              }
 
-             if($word && !$dateStart && !$dateEnd && !$filter){
-                
-                 $exportEquipos =  new Equipos();
-                 $exportEquipos->setWord($word);
-                 $exportEquipos =  $exportEquipos->getDataManagementExportByWord();
-               
-             }
+             if($dateStart && $dateEnd && $word && !$filter){
+                //busqueda inputs rango de fecha y palabra(recolector)
+                $exportEquipos =  new Equipos();
+                $exportEquipos->setFechaStart($dateStart);
+                $exportEquipos->setFechaEnd($dateEnd);
+                $exportEquipos->setWord($word);
+                $exportEquipos =  $exportEquipos->getDataManagementExportByDateRangeAndWord();
+            }
 
+            if($dateStart && $dateEnd && $word && $filter){
+                //busqueda inputs rango de fecha , palabra(recolector) y filtro
+                $exportEquipos =  new Equipos();
+                $exportEquipos->setFechaStart($dateStart);
+                $exportEquipos->setFechaEnd($dateEnd);
+                $exportEquipos->setWord($word);
+                $exportEquipos->setFilter($filter);
+                $exportEquipos =  $exportEquipos->getDataManagementExportByDateRangeAndWordAndFilter();
+            }
 
+            
             if(is_object($exportEquipos)){
 
                     $response = $this->excelEquipmentManagement($exportEquipos);
