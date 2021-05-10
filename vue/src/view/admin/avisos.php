@@ -1,31 +1,48 @@
 <?php require_once 'views/layout/headerAdmin.php'; ?>
 
-    <div id="admin-avisos" >
+    <div id="admin-equipos" >
             
     </div>
-
 <!-- VUE -->
 
 <!-- component  avisos -->
-    
-<script src="<?=base_url?>vue/src/components/helpers/VueExcelXlsx.js"></script>
-<script  src="<?=base_url?>vue/src/components/admin/avisos/formSearchByIDAndRangeDate.js"></script>
-<script src="<?=base_url?>vue/src/components/admin/avisos/formSearchDate.js"></script>
-<script src="<?=base_url?>vue/src/components/admin/avisos/formSearchId.js"></script>
+  
 
-<script src="<?=base_url?>vue/src/components/admin/avisos/tableData.js?v=14042021"></script>
-<script src="<?=base_url?>vue/src/components/admin/avisos/dialogCustom.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
+
+
+<!-- dialog component -->
+
+<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js"></script>
+
+<!-- table component -->
+<script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableAvisos.js"></script>
+
+
+<!-- form component -->
+<script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js"></script>
+<script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
+<script src="<?=base_url?>vue/src/components/form/formSearchWord.js"></script>
+<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js"></script>
+
+
+<!-- pagination component -->
+<script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+
+<!-- helpers component -->
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
 <!-- Store -->
 <script src="<?=base_url?>vue/src/store/index.js?v=05042021"></script>
 <script src="<?=base_url?>vue/src/modules/M_adminAvisos.js"></script>
 <!-- views -->
 
-<!-- <v-btn @click="$_formId" >Identificacion</v-btn>
-                   <v-btn @click="$_formRangeDate" >Fecha</v-btn>
-                   <v-btn @click="$_formIdAndRangeDate" >Recolector y Fecha</v-btn> -->
-       
 <?php require_once 'views/layout/footerAdmin.php'; ?>
 
 <script>
@@ -35,288 +52,454 @@
     
   new Vue({
 
-      el: '#admin-avisos',
-      vuetify: new Vuetify(),
-      store,
-      template : //html 
-      `
-      <v-app class=" empujarParaArriba elevation" >
-        <div >
-            <v-row  
-              class=" bg-blue-custom justify-center align-items-center  flex-column m-0 py-2"
-              wrap
-            > 
-              <v-container  class=" d-flex justify-center flex-column">
-                    <h5 class=" color-white-custom text-center" >Gestión de Avisos</h5>
-                    <v-toolbar 
-                      elevation="0"
-                      color="transparent"
-                      class="d-flex justify-center flew-row "
-                      height="auto"
-                      wrap
-                     
-                      > 
-                      <div class="d-flex justify-center flex-row flex-wrap" >
-                        <div  
-                          v-for="item in itemsButtons"
-                          :key="item.title"
-                          link
-                        
-                          >
-                          <v-btn
-                            @click="handle_function_call(item.methods)"
-                            class="bg-blue-custom mx-3 my-1 noUpperCase"
-                            color="transparent"
-                            :class="[item.active? 'secondary' :  '']"
-                             >
-                            <span class="color-white-custom" >{{ item.title }}</span>
-                          <v-icon class="mx-1" color="white" >{{ item.icon }}</v-icon>
-                          </v-btn>
-                          <v-spacer></v-spacer>
+        el: '#admin-equipos',
+        vuetify: new Vuetify(),
+        store,
+        template : //html 
+        `
+        <v-app class="empujarParaArriba elevation" >
+          <div >
+              <v-row  
+                class=" bg-blue-custom justify-center align-items-center  flex-column m-0 py-2"
+                wrap
+              > 
+                <v-container  class=" d-flex justify-center flex-column">
+                      <h5 class=" color-white-custom text-center" >Gestión de avisos</h5>
+                      <v-toolbar 
+                        elevation="0"
+                        color="transparent"
+                        class="d-flex justify-center flew-row "
+                        height="auto"
+                        wrap
+                        > 
+                        <div class="d-flex justify-center flex-row flex-wrap" >
+                          <div  
+                            v-for="item in itemsButtons"
+                            :key="item.title"
+                            link
+                            >
+                            <v-btn
+                              @click="handle_function_call(item.methods)"
+                              class="bg-blue-custom mx-3 my-1 noUpperCase"
+                              color="transparent"
+                              :class="[item.active? 'secondary' :  '']"
+                              >
+                              <span class="color-white-custom" >{{ item.title }}</span>
+                            <v-icon class="mx-1" color="white" >{{ item.icon }}</v-icon>
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                          </div>
                         </div>
-                      </div>
+                      </v-toolbar>
+                </v-container>     
+              </v-row>
+          </div>
+              <div class="d-flex justify-center align-center align-self-center flex-column" >
+            
+                <transition name="slide-fade">
+                  <error-global 
+                  v-if="error.type !== null" 
+                  :error="error"
+                  @clearingError="error = $event"
+                  />
+                </transition>
+                <template v-if="formId">
+                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                      <form-search-word
+                      :searchByWord="searchByWord"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                      @response="dataResponseDB = $event"
+                      @loadingTable="loadingTable = $event"
+                      @showTable="table = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setErrorGlobal="error = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"
+                      :pagination="pagination"
+                      :subheaders="subheaders"
+                      :base_url_header="base_url_header"
+                      :filter="filter"
+                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlSearchController="filter.url_searchCountController = $event"
+                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @filtering="filter.filtering = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      />
+                    </v-col>
+                </template>
 
-                    </v-toolbar>
-              </v-container>     
-            </v-row>
-        </div>
+                <template v-if="formRangeDate">
+                  <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
+                    <form-search-date
+                    :searchByRangeDate="searchByRangeDate"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="dataResponseDB = $event"
+                    @loadingTable="loadingTable = $event"
+                    @showTable="table = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                    @setSubHeadersLoader="subheaders.loader = $event"
+                    :pagination="pagination"
+                    :subheaders="subheaders"
+                    :base_url_header="base_url_header"
+                    :filter="filter"
+                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                    />
+                    </v-col>
+                </template>
+  
+                <template v-if="formWordAndRangeDate">
+                  <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
+                    <form-search-by-word-and-range-date 
+                    :searchByWordAndRangeDate="searchByWordAndRangeDate"
+                    :base_url_data_select="base_url_data_select" 
+                    @childrenProcessDataSelect="processDataSelect($event)"
+                    :dataSelect="dataSelect"
+                    :showDataSelect="showDataSelect"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="dataResponseDB = $event"
+                    @loadingTable="loadingTable = $event"
+                    @showTable="table = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                    @setSubHeadersLoader="subheaders.loader = $event"
+                    :pagination="pagination"
+                    :subheaders="subheaders"
+                    :base_url_header="base_url_header"
+                    :filter="filter"
+                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
 
-            <div class="d-flex justify-center align-center align-self-center flex-column" >
-           
-              <transition name="slide-fade">
-                <error-global 
-                v-if="error.type !== null" 
-                :error="error"
-                @clearingError="error = $event"
-                />
-              </transition>
-              
-                  <template v-if="formId">
-                    <v-col  class=" altura d-flex justify-center my-0"  cols="12" lg="6"  >
-                      <form-search-id
-                      :base_url_searchId="base_url_searchId" 
-                      @dataChildsearchId="dataResponseDB = $event"
-                      @childrenLoadingData="loadingTable = $event"
-                      @childrenTable="table = $event"
-                      @childrenError="error = $event"
-                      :error="error"/>
-                      </v-col>
-                  </template>
-                    
-                  <template v-if="formRangeDate">
-                    <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
-                      <form-search-date
-                      :base_url_searchDateRange="base_url_searchDateRange"
-                      @dataChildsearchInRangeDate="dataResponseDB = $event"
-                      @childrenLoadingData="loadingTable = $event"
-                      @childrenTable="table = $event"
-                      @childrenError="error = $event"
                       />
                       </v-col>
-                  </template>
+                </template>  
 
-                  <template v-if="formIdAndRangeDate">
-                    <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
-                      <form-search-by-id-and-range-date 
-                      :base_url_data_select="base_url_data_select" 
-                      :base_url_searchByIdAndRangeDate="base_url_searchByIdAndRangeDate"
-                      @dataChildsearchByIDAndRangeDate="dataResponseDB = $event"
-                      @childrenTable="table = $event"
-                      @childrenLoadingData="loadingTable = $event"
-                      @childrenProcessDataSelect="processDataSelect($event)"
-                      :dataSelect="dataSelect"
-                      :showDataSelect="showDataSelect"
-                      @childrenError="error = $event"
-                        />
-                        </v-col>
-                  </template>   
-                  
               </div> 
+                <template v-if="loadingTable" >
+                 <loader-line />
+                </template>
 
-            <template v-if="table">
-             <table-data    
+                <template v-if="filter.display">
+                    <filter-with-pagination
+                    :pagination = "pagination"
+                    :filter="filter"
+                    @setCountPagination="pagination = $event"
+                    @dynamicDataToSearch="dynamicDataToSearch = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    :urlTryPagination="urlTryPagination"
+                    :dataResponseDB="dataResponseDB" 
+                    @setAfterDataResponse="dataResponseDB = $event"
+                    @restoreBeforeDataResponse="dataResponseDB = $event"
+                    :dynamicDataToSearch="dynamicDataToSearch"
+                    @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
+                    @setFlagFiltering ="filter.filtering = $event"
+                    @restoreOldDataResponse="dataResponseDB = $event"
+                    @restoreOldPagination="pagination = $event"
+                    @restoreOldParametersToCall="dynamicDataToSearch = $event"
+                    @restoreUrlPagination="urlTryPagination = $event"
+                    />
+                </template>
+
+                <template v-if="table && displayExportFromComponentAccesores">
+                  <div>
+                    <v-row class="justify-center align-items-center align-content-center">
+                      <excel-export
+                      :url_actions="url_actions"
+                      :dynamicDataToSearch="dynamicDataToSearch"
+                      />
+                      <div>
+                      <v-btn
+                      color="primary"
+                      >
+                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
+                      </v-btn>
+                      </div> 
+                    </v-row>
+                  </div>
+                 
+                </template>
+        
+                <template v-if="table">
+                    <table-avisos
+                      :admin="admin"
+                      :dataResponseDB="dataResponseDB" 
+                      :columns="columns"
+                      :loadingTable="loadingTable"
+                      :table="table"
+                      :url_actions="url_actions"
+                      @updateDelete="dataResponseDB = $event"
+                    />
+                </template>
+
+                <template v-if="loaderLine" >
+                  <loader-line />
+                </template>
+
+                <template v-if="table">
+                    <pagination-custom 
+                    :pagination="pagination"
+                    :urlTryPagination="urlTryPagination"
+                    :loaderLine="loaderLine"
+                    @setPageCurrent= "pagination.pageCurrent = $event"
+                    @setFromRow="pagination.fromRow = $event"
+                    @updateDataResponseDB="dataResponseDB = $event"
+                    @showLoaderLine="loaderLine =  $event"
+                    :dynamicDataToSearch="dynamicDataToSearch"
+                    @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    />
+                </template>
+          </v-app>
+        `,
+        data(){
+            return {
+              admin : 0,
+              formEquipos : false,
+              formId :true,
+              formRangeDate:false,
+              formWordAndRangeDate:false,
+              dataSelect:[],
+              searchByWord : {
+                filteringSearchWord : false, 
+                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
+                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
+                export : true,
+              },
+              searchByRangeDate : {
+                filteringSearchWord : true, 
+                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDate',
+                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDate',
+                export : true,
+               
+              },
+              searchByWordAndRangeDate: {
+                filteringSearchWord : true, 
+                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDateAndWord',
+                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
+                export : true,
                 
-                :dataResponseDB="dataResponseDB" 
-                :columns="columns"
-    
-                :nameExport="nameExport"
-                :loadingTable="loadingTable"
-                :table="table"
-                @childrenDialog="dialog = $event"
-                :dialog="dialog"
-                :bodyDialog="bodyDialog"
-                :titleDialog="titleDialog"
-                :actionsDialog="actionsDialog"
-                @childrenBodyDialogTemplate="templateDialogDetail($event)"
-                :templateDialog="templateDialog"
-                :sortBy="sortBy"
-                :sortDesc="sortDesc"
-              />
-              </template>
-
-          
-        </v-app>
-      `,
-      data(){
-          return {
-            formId :true,
-            formRangeDate:false,
-            formIdAndRangeDate:false,
-            dataSelect:[],
-            base_url_searchId: API_BASE_URL + 'controllers/noticeController.php?notice=getNoticesById',
-            base_url_searchDateRange:  API_BASE_URL + 'controllers/noticeController.php?notice=getNoticesByDateRange',
-            base_url_data_select:  API_BASE_URL + 'controllers/usuarioController.php?usuario=dataUsers',
-            base_url_searchByIdAndRangeDate:  API_BASE_URL + 'controllers/noticeController.php?notice=getNoticesByIdAndDate',
-            dataResponseDB: [],
-            sortBy: 'created_at',
-            sortDesc: true,
-            columns: [
-              { text: 'Detalle', label: 'Aviso', value: 'actions', field: 'actions' },
-              { text: 'Nombre', label: 'Nombre', value:'name',  field:'name', width: 100,},
-              { text: 'Aviso', label: 'Aviso', value:'aviso', field:'aviso'},
-              { text: 'Contacto', label: 'Contacto', value:'contacto', field:'contacto'},
-              { text: 'Pais', label: 'Pais', value:'country', field:'country'},
-              { text: 'Recolector', label: 'Recolector', value:'id_user', field:'id_user', width: 120},
-              { text: 'Identificacion', label: 'Identificacion', value:'identificacion', field:'identificacion', width: 130},
-              { text: 'Lat', label: 'Lat', value:'lat', field:'lat' , align: ' d-none'},
-              { text: 'Lng', label: 'Lng', value:'lng', field:'lng', align: ' d-none'},
-              { text: 'Medio', label: 'Medio', value:'means',  field:'means', width: 100},
-              { text: 'Fecha', label: 'Fecha', value:'created_at', field:'created_at'}
-            ],
-            columnExport : [
-              { label: 'Nombre',  field:'name'},
-              { label: 'Aviso', field:'aviso'},
-              { label: 'Contacto', field:'contacto'},
-              { label: 'Pais', field:'country'},
-              { label: 'Recolector', field:'id_user'},
-              { label: 'Identificacion', field:'identificacion'},
-              { label: 'Medio',  field:'means'},
-              { label: 'Fecha', field:'created_at'}
+              },
+              base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
+              base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
+              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=countFilterSearchController',
+              base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=getDataSearchWordNoticeController',
+              url_actions : {
+                export : API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                download_excel : API_BASE_EXCEL,
+                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                showInvoice : API_BASE_URL + 'equipo/remito',
+                status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+              },
+              urlTryPagination:'',
+              pagination : {
+                  totalPage : 0, 
+                  rowForPage:10,
+                  pageCurrent: 1,
+                  totalCountResponse:0,
+                  fromRow:0,
+                  limit:10
+              },
+              dynamicDataToSearch : [],
+              loaderLine: false,
+              dataResponseDB: [],
+              sortBy: 'created_at',
+              sortDesc: true,
+              columns: [
+                { text: 'Detalle'},
+                { text: 'Aviso'},
+                { text: 'Contacto'},
+                { text: 'Pais'},
+                { text: 'Recolector'},
+                { text: 'Identificacion',},
+                { text: 'Lat'},
+                { text: 'Lng'},
+                { text: 'Fecha'},
               ],
-            nameExport: 'Gestion de avisos',
-            loadingTable : false,
-            table: false,
-            dialog: false,
-            bodyDialog: [],
-            titleDialog: 'Detalle del aviso',
-            templateDialog: [],
-            actionsDialog : {
-              close : {
-                flag:true,
-                text:'Cerrar'
-                } , 
-              save : {
-                flag:false,
-                text:'Guardar'
-              }},
-            itemsButtons: [
-                { title: 'Identificación', icon: 'mdi-view-dashboard', methods: '$_formId', active : true },
-                { title: 'Rango fecha', icon: 'mdi-forum', methods : '$_formRangeDate', active : false },
-                { title: 'Recolector y Rango fecha', icon: 'mdi-forum' ,methods: '$_formIdAndRangeDate', active : false },
+              loadingTable : false,
+              table: false,
+              displayExportFromComponentAccesores :false,
+              bodyDialog: [],
+              titleDialog: 'Detalle del aviso',
+              templateDialog: [
               ],
-            error: {
-              type: null,
-              text: null,
-              time: null
+              itemsButtons: [
+                  
+                  { title: 'Identificacion', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
+                  { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
+                  { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },
+                ],
+              error: {
+                type: null,
+                text: null,
+                time: null
+              },
+              subheaders : {
+                active : false,
+                dataResponseDB : [],
+                loader : false
+              },
+              filter : {
+                display: false,
+                dynamicDataToFilter : [],
+                url_searchCountController: '',
+                url_searchGetDataController: '',
+                filtering: false
+              },
             }
-          }
-      },
-      methods:{
-        processDataSelect(items){
-          // el Items lo traigo con un $emit desde el hijo. 
-          var dataProcess = items
-          const returnUser = dataProcess.filter(user => user.estado === 'active')
-          const finallyUser = returnUser.filter(user => user.tipoUsuario === 'recolector' || user.tipoUsuario === 'comercio' || user.tipoUsuario === 'admin')
-          // filtro la data que se esta mostrando en el select
-          this.dataSelect = finallyUser
-         
         },
-        showDataSelect(items){
-          // en cada iteracion del select, se activa este metodo el cual filtra lo que quiero mostrar
-           let showText = items
-           return `${showText.nombre} - ${showText.localidad} - ${showText.id}`
-
-        },
-        templateDialogDetail(items){
-
-          let name = items.name
-          let aviso = items.aviso
-          if(aviso === 'tomorrow'){
-            aviso = 'Mañana'
-          }
-          if(aviso === 'route'){
-            aviso = 'En ruta'
-          }
-          let contacto = items.contacto
-          let identificacion = items.identificacion
-          let created_at = items.created_at
-          let lat = items.lat
-          let lng = items.lng
-          let direccion = items.direccion
-          let localidad = items.localidad
-          let provincia = items.provincia
-
-          // Dialog template
-          this.templateDialog = [ 
-            {text : 'Nombre',value: name,  button:'' },
-            {text : 'Aviso',value: aviso, button:'' },
-            {text : 'Contacto',value: contacto, button:'' },
-            {text : 'Identificación',value: identificacion, button:'' },
-            {text : 'Fecha',value: created_at, button: ''},
-            {text : 'Direccion del cliente',value: direccion, button: ''},
-            {text : 'Localidad del cliente ',value: localidad, button: ''},
-            {text : 'Provincia del cliente',value: provincia, button: ''},
-            {text : 'Enviado desde', value: {
-                                lat: lat,
-                                lng: lng,
-                              }
-                              , button: 'Mapa'},
-          ]
-        },
-
-        handle_function_call(function_name) {
-          this[function_name]()
-        },
-        $_formId(){
-            this.formId = true
-            this.formRangeDate = false
-            this.formIdAndRangeDate = false
-            this.itemsButtons[0].active = true
-            this.itemsButtons[1].active = false
-            this.itemsButtons[2].active = false
-            
+        methods:{
+          processDataSelect(items){
+            // el Items lo traigo con un $emit desde el hijo. 
+            var dataProcess = items
+            const returnUser = dataProcess.filter(user => user.estado === 'active')
+            const finallyUser = returnUser.filter(user => user.tipoUsuario === 'recolector' || user.tipoUsuario === 'comercio' || user.tipoUsuario === 'admin')
+            // filtro la data que se esta mostrando en el select
+            this.dataSelect = finallyUser
           
-        },
-        $_formRangeDate(){
-            this.formId = false
-            this.formRangeDate = true
-            this.formIdAndRangeDate = false
+          },
+          showDataSelect(items){
+            // en cada iteracion del select, se activa este metodo el cual filtra lo que quiero mostrar
+            let showText = items
+            return `${showText.nombre} - ${showText.localidad} - ${showText.id}`
 
-            this.itemsButtons[0].active = false
-            this.itemsButtons[2].active = false
-            this.itemsButtons[1].active = true
-           
-        },
-        $_formIdAndRangeDate(){
+          },
+          templateDialogDetail(items){
+
+            let name = items.name
+            let aviso = items.aviso
+            if(aviso === 'tomorrow'){
+              aviso = 'Mañana'
+            }
+            if(aviso === 'route'){
+              aviso = 'En ruta'
+            }
+            let contacto = items.contacto
+            let identificacion = items.identificacion
+            let created_at = items.created_at
+            let lat = items.lat
+            let lng = items.lng
+            let direccion = items.direccion
+            let localidad = items.localidad
+            let provincia = items.provincia
+
+            // Dialog template
+            this.templateDialog = [ 
+              {text : 'Nombre',value: name,  button:'' },
+              {text : 'Aviso',value: aviso, button:'' },
+              {text : 'Contacto',value: contacto, button:'' },
+              {text : 'Identificación',value: identificacion, button:'' },
+              {text : 'Fecha',value: created_at, button: ''},
+              {text : 'Direccion del cliente',value: direccion, button: ''},
+              {text : 'Localidad del cliente ',value: localidad, button: ''},
+              {text : 'Provincia del cliente',value: provincia, button: ''},
+              {text : 'Enviado desde', value: {
+                                  lat: lat,
+                                  lng: lng,
+                                }
+                                , button: 'Mapa'},
+            ]
+          },
+          handle_function_call(function_name) {
+            this[function_name]()
+          },
+         
+          $_formId(){
+
+              this.formId = true
+              this.formRangeDate = false
+              this.formWordAndRangeDate = false
+            
+              this.itemsButtons[0].active = true
+              this.itemsButtons[1].active = false
+              this.itemsButtons[2].active = false
+
+              if(this.table){
+                this.table= false
+                this.filter.display= false
+              }
+          },
+          $_formRangeDate(){
+              
+              this.formId = false
+              this.formRangeDate = true
+              this.formWordAndRangeDate = false
+
+              this.itemsButtons[0].active = false
+              this.itemsButtons[1].active = true
+              this.itemsButtons[2].active = false
+        
+              if(this.table){
+                this.table= false
+                this.filter.display= false
+              } 
+          },
+          $_formWordAndRangeDate(){
+              
             this.formId = false
             this.formRangeDate = false
-            this.formIdAndRangeDate = true
+            this.formWordAndRangeDate = true
 
             this.itemsButtons[0].active = false
             this.itemsButtons[1].active = false
             this.itemsButtons[2].active = true
            
-           
+
+            if(this.table){
+              this.table= false
+              this.filter.display= false
+            }
+          },
+          $_getAdmin(){
+
+            if(document.getElementById("id_user_default") === null){
+              alertNegative("Mensage Codigo 52")
+              return
+            }else {
+              let admin =  document.getElementById("id_user_default").value
+              let country = document.getElementById("id_admin").value
+              this.admin = admin
+              this.country_admin = country
+            }
+            
+          }
+        },
+        created(){
+          this.$_getAdmin()
         }
-      },
-     
-    
+       
     })
 </script>
 
-
 <style>
-    .sacarOutline{
+
+    .empujarParaArriba{
+      margin-top: -20px;
+    }
+   
+     .sacarOutline{
         outline: none !important;
         border: none !important;
     }
@@ -335,9 +518,6 @@
         margin: 0 1rem;
     }
 
-    .empujarParaArriba{
-      transform: translateY(-22px);
-    }
     /* botones */
     .btn-base{
       display:flex;
@@ -365,8 +545,6 @@
     .color-blue-custom {
       color:#0093f5 !important ;
     }
-
-
 
     .color-white-custom {
       color: white !important ;

@@ -8,28 +8,33 @@ Vue.component('form-search-word',{
             @submit.prevent="countSearchByWord" 
             id="sendFormWord" 
             class="d-flex justify-center flex-row align-center  flex-wrap ">
-                <div class="mx-1 ">
-                    <v-text-field
-                    label="Complete identificación"
-                    hide-details="auto"
-                    v-model.trim="word"
-                    >
-                    </v-text-field >
-                </div>
-                <div class="mx-1 ">
-                    <v-btn
-                    color="primary"
-                    fab
-                    small
-                    primary
-                    type="submit"
-                    form="sendFormWord"
-                    class=" sacarOutline"
-                    :disabled="validateForm"
-                    >
-                        <v-icon>mdi-magnify</v-icon>
-                    </v-btn>
-                </div>
+                <v-container fluid>
+                    <v-row align="center"  class="d-flex justify-center" >
+                        <v-col class="d-flex justify-center" cols="12" sm="10">
+                            <v-text-field
+                            label="Complete identificación"
+                            hide-details="auto"
+                            v-model.trim="word"
+                            >
+                            </v-text-field >
+                        </v-col>
+
+                        <v-col class="d-flex justify-center" cols="12" sm="2">
+                            <v-btn
+                            color="primary"
+                            fab
+                            small
+                            primary
+                            type="submit"
+                            form="sendFormWord"
+                            class=" sacarOutline"
+                            :disabled="validateForm"
+                            >
+                                <v-icon>mdi-magnify</v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </form>
        </div>
     
@@ -43,7 +48,7 @@ Vue.component('form-search-word',{
     methods:{
         async  countSearchByWord(){
             try {
-                // this.$emit('loadingTable',true)
+                 this.$emit('loadingTable',true)
                 const url = this.searchByWord.base_url_count
                 await axios.get(url,{
                       params :{
@@ -120,6 +125,12 @@ Vue.component('form-search-word',{
                     this.$emit('response',res.data)
                     this.$emit('showTable',true)
                     this.$emit('loadingTable',false)
+
+                    if(this.searchByWord.export){
+                        this.$emit('setDisplayExportExcel',this.searchByWord.export)
+                    }else{
+                        this.$emit('setDisplayExportExcel',this.searchByWord.export)
+                    }
                      
                     //  settings url to fetch from pagination
                     this.$emit('urlTryPagination',base_url)
@@ -142,7 +153,8 @@ Vue.component('form-search-word',{
             })
             .then(res => {
                 if(!res.data[0].result){
-                    console.log('errorsito')
+                    this.$emit('setSubHeadersLoader',false)
+                    return
                 }
                  this.$emit('setSubHeadersDataResponseDB', res.data)
                  this.$emit('setSubHeadersLoader',false)
@@ -152,6 +164,7 @@ Vue.component('form-search-word',{
             })
         },
         error(error){
+            this.$emit('setShowFilter',false)
             this.$emit('setErrorGlobal',error)
             this.$emit('loadingTable',false)
             this.$emit('showTable',false)

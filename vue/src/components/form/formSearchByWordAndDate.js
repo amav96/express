@@ -157,6 +157,12 @@ Vue.component('form-search-by-word-and-range-date',{
                      this.$emit('response',res.data)
                      this.$emit('showTable',true)
                      this.$emit('loadingTable',false)
+
+                     if(this.searchByWordAndRangeDate.export){
+                        this.$emit('setDisplayExportExcel',this.searchByWordAndRangeDate.export)
+                    }else{
+                        this.$emit('setDisplayExportExcel',this.searchByWordAndRangeDate.export)
+                    }
                      
                     //  settings url to fetch from pagination
                     this.$emit('urlTryPagination',base_url)
@@ -253,6 +259,7 @@ Vue.component('form-search-by-word-and-range-date',{
             })
         },
         error(error){
+            this.$emit('setShowFilter',false)
             this.$emit('setErrorGlobal',error)
             this.$emit('loadingTable',false)
             this.$emit('showTable',false)

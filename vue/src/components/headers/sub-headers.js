@@ -5,6 +5,7 @@ template : //html
         <template>
             <div class="text-center">
                 <v-chip
+                
                 v-for="(item,i) in subheaders.dataResponseDB"
                 :key="i"
                 class="ma-2"
@@ -19,13 +20,8 @@ template : //html
    
     `,
 props:['subheaders'],
-data (){
-return {
-        
+created(){
+    console.log(this.subheaders)
 }
-},
-methods : {
-        
-},
 
 })

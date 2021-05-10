@@ -106,35 +106,68 @@
                   @clearingError="error = $event"
                   />
                 </transition>
-                
-                <template v-if="formId">
-                  <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
-                    <form-search-word
-                    :searchByWord="searchByWord"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="dataResponseDB = $event"
-                    @loadingTable="loadingTable = $event"
-                    @showTable="table = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setErrorGlobal="error = $event"
-                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                    @setSubHeadersLoader="subheaders.loader = $event"
-                    :pagination="pagination"
-                    :subheaders="subheaders"
-                    :base_url_header="base_url_header"
-                    :filter="filter"
-                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
-                    @filtering="filter.filtering = $event"
-                     />
+
+
+                <template v-if="formEquipos">
+                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                      <form-search-word
+                      :searchByWord="searchEquiposByWord"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                      @response="dataResponseDB = $event"
+                      @loadingTable="loadingTable = $event"
+                      @showTable="table = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setErrorGlobal="error = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"
+                      :pagination="pagination"
+                      :subheaders="subheaders"
+                      :base_url_header="base_url_header"
+                      :filter="filter"
+                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlSearchController="filter.url_searchCountController = $event"
+                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @filtering="filter.filtering = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      />
                     </v-col>
                 </template>
+                
+                <template v-if="formId">
+                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                      <form-search-word
+                      :searchByWord="searchByWord"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                      @response="dataResponseDB = $event"
+                      @loadingTable="loadingTable = $event"
+                      @showTable="table = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setErrorGlobal="error = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"
+                      :pagination="pagination"
+                      :subheaders="subheaders"
+                      :base_url_header="base_url_header"
+                      :filter="filter"
+                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
+                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlSearchController="filter.url_searchCountController = $event"
+                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @filtering="filter.filtering = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      />
+                    </v-col>
+                </template>
+
                 <template v-if="formRangeDate">
                   <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
                     <form-search-date
@@ -160,6 +193,7 @@
                     @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     />
                     </v-col>
                 </template>
@@ -193,12 +227,13 @@
                     @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
 
                       />
                       </v-col>
-                </template>   
+                </template>  
+
               </div> 
-          
                 <template v-if="loadingTable" >
                  <loader-line />
                 </template>
@@ -207,7 +242,7 @@
                  <loader-line />
                 </template>
 
-                <template v-if="table">
+                <template v-if="table ">
                     <sub-headers
                     :subheaders="subheaders"
                     />
@@ -234,7 +269,7 @@
                     />
                 </template>
 
-                <template v-if="table">
+                <template v-if="table && displayExportFromComponentAccesores">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
@@ -287,25 +322,37 @@
         data(){
             return {
               admin : 0,
-              formBaseOriginal : false,
+              formEquipos : false,
               formId :true,
               formRangeDate:false,
               formWordAndRangeDate:false,
               dataSelect:[],
+              searchEquiposByWord: {
+                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countEquiposByWord',
+                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=equiposByWord',
+                filteringSearchWord : false,
+                export : false,
+              },
               searchByWord : {
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
                 filteringSearchWord : false, 
+                export : true,
+                
               },
               searchByRangeDate : {
                 filteringSearchWord : true, 
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionRangeDate',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionRangeDate',
+                export : true,
+               
               },
               searchByWordAndRangeDate: {
                 filteringSearchWord : true, 
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWordAndDateRange',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionWordAndRangeDate',
+                export : true,
+                
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
@@ -359,6 +406,7 @@
                 { text: 'Provincia'},
                 { text: 'Localidad'},
                 { text: 'Codigo postal'},
+                { text: 'Orden'},
                 { text: 'Ver'},
                 { text: 'Enviar'},
                 { text: 'Accion'},
@@ -368,12 +416,13 @@
               ],
               loadingTable : false,
               table: false,
+              displayExportFromComponentAccesores :false,
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [
               ],
               itemsButtons: [
-                  { title: 'Base Original', icon: 'mdi-database', methods: '$_formBaseOriginal', active : false },
+                  { title: 'Base Original', icon: 'mdi-database', methods: '$_formEquipos', active : false },
                   { title: 'Gestión', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
                   { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },
@@ -452,9 +501,9 @@
           handle_function_call(function_name) {
             this[function_name]()
           },
-          $_formBaseOriginal(){
+          $_formEquipos(){
 
-            this.formBaseOriginal = true
+            this.formEquipos = true
             this.formId = false
             this.formRangeDate = false
             this.formWordAndRangeDate = false
@@ -472,7 +521,7 @@
           },
           $_formId(){
 
-              this.formBaseOriginal = false
+              this.formEquipos = false
               this.formId = true
               this.formRangeDate = false
               this.formWordAndRangeDate = false
@@ -488,7 +537,7 @@
               }
           },
           $_formRangeDate(){
-              this.formBaseOriginal = false
+              this.formEquipos = false
               this.formId = false
               this.formRangeDate = true
               this.formWordAndRangeDate = false
@@ -505,7 +554,7 @@
           },
           $_formWordAndRangeDate(){
               
-            this.formBaseOriginal = false
+            this.formEquipos = false
             this.formId = false
             this.formRangeDate = false
             this.formWordAndRangeDate = true
@@ -542,6 +591,11 @@
 </script>
 
 <style>
+
+    .empujarParaArriba{
+      margin-top: -20px;
+    }
+   
      .sacarOutline{
         outline: none !important;
         border: none !important;

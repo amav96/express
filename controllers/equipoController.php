@@ -1,11 +1,5 @@
 <?php
-
-
-
-
 if (isset($_GET['equipo'])) {
-
-
     session_start();
     require_once '../model/equipos.php';
     require_once '../config/db.php';
@@ -115,10 +109,6 @@ class equipoController
                                     'localidad' => $equipos->elocalidad,
                                     'provincia' => $equipos->eprovincia,
                                     'cp' => $equipos->ecodigo_postal,
-                                    'hdmi' => $equipos->hdmi,
-                                    'av' => $equipos->av,
-                                    'fuente' => $equipos->fuente,
-                                    'control' => $equipos->control,
                                     'estadoEquipo' => $equipos->estado,
                                     'telefono' => $equipos->telefono,
                                     'empresa' => $equipos->empresa,
@@ -127,7 +117,6 @@ class equipoController
                                     'telefono_cel6' =>  $this->clean($equipos->telefono_cel6),
                                     'emailcliente' => $equipos->emailcliente
                                     
-
                                 );
                             }
                         } else {
@@ -173,7 +162,6 @@ class equipoController
 
         return strtr($str, $unwanted_array);
     }
-
 
     public function recuperar()
     {
@@ -843,6 +831,35 @@ class equipoController
             echo $jsonstring;
         }
     }
+
+    public function countEquiposByWord(){
+
+        if($_GET){
+            $word = isset($_GET['word']) ? $_GET['word'] : false ;
+
+            $countEquiposByWord = new Equipos();
+            $countEquiposByWord->setWord($word);
+            $countEquiposByWord = $countEquiposByWord->countEquiposByWord();
+
+            if (is_object($countEquiposByWord)) {
+                foreach ($countEquiposByWord as $element) {
+                      $objeto = array(
+                          'result' => true,
+                          'count' => $element["count"]
+                      );
+                }
+            } else {
+                $objeto = array(
+                    'result' => false,
+                );
+            }
+
+            $jsonString = json_encode($objeto);
+            echo $jsonString;
+
+        }
+
+    }
    
     public function countGestionByWord(){
 
@@ -1069,14 +1086,14 @@ class equipoController
                 foreach ($status as $element) {
 
                     $objeto[] = array(
-                        'result' => 'count',
+                        'result' => true,
                         'estado' => $element["estado"],
                         'cantidadEstado' => $element["cantidadEstado"],
                     );
                 }
             } else {
                 $objeto[] = array(
-                    'result' => '2',
+                    'result' => false,
 
                 );
             }
@@ -1088,8 +1105,7 @@ class equipoController
 
     public function countFilterSearchController(){
 
-       
-        
+
         if($_GET){
 
             $dataRequest = json_decode($_GET['dataRequest']);
@@ -1149,6 +1165,74 @@ class equipoController
     }
 
     //BUSCADORES DIRECTOS DE GESTION PARA TABLAS
+
+    public function equiposByWord(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $request =  json_decode($dataRequest);
+        $word = isset($request->word) ? $request->word : false; 
+        $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
+        $limit = isset($request->limit) ? $request->limit : false;
+
+        $equiposByWord = new Equipos();
+
+        $equiposByWord->setWord($word);
+        $equiposByWord->setFromRow($fromRow);
+        $equiposByWord->setLimit($limit);
+        $equiposByWord = $equiposByWord->equiposByWord();
+
+        if (is_object($equiposByWord)) {
+
+            foreach ($equiposByWord as $element) {
+               
+                 $objeto[] = array(
+
+                     'result' => true,
+                     'id' => $element["id"],
+                     'identificacion' => $element["identificacion"],
+                     'estado' => $element["estado"],
+                     'empresa' => $element["empresa"],
+                     'terminal' => $element["terminal"],
+                     'serie' => $element["serie"],
+                     'orden' => $element["id_orden"],
+                     'recolector' => $element["id_user"],
+                     'serie_base' => $element["serie_base"],
+                     'tarjeta' => $element["tarjeta"],
+                     'chip_alternativo' => $element["chip_alternativo"],
+                     'accesorio_uno' => $element["accesorio_uno"],
+                     'accesorio_dos' => $element["accesorio_dos"],
+                     'accesorio_tres' => $element["accesorio_tres"],
+                     'accesorio_cuatro' => $element["accesorio_cuatro"],
+                     'motivo' => $element["motivo"],
+                     'created_at' => $element["created_at"],
+                     'nombre_cliente' => $element["nombre_cliente"],
+                     'direccion' => $element["direccion"],
+                     'provincia' => $element["provincia"],
+                     'localidad' => $element["localidad"],
+                     'codigo_postal' => $element["codigo_postal"],
+                     'remito' => $element["id_orden_pass"],
+                     'name' => $element["name"],
+                     'latAviso' => $element["latAviso"],
+                     'lngAviso' => $element["lngAviso"],
+                     'latGestion' => $element["latGestion"],
+                     'lngGestion' => $element["lngGestion"],
+                     'means' => $element["means"],
+                     'contacto' => $element["contacto"],
+                     'fecha_aviso_visita' => $element["fecha_aviso_visita"],
+                     
+                 );
+            }
+        } else {
+            $objeto[] = array(
+                'result' => false,
+            );
+        }
+
+        
+         $jsonstring = json_encode($objeto);
+         echo $jsonstring;
+        
+    }
 
     public function gestionByWord(){
 
@@ -1238,7 +1322,7 @@ class equipoController
             $gestion->setFechaEnd($dateEnd);
             $gestion->setFromRow($fromRow);
             $gestion->setLimit($limit);
-            $gestion = $gestion->getGestionByRangeDate();
+            $gestion = $gestion->gestionByRangeDate();
 
             if (is_object($gestion)) {
                 foreach ($gestion as $element) {
@@ -1310,7 +1394,7 @@ class equipoController
             $gestion->setFechaEnd($dateEnd);
             $gestion->setFromRow($fromRow);
             $gestion->setLimit($limit);
-            $gestion = $gestion->getGestionByWordAndRangeDate();
+            $gestion = $gestion->gestionByWordAndRangeDate();
 
             if (is_object($gestion)) {
                 foreach ($gestion as $element) {
@@ -1460,6 +1544,8 @@ class equipoController
         }
     } 
     
+    // EXPORT EXCEL
+
     public function exportEquipos(){
         if($_GET){
 

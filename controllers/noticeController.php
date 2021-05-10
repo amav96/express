@@ -4,26 +4,30 @@
 
 if (isset($_GET['notice'])) {
   
-      require '../resources/phpmailer/phpmailer/src/Exception.php';
-      require '../resources/phpmailer/phpmailer/src/PHPMailer.php';
-      require '../resources/phpmailer/phpmailer/src/SMTP.php';
+    require '../resources/phpmailer/phpmailer/src/Exception.php';
+    require '../resources/phpmailer/phpmailer/src/PHPMailer.php';
+    require '../resources/phpmailer/phpmailer/src/SMTP.php';
 
-     require_once '../model/notice.php';
-     require_once '../config/db.php';
-     require_once '../helpers/utils.php';
-     session_start();
-     $accion = $_GET['notice'];
-     $notice = new noticeController();
-     $notice->$accion();
-     
-     
+    require_once '../model/notice.php';
+    require_once '../config/db.php';
+    require_once '../helpers/utils.php';
+    require_once "../vendor/autoload.php";
+
+    session_start();
+    $accion = $_GET['notice'];
+    $notice = new noticeController();
+    $notice->$accion();
+    
 } else {
 
-     require_once 'model/notice.php';
-     require 'resources/phpmailer/phpmailer/src/Exception.php';
-     require 'resources/phpmailer/phpmailer/src/PHPMailer.php';
-     require 'resources/phpmailer/phpmailer/src/SMTP.php';
+    require_once 'model/notice.php';
+    require 'resources/phpmailer/phpmailer/src/Exception.php';
+    require 'resources/phpmailer/phpmailer/src/PHPMailer.php';
+    require 'resources/phpmailer/phpmailer/src/SMTP.php';
+    require_once "vendor/autoload.php";
 }
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class noticeController{
 
@@ -572,6 +576,141 @@ class noticeController{
 
       }
     }
+
+    //COUNT NOTICES
+
+    public function countNoticeRangeDate(){
+
+      if($_GET){
+
+        $dateStart = isset($_GET['dateStart']) ? $_GET['dateStart'] : false ;
+        $dateEnd = isset($_GET['dateEnd']) ? $_GET['dateEnd'] : false ;
+        
+        $countNoticeRangeDate = new Notice();
+        $countNoticeRangeDate->setDateStart($dateStart);
+        $countNoticeRangeDate->setDateEnd($dateEnd);
+        $countNoticeRangeDate = $countNoticeRangeDate->countNoticeRangeDate();
+
+        if(is_object($countNoticeRangeDate)){
+
+          foreach($countNoticeRangeDate as $element)
+  
+              $objeto = array(
+              'result' => true,
+              'count' => $element["count"]
+              );
+           
+        }else{
+          $objeto = array(
+            'result' => false,
+        );
+        }
+  
+        $jsonstring = json_encode($objeto);
+        echo $jsonstring;
+      }
+
+    }
+
+    public function countNoticeRangeDateAndWord(){
+
+      if($_GET){
+
+        $dateStart = isset($_GET['dateStart']) ? $_GET['dateStart'] : false ;
+        $dateEnd = isset($_GET['dateEnd']) ? $_GET['dateEnd'] : false ;
+        $word = isset($_GET['word']) ? $_GET['word'] : false ;
+        
+        $countNoticeRangeDateAndWord = new Notice();
+        $countNoticeRangeDateAndWord->setDateStart($dateStart);
+        $countNoticeRangeDateAndWord->setDateEnd($dateEnd);
+        $countNoticeRangeDateAndWord->setId_recolector($word);
+        $countNoticeRangeDateAndWord = $countNoticeRangeDateAndWord->countNoticeRangeDateAndWord();
+
+        if(is_object($countNoticeRangeDateAndWord)){
+
+          foreach($countNoticeRangeDateAndWord as $element)
+  
+              $objeto = array(
+              'result' => true,
+              'count' => $element["count"]
+              );
+           
+        }else{
+          $objeto = array(
+            'result' => false,
+        );
+        }
+  
+        $jsonstring = json_encode($objeto);
+        echo $jsonstring;
+      }
+
+    }
+
+    //FILTER COUNT CONTROLLER
+    public function  countFilterSearchController(){
+
+      if($_GET){
+
+          $dataRequest = json_decode($_GET['dataRequest']);
+          $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+          $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ;
+          $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ;  
+          $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
+
+
+          if($dateStart && $dateEnd  && $filter && !$word){
+            // busqueda por fecha y filtro
+              $countFilterSearchController =  new Notice();
+              $countFilterSearchController->setDateStart($dateStart);
+              $countFilterSearchController->setDateEnd($dateEnd);
+              $countFilterSearchController->setFilter($filter);
+              $countFilterSearchController = $countFilterSearchController->countFilterToNoticeByDateAndFilter();
+          }
+
+          // if(!$dateStart && !$dateEnd && $word && $filter){
+          //     $countFilterSearchController =  new Notice();
+          //     $countFilterSearchController->setFilter($filter);
+          //     $countFilterSearchController= $countFilterSearchController->countFilterToGestionByFilter();
+
+          // }
+
+          if($dateStart && $dateEnd && $word && $filter){
+             // busqueda por fecha , palabra(recolector) Y  filtro
+              $countFilterSearchController =  new Notice();
+              $countFilterSearchController->setDateStart($dateStart);
+              $countFilterSearchController->setDateEnd($dateEnd);
+              $countFilterSearchController->setWord($word);
+              $countFilterSearchController->setFilter($filter);
+              $countFilterSearchController = $countFilterSearchController->countFilterToNoticeByWordAndDateAndFilter();
+          }
+
+         
+          if(is_object($countFilterSearchController)){
+             
+               foreach ($countFilterSearchController as $element) {
+                 
+                   $objeto = array(
+  
+                       'result' => true,
+                       'count' => $element["count"]
+                   );
+               }
+          }else {
+              $objeto = array(
+  
+                  'result' => false,
+          
+              );
+          }
+          $jsonString = json_encode($objeto);
+          echo $jsonString;
+      }
+     
+    }
+
+    //DATA NOTICES
+
     public function getNoticesById(){
 
           $id = isset($_GET['id']) ? $_GET['id'] : false ;
@@ -616,56 +755,117 @@ class noticeController{
 
       
     }
-    public function getNoticesByDateRange(){
+
+    public function noticeRangeDate(){
 
       if($_GET){
 
-        $dateStart = isset($_GET['dateStart']) ? $_GET['dateStart'] : false ;
-        $dateEnd = isset($_GET['dateEnd']) ? $_GET['dateEnd'] : false ;
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $request =  json_decode($dataRequest);
 
-        $getNoticesByDateRange = new Notice();
-        $getNoticesByDateRange->setDateStart($dateStart);
-        $getNoticesByDateRange->setDateEnd($dateEnd);
-        $getNoticesByDateRange = $getNoticesByDateRange->getNoticesByDateRange();
+        $dateStart = !empty($request->dateStart) ? $request->dateStart: false; 
+        $dateEnd = !empty($request->dateEnd) ? $request->dateEnd: false; 
+        $fromRow = $request->fromRow;
+        $limit = $request->limit;
 
-        if(is_object($getNoticesByDateRange)){
 
-          foreach($getNoticesByDateRange as $element)
+        $noticeRangeDate = new Notice();
+        $noticeRangeDate->setDateStart($dateStart);
+        $noticeRangeDate->setDateEnd($dateEnd);
+        $noticeRangeDate->setFromRow($fromRow);
+        $noticeRangeDate->setLimit($limit);
+        $noticeRangeDate = $noticeRangeDate->noticeRangeDate();
+
+        if(is_object($noticeRangeDate)){
+
+          foreach($noticeRangeDate as $element)
   
-          $object[]= array(
+          $objeto[]= array(
             'result' => true,
+            'id' => $element["id"],
             'direccion' => $element["direccion"],
             'localidad' => $element["localidad"],
             'provincia' => $element["provincia"],
-            'id' => $element["id"],
-            'name' => $element["name"],
+            'nombre_cliente' => $element["nombre_cliente"],
             'aviso' => $element["aviso"],
             'contacto' => $element["contacto"],
             'country' => $element["country"],
             'id_user' => $element["id_user"],
+            'name' => $element["name"],
             'identificacion' => $element["identificacion"],
-            'lat' => $element["lat"],
-            'lng' => $element["lng"],
+            'latAviso' => $element["latAviso"],
+            'lngAviso' => $element["lngAviso"],
             'means' => $element["means"],
-            'created_at' => $element["created_at"],
+            'fecha_aviso_visita' => $element["created_at"],
           );
            
         }else{
-  
-          $object[]= array(
+          $objeto[]= array(
             'result' => false,
           );
-  
         }
   
-        $jsonstring = json_encode($object);
+        $jsonstring = json_encode($objeto);
         echo $jsonstring;
+      }
+    }
+    
+    public function noticeRangeDateAndWord(){
 
+      if($_GET){
 
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $request =  json_decode($dataRequest);
+        $dateStart = !empty($request->dateStart) ? $request->dateStart: false; 
+        $dateEnd = !empty($request->dateEnd) ? $request->dateEnd: false; 
+        $word = !empty($request->word) ? $request->word: false; 
 
+        $fromRow = $request->fromRow;
+        $limit = $request->limit;
+        
+        $noticeRangeDateAndWord = new Notice();
+        $noticeRangeDateAndWord->setDateStart($dateStart);
+        $noticeRangeDateAndWord->setDateEnd($dateEnd);
+        $noticeRangeDateAndWord->setWord($word);
+        $noticeRangeDateAndWord->setFromRow($fromRow);
+        $noticeRangeDateAndWord->setLimit($limit);
+        $noticeRangeDateAndWord = $noticeRangeDateAndWord->noticeRangeDateAndWord();
+
+        if(is_object($noticeRangeDateAndWord)){
+
+          foreach($noticeRangeDateAndWord as $element)
+  
+          $objeto[]= array(
+            'result' => true,
+            'id' => $element["id"],
+            'direccion' => $element["direccion"],
+            'localidad' => $element["localidad"],
+            'provincia' => $element["provincia"],
+            'nombre_cliente' => $element["nombre_cliente"],
+            'aviso' => $element["aviso"],
+            'contacto' => $element["contacto"],
+            'country' => $element["country"],
+            'id_user' => $element["id_user"],
+            'name' => $element["name"],
+            'identificacion' => $element["identificacion"],
+            'latAviso' => $element["latAviso"],
+            'lngAviso' => $element["lngAviso"],
+            'means' => $element["means"],
+            'fecha_aviso_visita' => $element["created_at"],
+          );
+           
+        }else{
+          $objeto[]= array(
+            'result' => false,
+          );
+        }
+  
+        $jsonstring = json_encode($objeto);
+        echo $jsonstring;
       }
 
     }
+
     public function getNoticesByIdAndDate(){
 
       $id = isset($_GET['id']) ? $_GET['id'] : false ;
@@ -714,6 +914,88 @@ class noticeController{
       
     
     }
+
+    //FILTER DATA CONTROLLER
+    public function getDataSearchWordNoticeController(){
+
+      if($_GET){
+
+          $dataRequest = json_decode($_GET['dataRequest']);
+
+          $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+          $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+          $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ; 
+          $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
+          $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
+          $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ; 
+
+          if($dateStart && $dateEnd && $filter && !$word){
+            // buscar por fecha y filtro
+              $getDataSearchWordGestionController =  new Notice();
+              $getDataSearchWordGestionController->setDateStart($dateStart);
+              $getDataSearchWordGestionController->setDateEnd($dateEnd);
+              $getDataSearchWordGestionController->setFilter($filter);
+              $getDataSearchWordGestionController->setFromRow($fromRow);
+              $getDataSearchWordGestionController->setLimit($limit);
+              $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToNoticeByDateAndFilter();
+          }
+          if($dateStart && $dateEnd && $filter && $word){
+              
+              $getDataSearchWordGestionController =  new Notice();
+              $getDataSearchWordGestionController->setDateStart($dateStart);
+              $getDataSearchWordGestionController->setDateEnd($dateEnd);
+              $getDataSearchWordGestionController->setId_recolector($word);
+              $getDataSearchWordGestionController->setFilter($filter);
+              $getDataSearchWordGestionController->setFromRow($fromRow);
+              $getDataSearchWordGestionController->setLimit($limit);
+              $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToNoticeByDateAndWordAndFilter();
+          }
+
+          if(!$dateStart && !$dateEnd && $filter){
+              
+              $getDataSearchWordGestionController =  new Notice();
+              $getDataSearchWordGestionController->setFilter($filter);
+              $getDataSearchWordGestionController->setFromRow($fromRow);
+              $getDataSearchWordGestionController->setLimit($limit);
+              $getDataSearchWordGestionController = $getDataSearchWordGestionController->getDataFilterToGestionByWord();
+          }
+
+        
+          if (is_object($getDataSearchWordGestionController)) {
+
+               foreach ($getDataSearchWordGestionController as $element) {
+                 
+                $objeto[]= array(
+                  'result' => true,
+                  'id' => $element["id"],
+                  'direccion' => $element["direccion"],
+                  'localidad' => $element["localidad"],
+                  'provincia' => $element["provincia"],
+                  'nombre_cliente' => $element["nombre_cliente"],
+                  'aviso' => $element["aviso"],
+                  'contacto' => $element["contacto"],
+                  'country' => $element["country"],
+                  'id_user' => $element["id_user"],
+                  'name' => $element["name"],
+                  'identificacion' => $element["identificacion"],
+                  'latAviso' => $element["latAviso"],
+                  'lngAviso' => $element["lngAviso"],
+                  'means' => $element["means"],
+                  'fecha_aviso_visita' => $element["created_at"],
+                );
+                 
+               }
+              }else{
+                $objeto[]= array(
+                  'result' => false,
+                );
+              }
+
+          $jsonString = json_encode($objeto);
+          echo $jsonString;  
+      }
+  }
+    
     public function detect(){
           $browser = array("IE", "OPERA", "MOZILLA", "NETSCAPE", "FIREFOX", "SAFARI", "CHROME");
           $os = array("WIN", "MAC", "LINUX");
@@ -743,7 +1025,164 @@ class noticeController{
           # devolvemos el array de valores
           return $info;
     }
+    //EXPORT EXCEL 
+
+    public function exportNotice(){
+      if($_GET){
+
+          $dataRequest = json_decode($_GET['dataRequest']);
+          $dateStart = !empty($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
+          $dateEnd = !empty($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
+          $filter = !empty($dataRequest->filter) ? $dataRequest->filter : false ; 
+          $word = !empty($dataRequest->word) ? $dataRequest->word : false ; 
+
+          // if($word && !$dateStart && !$dateEnd && !$filter){
+          //     //busqueda input word(identificacion,terminal,serie,etc)
+          //      $exportNotice =  new Notice();
+          //      $exportNotice->setWord($word);
+          //      $exportNotice =  $exportNotice->getDataManagementExportByWord();
+          //  }
+
+          if($dateStart && $dateEnd && !$filter && !$word){
+              //busqueda inputs rango de fecha
+              $exportNotice =  new Notice();
+              $exportNotice->setDateStart($dateStart);
+              $exportNotice->setDateEnd($dateEnd);
+              $exportNotice =  $exportNotice->getDataNoticeExportByDateRange();
+          }
+         
+          if($dateStart && $dateEnd && $filter && !$word){
+              //busqueda inputs rango de fecha y filtro
+            
+              $exportNotice =  new Notice();
+              $exportNotice->setDateStart($dateStart);
+              $exportNotice->setDateEnd($dateEnd);
+              $exportNotice->setFilter($filter);
+              $exportNotice =  $exportNotice->getDataNoticeExportByDateRangeAndFilter();
+          }
+
+            if($dateStart && $dateEnd && $word && !$filter){
+               //busqueda inputs rango de fecha y palabra(recolector)
+               $exportNotice =  new Notice();
+               $exportNotice->setDateStart($dateStart);
+               $exportNotice->setDateEnd($dateEnd);
+               $exportNotice->setId_recolector($word);
+               $exportNotice =  $exportNotice->getDataManagementExportByDateRangeAndWord();
+           }
+
+           if($dateStart && $dateEnd && $word && $filter){
+               //busqueda inputs rango de fecha , palabra(recolector) y filtro
+               $exportNotice =  new Notice();
+               $exportNotice->setDateStart($dateStart);
+               $exportNotice->setDateEnd($dateEnd);
+               $exportNotice->setId_recolector($word);
+               $exportNotice->setFilter($filter);
+               $exportNotice =  $exportNotice->getDataManagementExportByDateRangeAndWordAndFilter();
+           }
+          
+          if(is_object($exportNotice)){
+
+                  $response = $this->excelNoticetManagement($exportNotice);
+                  if($response){
+                      $objectResponse = array(
+                          'result' => true,
+                          'path' => $response
+                      );
+                  }else{
+                      $objectResponse = array(
+                          'result' => false  
+                      );
+                  }
+          }
+          $jsonString = json_encode($objectResponse);
+          echo $jsonString;
+      }
+    }
+
+    public function excelNoticetManagement($exportNotice){
+
+        foreach($exportNotice as $element){
+            $arrayRow[] =  array(
+            'id' => $element["id"],
+            'direccion' => $element["direccion"],
+            'localidad' => $element["localidad"],
+            'provincia' => $element["provincia"],
+            'nombre_cliente' => $element["nombre_cliente"],
+            'aviso' => $element["means"],
+            'contacto' => $element["contacto"],
+            'country' => $element["country"],
+            'id_user' => $element["id_user"],
+            'name' => $element["name"],
+            'identificacion' => $element["identificacion"],
+            'latAviso' => $element["latAviso"],
+            'lngAviso' => $element["lngAviso"],
+            'fecha_aviso_visita' => $element["fecha_aviso_visita"],
+            );
+        }
+            $header=array(
+                'id',
+                'direccion',
+                'localidad',
+                'provincia',
+                'nombre_cliente',
+                'aviso',
+                'contacto',
+                'Pais',
+                'id recolector',
+                'Nombre recolector',
+                'Identificacion',
+                'lat',
+                'lng',
+                'fecha',
+                
+            );
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->fromArray([$header], NULL, 'A1');
+        
+                $columnArray = array_chunk($arrayRow, 1);
+                $rowCount = 1;
+                foreach($columnArray as $element){
+                    $rowCount++;
+                    $lat = (string)$element[0]["latAviso"];
+                    $lng = (string)$element[0]["lngAviso"];
+                    $sheet->setCellValue('A'.$rowCount, $element[0]["id"]);
+                    $sheet->setCellValue('B'.$rowCount, $element[0]["direccion"]);
+                    $sheet->setCellValue('C'.$rowCount, $element[0]["localidad"]);
+                    $sheet->setCellValue('D'.$rowCount, $element[0]["provincia"]);
+                    $sheet->setCellValue('E'.$rowCount, $element[0]["nombre_cliente"]);
+                    $sheet->setCellValue('F'.$rowCount, $element[0]["aviso"]);
+                    $sheet->setCellValue('G'.$rowCount, $element[0]["contacto"]);
+                    $sheet->setCellValue('H'.$rowCount, $element[0]["country"]);
+                    $sheet->setCellValue('I'.$rowCount, $element[0]["id_user"]);
+                    $sheet->setCellValue('J'.$rowCount, $element[0]["name"]);
+                    $sheet->setCellValue('K'.$rowCount, $element[0]["identificacion"]);
+                    $sheet->setCellValue('L'.$rowCount, $lat);
+                    $sheet->setCellValue('M'.$rowCount, $lng);
+                    $sheet->setCellValue('N'.$rowCount, $element[0]["fecha_aviso_visita"]);
+                   
+                }
+        $writer = new Xlsx($spreadsheet);
+        # Le pasamos la ruta de guardado
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $momento = date('d-m-Y H-i-s');
+        //Este formato de hora esta asi para poder crear el archivo
+        $path = '../resources/excel/reporteAviso'.$momento.'.xlsx';
+        $pathFront = 'reporteAviso'.$momento.'.xlsx';
+        $writer->save($path);
+
+        if(file_exists($path)){
+            $result = $pathFront;
+        }else {
+            $result = false;
+        }
+
+        return $result ;
+  
+    }
+
     // templates emails for Loops Especific
+
     public function headNoticeVisit(){
       $html = "";
       $html = '<head>

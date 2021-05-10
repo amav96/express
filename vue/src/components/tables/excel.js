@@ -84,7 +84,7 @@ Vue.component('excel-export', {
                     console.log(err)
                 })
                 
-            }, 6000);
+            }, 10000);
         }
             
         }

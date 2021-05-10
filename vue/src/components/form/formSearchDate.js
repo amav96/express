@@ -71,6 +71,8 @@ Vue.component('form-search-date',{
                 .then(res => {
                     
                     if(!res.data.result){
+                      
+                       
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -142,6 +144,12 @@ Vue.component('form-search-date',{
                      this.$emit('response',res.data)
                      this.$emit('showTable',true)
                      this.$emit('loadingTable',false)
+
+                     if(this.searchByRangeDate.export){
+                        this.$emit('setDisplayExportExcel',this.searchByRangeDate.export)
+                    }else{
+                        this.$emit('setDisplayExportExcel',this.searchByRangeDate.export)
+                    }
                      
                     //  settings url to fetch from pagination
                     this.$emit('urlTryPagination',base_url)
@@ -151,6 +159,7 @@ Vue.component('form-search-date',{
                     
                  })
                  .catch(err =>{
+                     
                      const error = {type: 'no-exist',text: err,time: 4000}
                      this.error(error); return;
                  })
@@ -176,6 +185,7 @@ Vue.component('form-search-date',{
             })
         },
         error(error){
+            this.$emit('setShowFilter',false)
             this.$emit('setErrorGlobal',error)
             this.$emit('loadingTable',false)
             this.$emit('showTable',false)

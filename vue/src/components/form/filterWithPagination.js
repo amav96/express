@@ -35,6 +35,13 @@ template : //html
                         </v-col>
                     </transition>
                 </v-row>
+                <v-progress-linear
+                v-if="loaderFilter"
+                color="black"
+                indeterminate
+                rounded
+                height="6"
+              ></v-progress-linear>
             </v-form>
             </v-container>
 
@@ -49,7 +56,8 @@ return {
     oldDataResponseDB: [],
     oldUrl:[],
     oldPagination : [],
-    alert_flag : false
+    alert_flag : false,
+    loaderFilter : false
 }
 },
 methods : {
@@ -61,6 +69,7 @@ methods : {
            })
     },
     tryCountSearch(){
+        this.loaderFilter=true
         const dynamicData = JSON.parse(JSON.stringify(this.filter.dynamicDataToFilter)) 
         const buildFilter = {
             filter : this.data
@@ -103,6 +112,7 @@ methods : {
                          this.getFilter();
                      })
            }else {
+            this.loaderFilter=false
             this.alert_flag = true
                 setTimeout(() => {
                     this.alert_flag = false
@@ -111,6 +121,7 @@ methods : {
            }
         })
         .catch(err => {
+            this.loaderFilter=false
             console.log(err)
         })
     },
@@ -138,10 +149,12 @@ methods : {
                 }
                 const newDataResponse = res.data
                 this.$emit('setAfterDataResponse', newDataResponse)
+                this.loaderFilter=false
             }
         })
         .catch(err => {
             console.log(err)
+            this.loaderFilter=false
         })
     }      
 },

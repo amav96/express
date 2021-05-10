@@ -101,6 +101,7 @@ Vue.component("table-equipos", {
                             <td>{{row.provincia}}</td>
                             <td>{{row.localidad}}</td>
                             <td>{{row.codigo_postal}}</td>
+                            <td>{{row.remito}}</td>
                             
                             <td>
                                 <v-btn 
@@ -136,13 +137,17 @@ Vue.component("table-equipos", {
                                 </span>
                             </td>
                             <td>
-                            <v-btn color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
+                            <v-btn 
+                            v-if="row.estado !== '' && row.estado !== null"
+                            color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
                                 <v-icon left>
                                         mdi-trash-can-outline
                                 </v-icon>
                                 Eliminar 
                             </v-btn>
-                            <v-btn color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
+                            <v-btn
+                            v-if="row.estado !== '' && row.estado !== null"
+                             color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
                                 <v-icon left>
                                             mdi-pencil
                                 </v-icon>

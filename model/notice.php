@@ -19,6 +19,11 @@ class Notice{
     private $email;
     private $password;
     private $countSend;
+    private $fromRow;
+    private $limit;
+    private $word;
+    private $id_recolector;
+    private $filter;
     private $db;
 
     public function __construct(){
@@ -76,6 +81,25 @@ class Notice{
         return $this->countSend;
     }
 
+    public function getFromRow()
+    {
+        return (string)$this->fromRow;
+    }
+
+    public function getLimit(){
+        return $this->limit;
+    }
+    public function getWord(){
+        return $this->word;
+    }
+    public function getFilter(){
+        return $this->filter;
+    }
+
+    public function getId_recolector(){
+        return $this->id_recolector;
+    }
+
 
 
     public function setAviso($aviso){
@@ -128,6 +152,27 @@ class Notice{
     public function setCountSend($countSend){
         $this->countSend = $countSend;
     }
+
+    public function setFromRow($fromRow){
+        $this->fromRow = $fromRow;
+    }
+
+    public function setLimit($limit){
+        $this->limit = $limit;
+    }
+
+    public function setWord($word){
+        $this->word = $word;
+    }
+
+    public function setFilter($filter){
+        $this->filter = $filter;
+    }
+
+    public function setId_recolector($id_recolector){
+        $this->id_recolector = $id_recolector;
+    }
+
 
      public function setNotice(){
 
@@ -240,38 +285,145 @@ class Notice{
         return $result;
     }
 
-    public function getNoticesById(){
+     //COUNT NOTICES
 
-        $id = !empty($this->getIdentificacion()) ? $this->getIdentificacion() : false ;
-        $sql = "SELECT e.direccion,e.localidad,e.provincia,n.id,u.name,n.aviso,n.contacto,n.country,n.id_user,n.identificacion,n.lat,n.lng,
-        n.means,n.created_at FROM notice_management n
-        INNER JOIN users u ON u.id = n.id_user 
-        INNER JOIN equipos e ON n.identificacion = e.identificacion
-        WHERE n.identificacion = '$id' GROUP BY n.id ";
+    public function countNoticeRangeDate(){
 
-       
-        $getNoticesById = $this->db->query($sql);
-        if($getNoticesById && $getNoticesById->num_rows>0){
-            $result = $getNoticesById;
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+
+        $sql = "SELECT COUNT(DISTINCT(n.id)) as 'count' FROM notice_management n
+        inner JOIN users u ON u.id = n.id_user 
+        inner JOIN equipos e ON n.identificacion = e.identificacion
+        WHERE  n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+
+        $countNoticeRangeDate = $this->db->query($sql);
+        if($countNoticeRangeDate && $countNoticeRangeDate->num_rows>0){
+            $result = $countNoticeRangeDate;
 
         }else {
             $result = false;
         }
 
         return $result;
+
     }
 
-    public function getNoticesByDateRange(){
+    public function countNoticeRangeDateAndWord(){
 
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
         $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $word = !empty($this->getId_recolector()) ? $this->getId_recolector() : false ;
 
-        $sql = "SELECT e.direccion,e.localidad,e.provincia,n.id,u.name,n.aviso,n.contacto,n.country,n.id_user,n.identificacion,n.lat,n.lng,
-        n.means,n.created_at FROM notice_management n
+        $sql = "SELECT COUNT(DISTINCT(n.id)) as 'count' FROM notice_management n
+        inner JOIN users u ON u.id = n.id_user 
+        inner JOIN equipos e ON n.identificacion = e.identificacion
+        WHERE n.id_user = $word and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+
+
+        $countNoticeRangeDateAndWord = $this->db->query($sql);
+        if($countNoticeRangeDateAndWord && $countNoticeRangeDateAndWord->num_rows>0){
+            $result = $countNoticeRangeDateAndWord;
+
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    // FILTER count
+    public function  countFilterToNoticeByDateAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this-> getDateStart(): false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this-> getDateEnd(): false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT COUNT(DISTINCT(n.id)) as 'count' FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+
+        $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
+        if($countFilterToGestionByDateAndFilter->num_rows>0){
+            $result = $countFilterToGestionByDateAndFilter;
+        }else {
+            $result = false;
+        }
+        return $result;
+    }
+
+    public function countFilterToNoticeByWordAndDateAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this-> getDateStart(): false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this-> getDateEnd(): false ;
+        $word = !empty($this->getWord()) ? $this-> getWord(): false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+       
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT COUNT(DISTINCT(n.id)) as 'count' FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE  n.id_user = $word and ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') ";
+
+        $countFilterToNoticeByWordAndDateAndFilter = $this->db->query($sql);
+        if($countFilterToNoticeByWordAndDateAndFilter && $countFilterToNoticeByWordAndDateAndFilter->num_rows>0){
+            $result = $countFilterToNoticeByWordAndDateAndFilter;
+
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    //DATA NOTICES
+
+    public function noticeRangeDate(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+        $limit = ($this->getLimit())?$this->getLimit() : false ;
+        if(gettype($fromRow) !==  'string'){
+            $fromRow = '0';
+        }
+
+        $sql = "SELECT n.id,e.nombre_cliente,e.direccion,e.localidad,e.provincia,n.id,u.name,
+        n.aviso,n.contacto,n.country,n.id_user,n.identificacion,
+        n.lat AS 'latAviso',n.lng AS 'lngAviso',n.means,n.created_at FROM notice_management n
         INNER JOIN users u ON u.id = n.id_user 
         INNER JOIN equipos e ON n.identificacion = e.identificacion
-        WHERE  n.created_at >= '$dateStart' AND  n.created_at <= '$dateEnd%' 
-        GROUP BY n.id ";
+        WHERE  n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')
+        GROUP BY n.id ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
 
         $getNoticesByDateRange = $this->db->query($sql);
         if($getNoticesByDateRange && $getNoticesByDateRange->num_rows>0){
@@ -284,22 +436,28 @@ class Notice{
         return $result;
     }
 
-    public function getNoticesByIdAndDate(){
-        
-        $id = !empty($this->getIdentificacion()) ? $this->getIdentificacion() : false ;
+    public function noticeRangeDateAndWord(){
+
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
         $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $word = !empty($this->getWord()) ? $this->getWord() : false ;
+        $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+        $limit = ($this->getLimit())?$this->getLimit() : false ;
+        if(gettype($fromRow) !==  'string'){
+            $fromRow = '0';
+        }
 
-        $sql = "SELECT e.direccion,e.localidad,e.provincia,n.id,u.name,n.aviso,n.contacto,n.country,n.id_user,n.identificacion,n.lat,n.lng,
-        n.means,n.created_at FROM notice_management n
+        $sql = "SELECT n.id,e.nombre_cliente,e.direccion,e.localidad,e.provincia,n.id,u.name,
+        n.aviso,n.contacto,n.country,n.id_user,n.identificacion,
+        n.lat AS 'latAviso',n.lng AS 'lngAviso',n.means,n.created_at FROM notice_management n
         INNER JOIN users u ON u.id = n.id_user 
         INNER JOIN equipos e ON n.identificacion = e.identificacion
-        WHERE n.id_user = $id and n.created_at >= '$dateStart' AND  n.created_at <= '$dateEnd%'
-        GROUP BY n.id";
-       
-        $getNoticesByIdAndDate = $this->db->query($sql);
-        if($getNoticesByIdAndDate && $getNoticesByIdAndDate->num_rows>0){
-            $result = $getNoticesByIdAndDate;
+        WHERE n.id_user =$word  and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')
+        GROUP BY n.id ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
+
+        $noticeRangeDateAndWord = $this->db->query($sql);
+        if($noticeRangeDateAndWord && $noticeRangeDateAndWord->num_rows>0){
+            $result = $noticeRangeDateAndWord;
 
         }else {
             $result = false;
@@ -307,6 +465,232 @@ class Notice{
 
         return $result;
     }
+
+   
+    //FILTER data
+    public function getDataFilterToNoticeByDateAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this-> getDateStart(): false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this-> getDateEnd(): false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+        $limit = ($this->getLimit())?$this->getLimit() : false ;
+        if(gettype($fromRow) !==  'string'){
+            $fromRow = '0';
+        }
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT n.id,e.nombre_cliente,e.direccion,e.localidad,e.provincia,n.id,u.name,
+        n.aviso,n.contacto,n.country,n.id_user,n.identificacion,
+        n.lat AS 'latAviso',n.lng AS 'lngAviso',n.means,n.created_at FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') GROUP BY n.id 
+        ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
+
+        $getDataFilterToNoticeByDateAndFilter = $this->db->query($sql);
+        if($getDataFilterToNoticeByDateAndFilter && $getDataFilterToNoticeByDateAndFilter->num_rows>0){
+            $result = $getDataFilterToNoticeByDateAndFilter;
+
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    public function getDataFilterToNoticeByDateAndWordAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this-> getDateStart(): false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this-> getDateEnd(): false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $word = !empty($this->getId_recolector()) ? $this-> getId_recolector(): false ;
+        $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+        $limit = ($this->getLimit())?$this->getLimit() : false ;
+        if(gettype($fromRow) !==  'string'){
+            $fromRow = '0';
+        }
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT n.id,e.nombre_cliente,e.direccion,e.localidad,e.provincia,n.id,u.name,
+        n.aviso,n.contacto,n.country,n.id_user,n.identificacion,
+        n.lat AS 'latAviso',n.lng AS 'lngAviso',n.means,n.created_at FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE n.id_user = $word and ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') GROUP BY n.id 
+        ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
+
+
+        $getDataFilterToNoticeByDateAndFilter = $this->db->query($sql);
+        if($getDataFilterToNoticeByDateAndFilter && $getDataFilterToNoticeByDateAndFilter->num_rows>0){
+            $result = $getDataFilterToNoticeByDateAndFilter;
+
+        }else {
+            $result = false;
+        }
+
+        return $result;
+    }
+
+    
+    //EXPORT EXCEL 
+
+    public function getDataNoticeExportByDateRange(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+
+        $sql ="";
+        $sql.= "SELECT n.id,n.country,n.identificacion,e.nombre_cliente,
+        e.direccion, e.provincia, e.localidad,e.codigo_postal ,u.name,
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.id_user,n.contacto,n.created_at as 'fecha_aviso_visita' 
+        from notice_management n
+        INNER join equipos e on e.identificacion = n.identificacion 
+        inner join users u ON u.id = n.id_user
+        WHERE n.created_at 
+        BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY n.id ORDER BY n.created_at";
+
+        $getDataNoticeExportByDateRange = $this->db->query($sql);
+        if($getDataNoticeExportByDateRange->num_rows>0){
+            $result = $getDataNoticeExportByDateRange;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    public function getDataNoticeExportByDateRangeAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+
+        $sql ="";
+        $sql.= "SELECT n.id,n.country,n.identificacion,e.nombre_cliente,
+        e.direccion, e.provincia, e.localidad,e.codigo_postal ,u.name,
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.id_user,n.contacto,n.created_at as 'fecha_aviso_visita' 
+        from notice_management n
+        INNER join equipos e on e.identificacion = n.identificacion 
+        inner join users u ON u.id = n.id_user
+        WHERE ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') GROUP BY n.id ORDER BY n.created_at";
+
+        $getDataNoticeExportByDateRangeAndFilter = $this->db->query($sql);
+        if($getDataNoticeExportByDateRangeAndFilter->num_rows>0){
+            $result = $getDataNoticeExportByDateRangeAndFilter;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    public function getDataManagementExportByDateRangeAndWord(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $word = !empty($this->getId_recolector()) ? $this->getId_recolector(): false ;
+
+        $sql ="";
+        $sql.= "SELECT n.id,n.country,n.identificacion,e.nombre_cliente,
+        e.direccion, e.provincia, e.localidad,e.codigo_postal ,u.name,
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.id_user,n.contacto,n.created_at as 'fecha_aviso_visita' 
+        from notice_management n
+        INNER join equipos e on e.identificacion = n.identificacion 
+        inner join users u ON u.id = n.id_user
+        WHERE n.id_user= $word and n.created_at 
+        BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY n.id ORDER BY n.created_at";
+
+        $getDataManagementExportByDateRangeAndWord = $this->db->query($sql);
+        if($getDataManagementExportByDateRangeAndWord->num_rows>0){
+            $result = $getDataManagementExportByDateRangeAndWord;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
+    public function getDataManagementExportByDateRangeAndWordAndFilter(){
+
+        $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
+        $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
+        $word = !empty($this->getId_recolector()) ? $this->getId_recolector(): false ;
+        $filter = !empty($this->getFilter()) ? $this-> getFilter(): false ;
+        $filterArray = explode(' ',$filter);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.= "SELECT n.id,n.country,n.identificacion,e.nombre_cliente,
+        e.direccion, e.provincia, e.localidad,e.codigo_postal ,u.name,
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.id_user,n.contacto,n.created_at as 'fecha_aviso_visita' 
+        from notice_management n
+        INNER join equipos e on e.identificacion = n.identificacion 
+        inner join users u ON u.id = n.id_user
+        WHERE n.id_user = $word and ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )
+        and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') GROUP BY n.id ORDER BY n.created_at";
+
+        $getDataManagementExportByDateRangeAndWordAndFilter = $this->db->query($sql);
+        if($getDataManagementExportByDateRangeAndWordAndFilter->num_rows>0){
+            $result = $getDataManagementExportByDateRangeAndWordAndFilter;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
+
 
     public function addCount($email){
         
