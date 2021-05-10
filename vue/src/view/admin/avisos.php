@@ -202,7 +202,7 @@
                 <template v-if="loadingTable" >
                  <loader-line />
                 </template>
-
+    {{filter.display}}
                 <template v-if="filter.display">
                     <filter-with-pagination
                     :pagination = "pagination"

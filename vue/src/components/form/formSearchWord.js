@@ -163,12 +163,20 @@ Vue.component('form-search-word',{
                 console.log(err)
             })
         },
+        emit (eventName, value) {
+            // This method should be used when it is very important and time consuming to update reactive data.
+               return new Promise((resolve, reject) => {
+                 this.$emit(eventName, value)
+                 this.$nextTick(resolve)
+               })
+        },
         error(error){
-            this.$emit('setShowFilter',false)
+            
             this.$emit('setErrorGlobal',error)
             this.$emit('loadingTable',false)
             this.$emit('showTable',false)
             this.$emit('response', [])
+            this.emit('setShowFilter',false)
             return
         },
        
