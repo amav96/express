@@ -81,7 +81,7 @@ Vue.component('form-search-by-word-and-range-date',{
                     }
                 })
                 .then(res => {
-                    if(res.data.count <= '0'){
+                    if(!res.data.result){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -92,9 +92,12 @@ Vue.component('form-search-by-word-and-range-date',{
                     this.$emit('totalCountResponse',totalCountResponse)
                     this.searchWordAndRangeDate(this.searchByWordAndRangeDate.base_url_data)
                         .then(()=>{
-                            // show status if is true
-                            this.subheaders.active ? this.showStatus(this.base_url_header) :  true;
-
+                             // show status if is true
+                             if(this.searchByWordAndRangeDate.subheader){
+                                this.showStatus(this.base_url_header)
+                            }else {
+                                this.$emit('setDisplayHeaders', false)
+                            }
                             // if filter is true, activate
                             if(this.searchByWordAndRangeDate.filteringSearchWord){
                                 this.$emit('setShowFilter',true)
@@ -221,12 +224,14 @@ Vue.component('form-search-by-word-and-range-date',{
                 }
             })
             .then(res => {
+                this.$emit('setSubHeadersLoader',false)
                 if(!res.data[0].result){
-                    console.log('errorsito')
+                    this.$emit('setDisplayHeaders', false)
+                   return
                 }
-
-                 this.$emit('setSubHeadersDataResponseDB', res.data)
-                 this.$emit('setSubHeadersLoader',false)
+                this.$emit('setSubHeadersDataResponseDB', res.data)
+                this.$emit('setDisplayHeaders', true)
+                   
             })
             .catch(err => {
                 console.log(err)

@@ -69,7 +69,8 @@ Vue.component('form-search-date',{
                     }
                 })
                 .then(res => {
-                    if(res.data.count <= '0'){
+                   
+                    if(!res.data.result){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -80,8 +81,13 @@ Vue.component('form-search-date',{
                     this.$emit('totalCountResponse',totalCountResponse)
                     this.searchInRangeDate(this.searchByRangeDate.base_url_data)
                         .then(()=>{
-                            // show status if is true
-                            this.subheaders.active ? this.showStatus(this.base_url_header) :  true;
+                             // show status if is true
+
+                             if(this.searchByRangeDate.subheader){
+                                this.showStatus(this.base_url_header)
+                            }else {
+                                this.$emit('setDisplayHeaders', false)
+                            }
 
                             // if filter is true, activate
                             if(this.searchByRangeDate.filteringSearchWord){
@@ -162,6 +168,7 @@ Vue.component('form-search-date',{
                  })
         },
         async showStatus(base_url){
+            console.log("1")
             this.$emit('setSubHeadersLoader',true)
             await axios.get(base_url,{
                 params : {
@@ -170,12 +177,17 @@ Vue.component('form-search-date',{
                 }
             })
             .then(res => {
+                console.log("2")
+                this.$emit('setSubHeadersLoader',false)
                 if(!res.data[0].result){
-                    console.log('errorsito')
+                    this.$emit('setDisplayHeaders', false)
+                    return
                 }
-
-                 this.$emit('setSubHeadersDataResponseDB', res.data)
-                 this.$emit('setSubHeadersLoader',false)
+                console.log("3")
+                
+                this.$emit('setSubHeadersDataResponseDB', res.data)
+                this.$emit('setDisplayHeaders', true)
+                   
             })
             .catch(err => {
                 console.log(err)

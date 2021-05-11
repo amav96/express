@@ -831,10 +831,10 @@ class Equipos
         $sql.="INNER JOIN equipos e ON (g.id_equipo = e.id) ";
         $sql.="WHERE ";
         $sql.="( MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
-       
+        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) and g.status_gestion = 'transito') ";
+        
         $countGestionByWord = $this->db->query($sql);
-        if($countGestionByWord && $countGestionByWord->num_rows>0){
+        if($countGestionByWord && $countGestionByWord->num_rows> 0){
             $result = $countGestionByWord;
         }else {
             $result = false;
@@ -852,11 +852,11 @@ class Equipos
         WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
         'N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
         'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-        'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' 
-        and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59');";
-    
+        'ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59');";
+
+
         $countGetGestionRangeDate = $this->db->query($sql);
-        if($countGetGestionRangeDate && $countGetGestionRangeDate->fetch_object()->count > '0'){
+        if($countGetGestionRangeDate && $countGetGestionRangeDate->fetch_object()->count > 0){
             $result = $countGetGestionRangeDate;
         }else {
             $result = false;
@@ -876,11 +876,11 @@ class Equipos
         WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
         'N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
         'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-        'ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' 
+        'ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito'
         and g.id_user =$word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59');";
 
         $countGestionByWordAndDateRange = $this->db->query($sql);
-        if($countGestionByWordAndDateRange && $countGestionByWordAndDateRange->fetch_object()->count > '0'){
+        if($countGestionByWordAndDateRange && $countGestionByWordAndDateRange->fetch_object()->count > 0){
             $result = $countGestionByWordAndDateRange;
         }else {
             $result = false;
@@ -910,9 +910,9 @@ class Equipos
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
-        $sql.="  ( ";
+        $sql.="( ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
+        $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) and g.status_gestion = 'transito' ";
         $sql.=" )";
 
         $countFilterToGestionByFilter =  $this->db->query($sql);
@@ -947,8 +947,7 @@ class Equipos
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
-        $sql.="  ( ";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
+        $sql.=" (MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) ";
         $sql.="AGAINST ";
         $sql.="('$filterClean' IN BOOLEAN MODE) ";
@@ -956,7 +955,7 @@ class Equipos
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR "; 
-        $sql.="u.name LIKE '%$filter%') and g.created_at
+        $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
         $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
@@ -969,8 +968,6 @@ class Equipos
     }
 
     public function countFilterToGestionByWordAndDateAndFilter(){
-        
-        
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
         $id_recolector = !empty($this->getId_recolector()) ? $this-> getId_recolector(): false ;
@@ -993,8 +990,7 @@ class Equipos
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
-        $sql.="  ( ";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
+        $sql.="(  MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) ";
         $sql.="AGAINST ";
         $sql.="('$filterClean' IN BOOLEAN MODE) ";
@@ -1002,7 +998,7 @@ class Equipos
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filterClean' IN BOOLEAN MODE) ";
         $sql.="OR "; 
-        $sql.="u.name LIKE '%$filter%') and g.id_user = $id_recolector and g.created_at
+        $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user = $id_recolector and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
     
@@ -1026,7 +1022,9 @@ class Equipos
         FROM gestion g INNER JOIN equipos e
         ON e.id=g.id_equipo
         WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and status_gestion='transito' and ";
-        $sql.= "g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.estado WITH ROLLUP";
+        $sql.= " g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.estado WITH ROLLUP";
+
+
 
         $contador = $this->db->query($sql);
         if($contador && $contador->num_rows>0){
@@ -1050,7 +1048,7 @@ class Equipos
         $sql.="SELECT IFNULL(g.estado,'Total') AS 'estado', COUNT(g.estado) as 'cantidadEstado'
         FROM gestion g INNER JOIN equipos e
         ON e.id=g.id_equipo
-        WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and status_gestion='transito' ";
+        WHERE  g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito' ";
         $sql.= "and g.id_user = $word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.estado WITH ROLLUP";
 
         $contador = $this->db->query($sql);
@@ -1086,9 +1084,9 @@ class Equipos
         $sql.="SELECT IFNULL(g.estado,'Total') AS 'estado', COUNT(g.estado) as 'cantidadEstado'
         FROM gestion g INNER JOIN equipos e
         ON e.id=g.id_equipo
-        WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and status_gestion='transito' ";
+        WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') ";
         $sql.="and ( MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
+        $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) and g.status_gestion = 'transito' ";
         $sql.= "GROUP BY g.estado WITH ROLLUP";
 
         $contador = $this->db->query($sql);
@@ -1183,7 +1181,7 @@ class Equipos
                 $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
                 $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
                 $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
-                $sql.="WHERE g.status_gestion = 'transito' and ";
+                $sql.="WHERE ";
                 $sql.="(";
                 $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
                 $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
@@ -1216,8 +1214,8 @@ class Equipos
             g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
             $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
             LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
-            $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
-            $sql.="and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
+            $sql.="WHERE  g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL')  ";
+            $sql.="and g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
         
             $transito = $this->db->query($sql);
             
@@ -1243,12 +1241,12 @@ class Equipos
         }
             $result = false;
             $sql ="";
-            $sql.= "SELECT e.id as 'id_equipo'g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
+            $sql.= "SELECT e.id as 'id_equipo' ,g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
             g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
             $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
             LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
-            $sql.="WHERE g.status_gestion='transito' and g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') ";
-            $sql.="and g.id_user = $word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
+            $sql.="WHERE  g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') ";
+            $sql.="and g.id_user = $word and g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
 
             $getGestionByWordAndRangeDate = $this->db->query($sql);
             
@@ -1466,7 +1464,7 @@ class Equipos
         g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
         $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
         LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
-        $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at";
+        $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito' and  g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at";
 
        
 

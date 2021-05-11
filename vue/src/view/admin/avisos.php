@@ -128,6 +128,7 @@
                       @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                       @filtering="filter.filtering = $event"
                       @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @setDisplayHeaders="subheaders.active = $event"
                       />
                     </v-col>
                 </template>
@@ -158,6 +159,7 @@
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                    @setDisplayHeaders="subheaders.active = $event"
                     />
                     </v-col>
                 </template>
@@ -192,6 +194,7 @@
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
+                    @setDisplayHeaders="subheaders.active = $event"
 
                       />
                       </v-col>
@@ -287,12 +290,14 @@
                 base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeByWord',
                 base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeByWord',
                 export : true,
+                subheader : false
               },
               searchByRangeDate : {
                 filteringSearchWord : true, 
                 base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDate',
                 base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDate',
                 export : true,
+                subheader : false
                
               },
               searchByWordAndRangeDate: {
@@ -300,6 +305,7 @@
                 base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDateAndWord',
                 base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
                 export : true,
+                subheader : false
                 
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',

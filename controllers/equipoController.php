@@ -951,7 +951,6 @@ class equipoController
                 );
             }
 
-            
              $jsonstring = json_encode($objeto);
              echo $jsonstring;
         }
@@ -1880,7 +1879,7 @@ class equipoController
             $updateEquipo->setEstado($estado);
             $updateEquipo->setFecha_momento($fecha_update);
             $updateEquipo->setId_user_update($id_user_update);
-            
+
             $updateEquipo = $updateEquipo->updateEquipo();
             if($updateEquipo){
                 $object = array(

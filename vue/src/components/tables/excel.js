@@ -7,14 +7,20 @@ Vue.component('excel-export', {
             color="success"
             @click="exportExcel"
             >
-            excel
-            <v-icon right >mdi-file-excel</v-icon>
-            </v-btn>
+            <span v-if="!flagLoader" >excel</span>
+            <v-icon v-if="!flagLoader" right >mdi-file-excel</v-icon>
+
             <v-progress-circular
             v-if="flagLoader"
             indeterminate
-            color="primary"
+            color="white"
             ></v-progress-circular>
+
+            </v-btn>
+            <span v-if="flagLoader">
+                <strong>Esto puedo demorar...</strong>
+            </span>
+            
             <v-btn
             v-if="download"
             color="error"

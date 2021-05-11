@@ -98,7 +98,6 @@
               </v-row>
           </div>
               <div class="d-flex justify-center align-center align-self-center flex-column" >
-            
                 <transition name="slide-fade">
                   <error-global 
                   v-if="error.type !== null" 
@@ -106,7 +105,6 @@
                   @clearingError="error = $event"
                   />
                 </transition>
-
 
                 <template v-if="formEquipos">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
@@ -134,6 +132,7 @@
                       @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                       @filtering="filter.filtering = $event"
                       @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @setDisplayHeaders="subheaders.active = $event"
                       />
                     </v-col>
                 </template>
@@ -164,6 +163,7 @@
                       @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                       @filtering="filter.filtering = $event"
                       @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @setDisplayHeaders="subheaders.active = $event"
                       />
                     </v-col>
                 </template>
@@ -194,6 +194,7 @@
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                    @setDisplayHeaders="subheaders.active = $event"
                     />
                     </v-col>
                 </template>
@@ -228,6 +229,7 @@
                     @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
+                    @setDisplayHeaders="subheaders.active = $event"
 
                       />
                       </v-col>
@@ -241,8 +243,8 @@
                 <template v-if="subheaders.loader" >
                  <loader-line />
                 </template>
-
-                <template v-if="table ">
+               
+                <template v-if="table && subheaders.active ">
                     <sub-headers
                     :subheaders="subheaders"
                     />
@@ -304,7 +306,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="table">
+                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -332,12 +334,14 @@
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=equiposByWord',
                 filteringSearchWord : false,
                 export : false,
+                subheader : false
               },
               searchByWord : {
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
                 filteringSearchWord : false, 
                 export : true,
+                subheader : true
                 
               },
               searchByRangeDate : {
@@ -345,6 +349,7 @@
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionRangeDate',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionRangeDate',
                 export : true,
+                subheader : true
                
               },
               searchByWordAndRangeDate: {
@@ -352,6 +357,7 @@
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWordAndDateRange',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionWordAndRangeDate',
                 export : true,
+                subheader : true
                 
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
