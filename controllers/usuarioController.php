@@ -84,7 +84,7 @@ class usuarioController
 
      public function managentUs()
      {
-
+          Utils::AuthAdmin();
           require_once 'views/admin/registrados.php';
      }
 

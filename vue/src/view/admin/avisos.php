@@ -15,7 +15,6 @@
 
 <!-- dialog component -->
 
-<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/detailNotice.js"></script>
 
 <!-- table component -->
@@ -199,10 +198,11 @@
                 </template>  
 
               </div> 
+
                 <template v-if="loadingTable" >
                  <loader-line />
                 </template>
-    {{filter.display}}
+
                 <template v-if="filter.display">
                     <filter-with-pagination
                     :pagination = "pagination"
@@ -284,8 +284,8 @@
               dataSelect:[],
               searchByWord : {
                 filteringSearchWord : false, 
-                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
-                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
+                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeByWord',
+                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeByWord',
                 export : true,
               },
               searchByRangeDate : {

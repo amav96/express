@@ -40,7 +40,7 @@ Vue.component('dialog-detail-notice',{
 
                                                     <v-col cols="12" lg="6">
                                                         <v-list-item-title class="caption mb-1">
-                                                            <strong>Ubicaciòn</strong>
+                                                            <strong>Ubicaciòn cliente</strong>
                                                         </v-list-item-title>
                                                         <v-list-item-subtitle>
                                                             {{detailNotice.data.direccion}} - {{detailNotice.data.localidad}} -{{detailNotice.data.provincia}} 

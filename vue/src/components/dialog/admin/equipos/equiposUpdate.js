@@ -106,8 +106,11 @@ template : //html
                             label="Control/Base"
                             ></v-select>
                             </v-col>
+
+                           
                         </v-row>
                         </v-container>
+                        
                     </v-card-text>
             <v-card-actions>
                 <message-alert
@@ -124,6 +127,7 @@ template : //html
                 <v-btn
                 color="primary"
                 @click="update"
+                :disabled="updateProperty.disabled"
                 >
                 Guardar Cambios
                 </v-btn>
@@ -132,10 +136,10 @@ template : //html
                
         </v-dialog>
     `,
-    props:['dialogUpdate','title','editedItem','status','accesorios','message','alert_flag'],
+    props:['dialogUpdate','title','editedItem','status','accesorios','message','alert_flag','updateProperty'],
 data (){
 return {
-    downInner : false
+    downInner : false,
 }
 },
 methods : {
@@ -158,6 +162,7 @@ methods : {
         }
     },
     update(){
+        this.$emit("setDisabled",true)
         this.$emit('updateRow')
     },
    

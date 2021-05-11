@@ -73,7 +73,6 @@ Vue.component('form-search-by-word-and-range-date',{
         async countSearchByWordAndRangeDate(){
             try {
                 this.$emit('loadingTable',true)
-
                 await axios.get(this.searchByWordAndRangeDate.base_url_count,{
                       params :{
                         dateStart : this.dateStart,
@@ -82,8 +81,7 @@ Vue.component('form-search-by-word-and-range-date',{
                     }
                 })
                 .then(res => {
-                    if(!res.data.result){
-                      
+                    if(res.data.count <= '0'){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -116,14 +114,12 @@ Vue.component('form-search-by-word-and-range-date',{
                 })
 
             } catch (err) {
-               
                 const error = {type: 'no-exist',text: err,time: 4000}
                 this.error(error); return;
             }
             
         },
         async searchWordAndRangeDate(base_url){
-          
             const dataRequest = {
                 dateStart : this.dateStart,
                 dateEnd : this.dateEnd,
@@ -186,18 +182,11 @@ Vue.component('form-search-by-word-and-range-date',{
              await axios.post(this.base_url_data_select,dataPost)
                 .then(res => {
                     
-                    if(res.data[0].result !== '1'){
-                        const error = {
-                            type: 'no-exist',
-                            text: 'No se pudieron cargar los usuarios',
-                            time: 4000
-                        }
-    
-                        this.$emit('childrenError',error)
-                        return false
+                    if(res.data.count <= '0'){
+                        const error = {type: 'no-exist',text: 'No se pudieron cargar los usuarios',time: 4000}
+                        this.error(error); return;
                     }
                     const ordenadosAlfabeticamente = res.data.sort(function(prev, next){
-
                         if(prev.nombre > next.nombre){
                             return 1
                         }
@@ -208,32 +197,17 @@ Vue.component('form-search-by-word-and-range-date',{
                       })
 
                       this.items = ordenadosAlfabeticamente
-                      
                       this.$emit('childrenProcessDataSelect',this.items);
-                      this.$emit('childrenDataSelect',this.items);
-                      
-                      
+                      this.$emit('childrenDataSelect',this.items); 
                 })
                 .catch(err => {
-
-                    const error = {
-                        type: 'no-exist',
-                        text: err,
-                        time: 4000
-                    }
-
-                    this.$emit('childrenError',error)
-                   
+                    const error = {type: 'no-exist',text: err,time: 4000 }
+                    this.error(error); return;
                 })
             
         } catch (err) {
-            const error = {
-                        type: 'no-exist',
-                        text: err,
-                        time: 4000
-                    }
-
-            this.$emit('childrenError',error)
+            const error = {type: 'no-exist',text: err,time: 4000}
+            this.error(error); return;
         }
              
         },

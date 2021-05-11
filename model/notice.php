@@ -287,6 +287,37 @@ class Notice{
 
      //COUNT NOTICES
 
+    public function countNoticeByWord(){
+
+        $word = !empty($this->getWord()) ? $this-> getWord(): false ;
+        $filterArray = explode(' ',$word);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT COUNT(DISTINCT(n.id)) as 'count' FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) )";
+
+        $countNoticeByWord =  $this->db->query($sql);
+        if($countNoticeByWord->num_rows>0){
+            $result = $countNoticeByWord;
+        }else {
+            $result = false;
+        }
+        return $result;
+
+    }
+
     public function countNoticeRangeDate(){
 
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
@@ -406,6 +437,45 @@ class Notice{
     }
 
     //DATA NOTICES
+
+    public function noticeByWord(){
+
+        $word = !empty($this->getWord()) ? $this-> getWord(): false ;
+        $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+        $limit = ($this->getLimit())?$this->getLimit() : false ;
+        if(gettype($fromRow) !==  'string'){
+            $fromRow = '0';
+        }
+        $filterArray = explode(' ',$word);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.="SELECT n.id,e.nombre_cliente,e.direccion,e.localidad,e.provincia,n.id,u.name,
+        n.aviso,n.contacto,n.country,n.id_user,n.identificacion,
+        n.lat AS 'latAviso',n.lng AS 'lngAviso',n.means,n.created_at FROM  notice_management n 
+        INNER join equipos e on e.identificacion = n.identificacion 
+        INNER join users u ON u.id = n.id_user
+        WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) ) GROUP BY n.id 
+        ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
+
+        $noticeByWord = $this->db->query($sql);
+        if($noticeByWord && $noticeByWord->num_rows>0){
+            $result = $noticeByWord;
+
+        }else {
+            $result = false;
+        }
+        return $result;
+    }
 
     public function noticeRangeDate(){
 
@@ -559,6 +629,42 @@ class Notice{
 
     
     //EXPORT EXCEL 
+
+    public function getDataManagementExportByWord(){
+
+        $word = !empty($this->getWord()) ? $this->getWord(): false ;
+
+        $filterArray = explode(' ',$word);
+
+        if(is_array($filterArray)){
+            $filterPush = [];
+            for($i=0;$i<count($filterArray);$i++){
+                array_push($filterPush,'+"'.$filterArray[$i].'"');
+            }
+            $filterFinally = implode(",",$filterPush);
+            $filterClean = str_replace(","," ",$filterFinally);
+        }
+
+        $sql ="";
+        $sql.= "SELECT n.id,n.country,n.identificacion,e.nombre_cliente,
+        e.direccion, e.provincia, e.localidad,e.codigo_postal ,u.name,
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.id_user,n.contacto,n.created_at as 'fecha_aviso_visita' 
+        from notice_management n
+        INNER join equipos e on e.identificacion = n.identificacion 
+        inner join users u ON u.id = n.id_user
+        WHERE ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
+        AGAINST ('$filterClean' IN BOOLEAN MODE) ) GROUP BY n.id ORDER BY n.created_at";
+        
+        $getDataManagementExportByWord = $this->db->query($sql);
+        if($getDataManagementExportByWord->num_rows>0){
+            $result = $getDataManagementExportByWord;
+        }else {
+            $result = false;
+        }
+
+        return $result;
+
+    }
 
     public function getDataNoticeExportByDateRange(){
 

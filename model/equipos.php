@@ -801,6 +801,7 @@ class Equipos
         $sql.="SELECT COUNT(*) as 'count' FROM equipos  ";
         $sql.="WHERE ( MATCH (empresa,terminal,serie,identificacion,direccion,localidad,codigo_postal,provincia,emailcliente,estado)  ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
+
         
         $countGestionByWord = $this->db->query($sql);
         if($countGestionByWord && $countGestionByWord->num_rows>0){
@@ -1126,9 +1127,12 @@ class Equipos
 
         
         $sql ="";
-        $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
-        g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
-        g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
+        $sql.= "SELECT e.id as 'id_equipo' ,g.id,g.id_orden_pass, g.id_orden, g.id_user, e.terminal, e.serie,e.serie_base,e.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
+        g.accesorio_tres,g.accesorio_cuatro,e.estado,g.motivo,e.created_at,e.empresa,
+        e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad,
+        e.codigo_postal ,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',
+        n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,
+        n.created_at as 'fecha_aviso_visita' ";
         $sql.="FROM  ";
         $sql.="equipos e LEFT JOIN gestion g ON (g.id_equipo = e.id) ";
         $sql.="LEFT JOIN users u ON (u.id = g.id_user) ";
@@ -1138,6 +1142,7 @@ class Equipos
         $sql.="MATCH (e.empresa,e.terminal,e.serie,e.identificacion,e.direccion,e.localidad,e.codigo_postal,e.provincia,e.emailcliente,e.estado) ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
         $sql.="limit $fromRow,$limit ";
+
 
     
         $gestionByWord = $this->db->query($sql);
@@ -1171,20 +1176,19 @@ class Equipos
                 }
 
                 $sql ="";
-                $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
+                $sql.= "SELECT e.id as 'id_equipo',g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
                 g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
                 g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
                 $sql.="FROM  ";
                 $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
                 $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
                 $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
-                $sql.="WHERE ";
+                $sql.="WHERE g.status_gestion = 'transito' and ";
                 $sql.="(";
                 $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
                 $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
                 $sql.="order BY g.created_at desc limit $fromRow,$limit ";
 
-            
                 $gestionByWord = $this->db->query($sql);
                 if($gestionByWord && $gestionByWord->num_rows>0){
                     $result = $gestionByWord;
@@ -1207,7 +1211,7 @@ class Equipos
         }
             $result = false;
             $sql ="";
-            $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
+            $sql.= "SELECT e.id as 'id_equipo',g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
             g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
             g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
             $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
@@ -1239,12 +1243,11 @@ class Equipos
         }
             $result = false;
             $sql ="";
-            $sql.= "SELECT g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
-            g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
+            $sql.= "SELECT e.id as 'id_equipo'g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
             g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
             $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
             LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
-            $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' ";
+            $sql.="WHERE g.status_gestion='transito' and g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') ";
             $sql.="and g.id_user = $word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
 
             $getGestionByWordAndRangeDate = $this->db->query($sql);
@@ -1279,7 +1282,7 @@ class Equipos
         }
        
         $sql ="";
-        $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
+        $sql.="SELECT e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
         g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
         n.created_at AS 'fecha_aviso_visita' ";
         $sql.="FROM  ";
@@ -1326,7 +1329,7 @@ class Equipos
            
            
             $sql ="";
-            $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
+            $sql.="SELECT e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
             g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
             n.created_at AS 'fecha_aviso_visita' ";
             $sql.="FROM  ";
@@ -1378,7 +1381,7 @@ class Equipos
         }
 
         $sql ="";
-        $sql.="SELECT e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
+        $sql.="SELECT e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
         g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
         n.created_at AS 'fecha_aviso_visita' ";
         $sql.="FROM  ";
@@ -1613,7 +1616,7 @@ class Equipos
     
     public function updateGestion(){
 
-            $id_equipo = !empty($this->getId_equipo()) ?$this->getId_equipo() :false ;
+            $id_gestion = !empty($this->getGuiaEquipo()) ?$this->getGuiaEquipo() :false ;
             $id_user_update = !empty($this->getId_user_update()) ?$this->getId_user_update() :false ;
             $fecha_update = !empty($this->getFecha_momento()) ?$this->getFecha_momento() :false ;
             $terminal = !empty($this->getTerminal()) ?$this->getTerminal() :false ;
@@ -1624,7 +1627,9 @@ class Equipos
             $accesorio_cuatro = !empty($this->getAccesorioCuatro()) ?$this->getAccesorioCuatro() :false ;
             $estado = !empty($this->getEstado()) ?$this->getEstado() :false ;
 
-            $sql ="UPDATE gestion set updated_at='$fecha_update', id_user_update='$id_user_update', terminal='$terminal',serie='$serie',accesorio_uno= '$accesorio_uno', accesorio_dos='$accesorio_dos', accesorio_tres='$accesorio_tres', accesorio_cuatro='$accesorio_cuatro',estado='$estado' where id = $id_equipo";
+            $sql ="UPDATE gestion set updated_at='$fecha_update', id_user_update='$id_user_update', terminal='$terminal',serie='$serie',accesorio_uno= '$accesorio_uno', accesorio_dos='$accesorio_dos', accesorio_tres='$accesorio_tres', accesorio_cuatro='$accesorio_cuatro',estado='$estado' where id = $id_gestion";
+
+         
 
             $updateGestion = $this->db->query($sql);
             if($updateGestion){
@@ -1635,6 +1640,26 @@ class Equipos
 
             return $result;
 
+    }
+
+    public function updateEquipo(){
+
+        $id_equipo = !empty($this->getId_equipo()) ?$this->getId_equipo() :false ;
+        $id_user_update = !empty($this->getId_user_update()) ?$this->getId_user_update() :false ;
+        $fecha_update = !empty($this->getFecha_momento()) ?$this->getFecha_momento() :false ;
+        $estado = !empty($this->getEstado()) ?$this->getEstado() :false ;
+        
+        $sql ="UPDATE equipos SET estado = '$estado', updated_at = '$fecha_update',id_user_update =  '$id_user_update' where id = $id_equipo";
+
+
+        $updateEquipo = $this->db->query($sql);
+        if($updateEquipo){
+            $result = true;
+        }else {
+            $result = false;
+        }
+
+        return $result;
     }
 
     public function deleteGestion(){

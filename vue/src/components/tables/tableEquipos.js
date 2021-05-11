@@ -16,6 +16,8 @@ Vue.component("table-equipos", {
                     :alert_flag="alert_flag"
                     @message="message = $event"
                     @alert_flag="alert_flag = $event"
+                    @setDisabled="updateProperty.disabled = $event"
+                    :updateProperty="updateProperty"
                     />
             </template>
             
@@ -78,7 +80,7 @@ Vue.component("table-equipos", {
                                     <span class="text-white" >detalle </span>
                                     
                                 </v-btn>
-                                
+                               
                             </td>
                             <td>{{row.identificacion}}</td>
                             <td><strong>{{row.estado}}</strong></td>
@@ -194,6 +196,9 @@ Vue.component("table-equipos", {
             detailNotice: {
                 dialog : false,
                 data : []
+            },
+            updateProperty : {
+                disabled : false
             }
         };
         },
@@ -223,6 +228,7 @@ Vue.component("table-equipos", {
             },
             openDialogEdit(bool, data) {
                 this.editedItem = data;
+               
                 this.dialogUpdate = bool;
                 this.title = "Editar equipos gestionados";
                 if (this.status.length === 0) {
@@ -285,6 +291,7 @@ Vue.component("table-equipos", {
                 getSegundos;
 
             const dataRequest = {
+                id_equipo: this.editedItem.id_equipo,
                 id: this.editedItem.id,
                 estado: this.editedItem.estado,
                 serie: this.editedItem.serie,
@@ -306,14 +313,17 @@ Vue.component("table-equipos", {
                 })
                 .then((res) => {
                 if (!res.data.result) {
+                    this.updateProperty.disabled = false
                     alertNegative("Mensaje CODIGO 51");
                     return;
                 }
 
                 this.message = "Actualizado correctamente";
                 this.alert_flag = true;
+                this.updateProperty.disabled = false
                 })
                 .catch((err) => {
+                    this.updateProperty.disabled = false
                 console.log(err);
                 });
             },

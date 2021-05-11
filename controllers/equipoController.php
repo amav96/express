@@ -1188,6 +1188,7 @@ class equipoController
                  $objeto[] = array(
 
                      'result' => true,
+                     'id_equipo' => $element["id_equipo"],
                      'id' => $element["id"],
                      'identificacion' => $element["identificacion"],
                      'estado' => $element["estado"],
@@ -1236,11 +1237,6 @@ class equipoController
 
     public function gestionByWord(){
 
-        // echo "<pre>";
-        // print_r($_GET);
-        // echo "</pre>";
-        // die();
-
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $request =  json_decode($dataRequest);
         $word = isset($request->word) ? $request->word : false; 
@@ -1261,6 +1257,7 @@ class equipoController
                  $objeto[] = array(
 
                      'result' => true,
+                     'id_equipo' => $element["id_equipo"],
                      'id' => $element["id"],
                      'identificacion' => $element["identificacion"],
                      'estado' => $element["estado"],
@@ -1330,6 +1327,7 @@ class equipoController
                         $objeto[] = array(
     
                             'result' => true,
+                            'id_equipo' => $element["id_equipo"],
                             'id' => $element["id"],
                             'identificacion' => $element["identificacion"],
                             'estado' => $element["estado"],
@@ -1398,10 +1396,9 @@ class equipoController
 
             if (is_object($gestion)) {
                 foreach ($gestion as $element) {
-                    
                         $objeto[] = array(
-    
                             'result' => true,
+                            'id_equipo' => $element["id_equipo"],
                             'id' => $element["id"],
                             'identificacion' => $element["identificacion"],
                             'estado' => $element["estado"],
@@ -1499,6 +1496,7 @@ class equipoController
                       $objeto[] = array(
     
                           'result' => true,
+                          'id_equipo' => $element["id_equipo"],
                           'id' => $element["id"],
                           'identificacion' => $element["identificacion"],
                           'estado' => $element["estado"],
@@ -1850,7 +1848,7 @@ class equipoController
     {
 
         $dataRequest = json_decode($_GET['dataRequest']);
-      
+        $id_equipo = isset($dataRequest->id_equipo) ?$dataRequest->id_equipo : false ; 
         $id = isset($dataRequest->id) ?$dataRequest->id : false ; 
         $estado = isset($dataRequest->estado) ?$dataRequest->estado : false ; 
         $serie = isset($dataRequest->serie) ?$dataRequest->serie : false ; 
@@ -1863,7 +1861,7 @@ class equipoController
         $id_user_update = isset($dataRequest->id_user_update) ?$dataRequest->id_user_update : false ;
 
         $updateGestion = new Equipos();
-        $updateGestion->setId_equipo($id);
+        $updateGestion->setGuiaEquipo($id);
         $updateGestion->setId_user_update($id_user_update);
         $updateGestion->setFecha_momento($fecha_update);
         $updateGestion->setTerminal($terminal);
@@ -1876,15 +1874,27 @@ class equipoController
         $updateGestion = $updateGestion->updateGestion();
 
         if($updateGestion){
-            $object = array(
-                'result' => true
-            );
-        }else {
 
+            $updateEquipo = new Equipos();
+            $updateEquipo->setId_equipo($id_equipo);
+            $updateEquipo->setEstado($estado);
+            $updateEquipo->setFecha_momento($fecha_update);
+            $updateEquipo->setId_user_update($id_user_update);
+            
+            $updateEquipo = $updateEquipo->updateEquipo();
+            if($updateEquipo){
+                $object = array(
+                    'result' => true
+                );
+            }else {
+                $object = array(
+                    'result' => false
+                );
+            }
+        }else {
             $object = array(
                 'result' => false
             );
-
         }
             $jsonstring = json_encode($object);
             echo $jsonstring;

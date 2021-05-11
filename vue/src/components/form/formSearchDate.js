@@ -69,8 +69,7 @@ Vue.component('form-search-date',{
                     }
                 })
                 .then(res => {
-                    
-                    if(!res.data.result){
+                    if(res.data.count <= '0'){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -190,12 +189,11 @@ Vue.component('form-search-date',{
                })
         },
         error(error){
-            
+            this.emit('setShowFilter',false)
             this.$emit('setErrorGlobal',error)
             this.$emit('loadingTable',false)
             this.$emit('showTable',false)
             this.$emit('response', [])
-            this.emit('setShowFilter',false)
             return
         },
         

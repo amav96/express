@@ -20,8 +20,6 @@ template : //html
    
     `,
 props:['subheaders'],
-created(){
-    console.log(this.subheaders)
-}
+
 
 })

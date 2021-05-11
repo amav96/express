@@ -20,7 +20,6 @@ template : //html
           </v-btn>
           <v-btn
             color="success"
-            
             @click="deleteRow"
           >
             Si, estoy seguro/a

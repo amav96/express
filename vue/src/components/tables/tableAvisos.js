@@ -30,7 +30,21 @@ Vue.component("table-avisos", {
                           <tr 
                           v-for="row in dataResponseDB"
                           >
-                            <td></td>
+                          <td>
+                            <span v-if="row.contacto === '' || row.contacto === null || row.contacto.length < 1" >
+                            </span>
+                            <v-btn v-else 
+                            color="indigo"
+                            small @click="openDialogDetailNotice(true,row)"
+                            >
+                                <v-icon color="white" left>
+                                mdi-email-open-outline
+                                </v-icon>
+                                <span class="text-white" >detalle </span>
+                                
+                            </v-btn>
+                          
+                            </td>
                             <td>{{row.aviso}}</td>
                             <td>{{row.contacto}}</td>
                             <td>{{row.country}}</td>
