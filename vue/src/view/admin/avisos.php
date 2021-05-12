@@ -1,6 +1,6 @@
 <?php require_once 'views/layout/headerAdmin.php'; ?>
 
-    <div id="admin-equipos" >
+    <div id="admin-notices" >
             
     </div>
 <!-- VUE -->
@@ -51,7 +51,7 @@
     
   new Vue({
 
-        el: '#admin-equipos',
+        el: '#admin-notices',
         vuetify: new Vuetify(),
         store,
         template : //html 
@@ -234,16 +234,17 @@
                       :url_actions="url_actions"
                       :dynamicDataToSearch="dynamicDataToSearch"
                       />
-                      <div>
-                      <v-btn
-                      color="primary"
-                      >
-                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
-                      </v-btn>
-                      </div> 
                     </v-row>
                   </div>
                  
+                </template>
+
+                <template>
+                    <v-btn
+                      v-if="table"
+                      >
+                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
+                    </v-btn>
                 </template>
         
                 <template v-if="table">

@@ -58,14 +58,15 @@ Vue.component("table-equipos", {
                     <v-simple-table>
                         <template v-slot:default>
                         <thead>
-                            <tr >
-                            <th v-for="column in columns" class="text-left">
+                            <tr  class="bg-blue-custom">
+                            <th v-for="column in columns" class="text-left text-white">
                                 {{column.text}}
                             </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr 
+                           
                             v-for="row in dataResponseDB"
                             >
                             <td>
@@ -88,6 +89,7 @@ Vue.component("table-equipos", {
                             <td>{{row.empresa}}</td>
                             <td>{{row.terminal}}</td>
                             <td>{{row.serie}}</td>
+                            <td>{{row.name}} - {{row.recolector}}</td>
                             <td>{{row.emailcliente}}</td>
                             <td>{{row.serie_base}}</td>
                             <td>{{row.tarjeta}}</td>
@@ -98,8 +100,6 @@ Vue.component("table-equipos", {
                             <td>{{row.accesorio_cuatro}}</td>
                             <td>{{row.motivo}}</td>
                             <td>{{row.created_at}}</td>
-                            <td>{{row.recolector}}</td>
-                            <td>{{row.name}}</td>
                             <td>{{row.nombre_cliente}}</td>
                             <td>{{row.direccion}}</td>
                             <td>{{row.provincia}}</td>

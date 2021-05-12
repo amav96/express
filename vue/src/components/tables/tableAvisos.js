@@ -20,7 +20,7 @@ Vue.component("table-avisos", {
                       <v-simple-table>
                           <template v-slot:default>
                           <thead>
-                              <tr >
+                              <tr class="bg-blue-custom">
                               <th v-for="column in columns" class="text-left">
                                   {{column.text}}
                               </th>

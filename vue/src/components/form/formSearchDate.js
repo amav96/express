@@ -81,7 +81,6 @@ Vue.component('form-search-date',{
                     this.searchInRangeDate(this.searchByRangeDate.base_url_data)
                         .then(()=>{
                              // show status if is true
-
                              if(this.searchByRangeDate.subheader){
                                 this.showStatus(this.base_url_header)
                             }else {

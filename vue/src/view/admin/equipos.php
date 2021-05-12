@@ -42,7 +42,7 @@
 <script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=05042021"></script>
+<script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
 <script src="<?=base_url?>vue/src/modules/M_adminAvisos.js"></script>
 <!-- views -->
 
@@ -279,16 +279,16 @@
                       :url_actions="url_actions"
                       :dynamicDataToSearch="dynamicDataToSearch"
                       />
-                      <div>
-                      <v-btn
-                      color="primary"
-                      >
-                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
-                      </v-btn>
-                      </div> 
                     </v-row>
                   </div>
-                 
+                </template>
+
+                <template>
+                    <v-btn
+                      v-if="table"
+                      >
+                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
+                    </v-btn>
                 </template>
         
                 <template v-if="table">
@@ -396,6 +396,7 @@
                 { text: 'Empresa'},
                 { text: 'Terminal'},
                 { text: 'Serie'},
+                { text: 'Recolector'},
                 { text: 'email'},
                 { text: 'Serie Base',},
                 { text: 'Tarjeta/C.Red'},
@@ -406,9 +407,7 @@
                 { text: 'Control/Base'},
                 { text: 'Motivo'},
                 { text: 'Fecha'},
-                { text: 'ID Recolector'},
-                { text: 'Nombre Recolector'},
-                { text: 'Nombre'},
+                { text: 'Nombre cliente'},
                 { text: 'Direccion'},
                 { text: 'Provincia'},
                 { text: 'Localidad'},
