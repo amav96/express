@@ -8,38 +8,38 @@
 <!-- component  avisos -->
   
 
-<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=12052021"></script>
 
 
 <!-- dialog component -->
 
-<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=12052021"></script>
 
 <!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableAvisos.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableAvisos.js?v=12052021"></script>
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js"></script>
-<script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
-<script src="<?=base_url?>vue/src/components/form/formSearchWord.js"></script>
-<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/formSearchDate.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/formSearchWord.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js?v=12052021"></script>
 
 
 <!-- pagination component -->
-<script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
 
 <!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js"></script>
-<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=12052021"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=05042021"></script>
-<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js"></script>
+<script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=12052021"></script>
 <!-- views -->
 
 <?php require_once 'views/layout/footerAdmin.php'; ?>
@@ -205,7 +205,7 @@
                 <template v-if="loadingTable" >
                  <loader-line />
                 </template>
-
+                
                 <template v-if="filter.display">
                     <filter-with-pagination
                     :pagination = "pagination"
@@ -262,7 +262,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="table">
+                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -273,6 +273,7 @@
                     @showLoaderLine="loaderLine =  $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    @restauratePagination="pagination = $event"
                     />
                 </template>
           </v-app>
@@ -305,8 +306,7 @@
                 base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDateAndWord',
                 base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
                 export : true,
-                subheader : false
-                
+                subheader : false 
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
@@ -331,8 +331,6 @@
               dynamicDataToSearch : [],
               loaderLine: false,
               dataResponseDB: [],
-              sortBy: 'created_at',
-              sortDesc: true,
               columns: [
                 { text: 'Detalle'},
                 { text: 'Aviso'},

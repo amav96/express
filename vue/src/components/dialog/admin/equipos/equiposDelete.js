@@ -21,6 +21,7 @@ template : //html
           <v-btn
             color="success"
             @click="deleteRow"
+            :disabled="deleteProperty.disabled"
           >
             Si, estoy seguro/a
           </v-btn>
@@ -28,7 +29,7 @@ template : //html
       </v-card>
     </v-dialog>
     `,
-props:['dialogDelete','title'],
+props:['dialogDelete','title','deleteProperty'],
 data (){
 return {
     dialogflag : true

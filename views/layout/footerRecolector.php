@@ -16,11 +16,11 @@
 
  require_once 'views/modal/guia/instructivo.php';?>
 
-  <script src="<?=base_url?>assets/equipos/data.js?v=21042021"></script>
-  <script src="<?=base_url?>assets/equipos/data-autorizar.js?v=21042021"></script> 
-  <script src="<?=base_url?>assets/equipos/procesar.js?v=21042021"></script>
-  <script src="<?=base_url?>assets/equipos/procesar-autorizar.js?v=21042021"></script>
-  <script src="<?=base_url?>assets/equipos/firmas.js?v=21042021"></script> 
+  <script src="<?=base_url?>assets/equipos/data.js?v=12052021"></script>
+  <script src="<?=base_url?>assets/equipos/data-autorizar.js?v=12052021"></script> 
+  <script src="<?=base_url?>assets/equipos/procesar.js?v=12052021"></script>
+  <script src="<?=base_url?>assets/equipos/procesar-autorizar.js?v=12052021"></script>
+  <script src="<?=base_url?>assets/equipos/firmas.js?v=12052021"></script> 
 
 <!-- vue -->
   <!-- <script src="<?=base_url?>vue/src/view/AvisoVisita.js"></script>  -->
@@ -29,30 +29,30 @@
 
     <!--componentes-->
         <!-- visita en domicilio -->
-  <script src="<?=base_url?>vue/src/components/visita/BtnModalVisita.js?v=21042021"></script>
-  <script src="<?=base_url?>vue/src/components/visita/modalVisita.js?v=21042021"></script> 
-  <script src="<?=base_url?>vue/src/components/visita/DatosContacto.js?v=21042021"></script>
+  <script src="<?=base_url?>vue/src/components/visita/BtnModalVisita.js?v=12052021"></script>
+  <script src="<?=base_url?>vue/src/components/visita/modalVisita.js?v=12052021"></script> 
+  <script src="<?=base_url?>vue/src/components/visita/DatosContacto.js?v=12052021"></script>
   
         <!-- gestion de avisos -->
-  <script src="<?=base_url?>vue/src/components/gestionVisita/inputBuscar.js?v=21042021"></script>
-  <script src="<?=base_url?>vue/src/components/gestionVisita/tiposAvisos.js?v=21042021"></script>
+  <script src="<?=base_url?>vue/src/components/gestionVisita/inputBuscar.js?v=12052021"></script>
+  <script src="<?=base_url?>vue/src/components/gestionVisita/tiposAvisos.js?v=12052021"></script>
 
   <!-- guia instructiva -->
-  <script src="<?=base_url?>vue/src/components/guia/botonGuia.js?v=21042021"></script>
-  <script src="<?=base_url?>vue/src/components/guia/modalGuia.js?v=21042021"></script>
+  <script src="<?=base_url?>vue/src/components/guia/botonGuia.js?v=12052021"></script>
+  <script src="<?=base_url?>vue/src/components/guia/modalGuia.js?v=12052021"></script>
 
     <!--componentes-->
       <!-- errores -->
-      <script src="<?=base_url?>vue/src/components/helpers/errorAlert.js?v=21042021"></script>
+      <script src="<?=base_url?>vue/src/components/helpers/errorAlert.js?v=12052021"></script>
 
 
   <!----vuex------>
-  <script src="<?=base_url?>vue/src/store/index.js?v=21042021"></script>
-  <script src="<?=base_url?>vue/src/modules/M_visita.js?v=21042021"></script>
+  <script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
+  <script src="<?=base_url?>vue/src/modules/M_visita.js?v=12052021"></script>
   <!----vuex------>
 
   <!-- view -->
-  <script src="<?=base_url?>vue/src/view/avisoVisita.js?v=21042021"></script>
+  <script src="<?=base_url?>vue/src/view/avisoVisita.js?v=12052021"></script>
 
   <!-- ----------------------- -->
   

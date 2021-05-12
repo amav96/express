@@ -137,12 +137,12 @@
 
             var telefonosAProcesar = []
             dataDB.forEach((val)=>{
-                    
-                if(val.telefono_cel4 !== '' && val.telefono_cel4 !== null)
+                   
+                if(val.telefono_cel4 !== '' && val.telefono_cel4 !== null && val.telefono_cel4.length > 6)
                     telefonosAProcesar.push(val.telefono_cel4.trim())
-                if(val.telefono_cel5 !== '' && val.telefono_cel5 !== null)
+                if(val.telefono_cel5 !== '' && val.telefono_cel5 !== null && val.telefono_cel5.length > 6)
                     telefonosAProcesar.push(val.telefono_cel5.trim())    
-                if(val.telefono_cel6 !== '' && val.telefono_cel6 !== null)
+                if(val.telefono_cel6 !== '' && val.telefono_cel6 !== null && val.telefono_cel6.length > 6)
                     telefonosAProcesar.push(val.telefono_cel6.trim())     
             })
 
@@ -156,7 +156,7 @@
 
              var emailAProcesar = []   
              dataDB.forEach((val) => {
-                if(val.emailcliente !== '' && val.emailcliente !== null ){
+                if(val.emailcliente !== '' && val.emailcliente !== null && val.emailcliente.length>6){
                     emailAProcesar.push(val.emailcliente.replace(/ /g, ""))
                 }
             })           

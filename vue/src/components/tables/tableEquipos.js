@@ -21,14 +21,15 @@ Vue.component("table-equipos", {
                     />
             </template>
             
-                <template>
-                    <dialog-equipos-delete
-                    :dialogDelete="dialogDelete"
-                    :title="title"
-                    @openDialog="dialogDelete = $event"
-                    @deleteRow="deleteRow"
-                    />
-                </template>
+            <template>
+                <dialog-equipos-delete
+                :dialogDelete="dialogDelete"
+                :title="title"
+                @openDialog="dialogDelete = $event"
+                @deleteRow="deleteRow"
+                :deleteProperty="deleteProperty"
+                />
+            </template>
 
             <template>
                 <dialog-send-invoice
@@ -87,6 +88,7 @@ Vue.component("table-equipos", {
                             <td>{{row.empresa}}</td>
                             <td>{{row.terminal}}</td>
                             <td>{{row.serie}}</td>
+                            <td>{{row.emailcliente}}</td>
                             <td>{{row.serie_base}}</td>
                             <td>{{row.tarjeta}}</td>
                             <td>{{row.chip_alternativo}}</td>
@@ -198,6 +200,9 @@ Vue.component("table-equipos", {
                 data : []
             },
             updateProperty : {
+                disabled : false
+            },
+            deleteProperty : {
                 disabled : false
             }
         };
@@ -328,6 +333,7 @@ Vue.component("table-equipos", {
                 });
             },
             deleteRow() {
+            this.deleteProperty.disabled = true
             const id = this.editedItem.id;
             const data = this.dataResponseDB;
 
@@ -374,13 +380,14 @@ Vue.component("table-equipos", {
                 .then((res) => {
                 if (!res.data.result) {
                     alertNegative("Mensaje CODIGO 50");
+                    this.deleteProperty.disabled = false
                     return;
                 }
 
                 const found = data.filter((data) => data.id !== id);
                 this.$emit("updateDelete", found);
                 this.dialogDelete = false;
-
+                this.deleteProperty.disabled = false
                 this.snackbar.snack = true;
                 this.snackbar.textSnack = "Eliminado correctamente";
                 this.snackbar.timeout = 2500;

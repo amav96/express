@@ -20,6 +20,7 @@ template : //html
    
     `,
 props:['subheaders'],
-
-
+destroyed (){
+    this.$emit('setDisplayHeaders',false);
+}
 })

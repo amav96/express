@@ -51,16 +51,6 @@ template : //html
                             sm="6"
                             md="4"
                             >
-                            <v-text-field
-                            v-model="editedItem.tarjeta"
-                            label="Terminal"
-                            ></v-text-field>
-                            </v-col>
-                            <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                            >
                             <v-select
                             v-model="editedItem.accesorio_uno"
                             :items="accesorios"

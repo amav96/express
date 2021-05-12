@@ -308,14 +308,14 @@ class Notice{
         WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
         AGAINST ('$filterClean' IN BOOLEAN MODE) )";
 
-        $countNoticeByWord =  $this->db->query($sql);
-        if($countNoticeByWord->num_rows>0){
+        $countNoticeByWord = $this->db->query($sql);
+        if($countNoticeByWord && $countNoticeByWord->fetch_object()->count > 0){
             $result = $countNoticeByWord;
         }else {
             $result = false;
         }
-        return $result;
 
+        return $result;
     }
 
     public function countNoticeRangeDate(){
@@ -329,9 +329,8 @@ class Notice{
         WHERE  n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
         $countNoticeRangeDate = $this->db->query($sql);
-        if($countNoticeRangeDate && $countNoticeRangeDate->num_rows>0){
+        if($countNoticeRangeDate && $countNoticeRangeDate->fetch_object()->count > 0){
             $result = $countNoticeRangeDate;
-
         }else {
             $result = false;
         }
@@ -351,11 +350,9 @@ class Notice{
         inner JOIN equipos e ON n.identificacion = e.identificacion
         WHERE n.id_user = $word and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-
         $countNoticeRangeDateAndWord = $this->db->query($sql);
-        if($countNoticeRangeDateAndWord && $countNoticeRangeDateAndWord->num_rows>0){
+        if($countNoticeRangeDateAndWord && $countNoticeRangeDateAndWord->fetch_object()->count > 0){
             $result = $countNoticeRangeDateAndWord;
-
         }else {
             $result = false;
         }
@@ -388,6 +385,7 @@ class Notice{
         WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
         AGAINST ('$filterClean' IN BOOLEAN MODE) )
         and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
+
 
         $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
         if($countFilterToGestionByDateAndFilter->num_rows>0){

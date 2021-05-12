@@ -757,7 +757,7 @@ class equipoController
                         ($cadena == $movistar) ? require_once 'views/remitos/movistar.php' : null;
                         ($cadena == $geocom) ? require_once 'views/remitos/geocom.php' : null;
                     } else {
-                        echo "Error 505: KFFDSAFFFW(RE-NO-EXIST) REPORTED ;";
+                        echo "Error 505: (RE-NO-EXIST) REPORTED ;";
                     }
                 }
                 else if ($_GET["tp"] === 'okghvmnatrqzopo') {
@@ -775,7 +775,7 @@ class equipoController
                         require_once 'views/remitos/consignacion.php';
                     } else {
 
-                        echo "Error 707: FDASDFDSFW(CON-NO-EXIST) REPORTED ;";
+                        echo "Error 707: (CON-NO-EXIST) REPORTED ;";
                     }
                 }else{
                     header("Location:".base_url.'error');
@@ -1210,6 +1210,7 @@ class equipoController
                      'provincia' => $element["provincia"],
                      'localidad' => $element["localidad"],
                      'codigo_postal' => $element["codigo_postal"],
+                     'emailcliente' => $element["emailcliente"],
                      'remito' => $element["id_orden_pass"],
                      'name' => $element["name"],
                      'latAviso' => $element["latAviso"],
@@ -1279,6 +1280,7 @@ class equipoController
                      'provincia' => $element["provincia"],
                      'localidad' => $element["localidad"],
                      'codigo_postal' => $element["codigo_postal"],
+                     'emailcliente' => $element["emailcliente"],
                      'remito' => $element["id_orden_pass"],
                      'name' => $element["name"],
                      'latAviso' => $element["latAviso"],
@@ -1349,6 +1351,7 @@ class equipoController
                             'provincia' => $element["provincia"],
                             'localidad' => $element["localidad"],
                             'codigo_postal' => $element["codigo_postal"],
+                            'emailcliente' => $element["emailcliente"],
                             'remito' => $element["id_orden_pass"],
                             'name' => $element["name"],
                             'latAviso' => $element["latAviso"],
@@ -1420,6 +1423,7 @@ class equipoController
                             'provincia' => $element["provincia"],
                             'localidad' => $element["localidad"],
                             'codigo_postal' => $element["codigo_postal"],
+                            'emailcliente' => $element["emailcliente"],
                             'remito' => $element["id_orden_pass"],
                             'name' => $element["name"],
                             'latAviso' => $element["latAviso"],
@@ -1518,6 +1522,7 @@ class equipoController
                           'provincia' => $element["provincia"],
                           'localidad' => $element["localidad"],
                           'codigo_postal' => $element["codigo_postal"],
+                          'emailcliente' => $element["emailcliente"],
                           'remito' => $element["id_orden_pass"],
                           'name' => $element["name"],
                           'latAviso' => $element["latAviso"],

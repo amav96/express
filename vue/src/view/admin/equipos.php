@@ -243,9 +243,10 @@
                 <template v-if="subheaders.loader" >
                  <loader-line />
                 </template>
-               
+
                 <template v-if="table && subheaders.active ">
                     <sub-headers
+                    @setDisplayHeaders="subheaders.active = $event"
                     :subheaders="subheaders"
                     />
                 </template>
@@ -317,6 +318,7 @@
                     @showLoaderLine="loaderLine =  $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    @restauratePagination="pagination = $event"
                     />
                 </template>
           </v-app>
@@ -330,16 +332,16 @@
               formWordAndRangeDate:false,
               dataSelect:[],
               searchEquiposByWord: {
+                filteringSearchWord : false,
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countEquiposByWord',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=equiposByWord',
-                filteringSearchWord : false,
                 export : false,
                 subheader : false
               },
               searchByWord : {
+                filteringSearchWord : false, 
                 base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
                 base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
-                filteringSearchWord : false, 
                 export : true,
                 subheader : true
                 
@@ -387,8 +389,6 @@
               dynamicDataToSearch : [],
               loaderLine: false,
               dataResponseDB: [],
-              sortBy: 'created_at',
-              sortDesc: true,
               columns: [
                 { text: 'Aviso visita'},
                 { text: 'Identificacion'},
@@ -396,6 +396,7 @@
                 { text: 'Empresa'},
                 { text: 'Terminal'},
                 { text: 'Serie'},
+                { text: 'email'},
                 { text: 'Serie Base',},
                 { text: 'Tarjeta/C.Red'},
                 { text: 'Chip alternativo'},
@@ -439,7 +440,7 @@
                 time: null
               },
               subheaders : {
-                active : true,
+                active : false,
                 dataResponseDB : [],
                 loader : false
               },
@@ -522,6 +523,7 @@
               if(this.table){
                 this.table= false
                 this.filter.display= false
+                this.subheaders.loader = false
               }
 
           },
@@ -540,6 +542,7 @@
               if(this.table){
                 this.table= false
                 this.filter.display= false
+                this.subheaders.loader = false
               }
           },
           $_formRangeDate(){
@@ -556,7 +559,8 @@
               if(this.table){
                 this.table= false
                 this.filter.display= false
-              } 
+                this.subheaders.loader = false
+            }
           },
           $_formWordAndRangeDate(){
               
@@ -571,8 +575,9 @@
             this.itemsButtons[3].active = true
 
             if(this.table){
-              this.table= false
-              this.filter.display= false
+                this.table= false
+                this.filter.display= false
+                this.subheaders.loader = false
             }
           },
           $_getAdmin(){

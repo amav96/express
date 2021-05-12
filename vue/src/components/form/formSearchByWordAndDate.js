@@ -230,8 +230,8 @@ Vue.component('form-search-by-word-and-range-date',{
                    return
                 }
                 this.$emit('setSubHeadersDataResponseDB', res.data)
-                this.$emit('setDisplayHeaders', true)
-                   
+                this.$emit('setDisplayHeaders', true) 
+               
             })
             .catch(err => {
                 console.log(err)

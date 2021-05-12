@@ -71,6 +71,17 @@ methods : {
         setLoader(flag){
             this.$emit('showLoaderLine', flag)
         },
+        restauratePagination(){
+            const pagination = {
+                totalPage : 0, 
+                rowForPage:10,
+                pageCurrent: 1,
+                totalCountResponse:0,
+                fromRow:0,
+                limit:10
+            }
+            this.$emit("restauratePagination",pagination); 
+        }
 
 },
 watch: {
@@ -79,9 +90,11 @@ watch: {
       immediate: true, 
       handler (val, oldVal) {
           this.page = val.pageCurrent
-         
       }
     }
+  },
+  beforeDestroy(){
+      this.restauratePagination()
   }
 
 

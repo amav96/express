@@ -69,7 +69,6 @@ Vue.component('form-search-date',{
                     }
                 })
                 .then(res => {
-                   
                     if(!res.data.result){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
@@ -101,8 +100,6 @@ Vue.component('form-search-date',{
                                 this.$emit('setDataDynamicToFilter',search) 
                             }
                         })
-                    
-                    
                 })
                 .catch(err => {
                     console.log(err);
@@ -158,8 +155,7 @@ Vue.component('form-search-date',{
                     this.$emit('urlTryPagination',base_url)
 
                     // setting flag filtering
-                    this.$emit('filtering',true)
-                    
+                    this.$emit('filtering',true)        
                  })
                  .catch(err =>{
                      
@@ -168,7 +164,7 @@ Vue.component('form-search-date',{
                  })
         },
         async showStatus(base_url){
-            console.log("1")
+          
             this.$emit('setSubHeadersLoader',true)
             await axios.get(base_url,{
                 params : {
@@ -177,14 +173,12 @@ Vue.component('form-search-date',{
                 }
             })
             .then(res => {
-                console.log("2")
+               
                 this.$emit('setSubHeadersLoader',false)
                 if(!res.data[0].result){
                     this.$emit('setDisplayHeaders', false)
                     return
                 }
-                console.log("3")
-                
                 this.$emit('setSubHeadersDataResponseDB', res.data)
                 this.$emit('setDisplayHeaders', true)
                    
