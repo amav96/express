@@ -145,7 +145,7 @@ async function  leerDatosEquiposAutorizar() {
                     $("#abrirfirmar").hide()
                     $("#enviar").show();
                     $("#loaderAutorizar").remove();
-                    alertNegative('Si queres cargar equipos de otro cliente: Hace clic en "Salir de transacci¨®n"')  ;return false;
+                    alertNegative('Si queres cargar equipos de otro cliente: Hace clic en "Salir de transacciï¿½ï¿½n"')  ;return false;
                     
                 } if(identificacionComparar !== 'LA' && identificacionComparar !== 'PS' && identificacionComparar !== 'GC'){
                     if(serieAutINPUT.val() === ""){
@@ -393,7 +393,7 @@ function showLoader(){
             else if (estadoEnvioLS === 's'){
 
                 $("#mantenerEnvioDeRemito").show()
-                $("#text-caja-confirmar").text("Transacci¨®n actual")
+                $("#text-caja-confirmar").text("TransacciÃ³n actual")
                 $("#loaderAutorizar").remove();
                 $("#abrirfirmar").hide()
                 $("#enviar").show();

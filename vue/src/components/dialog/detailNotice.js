@@ -60,8 +60,8 @@ Vue.component('dialog-detail-notice',{
                                                         <v-list-item-title class="caption mb-1">
                                                             <strong>Fecha de envio</strong>
                                                         </v-list-item-title>
-                                                        <v-list-item-subtitle>
-                                                            {{detailNotice.data.fecha_aviso_visita}}
+                                                        <v-list-item-subtitle >
+                                                            {{ dateFormat(detailNotice.data.fecha_aviso_visita) }}
                                                         </v-list-item-subtitle>
                                                     </v-col>
 
@@ -127,6 +127,16 @@ Vue.component('dialog-detail-notice',{
             const coordinates = lat +','+ lng
             
              window.open('https://google.com.sa/maps/search/'+coordinates+'',"_blank")
+        },
+        dateFormat(date){
+            if(date !== undefined && date !== null && date !== ''){
+             var arrayDateTime = date.trim().split(' ');
+             var arrayDate = arrayDateTime[0].split('-')
+             var dateFormated = arrayDate[2]+ '/' + arrayDate[1] + '/' + arrayDate[0]
+             var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
+             return dateTimeFormated
+            }
+            
         }
     },
    

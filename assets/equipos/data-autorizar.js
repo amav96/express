@@ -124,7 +124,7 @@ function setDataAutorizar(valorBusqueda){
 
         Swal.fire({
           icon: "success",
-          title: 'Escoge la posible ubicaci®Æn del equipo',
+          title: 'Escoge la posible ubicaci√≥n del equipo',
           timer: 2100,
            showConfirmButton: false,
           showClass: {

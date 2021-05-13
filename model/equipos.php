@@ -665,11 +665,24 @@ class Equipos
             return $sentinelaFirma;
     }
 
+    function clean($str)
+    {
+    // IMPORTANTE ','=>'.'. ES PARA IMPORTAR TEXTO PARA QUE PUEDA ENTRAR EL ARCHIVO
+    $unwanted_array = array(
+        "'" => '',
+        "´" => '',
+        '"' => '' 
+    );
+
+    return strtr($str, $unwanted_array);
+    }
+
     private function setfirma($orden, $fecha, $aclaracion, $documento){
 
             $result = false;
+            $cleanAclaracion = $this->clean($aclaracion);
             
-            $sql = "INSERT INTO firmas (pass_id,aclaracion,documento,created_at) VALUES('$orden','$aclaracion','$documento','$fecha')";
+            $sql = "INSERT INTO firmas (pass_id,aclaracion,documento,created_at) VALUES('$orden','$cleanAclaracion','$documento','$fecha')";
             
             $firma = $this->db->query($sql);
 
@@ -802,7 +815,6 @@ class Equipos
         $sql.="WHERE ( MATCH (empresa,terminal,serie,identificacion,direccion,localidad,codigo_postal,provincia,emailcliente,estado)  ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
 
-        
         $countGestionByWord = $this->db->query($sql);
         if($countGestionByWord && $countGestionByWord->num_rows>0){
             $result = $countGestionByWord;
@@ -1001,6 +1013,7 @@ class Equipos
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user = $id_recolector and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
+        
     
         $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
         if($countFilterToGestionByDateAndFilter->num_rows>0){
@@ -1139,8 +1152,7 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (e.empresa,e.terminal,e.serie,e.identificacion,e.direccion,e.localidad,e.codigo_postal,e.provincia,e.emailcliente,e.estado) ";
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
-        $sql.="limit $fromRow,$limit ";
-
+        $sql.="group by e.id limit $fromRow,$limit ";
 
         $gestionByWord = $this->db->query($sql);
         if($gestionByWord && $gestionByWord->num_rows>0){
@@ -1151,7 +1163,7 @@ class Equipos
 
         return $result;
 
-}
+    }
 
     public function gestionByWord(){
 

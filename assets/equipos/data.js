@@ -638,8 +638,6 @@ if(inicialesEmpresa === "IP" || inicialesEmpresa == "MV"){
 }
 });
 
-
-
 // -------------CARGAR  DATA PARA LAPOS ----------------//
 //°°°°°°°°°°°°°°°LAPOS°°°°°°°°°°°°°°°°°°°
 
@@ -2616,16 +2614,3 @@ async function locateMe() {
   
 }
 
-
-// myFunction()
-    
-//      function myFunction() {
-//         setInterval(function(){ 
-//             $(".btn-guia").addClass("botonAnimation-guia");
-            
-//          }, 3000);
-//          setInterval(function(){ 
-//             $(".btn-guia").removeClass("botonAnimation-guia");
-            
-//          }, 5000);
-//       }

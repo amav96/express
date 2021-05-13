@@ -60,7 +60,7 @@ Vue.component("table-equipos", {
                         <thead>
                             <tr  class="bg-blue-custom">
                             <th v-for="column in columns" class="text-left text-white">
-                                {{column.text}}
+                            {{column.text}}
                             </th>
                             </tr>
                         </thead>
@@ -86,6 +86,7 @@ Vue.component("table-equipos", {
                             </td>
                             <td>{{row.identificacion}}</td>
                             <td><strong>{{row.estado}}</strong></td>
+                            <td><strong>{{dateFormat(row.created_at)}}</strong></td>
                             <td>{{row.empresa}}</td>
                             <td>{{row.terminal}}</td>
                             <td>{{row.serie}}</td>
@@ -99,7 +100,7 @@ Vue.component("table-equipos", {
                             <td>{{row.accesorio_tres}}</td>
                             <td>{{row.accesorio_cuatro}}</td>
                             <td>{{row.motivo}}</td>
-                            <td>{{row.created_at}}</td>
+                            
                             <td>{{row.nombre_cliente}}</td>
                             <td>{{row.direccion}}</td>
                             <td>{{row.provincia}}</td>
@@ -396,11 +397,22 @@ Vue.component("table-equipos", {
                 console.log(err);
                 });
             },
+            dateFormat(date){
+               
+                if(date !== undefined && date !== null && date !== ''){
+                    var arrayDateTime = date.trim().split(' ');
+                    var arrayDate = arrayDateTime[0].split('-')
+                    var dateFormated = arrayDate[2]+ '/' + arrayDate[1] + '/' + arrayDate[0]
+                    var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
+                    return dateTimeFormated
+                }
+            }
         },
         computed: {
             headers() {
             return this.columns;
             },
+           
         },
        
 });

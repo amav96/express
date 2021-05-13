@@ -7,22 +7,20 @@
 
 <!-- component  avisos -->
   
-
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
-
 <!-- dialog component -->
 <script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposUpdate.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposDelete.js"></script>
-<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js"></script>
-<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js?v=16072021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=16072021"></script>
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js?v=16072021"></script>
 
 
 <!-- form component -->
@@ -42,7 +40,7 @@
 <script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/store/index.js?v=16072021"></script>
 <script src="<?=base_url?>vue/src/modules/M_adminAvisos.js"></script>
 <!-- views -->
 
@@ -393,6 +391,7 @@
                 { text: 'Aviso visita'},
                 { text: 'Identificacion'},
                 { text: 'Estado'},
+                { text: 'Fecha'},
                 { text: 'Empresa'},
                 { text: 'Terminal'},
                 { text: 'Serie'},
@@ -406,7 +405,6 @@
                 { text: 'Fuente/Cargador'},
                 { text: 'Control/Base'},
                 { text: 'Motivo'},
-                { text: 'Fecha'},
                 { text: 'Nombre cliente'},
                 { text: 'Direccion'},
                 { text: 'Provincia'},
@@ -428,7 +426,7 @@
               templateDialog: [
               ],
               itemsButtons: [
-                  { title: 'Base Original', icon: 'mdi-database', methods: '$_formEquipos', active : false },
+                  { title: 'Clientes', icon: 'mdi-database', methods: '$_formEquipos', active : false },
                   { title: 'Gestión', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
                   { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },

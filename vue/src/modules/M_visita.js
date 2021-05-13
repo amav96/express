@@ -367,13 +367,13 @@
         },
         sendWhatsapp({commit,dispatch,state},notice){
 
-            var caracteristicaPais= ''
+           
             var contactoYHorarioExterno= ''
             if(notice.country === 'Argentina'){
-                caracteristicaPais = '54'
+               
                 contactoYHorarioExterno = '0810-362-2830%20Lunes%20a%20Viernes%208%20-%2017%20hs'
              }else if(notice.country === 'Uruguay'){
-                 caracteristicaPais = '598'
+                
                  contactoYHorarioExterno = '598 97 438238%20Lunes%20a%20Viernes%208%20-%2017%20hs'
              }
     
@@ -433,7 +433,7 @@
             }
             
 
-            var numero = caracteristicaPais+notice.contacto
+            var numero = notice.contacto
             var url = 'https://api.whatsapp.com/send?phone='
             
             window.open(url + numero +'&text=' + message, '_blank');

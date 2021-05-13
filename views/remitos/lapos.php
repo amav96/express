@@ -116,6 +116,60 @@ class pdf extends FPDF
                      $fpdf->SetFillColor(79,78,77);
                      $fpdf->Cell(196,5,' DATOS DEL EQUIPO / TERMINAL / COMPONENTES - RETIRADOS',0,0,'C',1);
                     
+
+                     $fpdf->SetLineWidth(1);
+                        $fpdf->SetTextColor(40,40,40);
+                        $fpdf->SetFillColor(255,255,255);
+                        $fpdf->SetDrawColor(80,80,80);
+                        $fpdf->SetFont('Arial','B',7);
+
+                        $firma = $remito->getSignatureData();
+                        $datosfirma = $firma->fetch_object();
+
+                        if(is_object($datosfirma)){
+                            $path = 'resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png';
+                        
+                            if(file_exists($path)){
+                                
+                                $fpdf->Image('resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png',46,205,40,32);
+                                $fpdf->SetDrawColor(255,255,255);
+                                $fpdf->SetFont('Arial','B',7);
+                                $fpdf->SetY(230);
+                                $fpdf->SetX(76);
+                                $fpdf->Cell(58,9,utf8_decode($datosfirma->aclaracion),1,0,'C',1);
+                                $fpdf->Cell(38,9,utf8_decode($datosfirma->documento),1,0,'C',1);
+                            }else{
+                               
+                            $fpdf->SetDrawColor(255,255,255);
+                            $fpdf->SetFont('Arial','B',7);
+                            $fpdf->SetY(230);
+                            $fpdf->SetX(76);
+                            $fpdf->Cell(58,9,utf8_decode(''),1,0,'C',1);
+                            $fpdf->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
+                            }
+                        }else{
+
+                           
+                            $fpdf->SetDrawColor(255,255,255);
+                            $fpdf->SetFont('Arial','B',7);
+                            $fpdf->SetY(230);
+                            $fpdf->SetX(76);
+                            $fpdf->Cell(58,9,utf8_decode(''),1,0,'C',1);
+                            $fpdf->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
+                        }
+
+                        $fpdf->SetLineWidth(0.5);
+                        $fpdf->SetTextColor(40,40,40);
+                        $fpdf->SetFillColor(255,255,255);
+                        $fpdf->SetDrawColor(80,80,80);
+                        $fpdf->SetFont('Arial','B',7);
+
+                        $fpdf->SetY(240);
+                        $fpdf->SetX(35);
+                        $fpdf->Cell(46,7,'Firma',1,0,'C',1);
+                        $fpdf->Cell(46,7,'Aclaracion',1,0,'C',1);
+                        $fpdf->Cell(46,7,'Documento',1,0,'C',1);
+
                     
                      $fpdf->SetY(119.6);
                      $fpdf->SetTextColor(255,255,255);
@@ -159,6 +213,7 @@ class pdf extends FPDF
                                         : $fpdf->Cell(13.5,10,'A','B',0,'C',1);
                                     
                                         $fpdf->Ln();
+                                        $fpdf->SetAutoPageBreak(10,80);
                                   }
 
                       $fpdf->Output('I','Remitos.pdf');

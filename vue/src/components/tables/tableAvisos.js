@@ -52,8 +52,7 @@ Vue.component("table-avisos", {
                             <td>{{row.identificacion}}</td>
                             <td>{{row.latAviso}}</td>
                             <td>{{row.lngAviso}}</td>
-                            
-                            <td>{{row.fecha_aviso_visita}}</td>
+                            <td>{{dateFormat(row.fecha_aviso_visita)}}</td>
                           </tr>
                           </tbody>
                           </template>
@@ -111,6 +110,15 @@ Vue.component("table-avisos", {
                   this.detailNotice.dialog = bool;
                   this.detailNotice.data = data;
               },
+              dateFormat(date){
+                if(date !== undefined && date !== null && date !== ''){
+                    var arrayDateTime = date.trim().split(' ');
+                    var arrayDate = arrayDateTime[0].split('-')
+                    var dateFormated = arrayDate[2]+ '/' + arrayDate[1] + '/' + arrayDate[0]
+                    var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
+                    return dateTimeFormated
+                }
+            }
           },
           computed: {
               headers() {

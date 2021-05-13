@@ -236,7 +236,7 @@ async function leerDatosEquipos(){
 
                 inicialesEmpresa = pasarClienteAMayuscula.substr(0, 2);
 
-                if (inicialesEmpresa === "PS" || inicialesEmpresa === "MV") {
+                if (inicialesEmpresa === "PS" || inicialesEmpresa === "MV" || inicialesEmpresa === "LA") {
                     $("#abrirfirmar").show()
                     $("#crear-imagen").show()
                     $("#borrar-imagen").show()
@@ -244,7 +244,7 @@ async function leerDatosEquipos(){
                     $("#siguienteNormal").hide()
                 }
 
-                if (inicialesEmpresa !== "PS" && inicialesEmpresa !== "MV") {
+                if (inicialesEmpresa !== "PS" && inicialesEmpresa !== "MV" && inicialesEmpresa !== "LA") {
                     
                     $("#abrirfirmar").hide()
                     $("#siguienteNormal").show()
@@ -285,13 +285,13 @@ async function leerDatosEquipos(){
 
                 inicialesEmpresa = pasarClienteAMayuscula.substr(0, 2);
 
-                if (inicialesEmpresa === "PS" || inicialesEmpresa === "MV") {
+                if (inicialesEmpresa === "PS" || inicialesEmpresa === "MV" || inicialesEmpresa == "LA") {
                     $("#abrirfirmar").show()
                     $("#crear-imagen").show()
                     $("#borrar-imagen").show()
                 
                 }
-                if (inicialesEmpresa !== "PS" && inicialesEmpresa !== "MV") {
+                if (inicialesEmpresa !== "PS" && inicialesEmpresa !== "MV" && inicialesEmpresa !== "LA") {
                     $("#abrirfirmar").hide()
                     $("#siguienteNormal").show()
                 }
@@ -826,7 +826,7 @@ guardarEquiposLocalStorage(infoEquipo)
 
                 
 
-                if(iniEmp === 'PS' || iniEmp === 'MV'){
+                if(iniEmp === 'PS' || iniEmp === 'MV' || iniEmp === 'LA'){
                  
 
                     $("#btnAutorizar").show()
@@ -844,7 +844,7 @@ guardarEquiposLocalStorage(infoEquipo)
         
                         }
 
-                        if(iniEmp !== 'PS' && iniEmp !== 'MV'){
+                        if(iniEmp !== 'PS' && iniEmp !== 'MV' && iniEmp !== 'LA'){
  
                             $("#btnAutorizar").show()
                             $("#siguienteNormal").show()
@@ -891,7 +891,7 @@ guardarEquiposLocalStorage(infoEquipo)
             
             if(localStorage.getItem('en') !== 's' && localStorage.getItem('en') !== 'n'){
 
-                if(iniEmp === 'PS' || iniEmp === 'MV'){
+                if(iniEmp === 'PS' || iniEmp === 'MV' || iniEmp === 'LA'){
                    
                     
                     // boton
@@ -902,7 +902,7 @@ guardarEquiposLocalStorage(infoEquipo)
                     $("#seguirRecuperando").hide()
     
                     }
-                    if(iniEmp !== 'PS' && iniEmp !== 'MV'){
+                    if(iniEmp !== 'PS' && iniEmp !== 'MV' && iniEmp !== 'LA'){
                         
                         
                         $("#mantenerEnvioDeRemito").show()

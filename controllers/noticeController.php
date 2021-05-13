@@ -1131,6 +1131,13 @@ class noticeController
       $rowCount++;
       $lat = (string)$element[0]["latAviso"];
       $lng = (string)$element[0]["lngAviso"];
+
+      $rowCount++;
+      $arrayDateTime = explode(' ', trim($element[0]["fecha_aviso_visita"]));
+      $arrayDate = explode('-',$arrayDateTime[0]);
+      $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+      $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+
       $sheet->setCellValue('A' . $rowCount, $element[0]["id"]);
       $sheet->setCellValue('B' . $rowCount, $element[0]["direccion"]);
       $sheet->setCellValue('C' . $rowCount, $element[0]["localidad"]);
@@ -1144,7 +1151,7 @@ class noticeController
       $sheet->setCellValue('K' . $rowCount, $element[0]["identificacion"]);
       $sheet->setCellValue('L' . $rowCount, $lat);
       $sheet->setCellValue('M' . $rowCount, $lng);
-      $sheet->setCellValue('N' . $rowCount, $element[0]["fecha_aviso_visita"]);
+      $sheet->setCellValue('N' . $rowCount, $dateTimeFormated);
     }
     $writer = new Xlsx($spreadsheet);
     # Le pasamos la ruta de guardado

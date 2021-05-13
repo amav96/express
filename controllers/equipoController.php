@@ -1657,6 +1657,7 @@ class equipoController
             $header=array(
                 'identificacion',
                 'estado',
+                'fecha',
                 'empresa',
                 'terminal',
                 'serie',
@@ -1668,7 +1669,6 @@ class equipoController
                 'fuente/cargador',
                 'control/base',
                 'motivo',
-                'fecha',
                 'id_recolector',
                 'nombre_recolector',
                 'nombre_cliente',
@@ -1687,22 +1687,30 @@ class equipoController
         
                 $columnArray = array_chunk($arrayRow, 1);
                 $rowCount = 1;
+
+
+
                 foreach($columnArray as $element){
                     $rowCount++;
+                    $arrayDateTime = explode(' ', trim($element[0]["created_at"]));
+                    $arrayDate = explode('-',$arrayDateTime[0]);
+                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+                   
                     $sheet->setCellValue('A'.$rowCount, $element[0]["identificacion"]);
                     $sheet->setCellValue('B'.$rowCount, $element[0]["estado"]);
-                    $sheet->setCellValue('C'.$rowCount, $element[0]["empresa"]);
-                    $sheet->setCellValue('D'.$rowCount, $element[0]["terminal"]);
-                    $sheet->setCellValue('E'.$rowCount, $element[0]["serie"]);
-                    $sheet->setCellValue('F'.$rowCount, $element[0]["serie_base"]);
-                    $sheet->setCellValue('G'.$rowCount, $element[0]["tarjeta"]);
-                    $sheet->setCellValue('H'.$rowCount, $element[0]["chip_alternativo"]);
-                    $sheet->setCellValue('I'.$rowCount, $element[0]["accesorio_uno"]);
-                    $sheet->setCellValue('J'.$rowCount, $element[0]["accesorio_dos"]);
-                    $sheet->setCellValue('K'.$rowCount, $element[0]["accesorio_tres"]);
-                    $sheet->setCellValue('L'.$rowCount, $element[0]["accesorio_cuatro"]);
-                    $sheet->setCellValue('M'.$rowCount, $element[0]["motivo"]);
-                    $sheet->setCellValue('N'.$rowCount, $element[0]["created_at"]);
+                    $sheet->setCellValue('C'.$rowCount, $dateTimeFormated);
+                    $sheet->setCellValue('D'.$rowCount, $element[0]["empresa"]);
+                    $sheet->setCellValue('E'.$rowCount, $element[0]["terminal"]);
+                    $sheet->setCellValue('F'.$rowCount, $element[0]["serie"]);
+                    $sheet->setCellValue('G'.$rowCount, $element[0]["serie_base"]);
+                    $sheet->setCellValue('H'.$rowCount, $element[0]["tarjeta"]);
+                    $sheet->setCellValue('I'.$rowCount, $element[0]["chip_alternativo"]);
+                    $sheet->setCellValue('J'.$rowCount, $element[0]["accesorio_uno"]);
+                    $sheet->setCellValue('K'.$rowCount, $element[0]["accesorio_dos"]);
+                    $sheet->setCellValue('L'.$rowCount, $element[0]["accesorio_tres"]);
+                    $sheet->setCellValue('M'.$rowCount, $element[0]["accesorio_cuatro"]);
+                    $sheet->setCellValue('N'.$rowCount, $element[0]["motivo"]);
                     $sheet->setCellValue('O'.$rowCount, $element[0]["nombre_recolector"]);
                     $sheet->setCellValue('P'.$rowCount, $element[0]["id_recolector"]);
                     $sheet->setCellValue('Q'.$rowCount, $element[0]["nombre_cliente"]);
