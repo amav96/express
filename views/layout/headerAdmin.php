@@ -58,7 +58,6 @@
 
 <div class="container-titulo-usuario">
         <div class="box-titulo-usuario">
-            <h4>Usuario/a: <?php echo $_SESSION["username"]->name ?></h4>
             <input type="hidden" id="id_user_default" value="<?= $_SESSION["username"]->id ?>">
             <input type="hidden" id="id_admin" value="<?=$_SESSION["username"]->country?>">
         </div>
@@ -124,17 +123,23 @@
                         </i>
                     </div>
                 </a>
-
             </div>  -->
 
-            <!-- <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/index">
+            <div class="mini-box-panel">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/admin">
                     <div class="item">
                     <i class="fas fa-globe-americas"></i>
                     </div>
                 </a>
+            </div>
 
-            </div>  -->
+            <div class="mini-box-panel">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/index">
+                    <div class="item">
+                    <i class="fas fa-truck"></i>
+                    </div>
+                </a>
+            </div>
 
             <div class="mini-box-panel" id="cerrar">
                 <div class="item">

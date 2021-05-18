@@ -593,12 +593,12 @@ class noticeController
         foreach ($countNoticeByWord as $element)
 
           $objeto = array(
-            'result' => true,
+            'success' => true,
             'count' => $element["count"]
           );
       } else {
         $objeto = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -625,12 +625,12 @@ class noticeController
         foreach ($countNoticeRangeDate as $element)
 
           $objeto = array(
-            'result' => true,
+            'success' => true,
             'count' => $element["count"]
           );
       } else {
         $objeto = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -659,12 +659,12 @@ class noticeController
         foreach ($countNoticeRangeDateAndWord as $element)
 
           $objeto = array(
-            'result' => true,
+            'success' => true,
             'count' => $element["count"]
           );
       } else {
         $objeto = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -719,14 +719,14 @@ class noticeController
 
           $objeto = array(
 
-            'result' => true,
+            'success' => true,
             'count' => $element["count"]
           );
         }
       } else {
         $objeto = array(
 
-          'result' => false,
+          'error' => true,
 
         );
       }
@@ -760,7 +760,7 @@ class noticeController
         foreach ($noticeByWord as $element)
 
           $objeto[] = array(
-            'result' => true,
+            'success' => true,
             'id' => $element["id"],
             'direccion' => $element["direccion"],
             'localidad' => $element["localidad"],
@@ -779,7 +779,7 @@ class noticeController
           );
       } else {
         $objeto[] = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -814,7 +814,7 @@ class noticeController
         foreach ($noticeRangeDate as $element)
 
           $objeto[] = array(
-            'result' => true,
+            'success' => true,
             'id' => $element["id"],
             'direccion' => $element["direccion"],
             'localidad' => $element["localidad"],
@@ -833,7 +833,7 @@ class noticeController
           );
       } else {
         $objeto[] = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -869,7 +869,7 @@ class noticeController
         foreach ($noticeRangeDateAndWord as $element)
 
           $objeto[] = array(
-            'result' => true,
+            'success' => true,
             'id' => $element["id"],
             'direccion' => $element["direccion"],
             'localidad' => $element["localidad"],
@@ -888,7 +888,7 @@ class noticeController
           );
       } else {
         $objeto[] = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -949,7 +949,7 @@ class noticeController
         foreach ($getDataSearchWordGestionController as $element) {
 
           $objeto[] = array(
-            'result' => true,
+            'success' => true,
             'id' => $element["id"],
             'direccion' => $element["direccion"],
             'localidad' => $element["localidad"],
@@ -969,7 +969,7 @@ class noticeController
         }
       } else {
         $objeto[] = array(
-          'result' => false,
+          'error' => true,
         );
       }
 
@@ -1069,12 +1069,12 @@ class noticeController
         $response = $this->excelNoticetManagement($exportNotice);
         if ($response) {
           $objectResponse = array(
-            'result' => true,
+            'success' => true,
             'path' => $response
           );
         } else {
           $objectResponse = array(
-            'result' => false
+            'error' => true,
           );
         }
       }

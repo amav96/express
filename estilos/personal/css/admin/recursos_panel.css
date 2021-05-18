@@ -39,7 +39,7 @@ body{
   /* 1= LOGO */
   .fondoimagen{
      
-    position: fixed;
+    /* position: fixed;
     z-index: 10;
     top: 0;
     background: white;
@@ -47,16 +47,25 @@ body{
     padding: 27vw 15vw 14vw 27vw ;
     margin-top: -16vw ;
     margin-left: 65vw ;
-    box-shadow: 0 10px 30px rgba(0,0,0,.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,.1); */
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    background: white;
+    border-radius: 100%;
+    padding: 27vw 15vw 14vw 27vw;
+    margin-top: -20vw;
+    margin-left: 80vw;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
      
   }
   .logo-main{
     display: none;
   }
   .logo-main-dos{
-    width: 21vw ;
+    width: 12vw ;
       position: absolute;
-      margin-top: -10.5vw;
+      margin-top: -5.5vw;
       margin-left: -19vw;
   }
   /* LOGO ++++END+++ */
@@ -387,7 +396,7 @@ border-radius:  0 0 5px 5px;
 .container-titulo-usuario{
   display: flex;
   justify-content: center;
-  margin: 0.5rem auto 0.5rem auto;
+  
 
 }
 /* COORDINADOR */
@@ -619,7 +628,7 @@ margin: 2rem auto;
     .container-titulo-usuario{
       display: flex;
       justify-content: center;
-      margin: 7rem auto 0.5rem auto;
+    
     
     }
 
@@ -633,7 +642,7 @@ margin: 2rem auto;
   
   .logo-main{
     display: block;
-    width: 19vw;
+    width: 10vw;
    
   }
   .fondoimagen{
@@ -821,7 +830,7 @@ border-radius: 7px 7px 0 0;
   /* 1= LOGO */
     
   .logo-main{
-    width: 15vw;
+    width: 8vw;
     transform: translateX(80%);
   }
   /* 1= LOGO ++END++*/
@@ -837,7 +846,7 @@ border-radius: 7px 7px 0 0;
     /* 1= LOGO */
     
     .logo-main{
-        width: 12vw;
+        width: 8vw;
         transform: translateX(140%);
     }
   
@@ -853,7 +862,7 @@ border-radius: 7px 7px 0 0;
         /* 1= LOGO */
         
         .logo-main{
-            width: 9vw;
+            width: 5vw;
             transform: translateX(250%);
         }
         /* 1= LOGO ++END++*/

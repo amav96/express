@@ -1211,22 +1211,22 @@ function table() {
 
    
     //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    $('#example thead tr').clone(true).appendTo( '#example thead' );
+    // $('#example thead tr').clone(true).appendTo( '#example thead' );
      
-    $('#example thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text(); //es el nombre de la columna+
-       title !== '' ? $(this).html( '<input type="text" class="input-dinamic" placeholder="Buscar '+title+'" />' ) : true;
+    // $('#example thead tr:eq(1) th').each( function (i) {
+    //     var title = $(this).text(); //es el nombre de la columna+
+    //    title !== '' ? $(this).html( '<input type="text" class="input-dinamic" placeholder="Buscar '+title+'" />' ) : true;
         
  
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
+    //     $( 'input', this ).on( 'keyup change', function () {
+    //         if ( table.column(i).search() !== this.value ) {
+    //             table
+    //                 .column(i)
+    //                 .search( this.value )
+    //                 .draw();
+    //         }
+    //     } );
+    // } );
 
 
 

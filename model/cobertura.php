@@ -15,9 +15,6 @@ class cobertura{
       private $lat;
       private $lng;
       private $id_operator;
-      private $detailed_type;
-      private $country_color;
-      private $type_color;
       private $id_user;
       private $customer_service_hours;
       private $user_managent_id;
@@ -26,6 +23,8 @@ class cobertura{
       private $motive;
       private $created_at;
       private $updated_at;
+      private $fromRow;
+      private $limit;
 
  
       public function __construct(){
@@ -73,16 +72,7 @@ class cobertura{
       public function setId_operator($id_operator){
             $this->id_operator=$id_operator;
       }
-      public function setDetailed_type($detailed_type){
-            $this->detailed_type=$detailed_type;
-      }
-      public function setCountry_color($country_color){
-            $this->country_color=$country_color;
-      }
-      public function setType_color($type_color){
-            $this->type_color=$type_color;
-      }
-
+      
       public function setId_user($id_user){
             $this->id_user=$id_user;
       }
@@ -114,6 +104,16 @@ class cobertura{
             $this->updated_at=$updated_at;
       }
 
+      public function setFromRow($fromRow){
+            $this->fromRow = $fromRow;
+      }
+    
+        
+        public function setLimit($limit)
+      {
+      $this->limit = $limit;
+      }
+      
 
 
       public function getId(){
@@ -158,17 +158,6 @@ class cobertura{
             return $this->id_operator;
        }
 
-       public function getDetailed_type(){
-            return $this->detailed_type;
-       }
-       public function getCountry_color(){
-            return $this->country_color;
-       }
-       public function getType_color(){
-            return $this->type_color;
-       }
-       
-
       public function getId_user(){
            return $this->id_user;
       }
@@ -201,32 +190,71 @@ class cobertura{
             return $this->updated_at;
        }
 
+        public function getFromRow()
+       {
+        return (string)$this->fromRow;
+       }
+
+      public function getLimit()
+       {
+        return (string)$this->limit;
+       }
+
        //note:  Al eliminar, actualizar y crear algo, se guarda una bandera en action y la fecha de cada accion
        //se guarda en created_at. 
 
-      public function  AllAssigned(){
+       //CONTADORES DE COBERTURA PARA PAGINACIONES
+       public function countAllCoverage(){
 
-        $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,c.province,c.id_country,co.country as 'name_country',c.type,c.name,
-        c.id_user,c.customer_service_hours, c.lat ,c.lng , c.id_operator,c.detailed_type,c.country_color,c.type_color, u.name as 'operator_name' FROM coverage c
-        left JOIN users u ON c.id_operator = u.id
-        LEFT JOIN country co ON c.id_country = co.id
-        WHERE c.status='active';";
+            $sql = "SELECT count(DISTINCT(c.id)) as 'count'
+            FROM coverage c
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            WHERE c.status='active'";
 
-     
-        $AllAssigned = $this->db->query($sql);
+            $countAllCoverage = $this->db->query($sql);
 
-        if($AllAssigned && $AllAssigned->num_rows>0){
-              
-            $result = $AllAssigned;
-        }else{
-            $result = false;
-        }
+            if($countAllCoverage && $countAllCoverage->fetch_object()->count > 0){
+                  $result = $countAllCoverage;
+            }else {
+                  $result = false;
+            }
 
-        return $result;
+            return $result;
+
+      }
+
+      //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
+      public function  getAllCoverage(){
+
+            $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+            $limit = ($this->getLimit())?$this->getLimit() : false ;
+            if(gettype($fromRow) !==  'string'){
+                  $fromRow = '0';
+              }
+
+            $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,c.province,co.country as 'name_country',
+            c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.id_operator, c.created_at
+            FROM coverage c
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            WHERE c.status='active' GROUP BY c.id order BY c.postal_code asc limit $fromRow,$limit  ;";
+
+            $getAllCoverage = $this->db->query($sql);
+
+            if($getAllCoverage && $getAllCoverage->num_rows>0){
+                  
+                  $result = $getAllCoverage;
+            }else{
+                  $result = false;
+            }
+
+            return $result;
 
 
       }
 
+      
       public function HistoricalInactive(){
 
             $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,c.province,c.id_country,co.country as 'name_country',c.type,c.name,
@@ -263,12 +291,9 @@ class cobertura{
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
             $id_operator  = !empty($this->getId_operator()) ? $this->getId_operator(): false ; 
-            $detailed_type  = !empty($this->getDetailed_type()) ? $this->getDetailed_type(): false ; 
-            $country_color  = !empty($this->getCountry_color()) ? $this->getCountry_color(): false ; 
-            $type_color  = !empty($this->getType_color()) ? $this->getType_color(): false ; 
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ; 
 
-            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,name,id_user,user_managent_id, customer_service_hours,lat,lng,id_operator,detailed_type,country_color,type_color,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type','$name',$id_user,$user_managent_id,'$customer_service_hours','$lat','$lng','$id_operator','$detailed_type','$country_color','$type_color','$created_at','active','activate_again')";
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,name,id_user,user_managent_id, customer_service_hours,lat,lng,id_operator,detailed_type,country_color,type_color,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type','$name',$id_user,$user_managent_id,'$customer_service_hours','$lat','$lng','$id_operator','$created_at','active','activate_again')";
             $activateAgain = $this->db->query($sql);
 
             if($activateAgain){
@@ -403,18 +428,14 @@ class cobertura{
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
             $id_operator  = !empty($this->getId_operator()) ? $this->getId_operator(): false ; 
-            $detailed_type  = !empty($this->getDetailed_type()) ? $this->getDetailed_type(): false ; 
-            $country_color  = !empty($this->getCountry_color()) ? $this->getCountry_color(): false ; 
-            $type_color  = !empty($this->getType_color()) ? $this->getType_color(): false ; 
+
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ; 
 
             if(is_array($postal_code)){
 
                   foreach($postal_code as $element){
-
-                  $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,name,id_user,user_managent_id, customer_service_hours,lat,lng,id_operator,detailed_type,country_color,type_color,created_at,status,action) values ($element,'$locate','$home_address','$province',$id_country,'$type','$name',$id_user,$user_managent_id,'$customer_service_hours','$lat','$lng','$id_operator','$detailed_type','$country_color','$type_color','$created_at','active','created')";
-                   $save = $this->db->query($sql);
-                        
+                  $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,name,id_user,user_managent_id, customer_service_hours,lat,lng,id_operator,detailed_type,country_color,type_color,created_at,status,action) values ($element,'$locate','$home_address','$province',$id_country,'$type','$name',$id_user,$user_managent_id,'$customer_service_hours','$lat','$lng','$id_operator','$created_at','active','created')";
+                  $save = $this->db->query($sql);
                   }
             } 
             
@@ -487,12 +508,9 @@ class cobertura{
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
             $id_operator  = !empty($this->getId_operator()) ? $this->getId_operator(): false ; 
-            $detailed_type  = !empty($this->getDetailed_type()) ? $this->getDetailed_type(): false ; 
-            $country_color  = !empty($this->getCountry_color()) ? $this->getCountry_color(): false ; 
-            $type_color  = !empty($this->getType_color()) ? $this->getType_color(): false ; 
             $created_at= !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
 
-             $sql = "UPDATE coverage set  home_address ='$home_address' ,type = '$type',name = '$name' ,id_user =$id_user ,user_managent_id = '$user_managent_id' , lat='$lat' , lng='$lng', id_operator = $id_operator, detailed_type = '$detailed_type',country_color = '$country_color',type_color='$type_color', customer_service_hours = '$customer_service_hours', created_at = '$created_at',action = 'updated' where id in($id) and status='active'";
+             $sql = "UPDATE coverage set  home_address ='$home_address' ,type = '$type',name = '$name' ,id_user =$id_user ,user_managent_id = '$user_managent_id' , lat='$lat' , lng='$lng', id_operator = $id_operator, customer_service_hours = '$customer_service_hours', created_at = '$created_at',action = 'updated' where id in($id) and status='active'";
 
 
              $update = $this->db->query($sql);
@@ -614,6 +632,8 @@ class cobertura{
             INNER JOIN operator_by_zone o ON p.province = o.province 
             INNER JOIN users u ON o.id_user = u.id
             WHERE p.postal_code = '$postal_code' AND p.id_country = $id_country ";
+
+         
 
 
             $getOperators = $this->db->query($sql);
@@ -759,24 +779,14 @@ class cobertura{
                           $beforeHistory = $this->db->query($sql);
                        
                   }
-
-
-
                   if($beforeHistory){
-
                         $result = true;
                   }else{
-
                         $result = false;
                   }
-
                   return $result;
             }
-
-            
-
       }
-
 }
 
 ?>

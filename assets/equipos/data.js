@@ -266,6 +266,8 @@ $(document).on('submit','#form-buscar',function(e){
 
     })
 
+
+
 //Dom
 
 // 1) accesorios

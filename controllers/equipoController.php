@@ -165,18 +165,13 @@ class equipoController
 
     public function recuperar()
     {
-
         if ($_POST) {
-
             $data = $_POST["sendData"];
-
-
             if (is_array($data)) {
 
                 $count = count($data);
                 $resultado =  false;
                 for ($i = 0; $i < $count; $i++) {
-
 
                     $estado =  $data[$i]["estado"];
                     $motivoRetiro =  $data[$i]["motivoRetiro"];
@@ -666,12 +661,8 @@ class equipoController
             $fecha = $_POST['fecha'];
             $idOrdenAComprobar = $_POST["idfirmar"];
             $baseFromJavascript = $_POST['dataUrl'];
-
-
             $documento = $_POST["documento"];
             $aclaracion = $_POST["aclaracion"];
-
-
 
             $filepath = '../resources/firmas/' . $fecha . $idOrdenAComprobar . '.png';
 
@@ -710,9 +701,11 @@ class equipoController
             echo $jsonString;
         }
     }
+    
     public function remito()
     {
-      
+        
+        
         if (isset($_GET["cd"]) && isset($_GET["tp"])) {
             if (!preg_match("/^[0-9A-Za-z]+$/", $_GET["cd"])) {
                 echo "Error 404: KFKCWWDFDFW(EX-RE-G);";
@@ -722,13 +715,15 @@ class equipoController
                 $codClean = str_replace($caracteres, '', $cod);
 
                 if ($_GET["tp"] === 'rmkcmmownloqwld') {
-
+                    
+                 
                     $remito = new Equipos();
                     $remito->setOrden($codClean);
                     $cliente = $remito->obtainCustomerDataToIssueInvoice();
 
                     $equipo = $remito->obtainEquipmentDataToIssueInvoice();
                     $firma = $remito->getSignatureData();
+                    
 
                     if ($cliente->num_rows > 0) {
                        
@@ -736,6 +731,7 @@ class equipoController
 
                         $idEmpresa = $getCliente->identificacion;
                         $antina = 'AN';
+                        $antinaPrepago = 'AP';
                         $lapos = 'LA';
                         $intv = 'IN';
                         $iplan = 'IP';
@@ -746,7 +742,9 @@ class equipoController
                         $movistar = 'MV';
                         $geocom = 'GC';
                         $cadena = substr($idEmpresa, 0, 2);
-                        ($cadena == $antina) ? require_once 'views/remitos/antina.php' : null;
+                        
+                        
+                        ($cadena == $antina || $cadena == $antinaPrepago) ? require_once 'views/remitos/antina.php' : null;
                         ($cadena == $lapos) ? require_once 'views/remitos/lapos.php' : null;
                         ($cadena == $intv) ? require_once 'views/remitos/intv.php' : null;
                         ($cadena === $iplan) ? require_once 'views/remitos/iplan.php' : null;
@@ -844,13 +842,13 @@ class equipoController
             if (is_object($countEquiposByWord)) {
                 foreach ($countEquiposByWord as $element) {
                       $objeto = array(
-                          'result' => true,
+                          'success' => true,
                           'count' => $element["count"]
                       );
                 }
             } else {
                 $objeto = array(
-                    'result' => false,
+                    'error' => true,
                 );
             }
 
@@ -874,13 +872,13 @@ class equipoController
             if (is_object($countGestionByWord)) {
                 foreach ($countGestionByWord as $element) {
                       $objeto = array(
-                          'result' => true,
+                          'success' => true,
                           'count' => $element["count"]
                       );
                 }
             } else {
                 $objeto = array(
-                    'result' => false,
+                    'error' => true,
                 );
             }
 
@@ -907,13 +905,13 @@ class equipoController
                    
                       $objeto = array(
 
-                          'result' => true,
+                          'success' => true,
                           'count' => $element["count"]
                       );
                 }
             } else {
                 $objeto = array(
-                    'result' => false,
+                    'error' => true,
                 );
             }
 
@@ -941,13 +939,13 @@ class equipoController
                
                 foreach ($countGestionByWordAndDateRange as $element) {
                       $objeto = array(
-                          'result' => true,
+                          'success' => true,
                           'count' => $element["count"]
                       );
                 }
             } else {
                 $objeto = array(
-                    'result' => false,
+                    'error' => true,
                 );
             }
 
@@ -971,7 +969,7 @@ class equipoController
 
                 foreach ($gestion as $element) {
                      $objeto[] = array(
-                         'result' => true,
+                         'success' => true,
                          'identificacion' => $element["identificacion"],
                          'estado' => $element["estado"],
                          'empresa' => $element["empresa"],
@@ -1008,8 +1006,8 @@ class equipoController
                 }
             } else {
 
-                $objeto[] = array(
-                    'result' => false,
+                $objeto = array(
+                    'error' => true,
                 );
             }
 
@@ -1034,14 +1032,14 @@ class equipoController
 
                     foreach ($status as $element) {
                         $objeto[] = array(
-                            'result' => 'count',
+                            'success' => true,
                             'estado' => $element["estado"],
                             'cantidadEstado' => $element["cantidadEstado"],
                         );
                     }
                 } else {
-                    $objeto[] = array(
-                        'result' => '2',
+                    $objeto = array(
+                        'error' => true,
                     );
                 }
 
@@ -1085,14 +1083,14 @@ class equipoController
                 foreach ($status as $element) {
 
                     $objeto[] = array(
-                        'result' => true,
+                        'success' => true,
                         'estado' => $element["estado"],
                         'cantidadEstado' => $element["cantidadEstado"],
                     );
                 }
             } else {
-                $objeto[] = array(
-                    'result' => false,
+                $objeto = array(
+                    'error' => true,
 
                 );
             }
@@ -1146,14 +1144,14 @@ class equipoController
                    
                      $objeto = array(
     
-                         'result' => true,
+                         'success' => true,
                          'count' => $element["count"]
                      );
                  }
             }else {
                 $objeto = array(
     
-                    'result' => false,
+                    'error' => true,
             
                 );
             }
@@ -1186,7 +1184,7 @@ class equipoController
                
                  $objeto[] = array(
 
-                     'result' => true,
+                     'success' => true,
                      'id_equipo' => $element["id_equipo"],
                      'id' => $element["id"],
                      'identificacion' => $element["identificacion"],
@@ -1224,8 +1222,8 @@ class equipoController
                  );
             }
         } else {
-            $objeto[] = array(
-                'result' => false,
+            $objeto = array(
+                'error' => true,
             );
         }
 
@@ -1256,7 +1254,7 @@ class equipoController
                
                  $objeto[] = array(
 
-                     'result' => true,
+                     'success' => true,
                      'id_equipo' => $element["id_equipo"],
                      'id' => $element["id"],
                      'identificacion' => $element["identificacion"],
@@ -1294,8 +1292,8 @@ class equipoController
                  );
             }
         } else {
-            $objeto[] = array(
-                'result' => false,
+            $objeto = array(
+                'error' => true,
             );
         }
 
@@ -1327,7 +1325,7 @@ class equipoController
                     
                         $objeto[] = array(
     
-                            'result' => true,
+                            'success' => true,
                             'id_equipo' => $element["id_equipo"],
                             'id' => $element["id"],
                             'identificacion' => $element["identificacion"],
@@ -1365,8 +1363,8 @@ class equipoController
                         );
                 }
             } else {
-                $objeto[] = array(
-                    'result' => false,
+                $objeto= array(
+                    'error' => true,
                 );
             }
                 $jsonstring = json_encode($objeto);
@@ -1399,7 +1397,7 @@ class equipoController
             if (is_object($gestion)) {
                 foreach ($gestion as $element) {
                         $objeto[] = array(
-                            'result' => true,
+                            'success' => true,
                             'id_equipo' => $element["id_equipo"],
                             'id' => $element["id"],
                             'identificacion' => $element["identificacion"],
@@ -1437,8 +1435,8 @@ class equipoController
                         );
                 }
             } else {
-                $objeto[] = array(
-                    'result' => false,
+                $objeto = array(
+                    'error' => true,
                 );
             }
                 $jsonstring = json_encode($objeto);
@@ -1498,7 +1496,7 @@ class equipoController
                    
                       $objeto[] = array(
     
-                          'result' => true,
+                          'success' => true,
                           'id_equipo' => $element["id_equipo"],
                           'id' => $element["id"],
                           'identificacion' => $element["identificacion"],
@@ -1536,8 +1534,8 @@ class equipoController
                       );
                  }
             } else {
-                $objeto[] = array(
-                    'result' => false,
+                $objeto = array(
+                    'error' => true,
                 );
             }
 
@@ -1607,12 +1605,12 @@ class equipoController
                     $response = $this->excelEquipmentManagement($exportEquipos);
                     if($response){
                         $objectResponse = array(
-                            'result' => true,
+                            'success' => true,
                             'path' => $response
                         );
                     }else{
                         $objectResponse = array(
-                            'result' => false
+                            'error' => true,
                             
                         );
                     }
@@ -1756,14 +1754,14 @@ class equipoController
             
             foreach($estados as $element){
                 $object[]= array(
-                    'result' => true,
+                    'success' => true,
                     'estado' => $element["estado"]
                 );
                
             }
          }else {
-            $object[]= array(
-                'result' => false
+            $object= array(
+                'error' => true,
             );
          }
 
@@ -1896,16 +1894,16 @@ class equipoController
             $updateEquipo = $updateEquipo->updateEquipo();
             if($updateEquipo){
                 $object = array(
-                    'result' => true
+                    'success' => true,
                 );
             }else {
                 $object = array(
-                    'result' => false
+                    'error' => true,
                 );
             }
         }else {
             $object = array(
-                'result' => false
+                'error' => true,
             );
         }
             $jsonstring = json_encode($object);
@@ -1929,11 +1927,11 @@ class equipoController
 
         if($deleteGestion){
             $object= array(
-                'result' => true
+                'success' => true,
             );
         }else {
             $object= array(
-                'result' => false
+                'error' => true,
             );
         }
 

@@ -242,7 +242,7 @@ Vue.component("table-equipos", {
                     axios
                     .get(url)
                     .then((res) => {
-                        if (!res.data[0].result) {
+                        if (res.data.error) {
                         alertNegative("Mensaje CODIGO 53");
                         return;
                         }
@@ -318,7 +318,7 @@ Vue.component("table-equipos", {
                 },
                 })
                 .then((res) => {
-                if (!res.data.result) {
+                if(res.data.error){
                     this.updateProperty.disabled = false
                     alertNegative("Mensaje CODIGO 51");
                     return;
@@ -379,7 +379,7 @@ Vue.component("table-equipos", {
                 },
                 })
                 .then((res) => {
-                if (!res.data.result) {
+                if (res.data.error) {
                     alertNegative("Mensaje CODIGO 50");
                     this.deleteProperty.disabled = false
                     return;

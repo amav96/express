@@ -1,6 +1,13 @@
 <?php
 class Utils{
 
+    public $id;
+    
+    public function __construct()
+    {
+        $this->db = Database::connect();
+    }
+
     public static function deleteSession($name){
         if(isset($_SESSION[$name])){
             $_SESSION[$name] = null;
@@ -66,7 +73,6 @@ class Utils{
        
     }
 
-
     public static function pais(){
 
         $pais = new EquiposExtra();
@@ -93,7 +99,7 @@ class Utils{
         $jsonstring = json_encode($objeto);
         echo $jsonstring;
  
-     }
+    }
  
     
 }

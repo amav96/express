@@ -4,38 +4,40 @@ Vue.component('form-search-word',{
     `   
     
        <div  >
-            <form 
-            @submit.prevent="countSearchByWord" 
-            id="sendFormWord" 
-            class="d-flex justify-center flex-row align-center  flex-wrap ">
-                <v-container fluid>
-                    <v-row align="center"  class="d-flex justify-center" >
-                        <v-col class="d-flex justify-center" cols="12" sm="10">
-                            <v-text-field
-                            label="Complete identificación"
-                            hide-details="auto"
-                            v-model.trim="word"
-                            >
-                            </v-text-field >
-                        </v-col>
+             <v-card>           
+                <form 
+                @submit.prevent="countSearchByWord" 
+                id="sendFormWord" 
+                class="d-flex justify-center flex-row align-center  flex-wrap ">
+                    <v-container fluid>
+                        <v-row align="center"  class="d-flex justify-center" >
+                            <v-col class="d-flex justify-center" cols="12" sm="10">
+                                <v-text-field
+                                label="Complete identificación"
+                                hide-details="auto"
+                                v-model.trim="word"
+                                >
+                                </v-text-field >
+                            </v-col>
 
-                        <v-col class="d-flex justify-center" cols="12" sm="2">
-                            <v-btn
-                            color="primary"
-                            fab
-                            small
-                            primary
-                            type="submit"
-                            form="sendFormWord"
-                            class=" sacarOutline"
-                            :disabled="validateForm"
-                            >
-                                <v-icon>mdi-magnify</v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </form>
+                            <v-col class="d-flex justify-center" cols="12" sm="2">
+                                <v-btn
+                                color="primary"
+                                fab
+                                small
+                                primary
+                                type="submit"
+                                form="sendFormWord"
+                                class=" sacarOutline"
+                                :disabled="validateForm"
+                                >
+                                    <v-icon>mdi-magnify</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card>
        </div>
     
     `,
@@ -56,7 +58,7 @@ Vue.component('form-search-word',{
                     }
                 })
                 .then(res => {
-                    if(!res.data.result){
+                    if(res.data.error){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -114,7 +116,7 @@ Vue.component('form-search-word',{
                         }
                     })
                  .then(res =>{
-                     if(!res.data[0].result){
+                    if(res.data.error){
                          const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                          this.error(error); return;
                      }
@@ -156,8 +158,9 @@ Vue.component('form-search-word',{
                 }
             })
             .then(res => {
+               
                 this.$emit('setSubHeadersLoader',false)
-                if(!res.data[0].result){
+                if(res.data.error){
                     this.$emit("setDisplayHeaders", false)
                     return
                 }

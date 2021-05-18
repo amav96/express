@@ -17,11 +17,11 @@ class deleteController{
             unlink($url.$arrayPath[6]);
             if(!file_exists($path)){
                 $object = array(
-                    'result' => true,
+                    'success' => true,
                 );
             }else {
                 $object = array(
-                    'result' => false,
+                    'error' => true,
                 );
             }
             $jsonstring = json_encode($object);

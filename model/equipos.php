@@ -665,16 +665,15 @@ class Equipos
             return $sentinelaFirma;
     }
 
-    function clean($str)
-    {
-    // IMPORTANTE ','=>'.'. ES PARA IMPORTAR TEXTO PARA QUE PUEDA ENTRAR EL ARCHIVO
-    $unwanted_array = array(
-        "'" => '',
-        "´" => '',
-        '"' => '' 
-    );
+    function clean($str){
+        // IMPORTANTE ','=>'.'. ES PARA IMPORTAR TEXTO PARA QUE PUEDA ENTRAR EL ARCHIVO
+        $unwanted_array = array(
+            "'" => '',
+            "´" => '',
+            '"' => '' 
+        );
 
-    return strtr($str, $unwanted_array);
+        return strtr($str, $unwanted_array);
     }
 
     private function setfirma($orden, $fecha, $aclaracion, $documento){
@@ -1196,7 +1195,7 @@ class Equipos
                 $sql.="(";
                 $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
                 $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
-                $sql.="order BY g.created_at desc limit $fromRow,$limit ";
+                $sql.="and g.status_gestion = 'transito' order BY g.created_at desc limit $fromRow,$limit ";
 
                 $gestionByWord = $this->db->query($sql);
                 if($gestionByWord && $gestionByWord->num_rows>0){

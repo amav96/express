@@ -83,9 +83,17 @@ methods : {
             }
         })
         .then(res => {
-           if(res.data.count > '0'){
-                //    settins value before the update
-                if(this.filter.filtering){
+            if(res.data.error){
+                this.loaderFilter=false
+                this.alert_flag = true
+                setTimeout(() => {
+                    this.alert_flag = false
+                }, 3000);
+                return
+            }else {
+               
+                 //    settins value before the update
+                 if(this.filter.filtering){
                     this.oldParametersToCall = this.dynamicDataToSearch
                     this.oldUrl = this.urlTryPagination
                      //setting values for pagination before to fetch new count 
@@ -111,14 +119,7 @@ methods : {
                      .then(()=>{
                          this.getFilter();
                      })
-           }else {
-            this.loaderFilter=false
-            this.alert_flag = true
-                setTimeout(() => {
-                    this.alert_flag = false
-                }, 3000);
-                return
-           }
+            }
         })
         .catch(err => {
             this.loaderFilter=false
@@ -142,7 +143,7 @@ methods : {
             }
         })
         .then(res => {
-            if(res.data[0].result){
+            
                 if(this.filter.filtering){
                     this.oldDataResponseDB = this.dataResponseDB
                     this.$emit('setFlagFiltering',false)
@@ -150,7 +151,7 @@ methods : {
                 const newDataResponse = res.data
                 this.$emit('setAfterDataResponse', newDataResponse)
                 this.loaderFilter=false
-            }
+            
         })
         .catch(err => {
             console.log(err)

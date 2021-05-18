@@ -17,57 +17,95 @@ class coberturaController{
 public function index(){
 
     Utils::AuthAdmin();
-
     require_once  'views/admin/cobertura.php';
 }
 
-public function AllAssigned(){
+public function admin(){
+    Utils::AuthAdmin();
+    require_once  'vue/src/view/admin/cobertura.php';
+}
 
-            $AllAssigned = new cobertura();
-            $AllAssigned = $AllAssigned-> AllAssigned();
+//CONTADORES DE COBERTURA PARA PAGINACIONES
+public function countAllCoverage(){
 
-            if(is_object($AllAssigned)){
+    $countAllCoverage = new cobertura();
+            $countAllCoverage = $countAllCoverage-> countAllCoverage();
+
+            if(is_object($countAllCoverage)){
                 
-            foreach($AllAssigned as $element){
+            foreach($countAllCoverage as $element){
 
-                         $object[]=array(
-                             'result' => '1',
-                             'id' => $element["id"],
-                             'postal_code' => $element["postal_code"],
-                             'locate' => $element["locate"],
-                             'home_address' => $element["home_address"], 
-                             'province' => $element["province"],
-                             'customer_service_hours' => $element["customer_service_hours"],
-                             'lat' => $element["lat"],
-                             'lng' => $element["lng"],
-                             'operator_name' => $element["operator_name"],
-                             'id_country' => $element["id_country"],
-                             'detailed_type'  => $element['detailed_type'], 
-                             'country_color'  => $element['country_color'], 
-                             'type_color'  => $element['type_color'], 
-                             'name_country' => $element['name_country'],
-                             'type' => $element["type"],
-                             'name' => $element["name"],
-                             'id_user' => $element["id_user"]
-
-                         );
-            }
-
+                        $object=array(
+                            'success' => true,
+                            'count' => $element["count"],
+                            
+                        );
+                }
             }else{
-
-                $object[]=array(
-                    'result' => '2',
-            
+                $object=array(
+                    'error' => true,
                 );
-
             }
 
             $jsonstring = json_encode($object);
             echo $jsonstring;
-    
-
-
 }
+
+//BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
+public function getAllCoverage(){
+
+            $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+            $request =  json_decode($dataRequest);
+            $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
+            $limit = isset($request->limit) ? $request->limit : false;
+
+            $getAllCoverage = new cobertura();
+            $getAllCoverage->setFromRow($fromRow);
+            $getAllCoverage->setLimit($limit);
+            $getAllCoverage = $getAllCoverage-> getAllCoverage();
+
+            if(is_object($getAllCoverage)){
+                
+            foreach($getAllCoverage as $element){
+
+                        $arrayDateTime = explode(' ', trim($element["created_at"]));
+                        $arrayDate = explode('-',$arrayDateTime[0]);
+                        $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                        $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+
+                        $object[]=array(
+                            'success' => true,
+                            'id' => $element["id"],
+                            'postal_code' => $element["postal_code"],
+                            'locate' => $element["locate"],
+                            'home_address' => $element["home_address"], 
+                            'province' => $element["province"],
+                            'name_country' => $element['name_country'],
+                            'type' => $element["type"],
+                            'id_user' => $element["id_user"],
+                            'name_assigned' => $element["id_user"],
+                            'customer_service_hours' => $element["customer_service_hours"],
+                            'lat' => $element["lat"],
+                            'lng' => $element["lng"],
+                            'created_at' => $dateTimeFormated
+                        );
+                }
+            }else{
+                $object=array(
+                    'error' => true,
+                );
+            }
+
+            $jsonstring = json_encode($object);
+            echo $jsonstring;
+}
+
+
+
+
+
+
+
 
 public function HistoricalInactive(){
 
@@ -138,9 +176,6 @@ public function activateAgain(){
         $lat = isset($_POST['object']['lat']) ? $_POST['object']['lat'] : false ;
         $lng = isset($_POST['object']['lng']) ? $_POST['object']['lng'] : false ;
         $id_operator = isset($_POST['object']['id_operator']) ? $_POST['object']['id_operator'] : false ;
-        $detailed_type = isset($_POST['object']['detailed_type']) ? $_POST['object']['detailed_type'] : false ;
-        $country_color = isset($_POST['object']['country_color']) ? $_POST['object']['country_color'] : false ;
-        $type_color = isset($_POST['object']['type_color']) ? $_POST['object']['type_color'] : false ;
         $created_at = isset($_POST['object']['created_at']) ? $_POST['object']['created_at'] : false ;
 
 
@@ -168,9 +203,6 @@ public function activateAgain(){
         $activateAgain->setLat($lat);
         $activateAgain->setLng($lng);
         $activateAgain->setId_operator($id_operator);
-        $activateAgain->setDetailed_type($detailed_type);
-        $activateAgain->setCountry_color($country_color);
-        $activateAgain->setType_color($type_color);
         $activateAgain = $activateAgain->activateAgain();
  
         if($activateAgain){
@@ -260,9 +292,7 @@ public function save(){
             $lat = isset($_POST['object']['lat']) ? $_POST['object']['lat'] : false ;
             $lng = isset($_POST['object']['lng']) ? $_POST['object']['lng'] : false ;
             $id_operator = isset($_POST['object']['id_operator']) ? $_POST['object']['id_operator'] : false ;
-            $detailed_type = isset($_POST['object']['detailed_type']) ? $_POST['object']['detailed_type'] : false ;
-            $country_color = isset($_POST['object']['country_color']) ? $_POST['object']['country_color'] : false ;
-            $type_color = isset($_POST['object']['type_color']) ? $_POST['object']['type_color'] : false ;
+           
             $created_at = isset($_POST['object']['created_at']) ? $_POST['object']['created_at'] : false ;
 
             $save = new cobertura();
@@ -280,9 +310,6 @@ public function save(){
             $save->setLat($lat);
             $save->setLng($lng);
             $save->setId_operator($id_operator);
-            $save->setDetailed_type($detailed_type);
-            $save->setCountry_color($country_color);
-            $save->setType_color($type_color);
             $save = $save->save();
 
             
@@ -312,9 +339,6 @@ public function save(){
                     'operator_name' => $element['operator_name'], 
                     'id_operator'  => $element['id_operator'], 
                     'motive'  => $element['motive'], 
-                    'detailed_type'  => $element['detailed_type'], 
-                    'country_color'  => $element['country_color'], 
-                    'type_color'  => $element['type_color'], 
                     'name_country' => $element['name_country'],
                     'created_at'  => $element['created_at'], 
                     'updated_at'  => $element['updated_at']
@@ -355,9 +379,6 @@ public function update(){
     $lat = isset($_POST['object']['lat']) ? $_POST['object']['lat'] : false ;
     $lng = isset($_POST['object']['lng']) ? $_POST['object']['lng'] : false ;
     $id_operator = isset($_POST['object']['id_operator']) ? $_POST['object']['id_operator'] : false ;
-    $detailed_type = isset($_POST['object']['detailed_type']) ? $_POST['object']['detailed_type'] : false ;
-    $country_color = isset($_POST['object']['country_color']) ? $_POST['object']['country_color'] : false ;
-    $type_color = isset($_POST['object']['type_color']) ? $_POST['object']['type_color'] : false ;
     $created_at  = isset($_POST['object']["created_at"]) ? $_POST['object']["created_at"] : false ;
 
             //    consulto los id que voy a actualizar para obtener sus datos antes de actualizarlos y  los inserto
@@ -382,9 +403,6 @@ public function update(){
             $update->setLat($lat);
             $update->setLng($lng);
             $update->setId_operator($id_operator);
-            $update->setDetailed_type($detailed_type);
-            $update->setCountry_color($country_color);
-            $update->setType_color($type_color);
             $update->setName($name);
             $update->setCreated_at($created_at);
         
@@ -433,9 +451,6 @@ public function update(){
                                 'lng'  => $element['lng'], 
                                 'operator_name' => $element['operator_name'], 
                                 'id_operator'  => $element['id_operator'], 
-                                'detailed_type'  => $element['detailed_type'], 
-                                'country_color'  => $element['country_color'], 
-                                'type_color'  => $element['type_color'], 
                                 'name_country' => $element['name_country'], 
                                 'motive'  => $element['motive'], 
                                 'created_at'  => $element['created_at'], 
@@ -773,10 +788,12 @@ public function getProvince(){
 
 public function getLocate(){
 
-    if($_POST["id_province"] && $_POST["id_country"]){
+   
+    if(isset($_POST["id_province"]) && isset($_POST["id_country"])){
 
         $id_province = $_POST["id_province"];
         $id_country = $_POST["id_country"];
+
     }else{
         $id_province = isset($_POST['object']['id_province']) ? $_POST['object']['id_province'] : false ;
         $id_country = isset($_POST['object']['id_country']) ? $_POST['object']['id_country'] : false ;

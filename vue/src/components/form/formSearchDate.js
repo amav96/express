@@ -3,51 +3,53 @@ Vue.component('form-search-date',{
     template : /*html*/ 
     `      
             <div>
-                <v-form
-                 @submit.prevent="countSearchInRangeDate" 
-                 id="sendFormRangeDate" 
-                 class="d-flex justify-center flex-row align-center  flex-wrap ">
-                    <v-container fluid>
-                        <v-row align="center"  class="d-flex justify-center" >
-                            <v-col class="d-flex justify-center" cols="12" sm="5">
-                                <v-text-field
-                                label="Desde"
-                                hide-details="auto"
-                                type="date"
-                                v-model="dateStart"
-                                >
-                                </v-text-field >
-                            </v-col>
+                <v-card>
+                    <v-form
+                    @submit.prevent="countSearchInRangeDate" 
+                    id="sendFormRangeDate" 
+                    class="d-flex justify-center flex-row align-center  flex-wrap ">
+                        <v-container fluid>
+                            <v-row align="center"  class="d-flex justify-center" >
+                                <v-col class="d-flex justify-center" cols="12" sm="5">
+                                    <v-text-field
+                                    label="Desde"
+                                    hide-details="auto"
+                                    type="date"
+                                    v-model="dateStart"
+                                    >
+                                    </v-text-field >
+                                </v-col>
 
-                            <v-col class="d-flex justify-center" cols="12" sm="5">
-                                <v-text-field
-                                label="Hasta"
-                                hide-details="auto"
-                                type="date"
-                                v-model="dateEnd"
-                                >
-                                </v-text-field >
-                            </v-col>
+                                <v-col class="d-flex justify-center" cols="12" sm="5">
+                                    <v-text-field
+                                    label="Hasta"
+                                    hide-details="auto"
+                                    type="date"
+                                    v-model="dateEnd"
+                                    >
+                                    </v-text-field >
+                                </v-col>
 
-                            <v-col class="d-flex justify-center" cols="12" sm="2">
-                                <v-btn
-                                color="primary"
-                                fab
-                                small
-                                primary
-                                class="sacarOutline"
-                                type="submit"
-                                form="sendFormRangeDate"
-                                :disabled="validateForm"
-                                >
-                                <v-icon>mdi-magnify</v-icon>
-                                </v-btn>
-                            </v-col>
-                           
-                        </v-row>
-                    </v-container>
-                </v-form>
-                
+                                <v-col class="d-flex justify-center" cols="12" sm="2">
+                                    <v-btn
+                                    color="primary"
+                                    fab
+                                    small
+                                    primary
+                                    class="sacarOutline"
+                                    type="submit"
+                                    form="sendFormRangeDate"
+                                    :disabled="validateForm"
+                                    >
+                                    <v-icon>mdi-magnify</v-icon>
+                                    </v-btn>
+                                </v-col>
+                            
+                            </v-row>
+                        </v-container>
+                    </v-form>
+
+                </v-card>
             </div>
     `,
     props:['titleFormRangeDate','pagination','subheaders','base_url_header','base_url_to_count_search_word_controller','base_url_to_get_search_word_controller','filter','searchByRangeDate'],
@@ -69,7 +71,7 @@ Vue.component('form-search-date',{
                     }
                 })
                 .then(res => {
-                    if(!res.data.result){
+                    if(res.data.error){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -124,7 +126,7 @@ Vue.component('form-search-date',{
                     })
                  .then(res =>{
                    
-                     if(!res.data[0].result){
+                     if(res.data.error){
                          const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                          this.error(error); return;
                      }
@@ -174,7 +176,7 @@ Vue.component('form-search-date',{
             .then(res => {
                
                 this.$emit('setSubHeadersLoader',false)
-                if(!res.data[0].result){
+                if(res.data.error){
                     this.$emit('setDisplayHeaders', false)
                     return
                 }

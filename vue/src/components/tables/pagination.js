@@ -50,7 +50,7 @@ methods : {
                 }
             })
             .then(res => {
-                if(!res.data[0].result){
+                if(res.data.error){
                     alertNegative("Ocurrio un error al paginar");
                     return
                 }

@@ -2,61 +2,63 @@ Vue.component('form-search-by-word-and-range-date',{
     template : /*html*/ 
     `      
         <div>
-            <form 
-            @submit.prevent="countSearchByWordAndRangeDate"
-            id="sendFormWordAndRange"
-            class="d-flex justify-center flex-row align-center  flex-wrap ">
-                <v-container fluid>
-                    <v-row align="center"  class="d-flex justify-center" >
-                        <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
-                            <v-select
-                            style="height:50px;"
-                            :items="dataSelect"
-                            :item-text="showDataSelect"
-                            item-value="id"
-                            label="Recolector"
-                            v-model="word"
-                            ></v-select>
-                        </v-col>
+            <v-card>
+                <form 
+                @submit.prevent="countSearchByWordAndRangeDate"
+                id="sendFormWordAndRange"
+                class="d-flex justify-center flex-row align-center  flex-wrap ">
+                    <v-container fluid>
+                        <v-row align="center"  class="d-flex justify-center" >
+                            <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
+                                <v-select
+                                style="height:50px;"
+                                :items="dataSelect"
+                                :item-text="showDataSelect"
+                                item-value="id"
+                                label="Recolector"
+                                v-model="word"
+                                ></v-select>
+                            </v-col>
 
-                        <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
-                            <v-text-field
-                            label="Desde"
-                            hide-details="auto"
-                            type="date"
-                            v-model="dateStart"
-                            >
-                            </v-text-field >
-                        </v-col>
+                            <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
+                                <v-text-field
+                                label="Desde"
+                                hide-details="auto"
+                                type="date"
+                                v-model="dateStart"
+                                >
+                                </v-text-field >
+                            </v-col>
 
-                        <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
-                            <v-text-field
-                            label="Hasta"
-                            hide-details="auto"
-                            type="date"
-                            v-model="dateEnd"
-                            >
-                            </v-text-field >
-                        </v-col>
+                            <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
+                                <v-text-field
+                                label="Hasta"
+                                hide-details="auto"
+                                type="date"
+                                v-model="dateEnd"
+                                >
+                                </v-text-field >
+                            </v-col>
 
-                        <v-col class="d-flex justify-center" cols="12"  lg="2" md ="2">
-                            <v-btn
-                            color="primary"
-                            fab
-                            small
-                            primary
-                            class="sacarOutline"
-                            type="submit"
-                            form="sendFormWordAndRange"
-                            :disabled="validateForm"
-                            >
-                            <v-icon>mdi-magnify</v-icon>
-                            </v-btn>
-                        </v-col>
-                    
-                    </v-row>
-                </v-container>
-            </form>
+                            <v-col class="d-flex justify-center" cols="12"  lg="2" md ="2">
+                                <v-btn
+                                color="primary"
+                                fab
+                                small
+                                primary
+                                class="sacarOutline"
+                                type="submit"
+                                form="sendFormWordAndRange"
+                                :disabled="validateForm"
+                                >
+                                <v-icon>mdi-magnify</v-icon>
+                                </v-btn>
+                            </v-col>
+                        
+                        </v-row>
+                    </v-container>
+                </form>
+            </v-card>
         </div>
        
     `,
@@ -81,7 +83,7 @@ Vue.component('form-search-by-word-and-range-date',{
                     }
                 })
                 .then(res => {
-                    if(!res.data.result){
+                    if(res.data.error){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                         this.error(error); return;
                     }
@@ -137,7 +139,7 @@ Vue.component('form-search-by-word-and-range-date',{
                     })
                  .then(res =>{
                    
-                     if(!res.data[0].result){
+                     if(res.data.error){
                          const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
                          this.error(error); return;
                      }
@@ -225,7 +227,7 @@ Vue.component('form-search-by-word-and-range-date',{
             })
             .then(res => {
                 this.$emit('setSubHeadersLoader',false)
-                if(!res.data[0].result){
+                if(res.data.error){
                     this.$emit('setDisplayHeaders', false)
                    return
                 }

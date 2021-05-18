@@ -55,7 +55,7 @@ Vue.component('excel-export', {
                 }
             })
             .then(res => {
-                if(!res.data.result){
+                if(res.data.error){
                     alertNegative("Mensaje CODIGO 54")
                     return
                 }
@@ -80,7 +80,7 @@ Vue.component('excel-export', {
                     }
                 })
                 .then(res => {
-                    if(!res.data.result){
+                    if(res.data.error){
                         alertNegative("Mensaje CODIGO 53");
                     }
                     this.clickDownload = true;
