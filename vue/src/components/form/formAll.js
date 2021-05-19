@@ -2,7 +2,7 @@ Vue.component('form-all',{
     template : /*html*/ 
     `      
     `,
-    props:['showAllCoverage','pagination'],
+    props:['showAll','pagination'],
     data() {
        return {
            
@@ -12,7 +12,7 @@ Vue.component('form-all',{
        async countAllCoverage(){
             try {
                 this.$emit('loadingTable',true)
-                await axios.get(this.showAllCoverage.base_url_count)
+                await axios.get(this.showAll.base_url_count)
                 .then(res => {
                     if(res.data.error){
                         const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
@@ -25,16 +25,16 @@ Vue.component('form-all',{
                     this.$emit('TotalPage',totalPage)
                     this.$emit('totalCountResponse',totalCountResponse)
                     
-                    this.getAllCoverage(this.showAllCoverage.base_url_data)
+                    this.getAllCoverage(this.showAll.base_url_data)
                         .then(()=>{
                              // show status if is true
-                             if(this.showAllCoverage.subheader){
+                             if(this.showAll.subheader){
                                 this.showStatus(this.base_url_header)
                             }else {
                                 this.$emit('setDisplayHeaders', false)
                             }
                             // if filter is true, activate
-                            if(this.showAllCoverage.filteringSearchWord){
+                            if(this.showAll.filteringSearchWord){
                                 this.$emit('setShowFilter',true)
                                 this.$emit('setUrlSearchController',this.base_url_to_count_search_word_controller)
                                 this.$emit('setUrlGetDataSearchController',this.base_url_to_get_search_word_controller)
@@ -68,6 +68,7 @@ Vue.component('form-all',{
                             }
                         })
                      .then(res =>{
+
                         
                          if(res.data.error){
                              const error = {type: 'no-exist',text: 'No hay datos para mostrar',time: 4000}
@@ -86,10 +87,10 @@ Vue.component('form-all',{
                          this.$emit('showTable',true)
                          this.$emit('loadingTable',false)
     
-                         if(this.showAllCoverage.export){
-                            this.$emit('setDisplayExportExcel',this.showAllCoverage.export)
+                         if(this.showAll.export){
+                            this.$emit('setDisplayExportExcel',this.showAll.export)
                         }else{
-                            this.$emit('setDisplayExportExcel',this.showAllCoverage.export)
+                            this.$emit('setDisplayExportExcel',this.showAll.export)
                         }
                        
                         //  settings url to fetch from pagination
@@ -108,5 +109,6 @@ Vue.component('form-all',{
     },
     created() {
         this.countAllCoverage()
-    }
+    },
+   
 })

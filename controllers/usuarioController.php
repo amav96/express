@@ -1347,7 +1347,7 @@ class usuarioController
                $id_managent = isset($_POST['object']["id_managent"]) ? $_POST['object']["id_managent"] : false;
                $motivo = isset($_POST['object']["motivo"]) && $_POST['object']["motivo"] !== 'Contrato Express' ? $_POST['object']["motivo"] : '';
                $descripcion = isset($_POST['object']["descripcion"]) ? $_POST['object']["descripcion"] : false;
-
+               
 
                if ($id && $receiveEstatus && $id_managent || $motivo) {
 

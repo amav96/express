@@ -33,6 +33,7 @@ Vue.component("table-cobertura", {
                               <tr  v-for="row in table.dataResponseDB">
                                 <td>{{row.postal_code}}</td>
                                 <td>{{row.locate}}</td>
+                                <td>{{row.provinceInt}}</td>
                                 <td>{{row.province}}</td>
                                 <td>{{row.home_address}}</td>
                                 <td>{{row.customer_service_hours}}</td>

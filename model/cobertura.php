@@ -204,18 +204,44 @@ class cobertura{
        //se guarda en created_at. 
 
        //CONTADORES DE COBERTURA PARA PAGINACIONES
-       public function countAllCoverage(){
+      public function countAllCoverage(){
 
             $sql = "SELECT count(DISTINCT(c.id)) as 'count'
             FROM coverage c
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
             WHERE c.status='active'";
+            
 
             $countAllCoverage = $this->db->query($sql);
 
             if($countAllCoverage && $countAllCoverage->fetch_object()->count > 0){
                   $result = $countAllCoverage;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+
+      }
+
+      public function countAllEmptyCoverage(){
+
+            $sql = "SELECT COUNT(distinct(l.id)) AS 'count'
+            FROM postal_code po
+            LEFT JOIN coverage c ON c.postal_code = po.postal_code
+            LEFT JOIN localities l ON l.postal_code = po.postal_code
+            left JOIN provinceint p ON p.postal_code = po.postal_code
+            LEFT JOIN province pr ON pr.id = po.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON po.id_country = co.id
+            WHERE c.postal_code IS NULL";
+            
+
+            $countAllEmptyCoverage = $this->db->query($sql);
+
+            if($countAllEmptyCoverage && $countAllEmptyCoverage->fetch_object()->count > 0){
+                  $result = $countAllEmptyCoverage;
             }else {
                   $result = false;
             }
@@ -233,12 +259,14 @@ class cobertura{
                   $fromRow = '0';
               }
 
-            $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,c.province,co.country as 'name_country',
+            $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',c.province,co.country as 'name_country',
             c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.id_operator, c.created_at
             FROM coverage c
+            left JOIN provinceint p ON p.postal_code = c.postal_code
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' GROUP BY c.id order BY c.postal_code asc limit $fromRow,$limit  ;";
+            WHERE c.status='active' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit  ;";
+
 
             $getAllCoverage = $this->db->query($sql);
 
@@ -254,7 +282,43 @@ class cobertura{
 
       }
 
-      
+      public function getAllEmptyCoverage(){
+
+            $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+            $limit = ($this->getLimit())?$this->getLimit() : false ;
+            if(gettype($fromRow) !==  'string'){
+                  $fromRow = '0';
+              }
+
+            $sql = "SELECT c.id,po.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',
+            pr.province,co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',
+            c.customer_service_hours,c.lat ,c.lng , c.id_operator, c.created_at
+            FROM postal_code po
+            LEFT JOIN coverage c ON c.postal_code = po.postal_code
+            LEFT JOIN localities l ON l.postal_code = po.postal_code
+            left JOIN provinceint p ON p.postal_code = po.postal_code
+            LEFT JOIN province pr ON pr.id = po.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON po.id_country = co.id
+            WHERE c.postal_code IS NULL
+            GROUP BY l.id 
+            order BY c.postal_code ASC limit $fromRow,$limit  ;";
+
+
+            $getAllEmptyCoverage = $this->db->query($sql);
+
+            if($getAllEmptyCoverage && $getAllEmptyCoverage->num_rows>0){
+                  
+                  $result = $getAllEmptyCoverage;
+            }else{
+                  $result = false;
+            }
+
+            return $result;
+
+            
+      }
+
       public function HistoricalInactive(){
 
             $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,c.province,c.id_country,co.country as 'name_country',c.type,c.name,

@@ -59,9 +59,9 @@ Vue.component("table-equipos", {
                         <template v-slot:default>
                         <thead>
                             <tr  class="bg-blue-custom">
-                            <th v-for="column in columns" class="text-left text-white">
-                            {{column.text}}
-                            </th>
+                                <th v-for="column in columns" class="text-left text-white">
+                                {{column.text}}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

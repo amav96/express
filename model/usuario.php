@@ -1020,16 +1020,18 @@
                     $status = !empty($this->getStatus()) ? $this->getStatus() : false ;
                     $motivo = !empty($this->getObservaciones()) ? $this->getObservaciones() : false ;
                     $descripcion = !empty($this->getDescripcion()) ? $this->getDescripcion() : '' ;
-                    
+                    date_default_timezone_set('America/Argentina/Buenos_Aires');
+                    $momento = date('Y-m-d H:i:s');
+
                     $result = false;
                     if($id && $status && $id_managent){
                      $sql = "";
-                     $sql.="UPDATE users set status_process='$status',user_managent_id='$id_managent',status_notifications='nueva', new_section = 'new' ";
+                     $sql.="UPDATE users set status_process='$status',user_managent_id='$id_managent',status_notifications='nueva', new_section = 'new', updated_at = '$momento' ";
                      if($motivo){
                      $sql .=",motive='$motivo',description='$descripcion' ";
                      }
-                     $sql .="where id_number='$id'";
-                   
+                     $sql .=" where id_number='$id'";
+                  
                      $setStatus = $this->db->query($sql);
                      if($setStatus){
                           

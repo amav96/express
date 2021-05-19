@@ -1,6 +1,6 @@
 <?php require_once 'views/layout/headerAdmin.php'; ?>
 
-    <div id="admin-notices" >
+    <div id="admin-cobertura" >
             
     </div>
 <!-- VUE -->
@@ -15,7 +15,8 @@
 
 <!-- dialog component -->
 
-<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/admin/cobertura/Create.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/chooseNext.js?v=12052021"></script>
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
@@ -30,6 +31,9 @@
 
 <!-- pagination component -->
 <script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
+
+<!-- helpers component -->
+<script  src="<?=base_url?>vue/src/components/services/geocoding.js?v=12052021"></script>
 
 <!-- helpers component -->
 <script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=12052021"></script>
@@ -49,7 +53,7 @@
     
   new Vue({
 
-        el: '#admin-notices',
+        el: '#admin-cobertura',
         vuetify: new Vuetify(),
         store,
         template : //html 
@@ -79,7 +83,7 @@
                               @click="handle_function_call(item.methods)"
                               class="bg-blue-custom mx-3 my-1 noUpperCase"
                               color="transparent"
-                              :class="[item.active? 'secondary' :  '']"
+                              :class="[item.active? 'secondary' :  item.color]"
                               >
                               <span class="color-white-custom" >{{ item.title }}</span>
                             <v-icon class="mx-1" color="white" >{{ item.icon }}</v-icon>
@@ -91,7 +95,7 @@
                 </v-container>     
               </v-row>
           </div>
-              <div class="d-flex justify-center align-center align-self-center flex-column" >
+              <div class=" d-flex justify-center align-center align-self-center flex-column" >
             
                 <transition name="slide-fade">
                   <error-global 
@@ -103,7 +107,7 @@
 
                 <template v-if="showAllCoverage.display">
                     <form-all
-                    :showAllCoverage="showAllCoverage"
+                    :showAll="showAllCoverage"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
                     @dynamicDataToSearch ="dynamicDataToSearch = $event"
@@ -122,13 +126,61 @@
                     />
                 </template>
 
+                <template v-if="showAllEmptyCoverage.display">
+                    <form-all
+                    :showAll="showAllEmptyCoverage"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="table.dataResponseDB = $event"
+                    @loadingTable="table.loading = $event"
+                    @showTable="table.display = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                    @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                    :pagination="pagination"
+                    />
+                </template>
+
+                <div class="d-flex justify-center  flex-row my-2">
+                  <div class="mx-1">
+                      <v-btn color="primary" @click="openDialogChoose()">
+                          Crear
+                      </v-btn>
+                  </div>
+                  <div class="mx-1" >
+                      <v-btn color="orange">
+                          Actualizar
+                      </v-btn>
+                  </div>
+                </div>
+
+                <template>
+                  <dialog-choose-next
+                  :dialogChoose="dialogChoose"
+                  @next="next($event)"
+                  @back="back($event)"
+                  />
+                </template>
+
+                <template>
+                  <dialog-cobertura-create v-if="dialogParams.display"
+                  :dialogParams="dialogParams"
+                  />
+                </template>
+
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
                       />
                     </v-col>
                 </template>
-               
+
               </div> 
                 <template v-if="table.loading" >
                  <loader-line />
@@ -166,8 +218,7 @@
                   </div>
                  
                 </template>
-                
-
+              
                 <template v-if="table.display">
                     <table-cobertura
                       :admin="admin"
@@ -183,7 +234,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table">
+                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -201,6 +252,30 @@
         `,
         data(){
             return {
+                dialogChoose : {
+                  chooseNext: {
+                    display: false,
+                    title:'Seleccione tipo',
+                    chosenOption:'',
+                    options: [
+                      {text:'Recolector',value:'collector'},
+                      {text:'Comercio', value: 'commerce'},
+                      {text:'Correo', value:'mail'},
+                      {text:'Terminal', value:'station'},
+                    ],
+                  }
+                },
+                dialogParams : {
+                  display :true,
+                  body:[],
+                  collector : [
+                    {text:'Recolector', required: true},
+                    {text:'Pais' , required: true},
+                    {text:'Provincia' , required: true},
+                    {text:'Localidad' , required: true},
+                    {text:'Codigo Postal' , required: true}
+                  ]
+                },
                 formRangeNumberAndWord : {
                     display : true
                 },
@@ -212,23 +287,20 @@
                     filteringSearchWord : false,
                     export : false
                 },
+                showAllEmptyCoverage : {
+                    display : false,
+                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllEmptyCoverage',
+                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllEmptyCoverage',
+                    subheader: false,
+                    filteringSearchWord : false,
+                    export : false
+                },
                 itemsButtons:[
-                    { title: 'Mostrar todo', icon: 'mdi-flag-triangle', methods: '$_showAllCoverage' , active : false},
-                    { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true},
+                    { title: 'Mostrar asignado', icon: 'mdi-account', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
+                    { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
+                    { title: 'Zonas vacias', icon: 'mdi-alert', methods: '$_showAllEmptyCoverage', active :  false, color :"error"},
                 ],
                 admin : 0,
-                dataSelect:[],
-                base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
-                base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
-                base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=countFilterSearchController',
-                base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=getDataSearchWordNoticeController',
-                url_actions : {
-                    export : API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
-                    download_excel : API_BASE_EXCEL,
-                    delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
-                    showInvoice : API_BASE_URL + 'equipo/remito',
-                    status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
-                },
                 urlTryPagination:'',
                 pagination : {
                     totalPage : 0, 
@@ -244,6 +316,7 @@
                    
                     { text: 'Codigo Postal'},
                     { text: 'Localidad'},
+                    { text: 'Provincia Int'},
                     { text: 'Provincia'},
                     { text: 'Direccion'},
                     { text: 'Horarios'},
@@ -260,8 +333,6 @@
                     dataResponseDB: []
                 },
                 displayExportFromComponentAccesores :false,     
-                templateDialog: [
-                ],
                 error: {
                     type: null,
                     text: null,
@@ -282,77 +353,61 @@
             }
         },
         methods:{
-          processDataSelect(items){
-            // el Items lo traigo con un $emit desde el hijo. 
-            var dataProcess = items
-            const returnUser = dataProcess.filter(user => user.estado === 'active')
-            const finallyUser = returnUser.filter(user => user.tipoUsuario === 'recolector' || user.tipoUsuario === 'comercio' || user.tipoUsuario === 'admin')
-            // filtro la data que se esta mostrando en el select
-            this.dataSelect = finallyUser
-          
+          openDialogChoose(){
+            this.dialogChoose.chooseNext.display = !this.dialogChoose.chooseNext.display
           },
-          showDataSelect(items){
-            // en cada iteracion del select, se activa este metodo el cual filtra lo que quiero mostrar
-            let showText = items
-            return `${showText.nombre} - ${showText.localidad} - ${showText.id}`
-
+          next(){
+            var choose = this.dialogChoose.chooseNext;
+            var chosenOption = choose.chosenOption
+            
           },
-          templateDialogDetail(items){
-
-            let name = items.name
-            let aviso = items.aviso
-            if(aviso === 'tomorrow'){
-              aviso = 'Mañana'
-            }
-            if(aviso === 'route'){
-              aviso = 'En ruta'
-            }
-            let contacto = items.contacto
-            let identificacion = items.identificacion
-            let created_at = items.created_at
-            let lat = items.lat
-            let lng = items.lng
-            let direccion = items.direccion
-            let localidad = items.localidad
-            let provincia = items.provincia
-
-            // Dialog template
-            this.templateDialog = [ 
-              {text : 'Nombre',value: name,  button:'' },
-              {text : 'Aviso',value: aviso, button:'' },
-              {text : 'Contacto',value: contacto, button:'' },
-              {text : 'Identificación',value: identificacion, button:'' },
-              {text : 'Fecha',value: created_at, button: ''},
-              {text : 'Direccion del cliente',value: direccion, button: ''},
-              {text : 'Localidad del cliente ',value: localidad, button: ''},
-              {text : 'Provincia del cliente',value: provincia, button: ''},
-              {text : 'Enviado desde', value: {
-                                  lat: lat,
-                                  lng: lng,
-                                }
-                                , button: 'Mapa'},
-            ]
+          back(){
+            this.dialogChoose.chooseNext.chosenOption = '';
           },
           handle_function_call(function_name) {
             this[function_name]()
           },
           $_showAllCoverage(){
-            this.formRangeNumberAndWord.display = false,
-            this.showAllCoverage.display = true
-
-            this.itemsButtons[0].active = true //todo
-            this.itemsButtons[1].active = false //rangeNumber
-
-            if(this.table.display){this.table.display= false}
+             if(!this.showAllCoverage.display){
+              this.showAllCoverage.display = true
+              this.$nextTick(() => {
+                this.formRangeNumberAndWord.display = false
+                this.showAllEmptyCoverage.display = false
+                
+                this.itemsButtons[0].active = true //todo
+                this.itemsButtons[1].active = false //rangeNumber
+                this.itemsButtons[2].active = false //empty
+                this.tableAndAccesorys()
+              });
+             }
+          },
+          $_showAllEmptyCoverage(){
+              if(!this.showAllEmptyCoverage.display){
+              this.showAllCoverage.display = false  
+              this.$nextTick(() => {
+                this.formRangeNumberAndWord.display = false,
+                this.showAllEmptyCoverage.display = true
+        
+                this.itemsButtons[0].active = false //todo
+                this.itemsButtons[1].active = false //rangeNumber
+                this.itemsButtons[2].active = true //empty
+                this.tableAndAccesorys()
+              });
+              }
           },
           $_formRangeNumberAndWord(){
-            this.formRangeNumberAndWord.display = true,
-            this.showAllCoverage.display = false
+            if(!this.formRangeNumberAndWord.display){
+              this.showAllCoverage.display = false
+              this.showAllEmptyCoverage.display = false
+              this.formRangeNumberAndWord.display = true,
 
-            this.itemsButtons[0].active = false //todo
-            this.itemsButtons[1].active = true //rangeNumber
+              this.itemsButtons[0].active = false //todo
+              this.itemsButtons[1].active = true //rangeNumber
+              this.itemsButtons[2].active = false //empty
 
-            if(this.table.display){this.table.display= false}
+              this.tableAndAccesorys()
+            }
+           
           },
           $_getAdmin(){
 
@@ -366,7 +421,12 @@
               this.country_admin = country
             }
             
-          }, 
+          },
+          tableAndAccesorys(){
+            if(this.table.display){
+              this.table.display = false
+            }
+          }
         },
         
         created(){
@@ -470,6 +530,12 @@
     /* .slide-fade-leave-active below version 2.1.8 */ {
       transform: translateX(10px);
       opacity: 0;
+    }
+
+    /* dialog */
+
+    .v-dialog__content{
+      z-index: 600 !important;
     }
 
 </style>

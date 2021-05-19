@@ -29,83 +29,159 @@ public function admin(){
 public function countAllCoverage(){
 
     $countAllCoverage = new cobertura();
-            $countAllCoverage = $countAllCoverage-> countAllCoverage();
+    $countAllCoverage = $countAllCoverage-> countAllCoverage();
 
-            if(is_object($countAllCoverage)){
-                
-            foreach($countAllCoverage as $element){
+    if(is_object($countAllCoverage)){
+        
+    foreach($countAllCoverage as $element){
 
-                        $object=array(
-                            'success' => true,
-                            'count' => $element["count"],
-                            
-                        );
-                }
-            }else{
                 $object=array(
-                    'error' => true,
+                    'success' => true,
+                    'count' => $element["count"],
+                    
                 );
-            }
+        }
+    }else{
+        $object=array(
+            'error' => true,
+        );
+    }
 
-            $jsonstring = json_encode($object);
-            echo $jsonstring;
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
+
+public function countAllEmptyCoverage(){
+
+    $countAllEmptyCoverage = new cobertura();
+    $countAllEmptyCoverage = $countAllEmptyCoverage-> countAllEmptyCoverage();
+
+    if(is_object($countAllEmptyCoverage)){
+        
+    foreach($countAllEmptyCoverage as $element){
+
+                $object=array(
+                    'success' => true,
+                    'count' => $element["count"],
+                    
+                );
+        }
+    }else{
+        $object=array(
+            'error' => true,
+        );
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+
 }
 
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
+
 public function getAllCoverage(){
 
-            $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-            $request =  json_decode($dataRequest);
-            $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
-            $limit = isset($request->limit) ? $request->limit : false;
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $request =  json_decode($dataRequest);
+    $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
+    $limit = isset($request->limit) ? $request->limit : false;
 
-            $getAllCoverage = new cobertura();
-            $getAllCoverage->setFromRow($fromRow);
-            $getAllCoverage->setLimit($limit);
-            $getAllCoverage = $getAllCoverage-> getAllCoverage();
+    $getAllCoverage = new cobertura();
+    $getAllCoverage->setFromRow($fromRow);
+    $getAllCoverage->setLimit($limit);
+    $getAllCoverage = $getAllCoverage-> getAllCoverage();
 
-            if(is_object($getAllCoverage)){
-                
-            foreach($getAllCoverage as $element){
+    if(is_object($getAllCoverage)){
+        
+    foreach($getAllCoverage as $element){
 
-                        $arrayDateTime = explode(' ', trim($element["created_at"]));
-                        $arrayDate = explode('-',$arrayDateTime[0]);
-                        $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
-                        $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+                $arrayDateTime = explode(' ', trim($element["created_at"]));
+                $arrayDate = explode('-',$arrayDateTime[0]);
+                $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
 
-                        $object[]=array(
-                            'success' => true,
-                            'id' => $element["id"],
-                            'postal_code' => $element["postal_code"],
-                            'locate' => $element["locate"],
-                            'home_address' => $element["home_address"], 
-                            'province' => $element["province"],
-                            'name_country' => $element['name_country'],
-                            'type' => $element["type"],
-                            'id_user' => $element["id_user"],
-                            'name_assigned' => $element["id_user"],
-                            'customer_service_hours' => $element["customer_service_hours"],
-                            'lat' => $element["lat"],
-                            'lng' => $element["lng"],
-                            'created_at' => $dateTimeFormated
-                        );
-                }
-            }else{
-                $object=array(
-                    'error' => true,
+                $object[]=array(
+                    'success' => true,
+                    'id' => $element["id"],
+                    'postal_code' => $element["postal_code"],
+                    'locate' => $element["locate"],
+                    'home_address' => $element["home_address"], 
+                    'provinceInt' => $element["provinceInt"], 
+                    'province' => $element["province"],
+                    'name_country' => $element['name_country'],
+                    'type' => $element["type"],
+                    'id_user' => $element["id_user"],
+                    'name_assigned' => $element["id_user"],
+                    'customer_service_hours' => $element["customer_service_hours"],
+                    'lat' => $element["lat"],
+                    'lng' => $element["lng"],
+                    'created_at' => $dateTimeFormated
                 );
-            }
+        }
+    }else{
+        $object=array(
+            'error' => true,
+        );
+    }
 
-            $jsonstring = json_encode($object);
-            echo $jsonstring;
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
 }
 
+public function getAllEmptyCoverage(){
 
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $request =  json_decode($dataRequest);
+    $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
+    $limit = isset($request->limit) ? $request->limit : false;
 
+    $getAllEmptyCoverage = new cobertura();
+    $getAllEmptyCoverage->setFromRow($fromRow);
+    $getAllEmptyCoverage->setLimit($limit);
+    $getAllEmptyCoverage = $getAllEmptyCoverage-> getAllEmptyCoverage();
 
+    if(is_object($getAllEmptyCoverage)){
+        
+    foreach($getAllEmptyCoverage as $element){
+                
+                if(!empty($element["created_at"]) && $element["created_at"] !== null){
+                    $arrayDateTime = explode(' ', trim($element["created_at"]));
+                    $arrayDate = explode('-',$arrayDateTime[0]);
+                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+                }else{
+                    $dateTimeFormated = $element["created_at"];
+                }
+                
 
+                $object[]=array(
+                    'success' => true,
+                    'id' => $element["id"],
+                    'postal_code' => $element["postal_code"],
+                    'locate' => $element["locate"],
+                    'home_address' => $element["home_address"], 
+                    'provinceInt' => $element["provinceInt"], 
+                    'province' => $element["province"],
+                    'name_country' => $element['name_country'],
+                    'type' => $element["type"],
+                    'id_user' => $element["id_user"],
+                    'name_assigned' => $element["id_user"],
+                    'customer_service_hours' => $element["customer_service_hours"],
+                    'lat' => $element["lat"],
+                    'lng' => $element["lng"],
+                    'created_at' => $dateTimeFormated
+                );
+        }
+    }else{
+        $object=array(
+            'error' => true,
+        );
+    }
 
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
 
+}
 
 public function HistoricalInactive(){
 
