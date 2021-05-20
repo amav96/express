@@ -24,10 +24,10 @@
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/formSearchByWordAndDate.js"></script>
-<script src="<?=base_url?>vue/src/components/form/formSearchDate.js"></script>
-<script src="<?=base_url?>vue/src/components/form/formSearchWord.js"></script>
-<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formSearchByWordAndDate.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 
 <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/sub-headers.js"></script>

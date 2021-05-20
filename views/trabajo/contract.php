@@ -145,6 +145,12 @@
 
             <?php if ($contrato->status_process === 'sign_contract') { ?>
 
+                <div class="alert alert-danger">
+                    <h4>Importante!</h4>
+                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
+                </div>
+
                 CBU: <input type="text" id="cbu" name="cbu" value="<?= $contrato->cbu ?>" placeholder="Ingresar CBU"> BANCO: <input type="text" id="banco" name="banco" value="<?= $contrato->bank ?>" placeholder="Ingresar BANCO">
                 <br>
                 <div class="d-flex justify-content-around mt-2">
@@ -266,6 +272,12 @@
         </p>
 
         <?php if ($contrato->status_process === 'sign_contract') { ?>
+
+            <div class="alert alert-danger">
+                    <h4>Importante!</h4>
+                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
+                </div>
 
             CBU: <input type="text" id="cbu" name="cbu" value="<?= $contrato->cbu ?>" placeholder="Ingresar CBU"> BANCO: <input type="text" id="banco" name="banco" value="<?= $contrato->bank ?>" placeholder="Ingresar BANCO">
             <br>
@@ -506,6 +518,12 @@
 
             <?php if ($contrato->status_process === 'sign_contract') { ?>
 
+                <div class="alert alert-danger">
+                    <h4>Importante!</h4>
+                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
+                </div>
+
                 CBU: <input type="text" id="cbu" name="cbu" value="<?= $contrato->cbu ?>" placeholder="Ingresar CBU"> BANCO: <input type="text" id="banco" name="banco" value="<?= $contrato->bank ?>" placeholder="Ingresar BANCO">
                 <br>
                 <div class="d-flex justify-content-around mt-2">
@@ -675,6 +693,12 @@
             </p>
 
             <?php if ($contrato->status_process === 'sign_contract') { ?>
+
+                <div class="alert alert-danger">
+                    <h4>Importante!</h4>
+                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
+                </div>
 
             CBU: <input type="text" id="cbu" name="cbu" value="<?= $contrato->cbu ?>" placeholder="Ingresar CBU"> BANCO: <input type="text" id="banco" name="banco" value="<?= $contrato->bank ?>" placeholder="Ingresar BANCO">
             <br>

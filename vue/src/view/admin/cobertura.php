@@ -14,8 +14,7 @@
 
 
 <!-- dialog component -->
-
-<script src="<?=base_url?>vue/src/components/dialog/admin/cobertura/Create.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js?v=12052021"></script>
 <script src="<?=base_url?>vue/src/components/dialog/chooseNext.js?v=12052021"></script>
 
 <!-- table component -->
@@ -25,9 +24,13 @@
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/formAll.js?v=12052021"></script>
-<script  src="<?=base_url?>vue/src/components/form/formRangeNumberAndWord.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/filterWithPagination.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCollector.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCommerce.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SavePoint.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js?v=12052021"></script>
 
 <!-- pagination component -->
 <script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
@@ -149,12 +152,18 @@
 
                 <div class="d-flex justify-center  flex-row my-2">
                   <div class="mx-1">
-                      <v-btn color="primary" @click="openDialogChoose()">
+                      <v-btn 
+                          color="primary" 
+                          @click="openDialogChoose('create')"
+                          >
                           Crear
                       </v-btn>
                   </div>
                   <div class="mx-1" >
-                      <v-btn color="orange">
+                      <v-btn 
+                          color="orange"
+                          @click="openDialogChoose('update')" 
+                          >
                           Actualizar
                       </v-btn>
                   </div>
@@ -163,15 +172,23 @@
                 <template>
                   <dialog-choose-next
                   :dialogChoose="dialogChoose"
-                  @next="next($event)"
-                  @back="back($event)"
+                  @next="nextChoose($event)"
+                  @back="backChoose($event)"
                   />
                 </template>
 
-                <template>
-                  <dialog-cobertura-create v-if="dialogParams.display"
-                  :dialogParams="dialogParams"
-                  />
+                <template >
+                  <d-media-screen :dialogMediaScreen="dialogMediaScreen"  >
+                    <template v-if="save.collector.display">
+                        <save-collector :save="save" />
+                    </template>
+                    <template v-if="save.commerce.display" >
+                      <save-commerce :save="save" />
+                    </template>
+                    <template v-if="save.point.display" >
+                      <save-point :save="save" />
+                    </template>
+                  </d-media-screen>
                 </template>
 
                 <template v-if="formRangeNumberAndWord.display">
@@ -252,6 +269,25 @@
         `,
         data(){
             return {
+                dialogMediaScreen : {
+                  display : true,
+                  title : 'Crear zona para comercio'
+                },
+                save : {
+                  action : 'update',
+                  type:'collector',
+                  collector :{
+                    display : false
+                  },
+                  commerce : {
+                    display : true,
+                    url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCommerce',
+                    title_field : 'Ingrese comercio',
+                  },
+                  point : {
+                    display : false
+                  },
+                },   
                 dialogChoose : {
                   chooseNext: {
                     display: false,
@@ -264,17 +300,6 @@
                       {text:'Terminal', value:'station'},
                     ],
                   }
-                },
-                dialogParams : {
-                  display :true,
-                  body:[],
-                  collector : [
-                    {text:'Recolector', required: true},
-                    {text:'Pais' , required: true},
-                    {text:'Provincia' , required: true},
-                    {text:'Localidad' , required: true},
-                    {text:'Codigo Postal' , required: true}
-                  ]
                 },
                 formRangeNumberAndWord : {
                     display : true
@@ -298,9 +323,20 @@
                 itemsButtons:[
                     { title: 'Mostrar asignado', icon: 'mdi-account', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
                     { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
-                    { title: 'Zonas vacias', icon: 'mdi-alert', methods: '$_showAllEmptyCoverage', active :  false, color :"error"},
+                    { title: 'Zonas vacias', icon: 'mdi-alert', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom<"},
                 ],
                 admin : 0,
+                url_actions : {
+                  export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                  download_excel : API_BASE_EXCEL,
+                  delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                  showInvoice : API_BASE_URL + 'equipo/remito',
+                  status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+                  update_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
+                  delete_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
+                  send_invoice : API_BASE_URL + 'helpers/email.php?email=remito',
+                  save_data_customer : API_BASE_CONTROLLER + 'equipoController.php?equipo=saveDataCustomer',
+                },
                 urlTryPagination:'',
                 pagination : {
                     totalPage : 0, 
@@ -353,15 +389,44 @@
             }
         },
         methods:{
-          openDialogChoose(){
+          openDialogChoose(action){
+            this.save.action = action
             this.dialogChoose.chooseNext.display = !this.dialogChoose.chooseNext.display
           },
-          next(){
+          nextChoose(){
             var choose = this.dialogChoose.chooseNext;
             var chosenOption = choose.chosenOption
+            this.save.type = chosenOption
+            // type to form
             
+            if(this.save.type === 'collector'){
+                this.dialogChoose.chooseNext.display = false
+                this.dialogMediaScreen.display = true
+                //show or hide others form
+                this.save.collector.display = true
+                this.save.commerce.display = false
+                this.save.point.display = false
+              }
+            if(this.save.type === 'commerce'){
+                this.dialogChoose.chooseNext.display = false
+                this.dialogMediaScreen.display = true
+                this.dialogMediaScreen.title = 'Crear zona para comercio'
+                //show or hide others form
+                this.save.commerce.display = true
+                this.save.collector.display = false
+                this.save.point.display = false
+              }
+            if(this.save.type === 'mail' || this.save.type === 'station'){
+                this.dialogChoose.chooseNext.display = false
+                this.dialogMediaScreen.display = true
+                //show or hide others form
+                this.save.point.display = true
+                this.save.collector.display = false
+                this.save.commerce.display = false
+              }
+              // this.dialogChoose.chooseNext.chosenOption = ''
           },
-          back(){
+          backChoose(){
             this.dialogChoose.chooseNext.chosenOption = '';
           },
           handle_function_call(function_name) {

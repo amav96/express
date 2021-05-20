@@ -717,11 +717,11 @@
 
                     $result = false;
                       if($stat==='checkEmailToRestore'){
-                          //esto es cuando es solicitado restablecer la contraseña por vez primera
+                          //esto es cuando es solicitado restablecer la contrase単a por vez primera
                         $sql ="UPDATE users set status_pass='$stat' where email ='$email'";
 
                       }else if($stat==='restorationInProcess'){
-                          //esto es cuando verifica el email para restablecer la contraseña
+                          //esto es cuando verifica el email para restablecer la contrase単a
                         $sql ="UPDATE users set status_pass='$stat' where email_hash ='$email'";            
                       }
 
@@ -1013,7 +1013,7 @@
                     
                 }
 
-                public function setStatusUser(){
+                 public function setStatusUser(){
                     
                     $id = !empty($this->getIdenviado()) ? $this->getIdenviado() : false ;
                     $id_managent = !empty($this->getUsername()) ? $this->getUsername() : false ;
@@ -1046,6 +1046,7 @@
 
 
                 }
+
 
                 public function setStatusNotifications(){
 
@@ -1151,6 +1152,20 @@
                         $result = true;
                     }
                     
+                    return $result;
+                }
+
+                //SCOPE
+
+                public function getUsersCommerce(){
+                    $sql = "SELECT name_alternative as 'name_user',id FROM users WHERE role = 'comercio' AND status_process = 'active'";
+
+                    $getUsersCommerce =  $this->db->query($sql);
+                    if($getUsersCommerce && $getUsersCommerce->num_rows>0){
+                        $result = $getUsersCommerce;
+                    }else {
+                        $result = false;
+                    }
                     return $result;
                 }
 

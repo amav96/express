@@ -73,33 +73,5 @@ class Utils{
        
     }
 
-    public static function pais(){
-
-        $pais = new EquiposExtra();
-        $pais = $pais->getAllPais();
-        
-        if(is_object($pais)){
-            foreach($pais as $element){
- 
-                 $objeto[]= array(
-                     'result' => '1',
-                     'id' => $element["id"],
-                     'country' => $element["country"],
-                 );
-                   
-            }
- 
-        }else{
-         $objeto[]= array(
-             'result' => '2',
-             
-         );
-        }
-        
-        $jsonstring = json_encode($objeto);
-        echo $jsonstring;
- 
-    }
- 
     
 }

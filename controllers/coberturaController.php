@@ -1,6 +1,8 @@
 <?php if (isset($_GET['cobertura'])) {
 
 require_once '../model/cobertura.php';
+require_once '../model/usuario.php';
+require_once '../helpers/utils.php';
 require_once '../config/db.php';
 
 session_start();
@@ -10,6 +12,7 @@ $cobertura->$accion();
 } else {
 
 require_once 'model/cobertura.php';
+require_once 'model/usuario.php';
 }
 
 class coberturaController{
@@ -182,6 +185,36 @@ public function getAllEmptyCoverage(){
     echo $jsonstring;
 
 }
+
+//USUALES
+
+public function getUsersCommerce(){
+
+    Utils::AuthAdmin();
+    $getUsersCommerce = new Usuario();
+    $getUsersCommerce = $getUsersCommerce->getUsersCommerce();
+
+    if($getUsersCommerce){
+        foreach ($getUsersCommerce as $element){
+            $object[] = array(
+                'success' => true,
+                'id' => $element["id"],
+                'name_user' => $element["name_user"],
+                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+            );
+        }
+        
+    }else {
+        $object = array(
+            'error' => true,
+        );
+
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
+
 
 public function HistoricalInactive(){
 

@@ -84,7 +84,7 @@ Vue.component("table-equipos", {
                                 </v-btn>
                                
                             </td>
-                            <td>{{row.identificacion}}</td>
+                            <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
                             <td><strong>{{row.estado}}</strong></td>
                             <td><strong>{{dateFormat(row.created_at)}}</strong></td>
                             <td>{{row.empresa}}</td>
