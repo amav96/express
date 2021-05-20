@@ -9,7 +9,7 @@ Vue.component('save-commerce',{
                             <select-auto-complete-simple-id 
                             @exportVal="id_user = $event"
                             title="Ingrese País" 
-                            :url="save.commerce.url_users" />
+                            :url="save.zone.url_country" />
                         </v-col>
                         <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
                             <select-auto-complete-simple-id 

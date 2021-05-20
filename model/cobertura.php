@@ -851,6 +851,20 @@ class cobertura{
                   return $result;
             }
       }
+
+      // SCOPE
+
+      public function getCountry(){
+            $sql = "SELECT id,country from country";
+            $getCountry = $this->db->query($sql);
+            if($getCountry && $getCountry->num_rows>0){
+                  $result = $getCountry;
+            }else {
+                  $result = false;
+            }
+            return $result;
+            
+      }
 }
 
 ?>

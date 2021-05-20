@@ -287,6 +287,11 @@
                   point : {
                     display : false
                   },
+                  zone : {
+                    url_country : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
+                    url_province: '',
+                    url_locate:''
+                  }
                 },   
                 dialogChoose : {
                   chooseNext: {

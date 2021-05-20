@@ -983,5 +983,28 @@ public function getAllCpByZone(){
      }
 }
 
+// SCOPE
+
+public function getCountry(){
+    $getCountry = new Cobertura();
+    $getCountry = $getCountry->getCountry();
+
+    if($getCountry){
+        foreach ($getCountry as $element){
+            $object[]=array(
+                'id'    => $element["id"],
+                'slug'  => $element["country"]
+            );
+        }
+    }else {
+        $object = array(
+            'error' => true
+        );
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
+
 
 }
