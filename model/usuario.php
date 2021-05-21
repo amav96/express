@@ -1158,7 +1158,7 @@
                 //SCOPE
 
                 public function getUsersCommerce(){
-                    $sql = "SELECT name_alternative as 'name_user',id FROM users WHERE role = 'comercio' AND status_process = 'active'";
+                    $sql = "SELECT id,name_alternative as 'name_user',country,province,location,home_address,customer_service_hours FROM users WHERE role = 'comercio' AND status_process = 'active'";
 
                     $getUsersCommerce =  $this->db->query($sql);
                     if($getUsersCommerce && $getUsersCommerce->num_rows>0){

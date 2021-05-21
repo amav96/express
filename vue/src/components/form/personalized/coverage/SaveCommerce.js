@@ -7,10 +7,14 @@ Vue.component('save-commerce',{
                 <v-row class="d-flex justify-start flex-row" >
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                         <select-auto-complete-simple-id 
-                        @exportVal="id_user = $event"
+                        @exportVal="setUser($event)"
                         :title="save.commerce.title_field" 
                         :url="save.commerce.url_users" />
                     </v-col>
+                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                        <span> {{infoUser}} </span>
+                    </v-col>
+                    
                 </v-row>
 
                 <h6 class="ml-4 my-5"> Dirección del comercio (Geocodificar)</h6>
@@ -75,10 +79,14 @@ Vue.component('save-commerce',{
          locate : '',
          text_locate:'',
          id_user : '',
-         chosenPostalCodes: []
+         chosenPostalCodes: [],
+         infoUser : []
         }
       },
       methods : {
+        setUser(user){
+            this.infoUser = user
+        },
         setCountry(country){
             this.id_country = country.id
             this.text_country = country.slug

@@ -186,35 +186,6 @@ public function getAllEmptyCoverage(){
 
 }
 
-//USUALES
-
-public function getUsersCommerce(){
-
-    Utils::AuthAdmin();
-    $getUsersCommerce = new Usuario();
-    $getUsersCommerce = $getUsersCommerce->getUsersCommerce();
-
-    if($getUsersCommerce){
-        foreach ($getUsersCommerce as $element){
-            $object[] = array(
-                'success' => true,
-                'id' => $element["id"],
-                'name_user' => $element["name_user"],
-                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
-            );
-        }
-        
-    }else {
-        $object = array(
-            'error' => true,
-        );
-
-    }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-}
-
 
 public function HistoricalInactive(){
 
@@ -951,6 +922,39 @@ public function getAllCpByZone(){
 }
 
 // SCOPE
+
+public function getUsersCommerce(){
+
+    Utils::AuthAdmin();
+    $getUsersCommerce = new Usuario();
+    $getUsersCommerce = $getUsersCommerce->getUsersCommerce();
+
+    if($getUsersCommerce){
+        foreach ($getUsersCommerce as $element){
+            $object[] = array(
+                'success' => true,
+                'id' => $element["id"],
+                'name_user' => $element["name_user"],
+                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                'country' => $element["country"],
+                'province' => $element["province"],
+                'locate' => $element["location"],
+                'home_address' => $element["home_address"],
+                'customer_service_hours' => $element["customer_service_hours"],
+                
+            );
+        }
+        
+    }else {
+        $object = array(
+            'error' => true,
+        );
+
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
 
 public function getCountry(){
     $getCountry = new Cobertura();

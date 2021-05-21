@@ -23,7 +23,7 @@ Vue.component('geocoding-simple',{
                     :searchID="id_province"
                     title="Ingrese Localidad" 
                     :url="save.zone.url_locate"
-                    @exportVal="getPostalCodes($event)"
+                    @exportVal="setLocate($event)"
                     />
                 </v-col>
             </v-row>
@@ -55,29 +55,9 @@ Vue.component('geocoding-simple',{
                 this.id_province = province.id
                 this.text_province = province.slug
             },
-            getPostalCodes(locate){
-                const url = this.save.zone.url_postalCode
-                axios.get(url,{
-                    params : {
-                        id_country : this.id_country,
-                        id_province : this.id_province,
-                        locate : locate.slug
-                    }
-                })
-                .then(res => {
-                    if(res.data.error){
-                        alertNegative("No hay datos disponibles")
-                        return
-                    }
-                    const postal_codes = res.data.map(key => key.postal_code)
-                    this.chosenPostalCodes = []
-                    this.save.zone.postal_codes = []
-                    this.save.zone.postal_codes = postal_codes
-                   
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            setLocate(locate){
+                console.log(locate)
+                return
             }
           },
         
