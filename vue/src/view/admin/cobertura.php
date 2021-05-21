@@ -8,43 +8,46 @@
 <!-- component  avisos -->
   
 
-<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
 
 <!-- dialog component -->
-<script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/dialog/chooseNext.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/chooseNext.js"></script>
 
 <!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/tables/excel.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableCobertura.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableCobertura.js"></script>
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js?v=12052021"></script>
-<script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCollector.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCommerce.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SavePoint.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCollector.js"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCommerce.js"></script>
+<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SavePoint.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/geocoding/geocodingSimple.js"></script>
 
 <!-- pagination component -->
-<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 
 <!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/services/geocoding.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/services/geocoding.js"></script>
 
 <!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=12052021"></script>
-<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/store/index.js"></script>
+<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js"></script>
 <!-- views -->
 
 <?php require_once 'views/layout/footerAdmin.php'; ?>
@@ -288,9 +291,13 @@
                     display : false
                   },
                   zone : {
+                    postal_codes : [],
+                    selectPostalCodes: [],
                     url_country : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
-                    url_province: '',
-                    url_locate:''
+                    url_province: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getProvinceById',
+                    url_locate:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getLocateById',
+                    url_postalCode:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeByLocateAndProvinceAndCountry',
+                    
                   }
                 },   
                 dialogChoose : {

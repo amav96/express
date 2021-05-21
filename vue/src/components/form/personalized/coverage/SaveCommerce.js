@@ -3,36 +3,56 @@ Vue.component('save-commerce',{
         `
         <div>
              <v-container>
-                <h5 class="ml-4"> Zona a cubir </h5>
+                <h6 class="ml-4 my-5"> Comercio </h6>
+                <v-row class="d-flex justify-start flex-row" >
+                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                        <select-auto-complete-simple-id 
+                        @exportVal="id_user = $event"
+                        :title="save.commerce.title_field" 
+                        :url="save.commerce.url_users" />
+                    </v-col>
+                </v-row>
+
+                <h6 class="ml-4 my-5"> Dirección del comercio </h6>
+                 <template>
+                    <geocoding-simple
+                    :save="save"
+                    />
+                 </template>
+
+                <h6 class="ml-4 my-5"> Zona a cubir </h6>
                 <v-row class="d-flex justify-center flex-row" >
-                        <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            @exportVal="id_user = $event"
-                            title="Ingrese País" 
-                            :url="save.zone.url_country" />
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            @exportVal="id_user = $event"
-                            title="Ingrese Provincia" 
-                            :url="save.commerce.url_users" />
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            @exportVal="id_user = $event"
-                            title="Ingrese Localidad" 
-                            :url="save.commerce.url_users" />
-                        </v-col>
-                    </v-row>
-                    <v-row class="d-flex justify-start flex-row" >
-                        <v-col  cols="12" xl="4" lg="4" md="4" sm="8" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            @exportVal="id_user = $event"
-                            :title="save.commerce.title_field" 
-                            :url="save.commerce.url_users" />
-                        </v-col>
-                    </v-row>
-                    
+                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                        <select-auto-complete-simple-id 
+                        title="Ingrese País" 
+                        :url="save.zone.url_country"
+                        @exportVal="setCountry($event)"
+                            />
+                    </v-col>
+                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                        <select-auto-complete-search-id 
+                        :searchID="id_country"
+                        title="Ingrese Provincia" 
+                        :url="save.zone.url_province"
+                        @exportVal="setProvince($event)" 
+                        />
+                    </v-col>
+                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                        <select-auto-complete-search-id 
+                        :searchID="id_province"
+                        title="Ingrese Localidad" 
+                        :url="save.zone.url_locate"
+                        @exportVal="getPostalCodes($event)"
+                        />
+                    </v-col>
+                </v-row>
+                    <template v-if="save.zone.postal_codes.length > 0" >
+                        <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
+                            <switches-common
+                            :options="save.zone.postal_codes"
+                            @setOptions="chosenPostalCodes = $event"
+                            />
+                    </template>
                 </v-container>
         </div>
         `,
@@ -43,9 +63,47 @@ Vue.component('save-commerce',{
     },
     data () {
         return {
-         id_user : ''
+         id_country : '',
+         id_province : '',
+         locate : '',
+         id_user : '',
+         chosenPostalCodes: []
         }
       },
+      methods : {
+        setCountry(country){
+            this.id_country = country
+          },
+        setProvince(province){
+            this.id_province = province
+        },
+        getPostalCodes(locate){
+            const url = this.save.zone.url_postalCode
+            axios.get(url,{
+                params : {
+                    id_country : this.id_country,
+                    id_province : this.id_province,
+                    locate
+                }
+            })
+            .then(res => {
+                if(res.data.error){
+                    alertNegative("No hay datos disponibles")
+                    return
+                }
+                const postal_codes = res.data.map(key => key.postal_code)
+                this.chosenPostalCodes = []
+                this.save.zone.postal_codes = []
+                this.save.zone.postal_codes = postal_codes
+               
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+      },
+
+      
      
     
     })

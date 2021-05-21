@@ -862,39 +862,6 @@ public function getOperators(){
     }
 }
 
-public function getProvince(){
-
-   $id_country = isset($_POST['object']['id_country']) ? $_POST['object']['id_country'] : false ;
-
-   $getProvince = new cobertura;
-   $getProvince->setId_country($id_country);
-   $getProvince = $getProvince->province();
-
-   if(is_object($getProvince)){
-
-      foreach($getProvince as $province){
-
-        $object[] = array(
-            'result' => '1',
-            'id' => $province["id"],
-            'province' => $province["province"]
-        );
-
-      }
-
-   }else{
-
-    $object[] = array(
-
-        'result' => '2'
-    );
-
-   }
-
-   $jsonstring =  json_encode($object);
-   echo $jsonstring;
-}
-
 public function getLocate(){
 
    
@@ -1004,6 +971,83 @@ public function getCountry(){
 
     $jsonstring = json_encode($object);
     echo $jsonstring;
+}
+
+public function getProvinceById(){
+    $id = isset($_GET['id']) ? $_GET['id'] : false ;
+    if($id){
+
+        $getProvinceById = new Cobertura();
+        $getProvinceById->setId($id);
+        $getProvinceById = $getProvinceById->getProvinceById();
+        if($getProvinceById){
+            foreach ($getProvinceById as $element){
+                $object[]=array(
+                    'id'    => $element["id"],
+                    'slug'  => $element["province"]
+                );
+            }
+        }else {
+            $object = array(
+                'error' => true
+            );
+        }
+    
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
+}
+
+public function getLocateById(){
+    $id = isset($_GET['id']) ? $_GET['id'] : false ;
+    if($id){
+
+        $getLocateById = new Cobertura();
+        $getLocateById->setId($id);
+        $getLocateById = $getLocateById->getLocateById();
+        if($getLocateById){
+            foreach ($getLocateById as $element){
+                $object[]=array(
+                    'id'    => $element["locate"],
+                    'slug'  => $element["locate"]
+                );
+            }
+        }else {
+            $object = array(
+                'error' => true
+            );
+        }
+    
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
+}
+
+public function getPostalCodeByLocateAndProvinceAndCountry(){
+    $id_country = isset($_GET['id_country']) ? $_GET['id_country'] : false ;
+    $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
+    $locate = isset($_GET['locate']) ? $_GET['locate'] : false ;
+
+    $getPostalCodeByLocateAndProvinceAndCountry = new Cobertura();
+    $getPostalCodeByLocateAndProvinceAndCountry->setId_country($id_country);
+    $getPostalCodeByLocateAndProvinceAndCountry->setProvince($id_province);
+    $getPostalCodeByLocateAndProvinceAndCountry->setLocate($locate);
+    $getPostalCodeByLocateAndProvinceAndCountry = $getPostalCodeByLocateAndProvinceAndCountry->getPostalCodeByLocateAndProvinceAndCountry();
+
+    if($getPostalCodeByLocateAndProvinceAndCountry){
+        foreach ($getPostalCodeByLocateAndProvinceAndCountry as $element){
+                $object[]=array(
+                    'postal_code'    => $element["postal_code"],
+                );
+            }
+    }else {
+        $object = array(
+                'error' => true
+            );
+    }
+
+    $jsonstring = json_encode($object);
+        echo $jsonstring;
 }
 
 

@@ -865,6 +865,52 @@ class cobertura{
             return $result;
             
       }
+
+      public function getProvinceById(){
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $sql = "SELECT id,province,id_country FROM province WHERE id_country = $id";
+            $getProvinceById = $this->db->query($sql);
+            if($getProvinceById && $getProvinceById->num_rows > 0){
+                  $result = $getProvinceById;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+      }
+
+      public function getLocateById(){
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $sql = "SELECT id,locate,postal_code,id_province FROM localities 
+            WHERE id_province = $id
+            GROUP BY locate ORDER BY postal_code";
+            $getLocateById = $this->db->query($sql);
+            if($getLocateById && $getLocateById->num_rows > 0){
+                  $result = $getLocateById;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+      }
+
+      public function getPostalCodeByLocateAndProvinceAndCountry(){
+            $id_country = !empty($this->getId_country()) ? $this->getId_country() : false ;
+            $id_province = !empty($this->getProvince()) ? $this->getProvince() : false ;
+            $locate = !empty($this->getLocate()) ? $this->getLocate() : false ;
+
+            $sql = "SELECT postal_code FROM localities
+            WHERE locate = '$locate' AND id_country = $id_country AND id_province = $id_province
+            ORDER BY postal_code";
+            $getPostalCodeByLocateAndProvinceAndCountry = $this->db->query($sql);
+            if($getPostalCodeByLocateAndProvinceAndCountry && $getPostalCodeByLocateAndProvinceAndCountry->num_rows > 0){
+                  $result = $getPostalCodeByLocateAndProvinceAndCountry;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+      }
 }
 
 ?>

@@ -117,41 +117,34 @@ class pdf extends FPDF
                      $fpdf->SetTextColor(255,255,255);
                      $fpdf->SetFillColor(79,78,77);
                      $fpdf->Cell(33,10,'Serie',0,0,'C',1);
-                     $fpdf->Cell(40,10,'Tarjeta',0,0,'C',1);
-                     $fpdf->Cell(30,10,'equipo',0,0,'C',1);
-                     $fpdf->Cell(25,10,'cable hdmi',0,0,'C',1);
-                     $fpdf->Cell(13,10,'cable av',0,0,'C',1);
-                     $fpdf->Cell(20,10,'fuente',0,0,'C',1);
-                     $fpdf->Cell(20,10,'control',0,0,'C',1);
-                     $fpdf->Cell(15,10,'Tipo',0,0,'C',1);
+                    $fpdf->Cell(36,10,'equipo',0,0,'C',1);
+                    $fpdf->Cell(34,10,'cable hdmi',0,0,'C',1);
+                    $fpdf->Cell(23,10,'cable av',0,0,'C',1);
+                    $fpdf->Cell(28,10,'fuente',0,0,'C',1);
+                    $fpdf->Cell(27,10,'control',0,0,'C',1);
+                    $fpdf->Cell(15,10,'Tipo',0,0,'C',1);
+                    $fpdf->Ln();
+                    $fpdf->SetLineWidth(1);
+                    $fpdf->SetTextColor(0,0,0);
+                    $fpdf->SetFillColor(255,255,255);
+                    $fpdf->SetDrawColor(80,80,80);
+                    $total= 0;
+                    foreach($equipo as $detail)
+                    {
+                        $fpdf->Cell(36,10,utf8_decode($detail["serie"]),'B',0,'C',1);
                     
-                     $fpdf->Ln();
-                    
-                     $fpdf->SetLineWidth(1);
-                     $fpdf->SetTextColor(0,0,0);
-                     $fpdf->SetFillColor(255,255,255);
-                     $fpdf->SetDrawColor(80,80,80);
-                     $total= 0;
-                    
-                                  foreach($equipo as $detail)
-                                  { 
+                        ($detail["estado"] === 'RECUPERADO')
+                        ?$fpdf->Cell(37,10,utf8_decode($detail["equipo"]),'B',0,'C',1)
+                        :$fpdf->Cell(37,10,'A VERIFICAR','B',0,'C',1);
 
-                                        $fpdf->Cell(36,10,utf8_decode($detail["serie"]),'B',0,'C',1);
-                                        $fpdf->Cell(35,10,utf8_decode($detail["tarjeta"]),'B',0,'C',1);
-                                        ($detail["estado"] === 'RECUPERADO')
-                                        ? $fpdf->Cell(36,10,utf8_decode($detail["equipo"]),'B',0,'C',1)
-                                        : $fpdf->Cell(36,10,'A VERIFICAR','B',0,'C',1);
-                                        
-                                        $fpdf->Cell(18,10,$detail["accesorio_uno"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_dos"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_tres"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_cuatro"],'B',0,'C',1);
-                                        ($detail["estado"] === 'RECUPERADO')
-                                        ? $fpdf->Cell(16.9,10,'B','B',0,'C',1)
-                                        : $fpdf->Cell(16.9,10,'A','B',0,'C',1);
-                                    
-                                        $fpdf->Ln();
-                                  }
-
-                      $fpdf->Output('I','Remitos.pdf');
-                      $fpdf->Output('F','Remitos.pdf');
+                        $fpdf->Cell(28,10,$detail["accesorio_uno"],'B',0,'C',1);
+                        $fpdf->Cell(26,10,$detail["accesorio_dos"],'B',0,'C',1);
+                        $fpdf->Cell(26,10,$detail["accesorio_tres"],'B',0,'C',1);
+                        $fpdf->Cell(26,10,$detail["accesorio_cuatro"],'B',0,'C',1);
+                        ($detail["estado"] === 'RECUPERADO')
+                        ?$fpdf->Cell(16.9,10,'B','B',0,'C',1)
+                        :$fpdf->Cell(16.9,10,'A','B',0,'C',1);
+                        $fpdf->Ln();
+                    }
+                    $fpdf->Output('I','Remitos.pdf');
+                    $fpdf->Output('F','Remitos.pdf');

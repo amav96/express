@@ -95,7 +95,6 @@ $fpdf->SetY(119.6);
 $fpdf->SetTextColor(255,255,255);
 $fpdf->SetFillColor(79,78,77);
 $fpdf->Cell(33,10,'Serie',0,0,'C',1);
-
 $fpdf->Cell(36,10,'equipo',0,0,'C',1);
 $fpdf->Cell(34,10,'cable hdmi',0,0,'C',1);
 $fpdf->Cell(23,10,'cable av',0,0,'C',1);

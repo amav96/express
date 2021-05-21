@@ -17,6 +17,7 @@ template : //html
         dense
         :label="title"
         flat
+        ref="autocomplete"
         hide-no-data
         hide-details
         > 
@@ -76,9 +77,13 @@ template : //html
             this.loading = false
           }, 500)
         },
+        clearCachedItems() {
+          
+          this.$refs.autocomplete.cachedItems = [];
+        },
         returnData(val){
+          
           this.$emit("exportVal",val)
-          console.log(val)
         }
       },
       created(){
