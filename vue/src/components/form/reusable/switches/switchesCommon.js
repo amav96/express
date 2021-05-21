@@ -1,28 +1,38 @@
 Vue.component('switches-common',{
 template : //html 
     `<div>
-        <v-row class=" d-flex justify-center flex-column align-content-center align-items-center px-3" >
-        {{options}}
-            <div>
-                <v-btn color="primary" @click="selectAll">
-                Seleccionar todo
-                </v-btn>
-            </div>
-            <div>
-                <v-row class=" d-flex justify-center flex-row px-3" >
+
+    <v-row class=" d-flex justify-center flex-row align-content-center align-items-center px-3">
+
+        <v-btn
+        class="mx-2"
+        fab
+        
+        small
+        color="primary"
+        @click="selectAll"
+        >
+            <v-icon v-if="!all">
+                mdi-vector-selection
+            </v-icon>
+            <v-icon v-else>
+                mdi-selection-off
+            </v-icon>
+        </v-btn>
+
+    </v-row>  
+            <v-row class=" d-flex justify-center flex-row align-content-center align-items-center px-3" >
                     <v-col cols="12" sm="2" md="2" v-for="option in options" :key="option"    
                     >
-                        <v-switch
-                        v-model="optionsIn"
-                        :label="option"
-                        color="primary"
-                        :value="option"
-                        hide-details
-                        ></v-switch>
+                    <v-switch
+                    v-model="optionsIn"
+                    :label="option"
+                    color="primary"
+                    :value="option"
+                    hide-details
+                    ></v-switch>
                     </v-col>
-                </v-row>
-            </div> 
-        </v-row>  
+            </v-row>  
      </div>
     `,
     props:{
@@ -32,7 +42,8 @@ template : //html
     },
     data (){
     return {
-         optionsIn:[]
+         optionsIn:[],
+         all : false
     }
     },
     methods:{
@@ -40,8 +51,13 @@ template : //html
             this.optionsIn = []
         },
         selectAll(){
-            console.log(this.options)
-            this.optionsIn = this.options
+            if(!this.all){
+                this.optionsIn = this.options
+                this.all = true
+            }else {
+                this.optionsIn = []
+                this.all = false
+            }
         }
     },
     watch : {

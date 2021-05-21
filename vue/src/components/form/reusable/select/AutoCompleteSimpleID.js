@@ -9,7 +9,7 @@ template : //html
         :loading="loading"
         :items="items"
         item-text="slug"
-        :item-value="valueCustom"
+        item-value="id"
         :search-input.sync="search"
         cache-items
         class="mx-4"
@@ -20,6 +20,7 @@ template : //html
         ref="autocomplete"
         hide-no-data
         hide-details
+        return-object
         > 
     </v-autocomplete>
     </div>
@@ -50,13 +51,6 @@ template : //html
         },
       },
       methods: {
-        valueCustom(valueCustom){
-          const value = {
-            id    :  valueCustom.id,
-            slug  :  valueCustom.slug
-          }
-          return value
-        },
         getData(){
           const url = this.url
           axios.get(url)
@@ -67,8 +61,7 @@ template : //html
               }
              const data = res.data
              this.items = data
-             this.data = data
-             
+             this.data = data  
             })
             .catch(err => {
               console.log(err)
@@ -89,7 +82,6 @@ template : //html
           this.$refs.autocomplete.cachedItems = [];
         },
         returnData(val){
-          
           this.$emit("exportVal",val)
         }
       },
