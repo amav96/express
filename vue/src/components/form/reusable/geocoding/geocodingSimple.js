@@ -34,21 +34,26 @@ Vue.component('geocoding-simple',{
                 type : Object
             }
         },
-        data (){
-        return {
-            id_country : '',
-            id_province : '',
-            locate : '',
-            id_user : '',
-            chosenPostalCodes: []
-        }
-        },
-        methods:{
+        data () {
+            return {
+             id_country : '',
+             text_country : '',
+             id_province : '',
+             text_province : '',
+             locate : '',
+             text_locate:'',
+             id_user : '',
+             chosenPostalCodes: []
+            }
+          },
+          methods : {
             setCountry(country){
-                this.id_country = country
+                this.id_country = country.id
+                this.text_country = country.slug
               },
             setProvince(province){
-                this.id_province = province
+                this.id_province = province.id
+                this.text_province = province.slug
             },
             getPostalCodes(locate){
                 const url = this.save.zone.url_postalCode
@@ -56,7 +61,7 @@ Vue.component('geocoding-simple',{
                     params : {
                         id_country : this.id_country,
                         id_province : this.id_province,
-                        locate
+                        locate : locate.slug
                     }
                 })
                 .then(res => {
@@ -74,6 +79,6 @@ Vue.component('geocoding-simple',{
                     console.log(err)
                 })
             }
-        },
+          },
         
     })

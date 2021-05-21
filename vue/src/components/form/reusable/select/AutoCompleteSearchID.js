@@ -5,10 +5,11 @@ Vue.component('select-auto-complete-search-id',{
         <div>
             <v-autocomplete
             v-model="select"
+            ref="autocomplete"
             :loading="loading"
             :items="items"
             item-text="slug"
-            item-value="id"
+            :item-value="valueCustom"
             :search-input.sync="search"
             cache-items
             class="mx-4"
@@ -18,8 +19,6 @@ Vue.component('select-auto-complete-search-id',{
             flat
             hide-no-data
             hide-details
-            ref="autocomplete"
-            :disabled="id_search === ''"
             > 
         </v-autocomplete>
         </div>
@@ -42,7 +41,7 @@ Vue.component('select-auto-complete-search-id',{
               search: null,
               select: null,
               data: [],
-              id_search: ''
+              id_search: {},
             }
           },
           watch: {
@@ -61,7 +60,15 @@ Vue.component('select-auto-complete-search-id',{
               },
           },
           methods: {
+            valueCustom(valueCustom){
+              const value = {
+                id    :   valueCustom.id,
+                slug  :   valueCustom.slug
+              }
+              return value
+            },
             getDataByID(){
+
               const url = this.url
               axios.get(url,{
                   params : {

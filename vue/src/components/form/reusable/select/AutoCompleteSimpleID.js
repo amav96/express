@@ -9,7 +9,7 @@ template : //html
         :loading="loading"
         :items="items"
         item-text="slug"
-        item-value="id"
+        :item-value="valueCustom"
         :search-input.sync="search"
         cache-items
         class="mx-4"
@@ -50,6 +50,13 @@ template : //html
         },
       },
       methods: {
+        valueCustom(valueCustom){
+          const value = {
+            id    :  valueCustom.id,
+            slug  :  valueCustom.slug
+          }
+          return value
+        },
         getData(){
           const url = this.url
           axios.get(url)

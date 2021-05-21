@@ -13,12 +13,13 @@ Vue.component('save-commerce',{
                     </v-col>
                 </v-row>
 
-                <h6 class="ml-4 my-5"> Dirección del comercio </h6>
+                <h6 class="ml-4 my-5"> Dirección del comercio (Geocodificar)</h6>
                  <template>
                     <geocoding-simple
                     :save="save"
                     />
                  </template>
+
 
                 <h6 class="ml-4 my-5"> Zona a cubir </h6>
                 <v-row class="d-flex justify-center flex-row" >
@@ -37,6 +38,7 @@ Vue.component('save-commerce',{
                         @exportVal="setProvince($event)" 
                         />
                     </v-col>
+
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                         <select-auto-complete-search-id 
                         :searchID="id_province"
@@ -45,7 +47,9 @@ Vue.component('save-commerce',{
                         @exportVal="getPostalCodes($event)"
                         />
                     </v-col>
+                   
                 </v-row>
+                
                     <template v-if="save.zone.postal_codes.length > 0" >
                         <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
                             <switches-common
@@ -53,6 +57,7 @@ Vue.component('save-commerce',{
                             @setOptions="chosenPostalCodes = $event"
                             />
                     </template>
+
                 </v-container>
         </div>
         `,
@@ -64,18 +69,23 @@ Vue.component('save-commerce',{
     data () {
         return {
          id_country : '',
+         text_country : '',
          id_province : '',
+         text_province : '',
          locate : '',
+         text_locate:'',
          id_user : '',
          chosenPostalCodes: []
         }
       },
       methods : {
         setCountry(country){
-            this.id_country = country
+            this.id_country = country.id
+            this.text_country = country.slug
           },
         setProvince(province){
-            this.id_province = province
+            this.id_province = province.id
+            this.text_province = province.slug
         },
         getPostalCodes(locate){
             const url = this.save.zone.url_postalCode
@@ -83,7 +93,7 @@ Vue.component('save-commerce',{
                 params : {
                     id_country : this.id_country,
                     id_province : this.id_province,
-                    locate
+                    locate : locate.slug
                 }
             })
             .then(res => {
