@@ -298,8 +298,11 @@
                     url_locate:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getLocateById',
                     url_postalCode:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeByLocateAndProvinceAndCountry',
                     
-                  }
-                },   
+                  },
+                  geocoding :{
+                   url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'
+                  },
+                },  
                 dialogChoose : {
                   chooseNext: {
                     display: false,

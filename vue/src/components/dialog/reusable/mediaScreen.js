@@ -1,5 +1,5 @@
-Vue.component('d-media-screen',{
-    template : //html 
+Vue.component('d-media-screen', {
+    template: //html 
         `
         <div id="app">
             <template id="inspire">
@@ -25,15 +25,7 @@ Vue.component('d-media-screen',{
                             </v-btn>
                             <v-toolbar-title>{{dialogMediaScreen.title}}</v-toolbar-title>
                                
-                            <v-spacer></v-spacer>
-                            <v-toolbar-items>
-                            <v-btn
-                                dark
-                                text
-                            >
-                                Save
-                            </v-btn>
-                            </v-toolbar-items>
+
                         </v-toolbar>
                         <template>
                             <slot></slot>
@@ -44,18 +36,16 @@ Vue.component('d-media-screen',{
             </template>
         </div>
         `,
-    props:{
-        dialogMediaScreen : {
-            type : Object
+    props: {
+        dialogMediaScreen: {
+            type: Object
         }
     },
-    data (){
-        return {
-        }
+    data() {
+        return {}
     },
-    methods : {
-      
-            
+    methods: {
+
+
     }
-    })
-    
+})

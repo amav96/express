@@ -1012,7 +1012,7 @@ public function getLocateById(){
         if($getLocateById){
             foreach ($getLocateById as $element){
                 $object[]=array(
-                    'id'    => $element["locate"],
+                    'id'    => $element["id"],
                     'slug'  => $element["locate"]
                 );
             }
