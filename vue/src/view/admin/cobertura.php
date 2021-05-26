@@ -183,13 +183,29 @@
                 <template >
                   <d-media-screen :dialogMediaScreen="dialogMediaScreen"  >
                     <template v-if="save.collector.display">
-                        <save-collector :save="save" />
+                        <save-collector 
+                        :pagination="pagination" 
+                        :admin="admin" 
+                        :save="save"
+                        />
                     </template>
                     <template v-if="save.commerce.display" >
-                      <save-commerce :save="save" />
+                      <save-commerce 
+                      :pagination="pagination"  
+                      :admin="admin" 
+                      :save="save"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @filtering="filter.filtering = $event"
+                      />
                     </template>
                     <template v-if="save.point.display" >
-                      <save-point :save="save" />
+                      <save-point 
+                      :pagination="pagination" 
+                      :admin="admin" 
+                      :save="save" />
                     </template>
                   </d-media-screen>
                 </template>
@@ -300,8 +316,12 @@
                     
                   },
                   geocoding :{
-                   url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'
+                    url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'
                   },
+                  url : {
+                    save : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=save',
+                    getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes'
+                  }
                 },  
                 dialogChoose : {
                   chooseNext: {
@@ -340,7 +360,7 @@
                     { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
                     { title: 'Zonas vacias', icon: 'mdi-alert', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom<"},
                 ],
-                admin : 0,
+                admin : '',
                 url_actions : {
                   export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
                   download_excel : API_BASE_EXCEL,

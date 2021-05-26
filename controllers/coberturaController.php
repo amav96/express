@@ -186,6 +186,52 @@ public function getAllEmptyCoverage(){
 
 }
 
+public function getRecentCodes(){
+    $postal_code = isset($_GET['postal_code']) ? $_GET['postal_code'] : false ;
+    $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
+
+    $getRecentCodes = new Cobertura();
+    $getRecentCodes->setPostal_code($postal_code);
+    $getRecentCodes->setCreated_at($created_at);
+    $getRecentCodes = $getRecentCodes->getRecentCodes();
+
+    if($getRecentCodes){
+        
+        foreach($getRecentCodes as $element){
+    
+                    $arrayDateTime = explode(' ', trim($element["created_at"]));
+                    $arrayDate = explode('-',$arrayDateTime[0]);
+                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+    
+                    $object[]=array(
+                        'success' => true,
+                        'id' => $element["id"],
+                        'postal_code' => $element["postal_code"],
+                        'locate' => $element["locate"],
+                        'home_address' => $element["home_address"], 
+                        'provinceInt' => $element["provinceInt"], 
+                        'province' => $element["province"],
+                        'name_country' => $element['name_country'],
+                        'type' => $element["type"],
+                        'id_user' => $element["id_user"],
+                        'name_assigned' => $element["id_user"],
+                        'customer_service_hours' => $element["customer_service_hours"],
+                        'lat' => $element["lat"],
+                        'lng' => $element["lng"],
+                        'created_at' => $dateTimeFormated
+                    );
+            }
+        }else{
+            $object=array(
+                'error' => true,
+            );
+        }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
+
 
 public function HistoricalInactive(){
 
@@ -357,88 +403,72 @@ public function activateAgain(){
 }
 
 public function save(){
+     $id_country = isset($_GET['id_country']) ? $_GET['id_country'] : false ;
+     $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
+     $id_locate = isset($_GET['id_locate']) ? $_GET['id_locate'] : false ;
+     $postal_code = isset($_GET['postal_code']) ? $_GET['postal_code'] : false ;
+     $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
+     $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
+     $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
+     $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : false ;
+     $type = isset($_GET['type']) ? $_GET['type'] : false ;
+     $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
+     $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
 
+        // $id_country = 1;
+        // $id_province = 1;
+        // $id_locate = 32455;
+        // $postal_code = ["1002","1003","1004"] ;
+        // $home_address = "Uruguay 226, C1015 ABF, Buenos Aires, Argentina";
+        // $lat = "-34.6060995";
+        // $lng = "-58.3864926";
+        // $id_user = 27;
+        // $type = "collector" ;
+        // $admin = 4 ;
+        // $created_at = "2021-05-26 14:46:25";
 
-            $id_country = isset($_POST['object']['id_country']) ? $_POST['object']['id_country'] : false ;
-            $locate = isset($_POST['object']['locate']) ? $_POST['object']['locate'] : false ;
-            $province = isset($_POST['object']['province']) ? $_POST['object']['province'] : false ;
-            $home_address = isset($_POST['object']['home_address']) ? $_POST['object']['home_address'] : false ;
-            $type = isset($_POST['object']['type']) ? $_POST['object']['type'] : false ;
-            $id_user = isset($_POST['object']['id_user']) ? $_POST['object']['id_user'] : false ;
-            $name = isset($_POST['object']['name']) ? $_POST['object']['name'] : false ;
-            $user_managent_id = isset($_POST['object']['user_managent_id']) ? $_POST['object']['user_managent_id'] : false ;
-            $customer_service_hours = isset($_POST['object']['customer_service_hours']) ? $_POST['object']['customer_service_hours'] : false ;
-            $postal_code = isset($_POST['object']['postal_code']) ? $_POST['object']['postal_code'] : false ;
-            $lat = isset($_POST['object']['lat']) ? $_POST['object']['lat'] : false ;
-            $lng = isset($_POST['object']['lng']) ? $_POST['object']['lng'] : false ;
-            $id_operator = isset($_POST['object']['id_operator']) ? $_POST['object']['id_operator'] : false ;
-           
-            $created_at = isset($_POST['object']['created_at']) ? $_POST['object']['created_at'] : false ;
-
-            $save = new cobertura();
-            $save->setId_country($id_country);
-            $save->setLocate($locate);
-            $save->setProvince($province);
-            $save->setHome_address($home_address);
-            $save->setType($type);
-            $save->setId_user($id_user);
-            $save->setName($name);
-            $save->setUser_managent_id($user_managent_id);
-            $save->setCustomer_service_hours($customer_service_hours);
-            $save->setCreated_at($created_at);
-            $save->setPostal_Code($postal_code);
-            $save->setLat($lat);
-            $save->setLng($lng);
-            $save->setId_operator($id_operator);
-            $save = $save->save();
-
-            
-              if(is_object($save)){
-
-                //despues de haber insertado todos los datos los consulto y los devuelvo al front
-                foreach($save as $element){
-
-                    $object[] = array(
-
-                    'result' => '1',
-                    'id'  => $element['id'], 
-                    'postal_code'  => $element['postal_code'], 
-                    'locate'  => $element['locate'],  
-                    'home_address'  => $element['home_address'], 
-                    'province'  => $element['province'],  
-                    'id_country'  => $element['id_country'], 
-                    'type'  => $element['type'], 
-                    'name'  => $element['name'], 
-                    'id_user'  => $element['id_user'], 
-                    'user_managent_id'  => $element['user_managent_id'], 
-                    'status'  => $element['status'], 
-                    'action'  => $element['action'], 
-                    'customer_service_hours'  => $element['customer_service_hours'],  
-                    'lat'  => $element['lat'], 
-                    'lng'  => $element['lng'], 
-                    'operator_name' => $element['operator_name'], 
-                    'id_operator'  => $element['id_operator'], 
-                    'motive'  => $element['motive'], 
-                    'name_country' => $element['name_country'],
-                    'created_at'  => $element['created_at'], 
-                    'updated_at'  => $element['updated_at']
-
-                   
-                  );
+        $save = new cobertura();
+        $save->setId_country($id_country);
+        $save->setLocate($id_locate);
+        $save->setProvince($id_province);
+        $save->setHome_address($home_address);
+        $save->setType($type);
+        $save->setId_user($id_user);
+        $save->setUser_managent_id($admin);
+        $save->setCreated_at($created_at);
+        $save->setLat($lat);
+        $save->setLng($lng);
+        $execute = count($postal_code);
+        for($i=0;$i<count($postal_code);$i++){
+            $save->setPostal_code($postal_code[$i]);
+            $save->save();
+            $execute--;
+        }
+        if($execute === 0){
+            $save->setPostal_code($postal_code);
+            $countRecentCodes = $save->countGetRecentCodes();
+            if($countRecentCodes){
                 
+                foreach ($countRecentCodes as $element){
+                        $object= array(
+                            'count'         => $element["count"],
+                            'postal_code'   => $postal_code,
+                            'created_at'    => $created_at
+                        );
                 }
-
-              }else{
-
-                $object[] = array(
-                    'result' => '2'
+            }else{
+                $object = array(
+                    'error' => 'not_count_recent'
                 );
+            }
+        }else {
+            $object = array(
+                'error' => 'not_insert_complete'
+            );
+        }
 
-              }
-
-              $jsonstring = json_encode($object);
-              echo $jsonstring;            
-    
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
 }
 
 public function update(){

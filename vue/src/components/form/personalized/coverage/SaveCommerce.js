@@ -94,6 +94,22 @@ Vue.component('save-commerce', {
                                 >
                                 </v-text-field>
                             </v-col>
+
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                <v-btn
+                                class="mx-2"
+                                fab
+                                small
+                                color="primary"
+                                :disabled="lng === '' || lat === ''"
+                                @click="reverseGeocodingManualToMap()"
+                                >
+                                    <v-icon dark>
+                                    mdi-refresh
+                                    </v-icon>
+                                </v-btn>
+                            </v-col>
+
                         </v-row>
                         <template v-if="srcMap !== ''" >
                             <v-row class="d-flex justify-center flex-column align-content-center" >
@@ -101,11 +117,16 @@ Vue.component('save-commerce', {
                                    <a @click="windowGoogleMap()" >Ver en Google Maps</a>
                                 </v-col>
                                 <v-col  cols="12" xl="8" lg="8" >
-                                    <v-img
-                                    elevation="10"
-                                    height="200"
-                                    :src="srcImgMap()"
-                                    ></v-img>
+
+                                <iframe
+                                width="450"
+                                height="450"
+                                style="border:0"
+                                loading="lazy"
+                                allowfullscreen
+                                :src="srcImgMap()">
+                                </iframe>
+                                
                                 </v-col>
                             </v-row>
                         </template>
@@ -154,18 +175,23 @@ Vue.component('save-commerce', {
                             <v-btn 
                             class="success"
                             block
-                           :disabled="validateFormComplete()"
+                            :disabled="validateFormComplete()"
+                            @click="saveData()"
                             >
                             Siguiente
                             </v-btn>
                         </v-row>
-                        
-
                     </v-container>
             </div>
         `,
     props: {
+        admin: {
+            type: String
+        },
         save: {
+            type: Object
+        },
+        pagination: {
             type: Object
         }
     },
@@ -243,6 +269,85 @@ Vue.component('save-commerce', {
             }
 
         },
+        reverseGeocodingManualToMap() {
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+        },
+        async saveData() {
+            const url = this.save.url.save
+            await axios.get(url, {
+                    params: {
+                        id_country: this.id_country,
+                        id_province: this.id_province,
+                        id_locate: this.id_locate,
+                        postal_code: this.chosenPostalCodes,
+                        home_address: this.home_address,
+                        lat: this.lat,
+                        lng: this.lng,
+                        id_user: this.id_user,
+                        type: this.save.type,
+                        admin: this.admin,
+                        created_at: this.getDateTime()
+                    }
+                })
+                .then(res => {
+                    if (res.data.error) {
+                        alertNegative("Mensaje CODIGO 45");
+                        return
+                    }
+                    this.countData(res);
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        getDateTime() {
+            var today = new Date();
+            var getMin = today.getMinutes();
+            var getSeconds = today.getSeconds()
+            var getHours = today.getHours()
+
+            if (getMin < 10) { getMin = '0' + today.getMinutes() }
+            if (getSeconds < 10) { getSeconds = '0' + today.getSeconds() }
+            if (getHours < 10) { getHours = '0' + today.getHours() }
+
+            var created_at = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' +
+                ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
+
+            return created_at
+        },
+        countData(res) {
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('totalCountResponse', totalCountResponse)
+            this.getRecentCodes(res);
+        },
+        async getRecentCodes(res) {
+            const url = this.save.url.getRecentCodes
+            await axios.get(url, {
+                    params: {
+                        postal_code: res.data.postal_code,
+                        created_at: res.data.created_at
+                    }
+                })
+                .then(res => {
+                    console.log(res)
+                    if (res.data.error) {
+                        alertNegative("Mensaje CODIGO 42");
+                        return
+                    }
+                    this.$emit('response', res.data)
+                    this.$emit('showTable', true)
+                        // setting flag filtering
+                    this.$emit('filtering', true)
+
+                    // mostrar mensaje de exito y dsps de 3 segundos 
+                    // cerrar el modal, resetear/vaciar todos las variables
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
     },
     watch: {
         resultGeocoding(val) {
@@ -250,10 +355,11 @@ Vue.component('save-commerce', {
             this.lat = val.lat
             this.lng = val.lng
 
-            this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+            // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         }
-    }
+    },
 
 
 

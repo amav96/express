@@ -250,6 +250,34 @@ class cobertura{
 
       }
 
+      //CONTADORES QUE RECUPERAN DATOS LUEGO DE INSERTAR, ACTUALIZAR O ELIMINAR
+
+      public function countGetRecentCodes(){
+            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
+            $postal_code  = !empty($this->getPostal_code()) ? $this->getPostal_code(): false ; 
+
+            if( $postal_code && is_array($postal_code) && count($postal_code) > 0){
+                  $stringPostalCode = implode(",",$postal_code);
+              }
+
+            $sql ="SELECT COUNT(DISTINCT(c.id)) AS 'count'
+            FROM coverage c
+            left JOIN provinceint p ON p.postal_code = c.postal_code
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            WHERE c.status='active' AND p.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'";
+
+            $countGetRecentCodes = $this->db->query($sql);
+            if($countGetRecentCodes && $countGetRecentCodes->fetch_object()->count > 0){
+                  $result = $countGetRecentCodes;
+            }else {
+                  $result = false;
+            }
+
+            return $result; 
+      }
+      
+
       //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
       public function  getAllCoverage(){
 
@@ -317,6 +345,36 @@ class cobertura{
             return $result;
 
             
+      }
+
+      // BUSCADORES DIRECTOS QUE RECUPERAN DATOS LUEGO DE INSERTAR, ACTUALIZAR O 
+      
+      public function getRecentCodes(){
+            $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
+            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
+
+            if( $postal_code && is_array($postal_code) && count($postal_code) > 0){
+                  $stringPostalCode = implode(",",$postal_code);
+              }
+
+                  $sql ="SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',c.province,
+                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours,
+                  c.lat ,c.lng,  c.created_at
+                  FROM coverage c
+                  left JOIN provinceint p ON p.postal_code = c.postal_code
+                  left JOIN users u ON c.id_user = u.id
+                  LEFT JOIN country co ON c.id_country = co.id
+                  WHERE c.status='active' AND p.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
+                  GROUP BY c.id order BY c.postal_code ASC";
+                  
+               $getRecentCodes = $this->db->query($sql);
+               if($getRecentCodes && $getRecentCodes->num_rows>0){
+                  $result = $getRecentCodes;
+               }else {
+                  $result = false;
+               }
+               return $result;
+               
       }
 
       public function HistoricalInactive(){
@@ -477,6 +535,7 @@ class cobertura{
 
       }
 
+
       public function save(){
 
             $id_country= !empty($this->getId_country()) ? $this->getId_country() : false ; 
@@ -485,41 +544,24 @@ class cobertura{
             $home_address = !empty($this->getHome_address()) ? $this->getHome_address() : false ; 
             $type= !empty($this->getType()) ? $this->getType() : false ;
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ; 
-            $name= !empty($this->getName()) ? $this->getName() : false ; 
             $user_managent_id= !empty($this->getUser_managent_id()) ? $this->getUser_managent_id() : false ; 
-            $customer_service_hours = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours() : false ; 
             $postal_code  = !empty($this->getPostal_code()) ? $this->getPostal_code(): false ; 
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
-            $id_operator  = !empty($this->getId_operator()) ? $this->getId_operator(): false ; 
-
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ; 
-
-            if(is_array($postal_code)){
-
-                  foreach($postal_code as $element){
-                  $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,name,id_user,user_managent_id, customer_service_hours,lat,lng,id_operator,detailed_type,country_color,type_color,created_at,status,action) values ($element,'$locate','$home_address','$province',$id_country,'$type','$name',$id_user,$user_managent_id,'$customer_service_hours','$lat','$lng','$id_operator','$created_at','active','created')";
-                  $save = $this->db->query($sql);
-                  }
-            } 
             
-              if($save){
-
-                   $array = array(
-
-                         'created_at' => $created_at,
-                         'id_country' => $id_country,
-                         'postal_code' => $postal_code
-                   );
-
-                   $result =  $this-> gettersSearchCode($array);
-
-              }else{
-                    $result = false;
-              }
-
-              return $result;
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type',$id_user,$user_managent_id,'$lat','$lng','$created_at','active','created')";
+            $save = $this->db->query($sql);
+      
+            if($save){
+                  $result = true;
+            }else {
+                  $result = false;
+            }
+            return $result;
       }
+
+     
 
       //este metodo es para mostrar lo que hice despues de utilizar el metodo save
       public function gettersSearchCode($array){

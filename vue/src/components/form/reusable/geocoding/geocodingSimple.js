@@ -26,7 +26,7 @@ Vue.component('geocoding-simple', {
                     @exportVal="setLocate($event)"
                     />
                 </v-col>
-                <v-col   cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                <v-col   cols="12" xl="6" lg="6" md="6" sm="6" xs="4"  >
                     <v-text-field 
                     label="Dirección"
                     v-model="home_address" 
@@ -119,7 +119,7 @@ Vue.component('geocoding-simple', {
                         return
                     }
                     if (res.data.error === 'not_precise') {
-                        this.$emit("setErrorGeocoding", 'El resultado no es preciso.')
+                        this.$emit("setErrorGeocoding", 'El resultado no es preciso. Asegurate que la direccion solo contenga Domicilio al hacer clic en GEOCODIFICAR')
                         return
                     }
                     if (res.data.error === 'not_result') {
