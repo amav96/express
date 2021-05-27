@@ -15,10 +15,11 @@ class geocodingController
         $country = isset($_GET['country']) ? $_GET['country'] : false ;
         $string = $home_address.','.$locate.','.$province.','.$country;
         $address = preg_replace('/\s+/','+',$string);
-
+       
          // url encode the address
         $address = urlencode($address);
         
+    
         // google map geocode api url
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko";
     
@@ -29,7 +30,7 @@ class geocodingController
         $resp = json_decode($resp_json, true);
        
         if($resp["status"] === 'OK'){
-                if($resp["results"][0]["geometry"]["location_type"] === 'ROOFTOP'){
+                // if($resp["results"][0]["geometry"]["location_type"] === 'ROOFTOP' ){
                     // get the important data
                     $lat = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
                     $long = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
@@ -48,11 +49,11 @@ class geocodingController
                             'error' => 'has_not_provided'
                         );
                     }
-            }else{
-                $object = array(
-                    'error' => 'not_precise'
-                );
-            }
+            // }else{
+            //     $object = array(
+            //         'error' => 'not_precise'
+            //     );
+            // }
         }else{
             $object = array(
                 'error' => 'not_result'

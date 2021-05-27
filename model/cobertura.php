@@ -524,7 +524,8 @@ class cobertura{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
             $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
-            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','active','created')";
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','active','created')";
+           
             $save = $this->db->query($sql);
       
             if($save){
@@ -534,8 +535,6 @@ class cobertura{
             }
             return $result;
       }
-
-     
 
       //este metodo es para mostrar lo que hice despues de utilizar el metodo save
       public function gettersSearchCode($array){
@@ -870,6 +869,7 @@ class cobertura{
 
       // SCOPE
 
+   
       public function getCountry(){
             $sql = "SELECT id,country from country";
             $getCountry = $this->db->query($sql);

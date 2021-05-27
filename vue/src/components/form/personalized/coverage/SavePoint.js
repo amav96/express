@@ -73,13 +73,10 @@ Vue.component('save-point', {
                         </v-row>
                         <template v-if="srcMap !== ''" >
                             <v-row class="d-flex justify-center flex-column align-content-center" >
-                                <v-col  cols="12" xl="8" lg="8" class="text-center">
-                                <a @click="windowGoogleMap()" >Ver en Google Maps</a>
-                                </v-col>
                                 <v-col  cols="12" xl="8" lg="8" >
 
                                 <iframe
-                                width="450"
+                                width="490"
                                 height="450"
                                 style="border:0"
                                 loading="lazy"
@@ -121,7 +118,7 @@ Vue.component('save-point', {
                             :searchID="id_province_by_select"
                             title="Ingrese Localidad" 
                             :url="save.zone.url_locate"
-                            @exportVal="getPostalCodes($event)"
+                            @exportVal="getZoneByPostalCode($event)"
                             />
                         </v-col>
                     
@@ -187,6 +184,9 @@ Vue.component('save-point', {
             if (this.save.type === 'mail') {
                 return "Correo";
             }
+            if (this.save.type === 'station') {
+                return "Terminal";
+            }
         },
         setSelectCountry(country) {
             this.id_country_by_select = country.id
@@ -195,7 +195,7 @@ Vue.component('save-point', {
             this.id_province_by_select = province.id
 
         },
-        getPostalCodes(locate) {
+        getZoneByPostalCode(locate) {
             const url = this.save.zone.url_postalCode
             axios.get(url, {
                     params: {
@@ -221,11 +221,6 @@ Vue.component('save-point', {
         },
         srcImgMap() {
             return this.srcMap
-        },
-        windowGoogleMap() {
-            var coordinates = this.lat + ',' + this.lng;
-            var url = "https://google.com.sa/maps/search/" + coordinates;
-            window.open(url, '_blank');
         },
         validateFormComplete() {
 
@@ -268,14 +263,13 @@ Vue.component('save-point', {
                         textSnack: 'Correo creado exitosamente'
                     }
                     this.$emit("setDialogDisplay", false)
-                    this.$emit("setSnack", snack)
-                    this.resetSection();
-                    // close dialog
+
                     this.$emit('setPaginateDisplay', false)
                     this.$emit('response', res.data)
                     this.$emit('showTable', true)
                         // setting flag filtering
                     this.$emit('filtering', false)
+                    this.$emit("setSnack", snack)
                 })
                 .catch(err => {
                     console.log(err)
@@ -296,26 +290,15 @@ Vue.component('save-point', {
 
             return created_at
         },
-        resetSection() {
-            this.id_country_by_select = ''
-            this.id_country = ''
-            this.text_country = ''
-            this.id_province_by_select = ''
-            this.id_province = ''
-            this.text_province = ''
-            this.text_locate = ''
-            this.id_locate = ''
-            this.home_address = ''
-            this.lat = ''
-            this.lng = ''
-            this.srcMap = ''
-            this.id_user = ''
-            this.chosenPostalCodes = []
-            this.infoUser = []
-            this.errorGeocoding = ''
-            this.resultGeocoding = ''
-            this.save.zone.postal_codes = []
+        cleanDialog() {
+            if (this.save.action === 'create') {
+                this.save.zone.postal_codes = []
+            }
         }
+
+    },
+    destroyed() {
+        this.cleanDialog()
     },
     watch: {
         resultGeocoding(val) {

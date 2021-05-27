@@ -1157,8 +1157,22 @@
 
                 //SCOPE
 
+                public function getUsersCollector(){
+
+                    $sql = "SELECT id,name as 'name_user' FROM users WHERE role = 'recolector' AND status_process = 'active' order by name asc";
+
+                    $getUsersCollector =  $this->db->query($sql);
+                    if($getUsersCollector && $getUsersCollector->num_rows>0){
+                        $result = $getUsersCollector;
+                    }else {
+                        $result = false;
+                    }
+                    return $result;
+
+                }
+
                 public function getUsersCommerce(){
-                    $sql = "SELECT id,name_alternative as 'name_user',country,province,location,home_address,customer_service_hours FROM users WHERE role = 'comercio' AND status_process = 'active'";
+                    $sql = "SELECT id,name_alternative as 'name_user',country,province,location,home_address,customer_service_hours FROM users WHERE role = 'comercio' AND status_process = 'active' order by name_alternative asc";
 
                     $getUsersCommerce =  $this->db->query($sql);
                     if($getUsersCommerce && $getUsersCommerce->num_rows>0){

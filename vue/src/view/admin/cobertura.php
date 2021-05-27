@@ -15,7 +15,7 @@
 
 <!-- dialog component -->
 <script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
-<script src="<?=base_url?>vue/src/components/dialog/chooseNext.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -33,6 +33,7 @@
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesContent.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/geocoding/geocodingSimple.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/timeSchedule.js"></script>
 
@@ -174,9 +175,6 @@
                       </v-btn>
                   </div>
                 </div>
-
-                {{save}}
-
                 <template>
                       <message-snack
                       :snackbar="snackbar"
@@ -191,13 +189,20 @@
                   />
                 </template>
 
-                <template  >
+                <template v-if="dialogMediaScreen.display" >
                   <d-media-screen :dialogMediaScreen="dialogMediaScreen"  >
                     <template v-if="save.collector.display">
                         <save-collector 
-                        :pagination="pagination" 
+                        :pagination="pagination"  
                         :admin="admin" 
                         :save="save"
+                        :dialogMediaScreen="dialogMediaScreen"
+                        @response="table.dataResponseDB = $event"
+                        @showTable="table.display = $event"
+                        @filtering="filter.filtering = $event"
+                        @setPaginateDisplay="pagination.display = $event"
+                        @setDialogDisplay="dialogMediaScreen.display = $event"
+                        @setSnack="snackbar = $event"
                         />
                     </template>
                     <template v-if="save.commerce.display" >
@@ -205,6 +210,7 @@
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
+                      :dialogMediaScreen="dialogMediaScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
@@ -218,6 +224,7 @@
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
+                      :dialogMediaScreen="dialogMediaScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
@@ -315,7 +322,9 @@
                   action : '',
                   type:'',
                   collector :{
-                    display : false
+                    display : false,
+                    url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
+                    title_field : 'Ingrese Recolector',
                   },
                   commerce : {
                     display : false,
@@ -458,32 +467,35 @@
             var chosenOption = choose.chosenOption
             this.save.type = chosenOption
             // type to form
-            
+
+            this.dialogChoose.chooseNext.display = false
+            this.dialogMediaScreen.display = true
+
+          
             if(this.save.type === 'collector'){
-                this.dialogChoose.chooseNext.display = false
-                this.dialogMediaScreen.display = true
+                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Recolector' : '';
+                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Recolector' : '';
                 //show or hide others form
                 this.save.collector.display = true
                 this.save.commerce.display = false
                 this.save.point.display = false
               }
             if(this.save.type === 'commerce'){
-                this.dialogChoose.chooseNext.display = false
-                this.dialogMediaScreen.display = true
-                this.dialogMediaScreen.title = 'Crear zona para comercio'
+              this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Comercio' : '';
+              this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Comercio' : '';
                 //show or hide others form
                 this.save.commerce.display = true
                 this.save.collector.display = false
                 this.save.point.display = false
               }
             if(this.save.type === 'mail' || this.save.type === 'station'){
-                this.dialogChoose.chooseNext.display = false
-                this.dialogMediaScreen.display = true
                 if(this.save.type === 'mail'){
-                  this.dialogMediaScreen.title = 'Crear zona para Correo'
+                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Correo' : '';
+                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Correo' : '';
                 }
                 if(this.save.type === 'station'){
-                  this.dialogMediaScreen.title = 'Crear zona para Terminal'
+                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Terminal' : '';
+                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Terminal' : '';
                 }
                 //show or hide others form
                 this.save.point.display = true
@@ -558,9 +570,8 @@
               this.table.display = false
             }
           }
-        },
-        
-        created(){
+        }
+        ,created(){
           this.$_getAdmin()
         }
        

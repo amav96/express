@@ -30,7 +30,7 @@ public function admin(){
 
 //CONTADORES DE COBERTURA PARA PAGINACIONES
 public function countAllCoverage(){
-
+    
     $countAllCoverage = new cobertura();
     $countAllCoverage = $countAllCoverage-> countAllCoverage();
 
@@ -83,7 +83,7 @@ public function countAllEmptyCoverage(){
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 
 public function getAllCoverage(){
-
+    Utils::AuthAdmin();
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $request =  json_decode($dataRequest);
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
@@ -132,7 +132,7 @@ public function getAllCoverage(){
 }
 
 public function getAllEmptyCoverage(){
-
+    Utils::AuthAdmin();
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $request =  json_decode($dataRequest);
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
@@ -187,6 +187,7 @@ public function getAllEmptyCoverage(){
 }
 
 public function getRecentCodes(){
+    Utils::AuthAdmin();
     $postal_code = isset($_GET['postal_code']) ? $_GET['postal_code'] : false ;
     $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
 
@@ -961,6 +962,34 @@ public function getAllCpByZone(){
 
 // SCOPE
 
+public function getUsersCollector(){
+
+    Utils::AuthAdmin();
+    $getUsersCollector = new Usuario();
+    $getUsersCollector = $getUsersCollector->getUsersCollector();
+
+    if($getUsersCollector){
+        foreach ($getUsersCollector as $element){
+            $object[] = array(
+                'success' => true,
+                'id' => $element["id"],
+                'name_user' => $element["name_user"],
+                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+            );
+        }
+        
+    }else {
+        $object = array(
+            'error' => true,
+        );
+
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+
+}
+
 public function getUsersCommerce(){
 
     Utils::AuthAdmin();
@@ -973,7 +1002,7 @@ public function getUsersCommerce(){
                 'success' => true,
                 'id' => $element["id"],
                 'name_user' => $element["name_user"],
-                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.'Prov: '.$element["province"],
                 'country' => $element["country"],
                 'province' => $element["province"],
                 'locate' => $element["location"],
