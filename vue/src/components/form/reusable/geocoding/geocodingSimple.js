@@ -26,7 +26,9 @@ Vue.component('geocoding-simple', {
                     @exportVal="setLocate($event)"
                     />
                 </v-col>
-                <v-col   cols="12" xl="6" lg="6" md="6" sm="6" xs="4"  >
+            </v-row>
+            <v-row class="d-flex justify-between flex-row " >
+                <v-col cols="12" xl="6" lg="6" md="6" sm="6" xs="4"  >
                     <v-text-field 
                     label="Dirección"
                     v-model="home_address" 
@@ -35,14 +37,13 @@ Vue.component('geocoding-simple', {
                     required
                     type="text"
                     color="black"
-                    class="info--text mx-4"
-                    
+                    class="info--text mx-4 "
                     >
                     </v-text-field>
                 </v-col>
                 <v-col   cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-btn 
-                    class="primary py-5 mx-4" 
+                    class="info py-5 mx-3" 
                     :disabled="validateFieldsEmpty()" 
                     @click="geocoding()"
                      >
@@ -55,6 +56,15 @@ Vue.component('geocoding-simple', {
                         </v-icon>
                     </v-btn>
                 </v-col>
+                <template v-if="loading" >
+                    <v-col  cols="12" xl="2" lg="2" md="2" sm="2" xs="2"  >
+                        <v-progress-circular
+                        class="py-5 mx-3" 
+                        indeterminate
+                        color="primary"
+                        />
+                    </v-col>
+                </template>
             </v-row>
         </div>
         `,
@@ -99,7 +109,6 @@ Vue.component('geocoding-simple', {
             } else {
                 return false
             }
-
         },
         geocoding() {
             const url = this.save.geocoding.url
@@ -136,6 +145,7 @@ Vue.component('geocoding-simple', {
                 })
 
         }
-    }
+    },
+
 
 })

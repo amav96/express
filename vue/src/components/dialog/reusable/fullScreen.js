@@ -1,5 +1,5 @@
-Vue.component('d-full-screen',{
-    template : //html 
+Vue.component('d-full-screen', {
+    template: //html 
         `
         <div id="app">
             <template id="inspire">
@@ -20,7 +20,7 @@ Vue.component('d-full-screen',{
                             dark
                             @click="dialogFullScreen.display = false"
                             >
-                            <v-icon>mdi-close</v-icon>
+                            <v-icon>mdi-arrow-left</v-icon>
                             </v-btn>
                             <v-toolbar-title>titulo statico</v-toolbar-title>
                                
@@ -43,18 +43,16 @@ Vue.component('d-full-screen',{
             </template>
         </div>
         `,
-    props:{
-        dialogFullScreen : {
-            type : Object
+    props: {
+        dialogFullScreen: {
+            type: Object
         }
     },
-    data (){
-        return {
-        }
+    data() {
+        return {}
     },
-    methods : {
-      
-            
+    methods: {
+
+
     }
-    })
-    
+})

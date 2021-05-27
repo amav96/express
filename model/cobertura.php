@@ -250,33 +250,7 @@ class cobertura{
 
       }
 
-      //CONTADORES QUE RECUPERAN DATOS LUEGO DE INSERTAR, ACTUALIZAR O ELIMINAR
 
-      public function countGetRecentCodes(){
-            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
-            $postal_code  = !empty($this->getPostal_code()) ? $this->getPostal_code(): false ; 
-
-            if( $postal_code && is_array($postal_code) && count($postal_code) > 0){
-                  $stringPostalCode = implode(",",$postal_code);
-              }
-
-            $sql ="SELECT COUNT(DISTINCT(c.id)) AS 'count'
-            FROM coverage c
-            left JOIN provinceint p ON p.postal_code = c.postal_code
-            left JOIN users u ON c.id_user = u.id
-            LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND p.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'";
-
-            $countGetRecentCodes = $this->db->query($sql);
-            if($countGetRecentCodes && $countGetRecentCodes->fetch_object()->count > 0){
-                  $result = $countGetRecentCodes;
-            }else {
-                  $result = false;
-            }
-
-            return $result; 
-      }
-      
 
       //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
       public function  getAllCoverage(){
@@ -288,13 +262,13 @@ class cobertura{
               }
 
             $sql = "SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',c.province,co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.id_operator, c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
             WHERE c.status='active' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit  ;";
-
+           
 
             $getAllCoverage = $this->db->query($sql);
 
@@ -320,7 +294,7 @@ class cobertura{
 
             $sql = "SELECT c.id,po.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',
             pr.province,co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',
-            c.customer_service_hours,c.lat ,c.lng , c.id_operator, c.created_at
+            c.customer_service_hours,c.lat ,c.lng , c.created_at
             FROM postal_code po
             LEFT JOIN coverage c ON c.postal_code = po.postal_code
             LEFT JOIN localities l ON l.postal_code = po.postal_code
@@ -366,7 +340,6 @@ class cobertura{
                   LEFT JOIN country co ON c.id_country = co.id
                   WHERE c.status='active' AND p.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
                   GROUP BY c.id order BY c.postal_code ASC";
-                  
                $getRecentCodes = $this->db->query($sql);
                if($getRecentCodes && $getRecentCodes->num_rows>0){
                   $result = $getRecentCodes;
@@ -548,9 +521,10 @@ class cobertura{
             $postal_code  = !empty($this->getPostal_code()) ? $this->getPostal_code(): false ; 
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
-            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ; 
+            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
+            $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
-            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type',$id_user,$user_managent_id,'$lat','$lng','$created_at','active','created')";
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province',$id_country,'$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','active','created')";
             $save = $this->db->query($sql);
       
             if($save){

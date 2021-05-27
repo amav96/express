@@ -159,6 +159,7 @@ Vue.component('form-search-by-word-and-range-date', {
 
                     this.$emit('response', res.data)
                     this.$emit('showTable', true)
+                    this.$emit('setPaginateDisplay', true)
                     this.$emit('loadingTable', false)
 
                     if (this.searchByWordAndRangeDate.export) {

@@ -34,6 +34,7 @@
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/geocoding/geocodingSimple.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/timeSchedule.js"></script>
 
 <!-- pagination component -->
 <script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -129,6 +130,7 @@
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     :pagination="pagination"
+                    @setPaginateDisplay="pagination.display = $event"
                     />
                 </template>
 
@@ -150,6 +152,7 @@
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     :pagination="pagination"
+                    @setPaginateDisplay="pagination.display = $event"
                     />
                 </template>
 
@@ -172,6 +175,14 @@
                   </div>
                 </div>
 
+                {{save}}
+
+                <template>
+                      <message-snack
+                      :snackbar="snackbar"
+                      />
+                </template>
+
                 <template>
                   <dialog-choose-next
                   :dialogChoose="dialogChoose"
@@ -180,7 +191,7 @@
                   />
                 </template>
 
-                <template >
+                <template  >
                   <d-media-screen :dialogMediaScreen="dialogMediaScreen"  >
                     <template v-if="save.collector.display">
                         <save-collector 
@@ -194,18 +205,26 @@
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
-                      @totalCountResponse = "pagination.totalCountResponse = $event"
-                      @TotalPage = "pagination.totalPage = $event"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
+                      @setPaginateDisplay="pagination.display = $event"
+                      @setDialogDisplay="dialogMediaScreen.display = $event"
+                      @setSnack="snackbar = $event"
                       />
                     </template>
                     <template v-if="save.point.display" >
                       <save-point 
-                      :pagination="pagination" 
+                      :pagination="pagination"  
                       :admin="admin" 
-                      :save="save" />
+                      :save="save"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @setPaginateDisplay="pagination.display = $event"
+                      @setDialogDisplay="dialogMediaScreen.display = $event"
+                      @setSnack="snackbar = $event"
+                      />
                     </template>
                   </d-media-screen>
                 </template>
@@ -270,7 +289,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table.display">
+                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table.display && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -289,17 +308,17 @@
         data(){
             return {
                 dialogMediaScreen : {
-                  display : true,
-                  title : 'Crear zona para comercio'
+                  display : false,
+                  title : ''
                 },
                 save : {
-                  action : 'update',
-                  type:'collector',
+                  action : '',
+                  type:'',
                   collector :{
                     display : false
                   },
                   commerce : {
-                    display : true,
+                    display : false,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCommerce',
                     title_field : 'Ingrese comercio',
                   },
@@ -374,6 +393,7 @@
                 },
                 urlTryPagination:'',
                 pagination : {
+                    display: false,
                     totalPage : 0, 
                     rowForPage:10,
                     pageCurrent: 1,
@@ -421,6 +441,11 @@
                     url_searchGetDataController: '',
                     filtering: false
                 },
+                snackbar :{
+                  snack : false,
+                  timeout : -1,
+                  textSnack : ''
+                }
             }
         },
         methods:{
@@ -454,6 +479,12 @@
             if(this.save.type === 'mail' || this.save.type === 'station'){
                 this.dialogChoose.chooseNext.display = false
                 this.dialogMediaScreen.display = true
+                if(this.save.type === 'mail'){
+                  this.dialogMediaScreen.title = 'Crear zona para Correo'
+                }
+                if(this.save.type === 'station'){
+                  this.dialogMediaScreen.title = 'Crear zona para Terminal'
+                }
                 //show or hide others form
                 this.save.point.display = true
                 this.save.collector.display = false
@@ -537,6 +568,8 @@
 </script>
 
 <style>
+
+ 
 
     .empujarParaArriba{
       margin-top: -20px;
@@ -638,4 +671,8 @@
       z-index: 600 !important;
     }
 
+    /* inputs */
+  
+
+    
 </style>

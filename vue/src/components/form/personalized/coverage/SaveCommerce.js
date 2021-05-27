@@ -193,7 +193,8 @@ Vue.component('save-commerce', {
         },
         pagination: {
             type: Object
-        }
+        },
+
     },
     data() {
         return {
@@ -294,7 +295,24 @@ Vue.component('save-commerce', {
                         alertNegative("Mensaje CODIGO 45");
                         return
                     }
-                    this.countData(res);
+                    const snack = {
+                        snack: true,
+                        timeout: 4500,
+                        textSnack: 'Comercio creado exitosamente'
+                    }
+                    this.$emit("setDialogDisplay", false)
+
+
+                    this.$emit("setSnack", snack)
+                    this.resetSection();
+
+
+                    // close dialog
+                    this.$emit('setPaginateDisplay', false)
+                    this.$emit('response', res.data)
+                    this.$emit('showTable', true)
+                        // setting flag filtering
+                    this.$emit('filtering', false)
                 })
                 .catch(err => {
                     console.log(err)
@@ -315,39 +333,27 @@ Vue.component('save-commerce', {
 
             return created_at
         },
-        countData(res) {
-            const totalCountResponse = parseInt(res.data.count)
-            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-            this.$emit('TotalPage', totalPage)
-            this.$emit('totalCountResponse', totalCountResponse)
-            this.getRecentCodes(res);
-        },
-        async getRecentCodes(res) {
-            const url = this.save.url.getRecentCodes
-            await axios.get(url, {
-                    params: {
-                        postal_code: res.data.postal_code,
-                        created_at: res.data.created_at
-                    }
-                })
-                .then(res => {
-                    console.log(res)
-                    if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 42");
-                        return
-                    }
-                    this.$emit('response', res.data)
-                    this.$emit('showTable', true)
-                        // setting flag filtering
-                    this.$emit('filtering', true)
-
-                    // mostrar mensaje de exito y dsps de 3 segundos 
-                    // cerrar el modal, resetear/vaciar todos las variables
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+        resetSection() {
+            this.id_country_by_select = ''
+            this.id_country = ''
+            this.text_country = ''
+            this.id_province_by_select = ''
+            this.id_province = ''
+            this.text_province = ''
+            this.text_locate = ''
+            this.id_locate = ''
+            this.home_address = ''
+            this.lat = ''
+            this.lng = ''
+            this.srcMap = ''
+            this.id_user = ''
+            this.chosenPostalCodes = []
+            this.infoUser = []
+            this.errorGeocoding = ''
+            this.resultGeocoding = ''
+            this.save.zone.postal_codes = []
         }
+
     },
     watch: {
         resultGeocoding(val) {
@@ -358,7 +364,8 @@ Vue.component('save-commerce', {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
-        }
+        },
+
     },
 
 

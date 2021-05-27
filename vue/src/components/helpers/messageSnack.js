@@ -1,25 +1,33 @@
-Vue.component('message-snack',{
-template : //html 
-    `
-        <v-snackbar
-        class="justify-center"
-        v-model="snackbar.snack"
-        :timeout="snackbar.timeout"
-        centered
-        >
-        {{ snackbar.textSnack }}
-        <v-icon right>
-          mdi-check-circle-outline
-        </v-icon>
-        </v-snackbar>
+Vue.component('message-snack', {
+    template: //html 
+        `
+        <div>
+            <div class="text-center" >
+            <v-snackbar
+                v-model="snackbar.snack"
+                color="success"
+                :timeout="snackbar.timeout"
+                centered
+                >
+                   {{snackbar.textSnack}}
+                <template v-slot:action="{ attrs }">
+                    <v-icon  right>
+                        mdi-check-circle-outline
+                    </v-icon>
+                </template>
+            </v-snackbar>
+            </div>
+            
+        </div>
+        
     `,
-props:['snackbar'],
-data (){
-    return {
+    props: ['snackbar'],
+    data() {
+        return {
+
+        }
+    },
+    methods: {
 
     }
-},
-methods : {
-        
-}
 })

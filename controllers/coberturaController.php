@@ -232,7 +232,6 @@ public function getRecentCodes(){
     echo $jsonstring;
 }
 
-
 public function HistoricalInactive(){
 
     $HistoricalInactive = new cobertura();
@@ -414,18 +413,7 @@ public function save(){
      $type = isset($_GET['type']) ? $_GET['type'] : false ;
      $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
      $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
-
-        // $id_country = 1;
-        // $id_province = 1;
-        // $id_locate = 32455;
-        // $postal_code = ["1002","1003","1004"] ;
-        // $home_address = "Uruguay 226, C1015 ABF, Buenos Aires, Argentina";
-        // $lat = "-34.6060995";
-        // $lng = "-58.3864926";
-        // $id_user = 27;
-        // $type = "collector" ;
-        // $admin = 4 ;
-        // $created_at = "2021-05-26 14:46:25";
+     $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
 
         $save = new cobertura();
         $save->setId_country($id_country);
@@ -436,6 +424,7 @@ public function save(){
         $save->setId_user($id_user);
         $save->setUser_managent_id($admin);
         $save->setCreated_at($created_at);
+        $save->setCustomer_service_hours($timeSchedule);
         $save->setLat($lat);
         $save->setLng($lng);
         $execute = count($postal_code);
@@ -446,19 +435,38 @@ public function save(){
         }
         if($execute === 0){
             $save->setPostal_code($postal_code);
-            $countRecentCodes = $save->countGetRecentCodes();
-            if($countRecentCodes){
-                
-                foreach ($countRecentCodes as $element){
-                        $object= array(
-                            'count'         => $element["count"],
-                            'postal_code'   => $postal_code,
-                            'created_at'    => $created_at
-                        );
-                }
+            $getRecentCodes = $save->getRecentCodes();
+            if($getRecentCodes){
+
+                foreach($getRecentCodes as $element){
+    
+                    $arrayDateTime = explode(' ', trim($element["created_at"]));
+                    $arrayDate = explode('-',$arrayDateTime[0]);
+                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+    
+                    $object[]=array(
+                        'success' => true,
+                        'id' => $element["id"],
+                        'postal_code' => $element["postal_code"],
+                        'locate' => $element["locate"],
+                        'home_address' => $element["home_address"], 
+                        'provinceInt' => $element["provinceInt"], 
+                        'province' => $element["province"],
+                        'name_country' => $element['name_country'],
+                        'type' => $element["type"],
+                        'id_user' => $element["id_user"],
+                        'name_assigned' => $element["id_user"],
+                        'customer_service_hours' => $element["customer_service_hours"],
+                        'lat' => $element["lat"],
+                        'lng' => $element["lng"],
+                        'created_at' => $dateTimeFormated
+                    );
+            }
+               
             }else{
                 $object = array(
-                    'error' => 'not_count_recent'
+                    'error' => 'not_result'
                 );
             }
         }else {

@@ -21,11 +21,10 @@ Vue.component('d-media-screen', {
                             dark
                             @click="dialogMediaScreen.display = false"
                             >
-                            <v-icon>mdi-close</v-icon>
+                            <v-icon>mdi-arrow-left</v-icon>
                             </v-btn>
                             <v-toolbar-title>{{dialogMediaScreen.title}}</v-toolbar-title>
                                
-
                         </v-toolbar>
                         <template>
                             <slot></slot>

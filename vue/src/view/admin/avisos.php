@@ -129,6 +129,7 @@
                       @filtering="filter.filtering = $event"
                       @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                       @setDisplayHeaders="subheaders.active = $event"
+                      @setPaginateDisplay="pagination.display = $event"
                       />
                     </v-col>
                 </template>
@@ -160,6 +161,7 @@
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     @setDisplayHeaders="subheaders.active = $event"
+                    @setPaginateDisplay="pagination.display = $event"
                     />
                     </v-col>
                 </template>
@@ -195,6 +197,7 @@
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
                     @setDisplayHeaders="subheaders.active = $event"
+                    @setPaginateDisplay="pagination.display = $event"
 
                       />
                       </v-col>
@@ -263,7 +266,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table">
+                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -322,6 +325,7 @@
               },
               urlTryPagination:'',
               pagination : {
+                  display: false,
                   totalPage : 0, 
                   rowForPage:10,
                   pageCurrent: 1,
