@@ -338,8 +338,9 @@ class cobertura{
                   left JOIN provinceint p ON p.postal_code = c.postal_code
                   left JOIN users u ON c.id_user = u.id
                   LEFT JOIN country co ON c.id_country = co.id
-                  WHERE c.status='active' AND p.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
+                  WHERE c.status='active' AND c.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
                   GROUP BY c.id order BY c.postal_code ASC";
+
                $getRecentCodes = $this->db->query($sql);
                if($getRecentCodes && $getRecentCodes->num_rows>0){
                   $result = $getRecentCodes;
@@ -525,6 +526,7 @@ class cobertura{
             $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
             $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','active','created')";
+
            
             $save = $this->db->query($sql);
       
@@ -921,6 +923,30 @@ class cobertura{
             $getPostalCodeByLocateAndProvinceAndCountry = $this->db->query($sql);
             if($getPostalCodeByLocateAndProvinceAndCountry && $getPostalCodeByLocateAndProvinceAndCountry->num_rows > 0){
                   $result = $getPostalCodeByLocateAndProvinceAndCountry;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+      }
+
+      public function verifyNotExistUser(){
+
+            $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
+            $country = !empty($this->getId_country()) ? $this->getId_country() : false ;
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+
+            if(is_array($postal_code)){
+                  $postal_code =  implode(',',$postal_code);
+                 }
+            
+            $sql = "SELECT c.postal_code,u.name,u.name_alternative FROM coverage c
+            LEFT JOIN users u ON u.id = c.id_user
+            WHERE c.id_user = '$id_user' AND c.postal_code IN($postal_code) AND c.id_country = '$country' GROUP BY c.id";
+
+            $verifyNotExistUser = $this->db->query($sql);
+            if($verifyNotExistUser && $verifyNotExistUser->num_rows > 0){
+                  $result = $verifyNotExistUser;
             }else {
                   $result = false;
             }

@@ -30,7 +30,7 @@ Vue.component('select-auto-complete-simple-id', {
         },
         title: {
             type: String
-        }
+        },
     },
     data() {
         return {
@@ -82,6 +82,10 @@ Vue.component('select-auto-complete-simple-id', {
         },
         returnData(val) {
             this.$emit("exportVal", val)
+        },
+        c_reset() {
+            this.search = null
+            this.select = null
         }
     },
     created() {

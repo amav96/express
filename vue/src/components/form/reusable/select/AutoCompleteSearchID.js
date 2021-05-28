@@ -97,6 +97,12 @@ Vue.component('select-auto-complete-search-id', {
         },
         returnData(val) {
             this.$emit("exportVal", val)
+        },
+        c_reset() {
+            this.items = []
+            this.data = []
+            this.search = null
+            this.select = null
         }
     },
 

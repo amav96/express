@@ -428,54 +428,68 @@ public function save(){
         $save->setCustomer_service_hours($timeSchedule);
         $save->setLat($lat);
         $save->setLng($lng);
-        $execute = count($postal_code);
-        for($i=0;$i<count($postal_code);$i++){
-            $save->setPostal_code($postal_code[$i]);
-            $save->save();
-            $execute--;
-        }
-        if($execute === 0){
-            $save->setPostal_code($postal_code);
-            $getRecentCodes = $save->getRecentCodes();
-            if($getRecentCodes){
+        $save->setPostal_code($postal_code);
 
-                foreach($getRecentCodes as $element){
-    
-                    $arrayDateTime = explode(' ', trim($element["created_at"]));
-                    $arrayDate = explode('-',$arrayDateTime[0]);
-                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
-                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
-    
-                    $object[]=array(
-                        'success' => true,
-                        'id' => $element["id"],
-                        'postal_code' => $element["postal_code"],
-                        'locate' => $element["locate"],
-                        'home_address' => $element["home_address"], 
-                        'provinceInt' => $element["provinceInt"], 
-                        'province' => $element["province"],
-                        'name_country' => $element['name_country'],
-                        'type' => $element["type"],
-                        'id_user' => $element["id_user"],
-                        'name_assigned' => $element["id_user"],
-                        'customer_service_hours' => $element["customer_service_hours"],
-                        'lat' => $element["lat"],
-                        'lng' => $element["lng"],
-                        'created_at' => $dateTimeFormated
+        $verifyNotExistUser = $save->verifyNotExistUser();
+        if($verifyNotExistUser){
+            foreach($verifyNotExistUser as $element){
+                    $object[] = array(
+                        'error'         => 'exist',
+                        'name_user'     => $element["name"].' '.$element["name_alternative"],
+                        'postal_code'   => $element["postal_code"]
                     );
             }
-               
-            }else{
+        }else{ 
+            $execute = count($postal_code);
+            for($i=0;$i<count($postal_code);$i++){
+                $save->setPostal_code($postal_code[$i]);
+                $save->save();
+                $execute--;
+            }
+            if($execute === 0){
+                $save->setPostal_code($postal_code);
+                $getRecentCodes = $save->getRecentCodes();
+                if($getRecentCodes){
+
+                    foreach($getRecentCodes as $element){
+        
+                        $arrayDateTime = explode(' ', trim($element["created_at"]));
+                        $arrayDate = explode('-',$arrayDateTime[0]);
+                        $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+                        $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+        
+                        $object[]=array(
+                            'success' => true,
+                            'id' => $element["id"],
+                            'postal_code' => $element["postal_code"],
+                            'locate' => $element["locate"],
+                            'home_address' => $element["home_address"], 
+                            'provinceInt' => $element["provinceInt"], 
+                            'province' => $element["province"],
+                            'name_country' => $element['name_country'],
+                            'type' => $element["type"],
+                            'id_user' => $element["id_user"],
+                            'name_assigned' => $element["id_user"],
+                            'customer_service_hours' => $element["customer_service_hours"],
+                            'lat' => $element["lat"],
+                            'lng' => $element["lng"],
+                            'created_at' => $dateTimeFormated
+                        );
+                }
+                
+                }else{
+                    $object = array(
+                        'error' => 'not_result'
+                    );
+                }
+            }else {
                 $object = array(
-                    'error' => 'not_result'
+                    'error' => 'not_insert_complete'
                 );
             }
-        }else {
-            $object = array(
-                'error' => 'not_insert_complete'
-            );
+           
         }
-
+     
         $jsonstring = json_encode($object);
         echo $jsonstring;
 }
@@ -1120,6 +1134,7 @@ public function getPostalCodeByLocateAndProvinceAndCountry(){
     $jsonstring = json_encode($object);
         echo $jsonstring;
 }
+
 
 
 }

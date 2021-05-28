@@ -22,17 +22,8 @@ Vue.component('d-full-screen', {
                             >
                             <v-icon>mdi-arrow-left</v-icon>
                             </v-btn>
-                            <v-toolbar-title>titulo statico</v-toolbar-title>
+                            <v-toolbar-title>{{dialogFullScreen.title}}</v-toolbar-title>
                                
-                            <v-spacer></v-spacer>
-                            <v-toolbar-items>
-                            <v-btn
-                                dark
-                                text
-                            >
-                                Save
-                            </v-btn>
-                            </v-toolbar-items>
                         </v-toolbar>
                         <template>
                             <slot></slot>

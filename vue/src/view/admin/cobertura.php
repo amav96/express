@@ -14,6 +14,7 @@
 
 
 <!-- dialog component -->
+<script src="<?=base_url?>vue/src/components/dialog/reusable/fullScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
 
@@ -27,13 +28,13 @@
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCollector.js"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SaveCommerce.js"></script>
-<script src="<?=base_url?>vue/src/components/form/personalized/coverage/SavePoint.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCollector.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCommerce.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/SavePoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesContent.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/switches/switchesContent.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/geocoding/geocodingSimple.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/timeSchedule.js"></script>
 
@@ -189,19 +190,19 @@
                   />
                 </template>
 
-                <template v-if="dialogMediaScreen.display" >
-                  <d-media-screen :dialogMediaScreen="dialogMediaScreen"  >
+                <template  >
+                  <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display">
                         <save-collector 
                         :pagination="pagination"  
                         :admin="admin" 
                         :save="save"
-                        :dialogMediaScreen="dialogMediaScreen"
+                        :dialogFullScreen="dialogFullScreen"
                         @response="table.dataResponseDB = $event"
                         @showTable="table.display = $event"
                         @filtering="filter.filtering = $event"
                         @setPaginateDisplay="pagination.display = $event"
-                        @setDialogDisplay="dialogMediaScreen.display = $event"
+                        @setDialogDisplay="dialogFullScreen.display = $event"
                         @setSnack="snackbar = $event"
                         />
                     </template>
@@ -210,12 +211,12 @@
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
-                      :dialogMediaScreen="dialogMediaScreen"
+                      :dialogFullScreen="dialogFullScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
                       @setPaginateDisplay="pagination.display = $event"
-                      @setDialogDisplay="dialogMediaScreen.display = $event"
+                      @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="snackbar = $event"
                       />
                     </template>
@@ -224,16 +225,16 @@
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
-                      :dialogMediaScreen="dialogMediaScreen"
+                      :dialogFullScreen="dialogFullScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
                       @setPaginateDisplay="pagination.display = $event"
-                      @setDialogDisplay="dialogMediaScreen.display = $event"
+                      @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="snackbar = $event"
                       />
                     </template>
-                  </d-media-screen>
+                  </d-full-screen>
                 </template>
 
                 <template v-if="formRangeNumberAndWord.display">
@@ -314,7 +315,7 @@
         `,
         data(){
             return {
-                dialogMediaScreen : {
+                dialogFullScreen : {
                   display : false,
                   title : ''
                 },
@@ -322,7 +323,7 @@
                   action : '',
                   type:'',
                   collector :{
-                    display : false,
+                    display : true,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
                     title_field : 'Ingrese Recolector',
                   },
@@ -336,7 +337,6 @@
                   },
                   zone : {
                     postal_codes : [],
-                    selectPostalCodes: [],
                     url_country : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
                     url_province: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getProvinceById',
                     url_locate:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getLocateById',
@@ -469,20 +469,20 @@
             // type to form
 
             this.dialogChoose.chooseNext.display = false
-            this.dialogMediaScreen.display = true
+            this.dialogFullScreen.display = true
 
           
             if(this.save.type === 'collector'){
-                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Recolector' : '';
-                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Recolector' : '';
+                this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Recolector' : '';
+                this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Recolector' : '';
                 //show or hide others form
                 this.save.collector.display = true
                 this.save.commerce.display = false
                 this.save.point.display = false
               }
             if(this.save.type === 'commerce'){
-              this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Comercio' : '';
-              this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Comercio' : '';
+              this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Comercio' : '';
+              this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Comercio' : '';
                 //show or hide others form
                 this.save.commerce.display = true
                 this.save.collector.display = false
@@ -490,12 +490,12 @@
               }
             if(this.save.type === 'mail' || this.save.type === 'station'){
                 if(this.save.type === 'mail'){
-                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Correo' : '';
-                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Correo' : '';
+                this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Correo' : '';
+                this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Correo' : '';
                 }
                 if(this.save.type === 'station'){
-                this.save.action === 'create' ? this.dialogMediaScreen.title = 'Crear zona para Terminal' : '';
-                this.save.action === 'update' ? this.dialogMediaScreen.title = 'Actualizar zona para Terminal' : '';
+                this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Terminal' : '';
+                this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Terminal' : '';
                 }
                 //show or hide others form
                 this.save.point.display = true
