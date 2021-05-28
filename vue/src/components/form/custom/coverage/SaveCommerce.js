@@ -247,7 +247,9 @@ Vue.component('save-commerce', {
             error: {
                 display: false,
                 text: ''
-            }
+            },
+            cp_start: '',
+            cp_end: '',
         }
     },
     methods: {
@@ -299,6 +301,14 @@ Vue.component('save-commerce', {
         validateFormComplete() {
 
             if (this.id_country === '' || this.id_province === '' || this.id_locate === '' || this.home_address === '' || this.lat === '' || this.lng === '' || this.id_user === '' || this.chosenPostalCodes.length === 0) {
+                return true
+            } else {
+                return false
+            }
+
+        },
+        validateButtonSearchCPbyRange() {
+            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '') {
                 return true
             } else {
                 return false

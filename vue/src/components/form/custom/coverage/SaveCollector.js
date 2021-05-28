@@ -21,7 +21,7 @@ Vue.component('save-collector', {
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <select-auto-complete-simple-id 
                                 @exportVal="setUser($event)"
-                                ref="p_completeSimple"
+                               
                                 :title="save.collector.title_field" 
                                 :url="save.collector.url_users" />
                             </v-col>
@@ -34,7 +34,7 @@ Vue.component('save-collector', {
                                 title="Ingrese País" 
                                 :url="save.zone.url_country"
                                 @exportVal="setSelectCountry($event)"
-                                ref="p_completeSearchCountry"
+                                
                                     />
                             </v-col>
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -54,18 +54,19 @@ Vue.component('save-collector', {
                                     title="Ingrese Localidad" 
                                     :url="save.zone.url_locate"
                                     @exportVal="getZoneByPostalCode($event)"
-                                    ref="p_completeSearchLocate"
+                                   
                                     />
                                 </v-col>
                             </template>
                         </v-row>
-
+                            
                         <template v-if="save.action == 'update'" >
                             <h6 class="ml-4 my-5">  Ingrese rango de codigo postal </h6>
                             <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <v-text-field
                                     label="Desde"
+                                    v-model="cp_start"
                                     type="number"
                                     class="mx-4"
                                     outlined
@@ -76,6 +77,7 @@ Vue.component('save-collector', {
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <v-text-field
                                     label="Hasta"
+                                    v-model="cp_end"
                                     type="number"
                                     class="mx-4"
                                     outlined
@@ -83,9 +85,12 @@ Vue.component('save-collector', {
                                     flat
                                     />
                                 </v-col>
+                                
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                    <v-btn
+                                   :disabled="validateButtonSearchCPbyRange()"
                                    class="mx-2 white--text"
+                                   color="primary"
                                    >
                                     Buscar
                                     <v-icon
@@ -188,7 +193,10 @@ Vue.component('save-collector', {
             error: {
                 display: false,
                 text: ''
-            }
+            },
+            cp_start: '',
+            cp_end: '',
+
 
         }
     },
@@ -249,6 +257,14 @@ Vue.component('save-collector', {
         validateFormComplete() {
 
             if (this.id_user === '' || this.chosenPostalCodes.length === 0) {
+                return true
+            } else {
+                return false
+            }
+
+        },
+        validateButtonSearchCPbyRange() {
+            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '') {
                 return true
             } else {
                 return false
