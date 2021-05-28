@@ -143,7 +143,7 @@ Vue.component('save-commerce', {
                         </template>
 
 
-                        <h6 class="ml-4 my-5"> Zona a cubir </h6>
+                        <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
                         <v-row class="d-flex justify-center flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <select-auto-complete-simple-id 
@@ -251,6 +251,12 @@ Vue.component('save-commerce', {
         }
     },
     methods: {
+        returnType() {
+            if (this.save.type === 'commerce') {
+                return "Comercio";
+            }
+
+        },
         setUser(user) {
             this.infoUser = user
             this.id_user = user.id

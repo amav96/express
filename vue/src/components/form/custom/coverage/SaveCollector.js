@@ -27,7 +27,7 @@ Vue.component('save-collector', {
                             </v-col>
                         </v-row>
                         
-                        <h6 class="ml-4 my-5"> Zona a cubir </h6>
+                        <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <select-auto-complete-simple-id 
@@ -60,7 +60,7 @@ Vue.component('save-collector', {
                             </template>
                         </v-row>
 
-                        <template>
+                        <template v-if="save.action == 'update'" >
                             <h6 class="ml-4 my-5">  Ingrese rango de codigo postal </h6>
                             <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -71,7 +71,6 @@ Vue.component('save-collector', {
                                     outlined
                                     dense
                                     flat
-                                    
                                     />
                                 </v-col>
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -83,6 +82,18 @@ Vue.component('save-collector', {
                                     dense
                                     flat
                                     />
+                                </v-col>
+                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                   <v-btn
+                                   class="mx-2 white--text"
+                                   >
+                                    Buscar
+                                    <v-icon
+                                    right
+                                    >
+                                    mdi-magnify
+                                    </v-icon>
+                                   </v-btn>
                                 </v-col>
                             </v-row>
                         </template>
@@ -182,6 +193,12 @@ Vue.component('save-collector', {
         }
     },
     methods: {
+        returnType() {
+            if (this.save.type === 'collector') {
+                return "Recolector";
+            }
+
+        },
         setUser(user) {
             this.infoUser = user
             this.id_user = user.id
