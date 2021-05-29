@@ -1144,6 +1144,20 @@ public function getPostalCodeByLocateAndProvinceAndCountry(){
         echo $jsonstring;
 }
 
+public function getAllPointInZone(){
+
+    $country = isset($_GET['country']) ? $_GET['country'] : false ;
+    $province = isset($_GET['province']) ? $_GET['province'] : false ;
+    $cp_start = isset($_GET['cp_start']) ? $_GET['cp_start'] : false ;
+    $cp_end = isset($_GET['cp_end']) ? $_GET['cp_end'] : false ;
+
+    $getAllPointInZone = new cobertura();
+    $getAllPointInZone->setId_country($country);
+    $getAllPointInZone->setProvince($province);
+    $getAllPointInZone->setPostal_code($cp_start);
+    $getAllPointInZone->setPostal_code_range($cp_end);
+    $getAllPointInZone = $getAllPointInZone->getAllPointInZone();
+}
 
 
 }

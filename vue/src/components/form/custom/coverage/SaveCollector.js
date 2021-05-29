@@ -79,6 +79,7 @@ Vue.component('save-collector', {
                                    :disabled="validateButtonSearchCPbyRange()"
                                    class="mx-2 white--text"
                                    color="primary"
+                                   @click="getAllPointInZone()"
                                    >
                                     Buscar
                                     <v-icon
@@ -219,12 +220,29 @@ Vue.component('save-collector', {
         },
         setSelectProvince(province) {
             this.id_province = province.id
-            this.save.action === 'create' ? this.id_province_by_select = province.id : this.chooseZipCodeByZone()
+            this.save.action === 'create' ? this.id_province_by_select = province.id : true
 
         },
         getZoneByPostalCode(locate) {
             this.slug_locate = locate.slug
             this.save.action === 'create' ? this.chooseZipCode(locate) : ''
+        },
+        getAllPointInZone() {
+            const url = this.save.zone.url_AllPointInZone
+            axios.get(url, {
+                    params: {
+                        country: this.id_country,
+                        province: this.id_province,
+                        cp_start: this.cp_start,
+                        cp_end: this.cp_end
+                    }
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         },
         chooseZipCode(locate) {
 

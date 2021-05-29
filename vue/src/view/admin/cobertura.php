@@ -341,7 +341,7 @@
                     url_province: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getProvinceById',
                     url_locate:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getLocateById',
                     url_postalCode:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeByLocateAndProvinceAndCountry',
-                    
+                    url_AllPointInZone:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllPointInZone',
                   },
                   geocoding :{
                     url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'

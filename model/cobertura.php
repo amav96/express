@@ -953,6 +953,10 @@ class cobertura{
 
             return $result;
       }
+
+      public function getAllPointInZone(){
+            
+      }
 }
 
 ?>
