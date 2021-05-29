@@ -115,6 +115,9 @@ class noticeController
 
 
       $search = strpos($contacto, ',');
+
+       
+        
       if (!$search) {
         // Si hay solo un correo
         $objectSend = [
@@ -159,6 +162,8 @@ class noticeController
         $convertContactArray = explode(',', $contacto);
         $countArray = sizeof($convertContactArray);
         $countForResponse = $countArray;
+
+        
 
         for ($i = 0; $i < $countArray; $i++) {
 
@@ -223,7 +228,6 @@ class noticeController
       $lng = isset($_POST['lng']) ? $_POST['lng'] : false;
       $medio = isset($_POST['medio']) ? $_POST['medio'] : false;
 
-
       $setNoticeManagement = new Notice();
       $setNoticeManagement->setAviso($aviso);
       $setNoticeManagement->setContacto($contacto);
@@ -235,7 +239,7 @@ class noticeController
       $setNoticeManagement->setLng($lng);
       $setNoticeManagement->setMedio($medio);
       $setNoticeManagement = $setNoticeManagement->setNoticeManagement();
-
+     
       if ($setNoticeManagement) {
 
         $object[] = array(
@@ -257,6 +261,8 @@ class noticeController
   {
     if ($_POST) {
 
+      
+
       $aviso = isset($_POST['aviso']) ? $_POST['aviso'] : false;
       $contacto = isset($_POST['contacto']) ? $_POST['contacto'] : false;
       $country = isset($_POST['country']) ? $_POST['country'] : false;
@@ -269,10 +275,12 @@ class noticeController
       $empresa = isset($_POST['empresa']) ? $_POST['empresa'] : false;
       $nameCustomer = isset($_POST['nameCustomer']) ? $_POST['nameCustomer'] : false;
       $locate = isset($_POST['locate']) ? $_POST['locate'] : false;
-
+      
 
       $search = strpos($contacto, ',');
+
       if (!$search) {
+      
         // Si hay solo un correo
         $objectSend = [
           'aviso' => $aviso,
@@ -311,6 +319,7 @@ class noticeController
           }
         }
       } else {
+     
         // Si hay mas de un correo 
         $convertContactArray = explode(',', $contacto);
         $countArray = sizeof($convertContactArray);
@@ -434,6 +443,10 @@ class noticeController
         $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/cremovistar.png';
         $asuntoSegundario = 'Decodificador';
         break;
+      case 'CLARO';
+        $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/claro.png';
+        $asuntoSegundario = 'Decodificador';
+        break;
     }
 
 
@@ -496,6 +509,7 @@ class noticeController
     }
     return $data;
   }
+
   public function searchNewSection()
   {
     if ($_POST) {

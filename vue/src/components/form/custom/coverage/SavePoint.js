@@ -4,20 +4,7 @@ Vue.component('save-point', {
             <div>
                 <v-container>
 
-                    <template v-if="saveLoading">
-                            <div class="text-center d-flex justify-center align-items-center" style="height:500px" >
-                                <div>
-                                    <v-progress-circular
-                                    :size="50"
-                                    color="primary"
-                                    indeterminate
-                                    ></v-progress-circular>
-                                </div>
-                            
-                            </div>
-                    </template>
-
-                    <template v-if="!saveLoading">
+                    <template v-if="!saveSuccess">
                         <h6 class="ml-4 my-5"> Dirección del {{returnType()}} a geocodificar</h6>
                             <template v-if="errorGeocoding !== ''">
                                 <v-row class="d-flex justify-center mx-2" >
@@ -145,7 +132,18 @@ Vue.component('save-point', {
                                     @setOptions="chosenPostalCodes = $event"
                                     />
                             </template>
+
                             <v-row class="d-flex justify-center my-4 mx-4" >
+
+                                <template v-if="saveLoading">
+                                    <v-progress-linear
+                                    color="info"
+                                    indeterminate
+                                    rounded
+                                    height="6"
+                                    ></v-progress-linear>
+                                </template>
+
                                 <v-btn 
                                 class="success"
                                 block
@@ -170,16 +168,16 @@ Vue.component('save-point', {
         pagination: {
             type: Object
         },
+        dialogFullScreen: {
+            type: Object
+        }
     },
     data() {
         return {
             id_country_by_select: '',
             id_country: '',
-            text_country: '',
             id_province_by_select: '',
             id_province: '',
-            text_province: '',
-            text_locate: '',
             id_locate: '',
             home_address: '',
             lat: '',
@@ -190,7 +188,18 @@ Vue.component('save-point', {
             errorGeocoding: '',
             resultGeocoding: '',
             timeSchedule: '',
-            saveLoading: false
+            saveLoading: false,
+            error: {
+                display: false,
+                text: ''
+            },
+            overlay: {
+                absolute: true,
+                opacity: 2,
+                overlay: true,
+            },
+            saveSuccess: false,
+            saveFlag: false
         }
     },
     methods: {
@@ -238,7 +247,7 @@ Vue.component('save-point', {
         },
         validateFormComplete() {
 
-            if (this.id_country === '' || this.id_province === '' || this.id_locate === '' || this.home_address === '' || this.lat === '' || this.lng === '' || this.id_user === '' || this.chosenPostalCodes.length === 0 || this.timeSchedule === '' || this.timeSchedule.length < 26) {
+            if (this.id_country === '' || this.id_province === '' || this.id_locate === '' || this.home_address === '' || this.lat === '' || this.lng === '' || this.chosenPostalCodes.length === 0 || this.timeSchedule === '' || this.timeSchedule.length < 26) {
                 return true
             } else {
                 return false
@@ -261,13 +270,18 @@ Vue.component('save-point', {
                         timeSchedule: this.timeSchedule,
                         lat: this.lat,
                         lng: this.lng,
-                        id_user: this.id_user,
                         type: this.save.type,
                         admin: this.admin,
                         created_at: this.getDateTime()
                     }
                 })
                 .then(res => {
+                    if (res.data[0].error === "exist") {
+                        this.exist(res)
+                        this.saveLoading = false
+                        return
+                    }
+
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
                         this.saveLoading = false
@@ -275,9 +289,10 @@ Vue.component('save-point', {
                     }
 
                     this.$emit("setDialogDisplay", false)
-                    setTimeout(() => {
-                        this.finish(res)
-                    }, 600);
+                    this.$nextTick(() => {
+                        this.setResponseWhenFinally(res)
+                        this.saveFlag = true
+                    })
 
                 })
                 .catch(err => {
@@ -285,25 +300,53 @@ Vue.component('save-point', {
                     console.log(err)
                 })
         },
-        finish(res) {
-            this.saveLoading = false
-            this.id_country_by_select = ''
-            this.id_province_by_select = ''
-            this.id_locate = ''
-
-            this.save.zone.postal_codes = []
-            this.chosenPostalCodes = []
-            this.lat = ''
-            this.lng = ''
-            this.srcMap = ''
-
+        setResponseWhenFinally(res) {
             this.$emit('setPaginateDisplay', false)
             this.$emit('response', res.data)
             this.$emit('showTable', true)
-                // setting flag filtering
-            this.$emit('filtering', false)
-            const snack = { snack: true, timeout: 2000, textSnack: 'Creado exitosamente' }
-            this.$emit("setSnack", snack)
+        },
+        finish() {
+            if (this.saveFlag) {
+                this.saveFlag = false
+                setTimeout(() => {
+                    this.saveSuccess = true
+                    this.saveLoading = false
+                    this.id_country_by_select = ''
+                    this.id_country = ''
+                    this.id_province_by_select = ''
+                    this.id_province = ''
+                    this.id_locate = ''
+                    this.save.zone.postal_codes = []
+                    this.chosenPostalCodes = []
+                    this.infoUser = []
+                    this.home_address = ''
+                    this.lat = ''
+                    this.lng = ''
+                    this.srcMap = ''
+                    this.error.display = false
+                    this.error.text = ''
+
+                    this.$nextTick(() => {
+
+                        this.saveSuccess = false
+                            // setting flag filtering
+                        this.$emit('filtering', false)
+
+                        const snack = { snack: true, timeout: 2000, textSnack: 'Creado exitosamente' }
+                        this.$emit("setSnack", snack)
+                    })
+                }, 700);
+            }
+        },
+        exist(res) {
+
+            var text = res.data[0].name_user + ' ya tiene asignado el codigo '
+            res.data.forEach((val) => {
+                text = text + ' ' + val.postal_code
+            })
+
+            this.error.display = true
+            this.error.text = text
         },
         getDateTime() {
             var today = new Date();
@@ -339,6 +382,14 @@ Vue.component('save-point', {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
+        },
+        dialogFullScreen: {
+            handler() {
+                this.$nextTick(() => {
+                    this.finish()
+                })
+            },
+            deep: true
         }
     },
 })

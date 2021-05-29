@@ -570,10 +570,11 @@
               this.table.display = false
             }
           }
-        }
-        ,created(){
+        },
+        created(){
           this.$_getAdmin()
-        }
+        },
+        
        
     })
 </script>

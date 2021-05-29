@@ -410,7 +410,7 @@ public function save(){
      $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
      $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
      $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
-     $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : false ;
+     $id_user = isset($_GET['id_user']) && !empty($_GET['id_user'])? $_GET['id_user'] : false ;
      $type = isset($_GET['type']) ? $_GET['type'] : false ;
      $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
      $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
@@ -430,7 +430,16 @@ public function save(){
         $save->setLng($lng);
         $save->setPostal_code($postal_code);
 
-        $verifyNotExistUser = $save->verifyNotExistUser();
+      
+        
+        if($id_user){
+        
+            $verifyNotExistUser = $save->verifyNotExistUser();
+        }else {
+           
+            $verifyNotExistUser = false;
+        }
+        
         if($verifyNotExistUser){
             foreach($verifyNotExistUser as $element){
                     $object[] = array(

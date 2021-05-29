@@ -5,7 +5,7 @@ Vue.component('d-full-screen', {
             <template id="inspire">
                 <v-row justify="center">
                 <v-dialog
-                    v-model="dialogFullScreen.display"
+                    v-model.lazy="dialogFullScreen.display"
                     fullscreen
                     hide-overlay
                     transition="dialog-left-transition"
@@ -42,8 +42,5 @@ Vue.component('d-full-screen', {
     data() {
         return {}
     },
-    methods: {
 
-
-    }
 })

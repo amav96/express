@@ -194,6 +194,7 @@ class Notice{
         $sql = "INSERT INTO notice  (contacto,id_user,identificacion,lat,lng,country,id_orden,means,aviso,delay_send,created_at) 
         values ('$contacto',$id_user,'$identificacion','$lat','$lng','$country','$order','$medio','$aviso','$momemto','$created_at') ";
 
+
          $setNotice = $this->db->query($sql);
 
          if($setNotice){
@@ -207,7 +208,7 @@ class Notice{
     } 
 
     public function setNoticeManagement(){
-
+        
         $aviso = !empty($this->getAviso()) ? $this->getAviso() : false ;
         $contacto = !empty($this->getContacto()) ? $this->getContacto() : false ;
         $country = !empty($this->getCountry()) ? $this->getCountry() : false ;
@@ -223,6 +224,8 @@ class Notice{
 
         $sql = "INSERT INTO notice_management  (aviso,contacto,country,id_user,identificacion,lat,lng,means,delay_send,created_at) 
         values ('$aviso','$contacto','$country',$id_user,'$identificacion','$lat','$lng','$medio','$momemto','$created_at') ";
+
+      
 
         $setNoticeManagement = $this->db->query($sql);
 

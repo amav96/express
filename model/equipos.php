@@ -422,8 +422,8 @@ class Equipos
     {
 
         $sql = "INSERT INTO  gestion (id_equipo,id_orden_pass,id_orden,id_user,identificacion,terminal,
-            serie,serie_base,tarjeta,chip_alternativo,accesorio_uno,accesorio_dos,accesorio_tres,
-            accesorio_cuatro,estado,motivo,lat,lng,created_at,accesorios,status_gestion) values ('{$this->getGuiaEquipo()}','{$this->getOrdenHash()}','{$this->getOrden()}',{$this->getId_recolector()},'{$this->getIdentificacionCliente()}','{$this->getTerminal()}','{$this->getSerie()}','{$this->getSerie_base()}','{$this->getTarjeta()}','{$this->getChip_alternativo()}','{$this->getAccesorioUno()}','{$this->getAccesorioDos()}','{$this->getAccesorioTres()}','{$this->getAccesorioCuatro()}','{$this->getEstado()}','{$this->getMotivoRetiro()}','{$this->getLat()}','{$this->getLng()}','{$this->getFecha_momento()}','{$this->getAccesorios()}','transito');";
+        serie,serie_base,tarjeta,chip_alternativo,accesorio_uno,accesorio_dos,accesorio_tres,
+        accesorio_cuatro,estado,motivo,created_at,accesorios,status_gestion) values ('{$this->getGuiaEquipo()}','{$this->getOrdenHash()}','{$this->getOrden()}',{$this->getId_recolector()},'{$this->getIdentificacionCliente()}','{$this->getTerminal()}','{$this->getSerie()}','{$this->getSerie_base()}','{$this->getTarjeta()}','{$this->getChip_alternativo()}','{$this->getAccesorioUno()}','{$this->getAccesorioDos()}','{$this->getAccesorioTres()}','{$this->getAccesorioCuatro()}','{$this->getEstado()}','{$this->getMotivoRetiro()}','{$this->getFecha_momento()}','{$this->getAccesorios()}','transito');";
 
         
         $equipos = $this->db->query($sql);

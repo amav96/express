@@ -191,8 +191,7 @@ class equipoController
                     $codOrden =  $data[$i]["codOrden"];
                     $codUser =  $data[$i]["codUser"];
                     $dateTime =  $data[$i]["dateTime"];
-                    $lat =  $data[$i]["lat"];
-                    $lng =  $data[$i]["lng"];
+                    
 
                     $recuperar = new Equipos();
 
@@ -214,8 +213,6 @@ class equipoController
                     $recuperar->setOrden($codOrden);
                     $recuperar->setId_recolector($codUser);
                     $recuperar->setFecha_momento($dateTime);
-                    $recuperar->setLat($lat);
-                    $recuperar->setLng($lng);
                     $resultado = $recuperar->setTransito();
                 }
 
@@ -741,6 +738,7 @@ class equipoController
                         $supercanal = 'SC';
                         $movistar = 'MV';
                         $geocom = 'GC';
+                        $claro = 'CL';
                         $cadena = substr($idEmpresa, 0, 2);
                         
                         
@@ -754,6 +752,7 @@ class equipoController
                         ($cadena == $posnet) ? require_once 'views/remitos/posnet.php' : null;
                         ($cadena == $movistar) ? require_once 'views/remitos/movistar.php' : null;
                         ($cadena == $geocom) ? require_once 'views/remitos/geocom.php' : null;
+                        ($cadena == $claro) ? require_once 'views/remitos/claro.php' : null;
                     } else {
                         echo "Error 505: (RE-NO-EXIST) REPORTED ;";
                     }

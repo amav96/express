@@ -3,21 +3,8 @@ Vue.component('save-commerce', {
         `
             <div>
                 <v-container>
-
-                    <template v-if="saveLoading">
-                        <div class="text-center d-flex justify-center align-items-center" style="height:500px" >
-                            <div>
-                                <v-progress-circular
-                                :size="50"
-                                color="primary"
-                                indeterminate
-                                ></v-progress-circular>
-                            </div>
-                        
-                        </div>
-                    </template>
-
-                    <template v-if="!saveLoading">
+                
+                    <template v-if="!saveSuccess">
                         <h6 class="ml-4 my-5"> Comercio </h6>
                         <v-row class="d-flex justify-center flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -73,7 +60,8 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-                        <template>
+
+                        
                             <geocoding-simple
                             @setErrorGeocoding="errorGeocoding = $event"
                             @setResultGeocoding="resultGeocoding = $event"
@@ -140,49 +128,47 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-                        </template>
-
-
-                        <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                        <v-row class="d-flex justify-center flex-row" >
-                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                <select-auto-complete-simple-id 
-                                title="Ingrese País" 
-                                :url="save.zone.url_country"
-                                @exportVal="setSelectCountry($event)"
-                                    />
-                            </v-col>
-                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                <select-auto-complete-search-id 
-                                :searchID="id_country_by_select"
-                                title="Ingrese Provincia" 
-                                :url="save.zone.url_province"
-                                @exportVal="setSelectProvince($event)" 
-                                />
-                            </v-col>
-
-                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                <select-auto-complete-search-id 
-                                :searchID="id_province_by_select"
-                                title="Ingrese Localidad" 
-                                :url="save.zone.url_locate"
-                                @exportVal="getZoneByPostalCode($event)"
-                                />
-                            </v-col>
                         
-                        </v-row>
+                            <h6  class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+                          
+                            <v-row class="d-flex justify-center flex-row" >
+                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                    <select-auto-complete-simple-id 
+                                    title="Ingrese País" 
+                                    :url="save.zone.url_country"
+                                    @exportVal="setSelectCountry($event)"
+                                        />
+                                </v-col>
+                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                    <select-auto-complete-search-id 
+                                    :searchID="id_country_by_select"
+                                    title="Ingrese Provincia" 
+                                    :url="save.zone.url_province"
+                                    @exportVal="setSelectProvince($event)" 
+                                    />
+                                </v-col>
 
-                        <template v-if="error.display" >
-                            <v-alert
-                            class="ml-4 my-5" 
-                            color="error"
-                            dark
-                            type="error"
-                            elevation="2"
-                            >
-                            {{error.text}}
-                            </v-alert>
-                        </template>
+                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                    <select-auto-complete-search-id 
+                                    :searchID="id_province_by_select"
+                                    title="Ingrese Localidad" 
+                                    :url="save.zone.url_locate"
+                                    @exportVal="getZoneByPostalCode($event)"
+                                    />
+                                </v-col>
+                            
+                            </v-row>
+                            <template v-if="error.display" >
+                                <v-alert
+                                class="ml-4 my-5" 
+                                color="error"
+                                dark
+                                type="error"
+                                elevation="2"
+                                >
+                                {{error.text}}
+                                </v-alert>
+                            </template>
                         
                             <template v-if="save.zone.postal_codes.length > 0" >
                                 <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
@@ -190,10 +176,18 @@ Vue.component('save-commerce', {
                                     :options="save.zone.postal_codes"
                                     @setOptions="chosenPostalCodes = $event"
                                     />
-                                    
-                            </v-text-field>
                             </template>
+                      
+                           
                             <v-row class="d-flex justify-center my-4 mx-4" >
+                                <template v-if="saveLoading">
+                                    <v-progress-linear
+                                    color="info"
+                                    indeterminate
+                                    rounded
+                                    height="6"
+                                    ></v-progress-linear>
+                                </template>
                                 <v-btn 
                                 class="success"
                                 block
@@ -205,7 +199,7 @@ Vue.component('save-commerce', {
                             </v-row>
                     </template>
                     
-                    </v-container>
+                </v-container>
             </div>
         `,
     props: {
@@ -218,7 +212,7 @@ Vue.component('save-commerce', {
         pagination: {
             type: Object
         },
-        dialogMediaScreen: {
+        dialogFullScreen: {
             type: Object
         }
 
@@ -228,11 +222,8 @@ Vue.component('save-commerce', {
             time: false,
             id_country_by_select: '',
             id_country: '',
-            text_country: '',
             id_province_by_select: '',
             id_province: '',
-            text_province: '',
-            text_locate: '',
             id_locate: '',
             home_address: '',
             lat: '',
@@ -250,6 +241,13 @@ Vue.component('save-commerce', {
             },
             cp_start: '',
             cp_end: '',
+            overlay: {
+                absolute: true,
+                opacity: 2,
+                overlay: true,
+            },
+            saveSuccess: false,
+            saveFlag: false
         }
     },
     methods: {
@@ -337,10 +335,9 @@ Vue.component('save-commerce', {
                     }
                 })
                 .then(res => {
-
                     if (res.data[0].error === "exist") {
-                        this.saveLoading = false
                         this.exist(res)
+                        this.saveLoading = false
                         return
                     }
 
@@ -351,9 +348,10 @@ Vue.component('save-commerce', {
                     }
 
                     this.$emit("setDialogDisplay", false)
-                    setTimeout(() => {
-                        this.finish(res)
-                    }, 600);
+                    this.$nextTick(() => {
+                        this.setResponseWhenFinally(res)
+                        this.saveFlag = true
+                    })
 
                 })
                 .catch(err => {
@@ -361,27 +359,44 @@ Vue.component('save-commerce', {
                     console.log(err)
                 })
         },
-        finish(res) {
-            this.saveLoading = false
-            this.id_country_by_select = ''
-            this.id_province_by_select = ''
-            this.id_locate = ''
-            this.lat = ''
-            this.lng = ''
-            this.srcMap = ''
-            this.error.display = false
-            this.error.text = ''
-
-            this.save.zone.postal_codes = []
-            this.chosenPostalCodes = []
-            this.infoUser = []
+        setResponseWhenFinally(res) {
             this.$emit('setPaginateDisplay', false)
             this.$emit('response', res.data)
             this.$emit('showTable', true)
-                // setting flag filtering
-            this.$emit('filtering', false)
-            const snack = { snack: true, timeout: 2000, textSnack: 'Comercio creado exitosamente' }
-            this.$emit("setSnack", snack)
+        },
+        finish() {
+            if (this.saveFlag) {
+                this.saveFlag = false
+                setTimeout(() => {
+                    this.saveSuccess = true
+                    this.saveLoading = false
+                    this.id_country_by_select = ''
+                    this.id_country = ''
+                    this.id_province_by_select = ''
+                    this.id_province = ''
+                    this.id_locate = ''
+                    this.id_user = ''
+                    this.save.zone.postal_codes = []
+                    this.chosenPostalCodes = []
+                    this.infoUser = []
+                    this.home_address = ''
+                    this.lat = ''
+                    this.lng = ''
+                    this.srcMap = ''
+                    this.error.display = false
+                    this.error.text = ''
+
+                    this.$nextTick(() => {
+
+                        this.saveSuccess = false
+                            // setting flag filtering
+                        this.$emit('filtering', false)
+
+                        const snack = { snack: true, timeout: 2000, textSnack: 'Comercio creado exitosamente' }
+                        this.$emit("setSnack", snack)
+                    })
+                }, 700);
+            }
         },
         exist(res) {
 
@@ -392,15 +407,6 @@ Vue.component('save-commerce', {
 
             this.error.display = true
             this.error.text = text
-            this.id_country_by_select = ''
-            this.id_province_by_select = ''
-            this.id_locate = ''
-            this.id_user = ''
-            this.save.zone.postal_codes = []
-            this.chosenPostalCodes = []
-            this.lat = ''
-            this.lng = ''
-            this.srcMap = ''
         },
         getDateTime() {
             var today = new Date();
@@ -437,11 +443,15 @@ Vue.component('save-commerce', {
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
+        dialogFullScreen: {
+            handler() {
+                this.$nextTick(() => {
+                    this.finish()
+                })
+            },
+            deep: true
+        }
 
     },
-
-
-
-
 
 })

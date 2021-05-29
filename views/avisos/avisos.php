@@ -1,8 +1,6 @@
 
 <?php require_once 'views/layout/headerRecolector.php'; ?>
 
-
-
 <div id="gestion-avisos" class="container  d-flex justify-content-center align-self-center  flex-column ">
 
 <div id="guia" class="d-flex justify-content-center mb-5">

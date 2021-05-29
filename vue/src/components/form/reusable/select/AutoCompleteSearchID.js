@@ -20,7 +20,7 @@ Vue.component('select-auto-complete-search-id', {
             hide-no-data
             hide-details
             return-object
-            
+            :disabled="searchID === ''"
             > 
         </v-autocomplete>
         </div>
@@ -51,14 +51,18 @@ Vue.component('select-auto-complete-search-id', {
             val && val !== this.select && this.querySelections(val)
         },
         select(val) {
+
             val && this.returnData(val)
         },
         searchID(NewVal, oldVal) {
             if (oldVal !== '' && NewVal !== oldVal) {
                 this.clearCachedItems();
             }
-            this.id_search = NewVal
-            this.getDataByID()
+            if (NewVal !== '') {
+                this.id_search = NewVal
+                this.getDataByID()
+            }
+
         },
     },
     methods: {
@@ -103,7 +107,8 @@ Vue.component('select-auto-complete-search-id', {
             this.data = []
             this.search = null
             this.select = null
-        }
+        },
+
     },
 
 })
