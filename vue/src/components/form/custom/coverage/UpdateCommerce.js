@@ -1,94 +1,9 @@
-Vue.component('save-collector', {
+Vue.component('update-commerce', {
     template: //html 
         `
             <div>
                 <v-container>
-
-                        <template v-if="!saveSuccess">
-                            <h6 class="ml-4 my-5"> Recolector </h6>
-                            <v-row class="d-flex justify-start flex-row" >
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <select-auto-complete-simple-id 
-                                    @exportVal="setUser($event)"
-                                    :title="save.collector.title_field" 
-                                    :url="save.collector.url_users" />
-                                </v-col>
-                            </v-row>
-                            
-                            <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                            <v-row class="d-flex justify-start flex-row" >
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <select-auto-complete-simple-id 
-                                    title="Ingrese País" 
-                                    :url="save.zone.url_country"
-                                    @exportVal="setSelectCountry($event)"
-                                    
-                                    
-                                        />
-                                </v-col>
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <select-auto-complete-search-id 
-                                    :searchID="id_country_by_select"
-                                    title="Ingrese Provincia" 
-                                    :url="save.zone.url_province"
-                                    @exportVal="setSelectProvince($event)"
-                                
-                                    />
-                                </v-col>
-
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <select-auto-complete-search-id 
-                                        :searchID="id_province_by_select"
-                                        title="Ingrese Localidad" 
-                                        :url="save.zone.url_locate"
-                                        @exportVal="getZoneByPostalCode($event)"
-                                    
-                                        />
-                                    </v-col>
-                            
-                            </v-row>
-
-                            <template v-if="error.display" >
-                                <v-alert
-                                class="ml-4 my-5" 
-                                color="error"
-                                dark
-                                type="error"
-                                elevation="2"
-                                >
-                                {{error.text}}
-                                </v-alert>
-                            </template>
-                        
-
-                            <template v-if="save.zone.postal_codes.length > 0" >
-                                    <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
-                                            <switches-common
-                                            :options="save.zone.postal_codes"
-                                            @setOptions="chosenPostalCodes = $event"
-                                            />
-                            </template>
-
-                                <v-row class="d-flex justify-center my-4 mx-4" >
-                                    <template v-if="saveLoading">
-                                        <v-progress-linear
-                                        color="info"
-                                        indeterminate
-                                        rounded
-                                        height="6"
-                                        ></v-progress-linear>
-                                    </template>
-                                    <v-btn 
-                                    class="success"
-                                    block
-                                    :disabled="validateFormComplete()"
-                                    @click="saveData()"
-                                    >
-                                    Siguiente
-                                    </v-btn>
-                                </v-row>
-                            </template>
-                        </template>
+                    <h2>Actualizar commerce</h2>
                 </v-container>
             </div>
         `,
@@ -118,6 +33,18 @@ Vue.component('save-collector', {
             chosenPostalCodes: [],
             infoUser: [],
             saveLoading: false,
+            zone: [
+                { value: '1', postal_code: '1001', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector', },
+                { value: '2', postal_code: '1002', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector' },
+                { value: '3', postal_code: '1003', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector' },
+                { value: '4', postal_code: '1004', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
+                { value: '5', postal_code: '1005', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
+                { value: '6', postal_code: '1006', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
+                { value: '7', postal_code: '1007', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Terminal', type: 'station' },
+                { value: '8', postal_code: '1008', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Terminal', type: 'station' },
+                { value: '9', postal_code: '1009', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Correo', type: 'mail' },
+            ],
+            selectZone: [],
             error: {
                 display: false,
                 text: ''
@@ -157,7 +84,24 @@ Vue.component('save-collector', {
         },
         getZoneByPostalCode(locate) {
             this.slug_locate = locate.slug
-            this.chooseZipCode(locate)
+            this.save.action === 'create' ? this.chooseZipCode(locate) : ''
+        },
+        getAllPointInZone() {
+            const url = this.save.zone.url_AllPointInZone
+            axios.get(url, {
+                    params: {
+                        country: this.id_country,
+                        province: this.id_province,
+                        cp_start: this.cp_start,
+                        cp_end: this.cp_end
+                    }
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         },
         chooseZipCode(locate) {
 
@@ -185,6 +129,9 @@ Vue.component('save-collector', {
                     console.log(err)
                 })
 
+        },
+        chooseZipCodeByZone() {
+            console.log("diferente")
         },
         validateFormComplete() {
 

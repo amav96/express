@@ -31,6 +31,9 @@
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCollector.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCommerce.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/SavePoint.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCollector.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCommerce.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdatePoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
@@ -192,7 +195,7 @@
 
                 <template  >
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
-                    <template v-if="save.collector.display">
+                    <template v-if="save.collector.display && save.action === 'create'">
                         <save-collector 
                         :pagination="pagination"  
                         :admin="admin" 
@@ -206,7 +209,7 @@
                         @setSnack="snackbar = $event"
                         />
                     </template>
-                    <template v-if="save.commerce.display" >
+                    <template v-if="save.commerce.display && save.action === 'create'" >
                       <save-commerce 
                       :pagination="pagination"  
                       :admin="admin" 
@@ -220,7 +223,7 @@
                       @setSnack="snackbar = $event"
                       />
                     </template>
-                    <template v-if="save.point.display" >
+                    <template v-if="save.point.display && save.action === 'create'" >
                       <save-point 
                       :pagination="pagination"  
                       :admin="admin" 
@@ -234,6 +237,50 @@
                       @setSnack="snackbar = $event"
                       />
                     </template>
+
+                    <template v-if="save.collector.display && save.action === 'update'" >
+                      <update-collector
+                      :pagination="pagination"  
+                      :admin="admin" 
+                      :save="save"
+                      :dialogFullScreen="dialogFullScreen"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @setPaginateDisplay="pagination.display = $event"
+                      @setDialogDisplay="dialogFullScreen.display = $event"
+                      @setSnack="snackbar = $event"
+                      />
+                    </template>
+                    <template v-if="save.commerce.display && save.action === 'update'" >
+                      <update-commerce
+                      :pagination="pagination"  
+                      :admin="admin" 
+                      :save="save"
+                      :dialogFullScreen="dialogFullScreen"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @setPaginateDisplay="pagination.display = $event"
+                      @setDialogDisplay="dialogFullScreen.display = $event"
+                      @setSnack="snackbar = $event"
+                      />
+                    </template>
+                    <template v-if="save.point.display && save.action === 'update'" >
+                      <update-point
+                      :pagination="pagination"  
+                      :admin="admin" 
+                      :save="save"
+                      :dialogFullScreen="dialogFullScreen"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @setPaginateDisplay="pagination.display = $event"
+                      @setDialogDisplay="dialogFullScreen.display = $event"
+                      @setSnack="snackbar = $event"
+                      />
+                    </template>
+
                   </d-full-screen>
                 </template>
 
@@ -316,12 +363,12 @@
         data(){
             return {
                 dialogFullScreen : {
-                  display : false,
+                  display : true,
                   title : ''
                 },
                 save : {
-                  action : '',
-                  type:'',
+                  action : 'update',
+                  type:'collector',
                   collector :{
                     display : true,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
@@ -348,7 +395,10 @@
                   },
                   url : {
                     save : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=save',
-                    getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes'
+                    delete : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=delete',
+                    update : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=update',
+                    getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes',
+
                   }
                 },  
                 dialogChoose : {
