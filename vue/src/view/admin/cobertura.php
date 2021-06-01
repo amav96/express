@@ -17,6 +17,8 @@
 <script src="<?=base_url?>vue/src/components/dialog/reusable/fullScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
+
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -34,6 +36,7 @@
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCollector.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCommerce.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdatePoint.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/Confirm.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
@@ -43,9 +46,6 @@
 
 <!-- pagination component -->
 <script  src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
-
-<!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/services/geocoding.js"></script>
 
 <!-- helpers component -->
 <script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js"></script>
@@ -193,7 +193,7 @@
                   />
                 </template>
 
-                <template  >
+                <template>
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display && save.action === 'create'">
                         <save-collector 
@@ -237,20 +237,23 @@
                       @setSnack="snackbar = $event"
                       />
                     </template>
-
                     <template v-if="save.collector.display && save.action === 'update'" >
                       <update-collector
                       :pagination="pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
+                      :dialogSmallScreen="dialogSmallScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
                       @setPaginateDisplay="pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="snackbar = $event"
+                      @confirm="dialogSmallScreen.display = $event"
+                      ref="confirm"
                       />
+                      
                     </template>
                     <template v-if="save.commerce.display && save.action === 'update'" >
                       <update-commerce
@@ -280,9 +283,18 @@
                       @setSnack="snackbar = $event"
                       />
                     </template>
-
                   </d-full-screen>
                 </template>
+
+                  <template>
+                  <d-small-screen 
+                  :dialogSmallScreen="dialogSmallScreen">
+                  <confirm
+                  :dialogSmallScreen="dialogSmallScreen"
+                  @setConfirm="$_confirm($event)"
+                  />
+                  </d-small-screen>
+                  </template> 
 
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
@@ -366,6 +378,10 @@
                   display : true,
                   title : ''
                 },
+                dialogSmallScreen: {
+                  display : false,
+                  title : ''
+                },
                 save : {
                   action : 'update',
                   type:'collector',
@@ -399,7 +415,8 @@
                     update : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=update',
                     getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes',
 
-                  }
+                  },
+                  confirm : false
                 },  
                 dialogChoose : {
                   chooseNext: {
@@ -602,7 +619,7 @@
             }
            
           },
-          $_getAdmin(){
+          getAdmin(){
 
             if(document.getElementById("id_user_default") === null){
               alertNegative("Mensage Codigo 52")
@@ -619,10 +636,14 @@
             if(this.table.display){
               this.table.display = false
             }
+          },
+          $_confirm(){
+            this.$refs.confirm.$_deleteOne()
           }
+
         },
         created(){
-          this.$_getAdmin()
+          this.getAdmin()
         },
         
        

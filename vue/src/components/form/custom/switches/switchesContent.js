@@ -21,7 +21,7 @@ Vue.component('switches-content', {
         </v-row>  
                 <v-row class="ml-1 d-flex justify-center flex-row" >
                     <v-col cols="12" lg="3" sm="6" xs="12"  v-for="(item,key) in options" :key="key" >
-                        <v-card v-if="!item.repeat" >
+                        <v-card  >
                             <v-card-title class="text-sm-body-2 py-1" >
                                 <strong>CP : </strong> &nbsp;{{item.postal_code}}
                             </v-card-title>
@@ -39,47 +39,11 @@ Vue.component('switches-content', {
                                 class="ml-1"
                                 v-model="optionsIn"
                                 color="primary"
-                                :value="item.id"
+                                :value="returnValue(item)"
                                 hide-details
                                 ></v-switch>
                             </div>
                         </v-card>
-                        <v-card v-else  >
-                            <v-card-title class="text-sm-body-2 py-1 " >
-                                <strong>CP : </strong> &nbsp;{{item.postal_code}}
-                            </v-card-title>
-                            <v-card-title class="text-sm-body-2 py-1 ">
-                                {{item.locate}}
-                            </v-card-title>
-                            <v-card-title class="text-sm-body-2 py-1 ">
-                                <strong> Nombre: </strong> &nbsp; {{item.name}}
-                            </v-card-title>
-                            <v-card-title class="text-sm-body-2 py-1 ">
-                                <strong> Tipo: </strong> &nbsp; {{type(item.type)}}
-                            </v-card-title>
-                            <v-alert 
-                            class="mt-2"
-                            border="right"
-                            colored-border
-                            type="info"
-                            elevation="4"
-                            >
-                                Si desea reemplazar este CP haga <strong> clic </strong>
-                                <v-btn 
-                                @click="deleteOne(item.id)"
-                                color="info"
-                                fab
-                                small
-                                >
-                                    <v-icon >
-                                    mdi-arrow-up-bold-circle
-                                    </v-icon>
-                                </v-btn>
-                            </v-alert>
-                           
-                        </v-card>
-
-                       
                     </v-col>
                 </v-row>
                 
@@ -102,9 +66,13 @@ Vue.component('switches-content', {
         },
         selectAll() {
             if (!this.all) {
-
+                this.optionsIn = []
                 this.options.forEach((val) => {
-                    this.optionsIn.push(val.id)
+                    const value = {
+                        id: val.id,
+                        postal_code: val.postal_code
+                    }
+                    this.optionsIn.push(value)
                 })
                 this.all = true
             } else {
@@ -132,6 +100,13 @@ Vue.component('switches-content', {
         },
         setCache(cache) {
             this.optionsIn = cache
+        },
+        returnValue(item) {
+            const value = {
+                id: item.id,
+                postal_code: item.postal_code
+            }
+            return value
         }
     },
     watch: {

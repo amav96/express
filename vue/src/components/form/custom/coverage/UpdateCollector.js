@@ -1,9 +1,9 @@
 Vue.component('update-collector', {
     template: //html 
         `
-        <div>
-        <v-container>
-           
+    <div>
+        <v-container>   
+        
                 <h6 class="ml-4 my-5"> Recolector </h6>
                 <v-row class="d-flex justify-start flex-row" >
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -91,13 +91,15 @@ Vue.component('update-collector', {
                 </template>
 
                 <template v-if="zone && zone.length > 0 ">
+                selectZone {{selectZone}} <br>
+                selectZoneCache {{selectZoneCache}} <br>
                 <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
                     <switches-content 
                     :options="zone" 
                     ref="cache"
                     @setOptions="selectZone = $event"
                     @selectZoneCache="selectZoneCache = $event"
-                    @deleteOne="_deleteOne($event)" />
+                    @deleteOne="$confirm($event)" />
                 </template>
                    
                     <v-row class="d-flex justify-center my-4 mx-4" >
@@ -136,8 +138,10 @@ Vue.component('update-collector', {
         },
         dialogFullScreen: {
             type: Object
+        },
+        dialogSmallScreen: {
+            type: Object
         }
-
     },
     data() {
         return {
@@ -166,7 +170,9 @@ Vue.component('update-collector', {
             },
             saveSuccess: false,
             saveFlag: false,
-            id_replace: []
+            id_replace: [],
+            id_deleteByRepeat: '',
+            $_id_transito: ''
         }
     },
     methods: {
@@ -207,8 +213,8 @@ Vue.component('update-collector', {
                         this.zone = []
                         return
                     }
+                    this.zone = res.data
 
-                    this.verifyRepeatCodes(res.data);
                     this.error.display = false
                 })
                 .catch(err => {
@@ -235,13 +241,15 @@ Vue.component('update-collector', {
         async _updateData() {
             this.saveLoading = true
             const url = this.save.url.update
+            const dataRequest = {
+                value: this.selectZone,
+                type: this.save.type,
+                admin: this.admin,
+                created_at: this.getDateTime()
+            }
             await axios.get(url, {
                     params: {
-                        id: this.selectZone,
-                        id_user: this.id_user,
-                        type: this.save.type,
-                        admin: this.admin,
-                        created_at: this.getDateTime()
+                        dataRequest
                     }
                 })
                 .then(res => {
@@ -356,12 +364,15 @@ Vue.component('update-collector', {
             })
             this.zone = items
         },
-        _deleteOne(id) {
-            this.id_replace = id
+        $confirm(id) {
+            this.id_deleteByRepeat = id
+            this.$emit("confirm", true)
+        },
+        $_deleteOne() {
             const url = this.save.url.delete
             axios.get(url, {
                     params: {
-                        id: this.id_replace,
+                        id: this.id_deleteByRepeat,
                         admin: this.admin,
                         created_at: this.getDateTime()
                     }
@@ -372,10 +383,18 @@ Vue.component('update-collector', {
                         return
                     }
                     this.cleanArrayByZone()
+                    this.$nextTick(() => {
+                        this.dialogSmallScreen.display = false
+                        const snack = { snack: true, timeout: 1500, textSnack: 'Eliminado correctamente' }
+                        this.$emit("setSnack", snack)
+                    })
+
+
                 })
                 .catch(err => {
                     console.log(err)
                 })
+
         },
         async cleanArrayByZone() {
             // this.zone = this.zone.filter(zone => {

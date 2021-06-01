@@ -235,6 +235,7 @@ public function getRecentCodes(){
 
 
 public function save(){
+    Utils::AuthAdmin();
      $id_country = isset($_GET['id_country']) ? $_GET['id_country'] : false ;
      $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
      $id_locate = isset($_GET['id_locate']) ? $_GET['id_locate'] : false ;
@@ -343,47 +344,144 @@ public function delete(){
     $delete->setUser_managent_id($admin);
     $delete->setCreated_at($created_at);
 
-    if($delete->insertByDelete()){
+    if($delete->removeToHistory()){
         if($delete->delete()){$object= array('success' => true,);}
         else {$object= array('error' => 'not_delete',);}
     }
-    else {$object= array('error' => 'not_insertByDelete',);}
+    else {$object= array('error' => 'not_removeToHistory',);}
    
     $jsonstring = json_encode($object);
     echo $jsonstring;
 }
 
 public function update(){
-    echo '<pre>';
-    print_r($_GET);
-    echo '</pre>';
-    die();
-    $id = isset($_GET['$id']) ? $_GET['$id'] : false ;
-    $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
-    $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
-    $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
-    $id_user = isset($_GET['id_user']) && !empty($_GET['id_user'])? $_GET['id_user'] : false ;
-    $type = isset($_GET['type']) ? $_GET['type'] : false ;
-    $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
-    $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
-    $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
+
+    
+
+    // $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    // $request =  json_decode($dataRequest);
+    // echo '<pre>';
+    // print_r($request);
+    // echo '</pre>';
+    // die();
+    $valueObject = (object) [
+        'value' => array(
+            (object)[
+                'id' => '25',
+                'postal_code' => '1001'
+            ],
+            (object)[
+                'id' => '103',
+                'postal_code' => '1002'
+            ],
+            (object)[
+                'id' => '79',
+                'postal_code' => '1003'
+            ],
+            (object)[
+                'id' => '106',
+                'postal_code' => '1003'
+            ],
+            (object)[
+                'id' => '107',
+                'postal_code' => '1003'
+            ],
+            (object)[
+                'id' => '108',
+                'postal_code' => '1003'
+            ],
+            (object)[
+                'id' => '109',
+                'postal_code' => '1003'
+            ],
+            (object)[
+                'id' => '29',
+                'postal_code' => '1004'
+            ],
+            (object)[
+                'id' => '4',
+                'postal_code' => '1005'
+            ],
+            (object)[
+                'id' => '24',
+                'postal_code' => '1006'
+            ],
+            (object)[
+                'id' => '21',
+                'postal_code' => '1009'
+            ],
+        )
+    ];
+
+    // $id= array('103','79','106','107','108','109','29','4','24','21');
+    $home_address = false;
+    $lat = false ;
+    $lng = false ;
+    $id_user = '449';
+    $type = 'collector';
+    $admin = '4';
+    $created_at = '2021-06-01 11:21:16';
+    $timeSchedule = false;
+
+
+    // Utils::AuthAdmin();
+    // $id = isset($_GET['id']) ? $_GET['id'] : false ;
+    // $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
+    // $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
+    // $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
+    // $id_user = isset($_GET['id_user']) && !empty($_GET['id_user'])? $_GET['id_user'] : false ;
+    // $type = isset($_GET['type']) ? $_GET['type'] : false ;
+    // $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
+    // $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
+    // $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
 
     $update = new cobertura();
-    $update->setId($id);
+    $update->setId_user($id_user);
     $update->setHome_address($home_address);
     $update->setType($type);
-    $update->setId_user($id_user);
     $update->setUser_managent_id($admin);
     $update->setCreated_at($created_at);
     $update->setCustomer_service_hours($timeSchedule);
     $update->setLat($lat);
     $update->setLng($lng);
 
-    if($update->update()){
-        echo "sisa";
-    }else {
-        echo "nolsa";
+    foreach ($valueObject as $element){
+            foreach ($element as $childElement){
+                $update->setId($childElement->id);
+                $update->setPostal_code($childElement->postal_code);
+                if(!$update->verifyExist()){
+                    if($update->removeToHistory()){
+                        if($update->update()){
+                            echo "<strong>actualizados</strong><br>";
+                            echo "id->$childElement->id $<br>";
+                            echo "postal_code->$childElement->postal_code $<br>";
+                            echo "------------------------<br>";
+                        } else {$object=array('error' => 'not_update');}
+                    } else {$object=array('error' => 'not_removeToHistory');}
+                }else {
+                    if($update->removeToHistory()){
+                        if($update->delete()){
+                             // pasar sus datos al historial y actualizar
+                            // eliminar estos de coverage
+                            echo "<strong>repetidos y eliminados</strong><br>";
+                            echo "id->$childElement->id $<br>";
+                            echo "postal_code->$childElement->postal_code $<br>";
+                            echo "------------------------<br>";
+                        }else {$object=array('error' => 'not_delete');}
+                    } else {$object=array('error' => 'not_removeToHistory');}
+                   
+                }
+            }
     }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+    
+    // if($update->update()){
+    //     echo "sisa";
+    // }else {
+    //     echo "nolsa";
+    // }
 
 
 }

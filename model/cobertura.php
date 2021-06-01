@@ -364,7 +364,7 @@ class cobertura{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
             $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
-            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','active','created')";
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
 
            
             $save = $this->db->query($sql);
@@ -377,18 +377,20 @@ class cobertura{
             return $result;
       }
 
-      public function insertByDelete(){
+      public function removeToHistory(){
             $id = !empty($this->getId()) ? $this->getId() : false ;
             $user_managent_id= !empty($this->getUser_managent_id()) ? $this->getUser_managent_id() : false ;
             $created_at= !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
       
             $sql = "INSERT INTO history_coverage (id,postal_code,locate,home_address,province,id_country,type,
-            id_user,user_managent_id,status,action,customer_service_hours,lat,lng,motive,created_at) 
-            SELECT id,postal_code,locate,home_address,province,id_country,type,id_user,'$user_managent_id',
-            STATUS,'InsertAndDelete',customer_service_hours,lat,lng,motive,'$created_at'
-            FROM coverage where id in($id)";
-            $insertByDelete = $this->db->query($sql);
-            if($insertByDelete){
+            id_user,user_managent_id,status,action,customer_service_hours,lat,lng,motive,created_at,id_coverage) 
+            SELECT null,postal_code,locate,home_address,province,id_country,type,id_user,'$user_managent_id',
+            STATUS,'REMOVETOHISTORY',customer_service_hours,lat,lng,motive,'$created_at','$id'
+            FROM coverage where id = '$id' ";
+
+           
+            $removeToHistory = $this->db->query($sql);
+            if($removeToHistory){
                   $result =  true;
             }else {
                   $result = false;
@@ -396,6 +398,7 @@ class cobertura{
             return $result;
             
       }
+
       public function delete(){
             $id = !empty($this->getId()) ? $this->getId() : false ;
             $sql = "DELETE from coverage where id = '$id'";
@@ -421,19 +424,35 @@ class cobertura{
             $lat  = !empty($this->getLat()) ? $this->getLat(): false ; 
             $lng  = !empty($this->getLng()) ? $this->getLng(): false ; 
 
-            if( $id && is_array($id) && count($id) > 0){
-                  $stringId = implode(",",$id);
-              }
+            
+            $sql = "UPDATE coverage set home_address = '$home_address',type = '$type', id_user = '$id_user', user_managent_id = '$user_managent_id', action = 'UPDATED', customer_service_hours = '$timeSchedule', lat = '$lat', lng = '$lng', 
+            created_at = '$created_at' where id= '$id'";
 
-            $sql = "UPDATE coverage set home_address = '$home_address',type = '$type', id_user = '$id_user', user_management_id = '$user_managent_id', action = 'update', customer_service_hours = '$timeSchedule', lat = '$lat', lng = '$lng', 
-            created_at = '$created_at' where id in($stringId)";
+      
+            $update = $this->db->query($sql);
+            if($update){
+                  $result = true;
+            }else {
+                  $result = false;
+            }
 
-            echo '<pre>';
-            print_r($sql);
-            echo '</pre>';
-            die();
+            return $result;
+      }
 
+      public function verifyExist(){
 
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ; 
+
+            $sql = "SELECT id,postal_code,id_user FROM coverage WHERE id_user = '$id_user' and postal_code = '$postal_code'";
+            $verifyExist = $this->db->query($sql);
+            if($verifyExist && $verifyExist->num_rows > 0){
+                  $result = true;
+            }else{
+                  $result = false;
+            }
+
+            return $result;
       }
 
       // SCOPE
