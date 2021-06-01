@@ -94,13 +94,6 @@ Vue.component('switches-content', {
                 return 'Terminal'
             }
         },
-        deleteOne(id) {
-            this.$emit("selectZoneCache", this.optionsIn)
-            this.$emit('deleteOne', id)
-        },
-        setCache(cache) {
-            this.optionsIn = cache
-        },
         returnValue(item) {
             const value = {
                 id: item.id,
@@ -111,7 +104,6 @@ Vue.component('switches-content', {
     },
     watch: {
         optionsIn(val) {
-
             this.$emit('setOptions', val);
         },
         options(val) {

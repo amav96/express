@@ -13,6 +13,7 @@ Vue.component('form-all', {
                 this.$emit('loadingTable', true)
                 await axios.get(this.showAll.base_url_count)
                     .then(res => {
+
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
@@ -108,6 +109,14 @@ Vue.component('form-all', {
                     this.error(error);
                     return;
                 })
+        },
+        error(error) {
+            this.$emit('setErrorGlobal', error)
+            this.$emit('loadingTable', false)
+            this.$emit('showTable', false)
+            this.$emit('response', [])
+            this.$emit('setShowFilter', false)
+            return
         },
     },
     created() {

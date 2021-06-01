@@ -12,13 +12,9 @@
 <script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
-
 <!-- dialog component -->
 <script src="<?=base_url?>vue/src/components/dialog/reusable/fullScreen.js"></script>
-<script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
-<script src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
-
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -243,15 +239,12 @@
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      :dialogSmallScreen="dialogSmallScreen"
                       @response="table.dataResponseDB = $event"
                       @showTable="table.display = $event"
                       @filtering="filter.filtering = $event"
                       @setPaginateDisplay="pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="snackbar = $event"
-                      @confirm="dialogSmallScreen.display = $event"
-                      ref="confirm"
                       />
                       
                     </template>
@@ -286,15 +279,6 @@
                   </d-full-screen>
                 </template>
 
-                  <template>
-                  <d-small-screen 
-                  :dialogSmallScreen="dialogSmallScreen">
-                  <confirm
-                  :dialogSmallScreen="dialogSmallScreen"
-                  @setConfirm="$_confirm($event)"
-                  />
-                  </d-small-screen>
-                  </template> 
 
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
@@ -376,10 +360,6 @@
             return {
                 dialogFullScreen : {
                   display : true,
-                  title : ''
-                },
-                dialogSmallScreen: {
-                  display : false,
                   title : ''
                 },
                 save : {
@@ -637,9 +617,6 @@
               this.table.display = false
             }
           },
-          $_confirm(){
-            this.$refs.confirm.$_deleteOne()
-          }
 
         },
         created(){

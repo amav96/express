@@ -511,7 +511,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'monotributo';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          $max_ancho = 1280;
                          $max_alto = 900;
@@ -585,7 +585,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'documentoFront';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
 
                          //Parámetros optimización, resolución máxima permitida
@@ -662,7 +662,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'documentoPost';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          //Parámetros optimización, resolución máxima permitida
                          $max_ancho = 1280;
@@ -738,7 +738,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'cuilrut';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          //Parámetros optimización, resolución máxima permitida
                          $max_ancho = 1280;
@@ -815,7 +815,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'domicilio';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          //Parámetros optimización, resolución máxima permitida
                          $max_ancho = 1280;
@@ -892,7 +892,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'persona';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          //Parámetros optimización, resolución máxima permitida
                          $max_ancho = 1280;
@@ -969,7 +969,7 @@ class usuarioController
                     $filename = $numeroDocumento . 'comercio';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          //Parámetros optimización, resolución máxima permitida
                          $max_ancho = 1280;
@@ -1488,7 +1488,7 @@ class usuarioController
                     $filename = $id_number . 'monotributo';
                     $mimetype = $file['type'];
 
-                    if ($mimetype == 'image/jpeg' || $mimetype == 'imagen/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
+                    if ($mimetype == 'image/jpeg' || $mimetype == 'image/jpg' || $mimetype == 'image/png' || $mimetype == 'image/gif') {
 
                          $max_ancho = 1280;
                          $max_alto = 900;

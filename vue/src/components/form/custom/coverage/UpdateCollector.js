@@ -3,126 +3,122 @@ Vue.component('update-collector', {
         `
     <div>
         <v-container>   
-        
-                <h6 class="ml-4 my-5"> Recolector </h6>
-                <v-row class="d-flex justify-start flex-row" >
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <select-auto-complete-simple-id 
-                        @exportVal="setUser($event)"
-                        :title="save.collector.title_field" 
-                        :url="save.collector.url_users" />
-                    </v-col>
-                </v-row>
-                
-                <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                <v-row class="d-flex justify-start flex-row" >
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <select-auto-complete-simple-id 
-                        title="Ingrese País" 
-                        :url="save.zone.url_country"
-                        @exportVal="setSelectCountry($event)"
-                        
-                        
-                            />
-                    </v-col>
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <select-auto-complete-search-id 
-                        :searchID="id_country_by_select"
-                        title="Ingrese Provincia" 
-                        :url="save.zone.url_province"
-                        @exportVal="setSelectProvince($event)"
-                       
-                        />
-                    </v-col>
-
-                </v-row>
-
-                    <h6 class="ml-4 my-5">  Ingrese rango de codigo postal </h6>
+                <template v-if="!saveSuccess">
+                    <h6 class="ml-4 my-5"> Recolector </h6>
                     <v-row class="d-flex justify-start flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field
-                            label="Desde"
-                            v-model="cp_start"
-                            type="number"
-                            class="mx-4"
-                            outlined
-                            dense
-                            flat
-                            />
+                            <select-auto-complete-simple-id 
+                            @exportVal="setUser($event)"
+                            :title="save.collector.title_field" 
+                            :url="save.collector.url_users" />
+                        </v-col>
+                    </v-row>
+                    
+                    <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+                    <v-row class="d-flex justify-start flex-row" >
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <select-auto-complete-simple-id 
+                            title="Ingrese País" 
+                            :url="save.zone.url_country"
+                            @exportVal="setSelectCountry($event)"
+                            
+                            
+                                />
                         </v-col>
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field
-                            label="Hasta"
-                            v-model="cp_end"
-                            type="number"
-                            class="mx-4"
-                            outlined
-                            dense
-                            flat
-                            />
-                        </v-col>
+                            <select-auto-complete-search-id 
+                            :searchID="id_country_by_select"
+                            title="Ingrese Provincia" 
+                            :url="save.zone.url_province"
+                            @exportVal="setSelectProvince($event)"
                         
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                           <v-btn
-                           :disabled="validateButtonSearchCPbyRange()"
-                           class="mx-2 white--text"
-                           color="primary"
-                           @click="_getAllPointInZone()"
-                           >
-                            Buscar
-                            <v-icon
-                            right
-                            >
-                            mdi-magnify
-                            </v-icon>
-                           </v-btn>
+                            />
                         </v-col>
-                    </v-row>
-                
-                <template v-if="error.display" >
-                    <v-alert
-                    class="ml-4 my-5" 
-                    dense
-                    outlined
-                    type="error"
-                    >
-                    {{error.text}}
-                    </v-alert>
-                </template>
 
-                <template v-if="zone && zone.length > 0 ">
-                selectZone {{selectZone}} <br>
-                selectZoneCache {{selectZoneCache}} <br>
-                <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
-                    <switches-content 
-                    :options="zone" 
-                    ref="cache"
-                    @setOptions="selectZone = $event"
-                    @selectZoneCache="selectZoneCache = $event"
-                    @deleteOne="$confirm($event)" />
-                </template>
-                   
-                    <v-row class="d-flex justify-center my-4 mx-4" >
-                        <template v-if="saveLoading">
-                            <v-progress-linear
-                            color="info"
-                            indeterminate
-                            rounded
-                            height="6"
-                            ></v-progress-linear>
-                        </template>
-                        <v-btn 
-                        class="success"
-                        block
-                        :disabled="validateFormComplete()"
-                        @click="_updateData()"
+                    </v-row>
+
+                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal </h6>
+                        <v-row class="d-flex justify-start flex-row" >
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                <v-text-field
+                                label="Desde"
+                                v-model="cp_start"
+                                type="number"
+                                class="mx-4"
+                                outlined
+                                dense
+                                flat
+                                />
+                            </v-col>
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                <v-text-field
+                                label="Hasta"
+                                v-model="cp_end"
+                                type="number"
+                                class="mx-4"
+                                outlined
+                                dense
+                                flat
+                                />
+                            </v-col>
+                            
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-btn
+                            :disabled="validateButtonSearchCPbyRange()"
+                            class="mx-2 white--text"
+                            color="primary"
+                            @click="_getAllPointInZone()"
+                            >
+                                Buscar
+                                <v-icon
+                                right
+                                >
+                                mdi-magnify
+                                </v-icon>
+                            </v-btn>
+                            </v-col>
+                        </v-row>
+                    
+                    <template v-if="error.display" >
+                        <v-alert
+                        class="ml-4 my-5" 
+                        dense
+                        outlined
+                        type="error"
                         >
-                        Siguiente
-                        </v-btn>
-                    </v-row>
+                        {{error.text}}
+                        </v-alert>
+                    </template>
 
-            </template>
+                    <template v-if="zone && zone.length > 0 ">
+                    <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
+                        <switches-content 
+                        :options="zone" 
+                        @setOptions="selectZone = $event"
+                        />
+                    </template>
+                    
+                        <v-row class="d-flex justify-center my-4 mx-4" >
+                            <template v-if="saveLoading">
+                                <v-progress-linear
+                                color="info"
+                                indeterminate
+                                rounded
+                                height="6"
+                                ></v-progress-linear>
+                            </template>
+                            <v-btn 
+                            class="success"
+                            block
+                            :disabled="validateFormComplete()"
+                            @click="_updateData()"
+                            >
+                            Siguiente
+                            </v-btn>
+                        </v-row>
 
+                    </template>
+                </template>
         </v-container>
     </div>
         `,
@@ -151,18 +147,17 @@ Vue.component('update-collector', {
             id_province: '',
             id_locate: '',
             id_user: '',
-            chosenPostalCodes: [],
             infoUser: [],
             saveLoading: false,
             zone: [],
             selectZone: [],
-            selectZoneCache: [],
+
             error: {
                 display: false,
                 text: ''
             },
-            cp_start: '1000',
-            cp_end: '1007',
+            cp_start: '',
+            cp_end: '',
             overlay: {
                 absolute: true,
                 opacity: 2,
@@ -200,6 +195,7 @@ Vue.component('update-collector', {
             const url = this.save.zone.url_AllPointInZone
             await axios.get(url, {
                     params: {
+                        id_user: this.id_user,
                         country: this.id_country,
                         province: this.id_province,
                         cp_start: this.cp_start,
@@ -231,18 +227,28 @@ Vue.component('update-collector', {
 
         },
         validateButtonSearchCPbyRange() {
-            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '') {
+            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '' || this.id_user === '') {
                 return true
             } else {
                 return false
             }
 
         },
+        activateSearchEngine() {
+            if (this.cp_start !== '' && this.cp_end !== '' && this.id_country !== '' && this.id_province !== '') {
+                this._getAllPointInZone();
+            } else {
+                if (this.selectZone.length > 0) {
+                    this.selectZone = []
+                }
+            }
+        },
         async _updateData() {
             this.saveLoading = true
             const url = this.save.url.update
             const dataRequest = {
                 value: this.selectZone,
+                id_user: this.id_user,
                 type: this.save.type,
                 admin: this.admin,
                 created_at: this.getDateTime()
@@ -253,16 +259,8 @@ Vue.component('update-collector', {
                     }
                 })
                 .then(res => {
-                    console.log(res);
-                    return
-                    if (res.data[0].error === "exist") {
-                        this.exist(res)
-                        this.saveLoading = false
-                        return
-                    }
-
                     if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 45");
+                        alertNegative("Mensaje CODIGO 15");
                         this.saveLoading = false
                         return
                     }
@@ -286,7 +284,6 @@ Vue.component('update-collector', {
         },
         finish() {
             if (this.saveFlag) {
-
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
@@ -294,10 +291,12 @@ Vue.component('update-collector', {
                     this.id_country = ''
                     this.id_province_by_select = ''
                     this.id_province = ''
+                    this.cp_start = ''
+                    this.cp_end = ''
+                    this.zone = []
                     this.id_locate = ''
                     this.id_user = ''
-                    this.save.zone.postal_codes = []
-                    this.chosenPostalCodes = []
+                    this.selectZone = []
                     this.infoUser = []
                     this.error.display = false
                     this.error.text = ''
@@ -306,8 +305,7 @@ Vue.component('update-collector', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Recolector creado exitosamente' }
+                        const snack = { snack: true, timeout: 2000, textSnack: 'Recolector actualizado correctamente' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 
@@ -340,75 +338,8 @@ Vue.component('update-collector', {
 
             return created_at
         },
-        cleanDialog() {
-            if (this.save.action === 'create') {
-                this.save.zone.postal_codes = []
-            }
-        },
-        verifyRepeatCodes(items) {
-            var lastCode = ''
-            var code = ''
-            var repeat = []
-            items.forEach((val) => {
-                code = val.postal_code
-                if (code === lastCode) {
-                    repeat.push(val.postal_code)
-                }
-                lastCode = code
-                    //or lastCode = val.postal_code
-            })
-            items.forEach((val) => {
-                if (repeat.indexOf(val.postal_code) > -1) {
-                    val.repeat = true
-                }
-            })
-            this.zone = items
-        },
-        $confirm(id) {
-            this.id_deleteByRepeat = id
-            this.$emit("confirm", true)
-        },
-        $_deleteOne() {
-            const url = this.save.url.delete
-            axios.get(url, {
-                    params: {
-                        id: this.id_deleteByRepeat,
-                        admin: this.admin,
-                        created_at: this.getDateTime()
-                    }
-                })
-                .then(res => {
-                    if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 25")
-                        return
-                    }
-                    this.cleanArrayByZone()
-                    this.$nextTick(() => {
-                        this.dialogSmallScreen.display = false
-                        const snack = { snack: true, timeout: 1500, textSnack: 'Eliminado correctamente' }
-                        this.$emit("setSnack", snack)
-                    })
-
-
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-
-        },
-        async cleanArrayByZone() {
-            // this.zone = this.zone.filter(zone => {
-            //     return zone.id.indexOf(id) === -1
-            // })
-            await this._getAllPointInZone();
-            this.selectZone = this.selectZoneCache
-            this.$refs.cache.setCache(this.selectZoneCache)
-
-        }
     },
-    destroyed() {
-        this.cleanDialog()
-    },
+
     watch: {
         dialogFullScreen: {
             handler() {
@@ -417,8 +348,14 @@ Vue.component('update-collector', {
                 })
             },
             deep: true
+        },
+        id_user(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                this.activateSearchEngine();
+            }
         }
-    }
+    },
+
 
 
     // agregar dos input para colocar el rango de codigo postal, buscar y mostrar

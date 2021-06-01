@@ -356,84 +356,18 @@ public function delete(){
 
 public function update(){
 
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $request =  json_decode($dataRequest);
+    Utils::AuthAdmin();
     
-
-    // $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    // $request =  json_decode($dataRequest);
-    // echo '<pre>';
-    // print_r($request);
-    // echo '</pre>';
-    // die();
-    $valueObject = (object) [
-        'value' => array(
-            (object)[
-                'id' => '25',
-                'postal_code' => '1001'
-            ],
-            (object)[
-                'id' => '103',
-                'postal_code' => '1002'
-            ],
-            (object)[
-                'id' => '79',
-                'postal_code' => '1003'
-            ],
-            (object)[
-                'id' => '106',
-                'postal_code' => '1003'
-            ],
-            (object)[
-                'id' => '107',
-                'postal_code' => '1003'
-            ],
-            (object)[
-                'id' => '108',
-                'postal_code' => '1003'
-            ],
-            (object)[
-                'id' => '109',
-                'postal_code' => '1003'
-            ],
-            (object)[
-                'id' => '29',
-                'postal_code' => '1004'
-            ],
-            (object)[
-                'id' => '4',
-                'postal_code' => '1005'
-            ],
-            (object)[
-                'id' => '24',
-                'postal_code' => '1006'
-            ],
-            (object)[
-                'id' => '21',
-                'postal_code' => '1009'
-            ],
-        )
-    ];
-
-    // $id= array('103','79','106','107','108','109','29','4','24','21');
-    $home_address = false;
-    $lat = false ;
-    $lng = false ;
-    $id_user = '449';
-    $type = 'collector';
-    $admin = '4';
-    $created_at = '2021-06-01 11:21:16';
-    $timeSchedule = false;
-
-
-    // Utils::AuthAdmin();
-    // $id = isset($_GET['id']) ? $_GET['id'] : false ;
-    // $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
-    // $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
-    // $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
-    // $id_user = isset($_GET['id_user']) && !empty($_GET['id_user'])? $_GET['id_user'] : false ;
-    // $type = isset($_GET['type']) ? $_GET['type'] : false ;
-    // $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
-    // $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
-    // $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
+    $home_address = isset($request->home_address) ? $request->home_address : false ;
+    $lat = isset($request->lat) ? $request->lat : false ;
+    $lng = isset($request->lng) ? $request->lng : false ;
+    $id_user = isset($request->id_user) && !empty($request->id_user)? $request->id_user : false ;
+    $type = isset($request->type) ? $request->type : false ;
+    $admin = isset($request->admin) ? $request->admin : false ;
+    $created_at = isset($request->created_at) ? $request->created_at : false ;
+    $timeSchedule = isset($request->timeSchedule) ? $request->timeSchedule : false ;
 
     $update = new cobertura();
     $update->setId_user($id_user);
@@ -444,46 +378,78 @@ public function update(){
     $update->setCustomer_service_hours($timeSchedule);
     $update->setLat($lat);
     $update->setLng($lng);
-
-    foreach ($valueObject as $element){
+    $idModified[]='';
+    $object= false;
+    $process = false;
+    foreach ($request as $element){
+        if (gettype($element) === 'array'){
             foreach ($element as $childElement){
                 $update->setId($childElement->id);
                 $update->setPostal_code($childElement->postal_code);
                 if(!$update->verifyExist()){
                     if($update->removeToHistory()){
                         if($update->update()){
-                            echo "<strong>actualizados</strong><br>";
-                            echo "id->$childElement->id $<br>";
-                            echo "postal_code->$childElement->postal_code $<br>";
-                            echo "------------------------<br>";
+                            array_push($idModified,$childElement->id);
+                            $process = true;
                         } else {$object=array('error' => 'not_update');}
                     } else {$object=array('error' => 'not_removeToHistory');}
                 }else {
                     if($update->removeToHistory()){
-                        if($update->delete()){
-                             // pasar sus datos al historial y actualizar
-                            // eliminar estos de coverage
-                            echo "<strong>repetidos y eliminados</strong><br>";
-                            echo "id->$childElement->id $<br>";
-                            echo "postal_code->$childElement->postal_code $<br>";
-                            echo "------------------------<br>";
-                        }else {$object=array('error' => 'not_delete');}
-                    } else {$object=array('error' => 'not_removeToHistory');}
-                   
+                        if($update->delete()){true;}
+                        else {$object=array('error' => 'not_delete');}
+                    }else {$object=array('error' => 'not_removeToHistory');}
                 }
             }
+        }  
+    }
+
+    if($process){
+        $idFinally = array_filter($idModified);
+        $update->setId($idFinally);
+        if($update->getCodesById()){
+           $this->showCoverage($update->getCodesById());
+        }
+    }
+    else {$object=array('error' => 'not_process');}
+    if(is_array($object)){
+        $jsonstring = json_encode($object);echo $jsonstring;
+    }
+}
+
+public function showCoverage($response){
+    if($response){
+        foreach ($response as $element){
+            $object[]=array(
+                'success' => true,
+                'id' => $element["id"],
+                'postal_code' => $element["postal_code"],
+                'locate' => $element["locate"],
+                'home_address' => $element["home_address"], 
+                'provinceInt' => $element["provinceInt"], 
+                'province' => $element["province"],
+                'name_country' => $element['name_country'],
+                'type' => $element["type"],
+                'id_user' => $element["id_user"],
+                'name_assigned' => $element["id_user"],
+                'customer_service_hours' => $element["customer_service_hours"],
+                'lat' => $element["lat"],
+                'lng' => $element["lng"],
+                'created_at' => $this->getDataTime($element["created_at"])
+            );
+        }
     }
 
     $jsonstring = json_encode($object);
     echo $jsonstring;
-    
-    // if($update->update()){
-    //     echo "sisa";
-    // }else {
-    //     echo "nolsa";
-    // }
+}
 
-
+public function getDataTime($data){
+    $arrayDateTime = explode(' ', trim($data));
+    $arrayDate = explode('-',$arrayDateTime[0]);
+    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+    return $dateTimeFormated;
+   
 }
 
 // SCOPE
@@ -652,11 +618,13 @@ public function getAllPointInZone(){
     $country = isset($_GET['country']) ? $_GET['country'] : false ;
     $cp_start = isset($_GET['cp_start']) ? $_GET['cp_start'] : false ;
     $cp_end = isset($_GET['cp_end']) ? $_GET['cp_end'] : false ;
+    $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : false ;
 
     $getAllPointInZone = new cobertura();
     $getAllPointInZone->setId_country($country);
     $getAllPointInZone->setPostal_code($cp_start);
     $getAllPointInZone->setPostal_code_range($cp_end);
+    $getAllPointInZone->setId_user($id_user);
     $getAllPointInZone = $getAllPointInZone->getAllPointInZone();
 
     if($getAllPointInZone){

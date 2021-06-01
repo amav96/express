@@ -349,6 +349,33 @@ class cobertura{
                
       }
 
+      public function getCodesById(){
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+
+            if( $id && is_array($id) && count($id) > 0){
+                  $stringId = implode(",",$id);
+              }
+
+                  $sql ="SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',c.province,
+                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours,
+                  c.lat ,c.lng,  c.created_at
+                  FROM coverage c
+                  left JOIN provinceint p ON p.postal_code = c.postal_code
+                  left JOIN users u ON c.id_user = u.id
+                  LEFT JOIN country co ON c.id_country = co.id
+                  WHERE c.status='active' AND c.id IN($stringId)
+                  GROUP BY c.id order BY c.postal_code ASC";
+
+               $getCodesById = $this->db->query($sql);
+               if($getCodesById && $getCodesById->num_rows>0){
+                  $result = $getCodesById;
+               }else {
+                  $result = false;
+               }
+               return $result;
+
+      }
+
       public function save(){
 
             $id_country= !empty($this->getId_country()) ? $this->getId_country() : false ; 
@@ -544,6 +571,7 @@ class cobertura{
             $country = !empty($this->getId_country()) ? $this->getId_country() : false ;
             $cp_start  = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
             $cp_end  = !empty($this->getPostal_code_range()) ? $this->getPostal_code_range() : false ;
+            $id_user  = !empty($this->getId_user()) ? $this->getId_user() : false ;
 
             $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.type,c.id_user,u.name,u.name_alternative 
             FROM coverage c
@@ -553,7 +581,7 @@ class cobertura{
             LEFT JOIN province pro ON pro.id = po.id_province
             LEFT JOIN country co ON co.id = pro.id_country
             WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
-            AND c.type not IN('mail','station')
+            and c.id_user != '$id_user' AND c.type not IN('mail','station') 
             GROUP BY c.id order by c.postal_code";
 
             $getAllPointInZone = $this->db->query($sql);
