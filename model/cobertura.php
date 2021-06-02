@@ -455,6 +455,8 @@ class cobertura{
             $sql = "UPDATE coverage set home_address = '$home_address',type = '$type', id_user = '$id_user', user_managent_id = '$user_managent_id', action = 'UPDATED', customer_service_hours = '$timeSchedule', lat = '$lat', lng = '$lng', 
             created_at = '$created_at' where id= '$id'";
 
+
+
       
             $update = $this->db->query($sql);
             if($update){

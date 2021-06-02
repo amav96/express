@@ -386,19 +386,19 @@ public function update(){
             foreach ($element as $childElement){
                 $update->setId($childElement->id);
                 $update->setPostal_code($childElement->postal_code);
-                if(!$update->verifyExist()){
-                    if($update->removeToHistory()){
-                        if($update->update()){
-                            array_push($idModified,$childElement->id);
-                            $process = true;
-                        } else {$object=array('error' => 'not_update');}
-                    } else {$object=array('error' => 'not_removeToHistory');}
-                }else {
-                    if($update->removeToHistory()){
-                        if($update->delete()){true;}
-                        else {$object=array('error' => 'not_delete');}
-                    }else {$object=array('error' => 'not_removeToHistory');}
-                }
+                    if(!$update->verifyExist()){
+                        if($update->removeToHistory()){
+                            if($update->update()){
+                                array_push($idModified,$childElement->id);
+                                $process = true;
+                            } else {$object=array('error' => 'not_update');}
+                        } else {$object=array('error' => 'not_removeToHistory');}
+                    }else {
+                        if($update->removeToHistory()){
+                            if($update->delete()){true;}
+                            else {$object=array('error' => 'not_delete');}
+                        }else {$object=array('error' => 'not_removeToHistory');}
+                    }
             }
         }  
     }

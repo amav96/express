@@ -1,11 +1,199 @@
 Vue.component('update-point', {
     template: //html 
         `
-            <div>
-                <v-container>
-                    <h2>Actualizar point</h2>
-                </v-container>
-            </div>
+    <div>
+        <v-container>   
+                <template v-if="!saveSuccess">
+                    <template v-if="errorGeocoding !== ''">
+                        <v-row class="d-flex justify-center mx-2" >
+                            <v-col cols="12">
+                                <v-alert
+                                dense
+                                outlined
+                                type="error"
+                                >
+                                    {{errorGeocoding}}
+                                </v-alert>
+                            </v-col>
+                        </v-row>
+                    </template>
+
+                    <h6 class="ml-4 my-5"> Dirección de {{returnType()}} a geocodificar</h6>
+                    <geocoding-simple
+                    @setErrorGeocoding="errorGeocoding = $event"
+                    @setResultGeocoding="resultGeocoding = $event"
+                    @setCountryID="id_country = $event"
+                    @setProvinceID="id_province = $event"
+                    @setLocateID="id_locate = $event"
+                    :save="save"
+                    />
+                    <v-row class="d-flex justify-between flex-row" >
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-text-field 
+                            label="latitud"
+                            v-model="lat"
+                            outlined
+                            dense
+                            required
+                            type="text"
+                            color="black"
+                            class="info--text mx-4"
+                            >
+                            </v-text-field>
+                        </v-col>
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-text-field 
+                            label="longitud"
+                            v-model="lng"
+                            outlined
+                            dense
+                            required
+                            type="text"
+                            color="black"
+                            class="info--text mx-4"
+                            >
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-btn
+                            class="mx-2"
+                            fab
+                            small
+                            color="primary"
+                            :disabled="lng === '' || lat === ''"
+                            @click="reverseGeocodingManualToMap()"
+                            >
+                                <v-icon dark>
+                                mdi-refresh
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+
+                    </v-row>
+                    <template v-if="srcMap !== ''" >
+                        <v-row class="d-flex justify-center flex-column align-content-center" >
+                            <v-col  cols="12" xl="8" lg="8" >
+                                <iframe
+                                width="100%"
+                                height="450"
+                                style="border:0"
+                                loading="lazy"
+                                allowfullscreen
+                                :src="srcImgMap()">
+                                </iframe>
+                            </v-col>
+                        </v-row>
+                    </template>
+                    
+                    <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+                    <v-row class="d-flex justify-start flex-row" >
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <select-auto-complete-simple-id 
+                            title="Ingrese País" 
+                            :url="save.zone.url_country"
+                            @exportVal="setSelectCountry($event)"
+                            
+                            
+                                />
+                        </v-col>
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <select-auto-complete-search-id 
+                            :searchID="id_country_by_select"
+                            title="Ingrese Provincia" 
+                            :url="save.zone.url_province"
+                            @exportVal="setSelectProvince($event)"
+                        
+                            />
+                        </v-col>
+
+                    </v-row>
+
+                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
+                        <v-row class="d-flex justify-start flex-row" >
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                <v-text-field
+                                label="Desde"
+                                v-model="cp_start"
+                                type="number"
+                                class="mx-4"
+                                outlined
+                                dense
+                                flat
+                                />
+                            </v-col>
+                            
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                <v-text-field
+                                label="Hasta"
+                                v-model="cp_end"
+                                type="number"
+                                class="mx-4"
+                                outlined
+                                dense
+                                flat
+                                />
+                            </v-col>
+                            
+                            <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-btn
+                            :disabled="validateButtonSearchCPbyRange()"
+                            class="mx-2 white--text"
+                            color="primary"
+                            @click="_getAllPointInZone()"
+                            >
+                                Buscar
+                                <v-icon
+                                right
+                                >
+                                mdi-magnify
+                                </v-icon>
+                            </v-btn>
+                            </v-col>
+                        </v-row>
+                    
+                    <template v-if="error.display" >
+                        <v-alert
+                        class="ml-4 my-5" 
+                        dense
+                        outlined
+                        type="error"
+                        >
+                        {{error.text}}
+                        </v-alert>
+                    </template>
+
+                    <template v-if="zone && zone.length > 0 ">
+                    <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
+                        <switches-content 
+                        :options="zone" 
+                        @setOptions="selectZone = $event"
+                        />
+                    </template>
+                    
+                        <v-row class="d-flex justify-center my-4 mx-4" >
+                            <template v-if="saveLoading">
+                                <v-progress-linear
+                                color="info"
+                                indeterminate
+                                rounded
+                                height="6"
+                                ></v-progress-linear>
+                            </template>
+                            <v-btn 
+                            class="success"
+                            block
+                            :disabled="validateFormComplete()"
+                            @click="_updateData()"
+                            >
+                            Siguiente
+                            </v-btn>
+                        </v-row>
+
+                    </template>
+                </template>
+        </v-container>
+    </div>
         `,
     props: {
         admin: {
@@ -19,8 +207,10 @@ Vue.component('update-point', {
         },
         dialogFullScreen: {
             type: Object
+        },
+        dialogSmallScreen: {
+            type: Object
         }
-
     },
     data() {
         return {
@@ -29,48 +219,33 @@ Vue.component('update-point', {
             id_province_by_select: '',
             id_province: '',
             id_locate: '',
-            id_user: '',
-            chosenPostalCodes: [],
-            infoUser: [],
+            home_address: '',
+            lat: '',
+            lng: '',
+            srcMap: '',
             saveLoading: false,
-            zone: [
-                { value: '1', postal_code: '1001', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector', },
-                { value: '2', postal_code: '1002', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector' },
-                { value: '3', postal_code: '1003', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Matias Pilon', type: 'collector' },
-                { value: '4', postal_code: '1004', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
-                { value: '5', postal_code: '1005', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
-                { value: '6', postal_code: '1006', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Lo de Luci', type: 'commerce' },
-                { value: '7', postal_code: '1007', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Terminal', type: 'station' },
-                { value: '8', postal_code: '1008', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Terminal', type: 'station' },
-                { value: '9', postal_code: '1009', locate: 'CIUDAD AUTONOMA DE BUENOS AIRES', name: 'Correo', type: 'mail' },
-            ],
+            zone: [],
             selectZone: [],
+            errorGeocoding: '',
+            resultGeocoding: '',
             error: {
                 display: false,
                 text: ''
             },
             cp_start: '',
             cp_end: '',
-            overlay: {
-                absolute: true,
-                opacity: 2,
-                overlay: true,
-            },
             saveSuccess: false,
-            saveFlag: false
-
+            saveFlag: false,
         }
     },
     methods: {
         returnType() {
-            if (this.save.type === 'collector') {
-                return "Recolector";
+            if (this.save.type === 'mail') {
+                return "Correo";
             }
-
-        },
-        setUser(user) {
-            this.infoUser = user
-            this.id_user = user.id
+            if (this.save.type === 'station') {
+                return "Terminal";
+            }
 
         },
         setSelectCountry(country) {
@@ -79,17 +254,12 @@ Vue.component('update-point', {
         },
         setSelectProvince(province) {
             this.id_province = province.id
-            this.save.action === 'create' ? this.id_province_by_select = province.id : true
-
         },
-        getZoneByPostalCode(locate) {
-            this.slug_locate = locate.slug
-            this.save.action === 'create' ? this.chooseZipCode(locate) : ''
-        },
-        getAllPointInZone() {
+        async _getAllPointInZone() {
             const url = this.save.zone.url_AllPointInZone
-            axios.get(url, {
+            await axios.get(url, {
                     params: {
+                        id_user: this.id_user,
                         country: this.id_country,
                         province: this.id_province,
                         cp_start: this.cp_start,
@@ -97,45 +267,29 @@ Vue.component('update-point', {
                     }
                 })
                 .then(res => {
-                    console.log(res)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-        chooseZipCode(locate) {
-
-            this.id_locate = locate.id
-            const url = this.save.zone.url_postalCode
-            axios.get(url, {
-                    params: {
-                        id_country: this.id_country_by_select,
-                        id_province: this.id_province_by_select,
-                        locate: locate.slug
-                    }
-                })
-                .then(res => {
                     if (res.data.error) {
-                        alertNegative("No hay datos disponibles")
+                        const error = { display: true, text: 'No hay resultados' }
+                        this.error = error
+                        this.zone = []
                         return
                     }
-                    const postal_codes = res.data.map(key => key.postal_code)
-                    this.chosenPostalCodes = []
-                    this.save.zone.postal_codes = []
-                    this.save.zone.postal_codes = postal_codes
+                    this.zone = res.data
 
+                    this.error.display = false
                 })
                 .catch(err => {
                     console.log(err)
                 })
-
         },
-        chooseZipCodeByZone() {
-            console.log("diferente")
+        srcImgMap() {
+            return this.srcMap
+        },
+        reverseGeocodingManualToMap() {
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
         validateFormComplete() {
 
-            if (this.id_user === '' || this.chosenPostalCodes.length === 0) {
+            if (this.id_user === '' || this.selectZone.length === 0) {
                 return true
             } else {
                 return false
@@ -143,37 +297,43 @@ Vue.component('update-point', {
 
         },
         validateButtonSearchCPbyRange() {
-            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '') {
+            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '' || this.id_user === '') {
                 return true
             } else {
                 return false
             }
 
         },
-        async saveData() {
+        activateSearchEngine() {
+            if (this.cp_start !== '' && this.cp_end !== '' && this.id_country !== '' && this.id_province !== '') {
+                this._getAllPointInZone();
+            } else {
+                if (this.selectZone.length > 0) {
+                    this.selectZone = []
+                }
+            }
+        },
+        async _updateData() {
             this.saveLoading = true
-            const url = this.save.url.save
+            const url = this.save.url.update
+            const dataRequest = {
+                lat: this.lat,
+                lng: this.lng,
+                home_address: this.home_address,
+                value: this.selectZone,
+                id_user: this.save.type,
+                type: this.save.type,
+                admin: this.admin,
+                created_at: this.getDateTime()
+            }
             await axios.get(url, {
                     params: {
-                        id_country: this.id_country,
-                        id_province: this.id_province,
-                        id_locate: this.id_locate,
-                        postal_code: this.chosenPostalCodes,
-                        id_user: this.id_user,
-                        type: this.save.type,
-                        admin: this.admin,
-                        created_at: this.getDateTime()
+                        dataRequest
                     }
                 })
                 .then(res => {
-                    if (res.data[0].error === "exist") {
-                        this.exist(res)
-                        this.saveLoading = false
-                        return
-                    }
-
                     if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 45");
+                        alertNegative("Mensaje CODIGO 15");
                         this.saveLoading = false
                         return
                     }
@@ -197,7 +357,6 @@ Vue.component('update-point', {
         },
         finish() {
             if (this.saveFlag) {
-
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
@@ -205,11 +364,15 @@ Vue.component('update-point', {
                     this.id_country = ''
                     this.id_province_by_select = ''
                     this.id_province = ''
+                    this.lat = ''
+                    this.lng = ''
+                    this.home_address = ''
+                    this.srcMap = ''
+                    this.cp_start = ''
+                    this.cp_end = ''
+                    this.zone = []
                     this.id_locate = ''
-                    this.id_user = ''
-                    this.save.zone.postal_codes = []
-                    this.chosenPostalCodes = []
-                    this.infoUser = []
+                    this.selectZone = []
                     this.error.display = false
                     this.error.text = ''
 
@@ -217,8 +380,7 @@ Vue.component('update-point', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Recolector creado exitosamente' }
+                        const snack = { snack: true, timeout: 2000, textSnack: 'Actualizado correctamente' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 
@@ -226,15 +388,6 @@ Vue.component('update-point', {
                 }, 700);
 
             }
-        },
-        exist(res) {
-            var text = res.data[0].name_user + ' ya tiene asignado el codigo '
-            res.data.forEach((val) => {
-                text = text + ' ' + val.postal_code
-            })
-
-            this.error.display = true
-            this.error.text = text
         },
         getDateTime() {
             var today = new Date();
@@ -251,19 +404,18 @@ Vue.component('update-point', {
 
             return created_at
         },
-        cleanDialog() {
-            if (this.save.action === 'create') {
-                this.save.zone.postal_codes = []
-            }
-        },
-
-
-
     },
-    destroyed() {
-        this.cleanDialog()
-    },
+
     watch: {
+        resultGeocoding(val) {
+            this.home_address = val.formatted_addess
+            this.lat = val.lat
+            this.lng = val.lng
+
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+            // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
+
+        },
         dialogFullScreen: {
             handler() {
                 this.$nextTick(() => {
@@ -271,8 +423,14 @@ Vue.component('update-point', {
                 })
             },
             deep: true
+        },
+        id_user(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                this.activateSearchEngine();
+            }
         }
-    }
+    },
+
 
 
     // agregar dos input para colocar el rango de codigo postal, buscar y mostrar

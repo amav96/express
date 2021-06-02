@@ -1,6 +1,6 @@
-Vue.component('switches-common',{
-template : //html 
-    `<div>
+Vue.component('switches-common', {
+    template: //html 
+        `<div>
 
     <v-row class=" d-flex justify-center flex-row align-content-center align-items-center px-3">
 
@@ -22,50 +22,51 @@ template : //html
 
     </v-row>  
             <v-row class=" d-flex justify-center flex-row align-content-center align-items-center px-3" >
-                    <v-col cols="12" sm="2" md="2" v-for="option in options" :key="option"    
+                    <v-col cols="4" lg="2" xs="2"   v-for="option in options" :key="option"    
                     >
-                    <v-switch
-                    v-model="optionsIn"
-                    :label="option"
-                    color="primary"
-                    :value="option"
-                    hide-details
-                    ></v-switch>
+                        <v-switch
+                        class="mx-2"
+                        v-model="optionsIn"
+                        :label="option"
+                        color="primary"
+                        :value="option"
+                        hide-details
+                        ></v-switch>
                     </v-col>
             </v-row>  
      </div>
     `,
-    props:{
-        options :{
-            type : Array
+    props: {
+        options: {
+            type: Array
         },
     },
-    data (){
-    return {
-         optionsIn:[],
-         all : false
-    }
+    data() {
+        return {
+            optionsIn: [],
+            all: false
+        }
     },
-    methods:{
-        clearOptions(){
+    methods: {
+        clearOptions() {
             this.optionsIn = []
         },
-        selectAll(){
-            if(!this.all){
+        selectAll() {
+            if (!this.all) {
                 this.optionsIn = this.options
                 this.all = true
-            }else {
+            } else {
                 this.optionsIn = []
                 this.all = false
             }
         }
     },
-    watch : {
-         optionsIn(val){
-             this.$emit('setOptions',val);
-         },
-         options(val){
-             this.clearOptions() 
-         }
-     }
+    watch: {
+        optionsIn(val) {
+            this.$emit('setOptions', val);
+        },
+        options(val) {
+            this.clearOptions()
+        }
+    }
 })

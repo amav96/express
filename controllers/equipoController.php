@@ -1110,6 +1110,8 @@ class equipoController
             $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ;  
             $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
 
+         
+
 
             if($dateStart && $dateEnd  && $filter){
                 $countFilterSearchController =  new Equipos();
@@ -1117,6 +1119,7 @@ class equipoController
                 $countFilterSearchController->setFechaEnd($dateEnd);
                 $countFilterSearchController->setFilter($filter);
                 $countFilterSearchController = $countFilterSearchController->countFilterToGestionByDateAndFilter();
+
             }
 
             if(!$dateStart && !$dateEnd && $word && $filter){

@@ -4,12 +4,12 @@ Vue.component('select-auto-complete-simple-id', {
         `
     <div>
         <v-autocomplete
-        v-model="select"
+        v-model.trim="select"
         :loading="loading"
         :items="items"
         item-text="slug"
         item-value="id"
-        :search-input.sync="search"
+        :search-input.sync.trim="search"
         cache-items
         class="mx-4"
         outlined

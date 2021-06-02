@@ -193,11 +193,6 @@ Vue.component('save-point', {
                 display: false,
                 text: ''
             },
-            overlay: {
-                absolute: true,
-                opacity: 2,
-                overlay: true,
-            },
             saveSuccess: false,
             saveFlag: false
         }
@@ -266,6 +261,7 @@ Vue.component('save-point', {
                         id_province: this.id_province,
                         id_locate: this.id_locate,
                         postal_code: this.chosenPostalCodes,
+                        id_user: this.save.type,
                         home_address: this.home_address,
                         timeSchedule: this.timeSchedule,
                         lat: this.lat,

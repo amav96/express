@@ -96,10 +96,22 @@ async function leerDatosEquiposAutorizar() {
             getIdentificacionComparar = equipoLS.identificacion
             identificacionComparar = getIdentificacionComparar.substr(0, 2)
 
-            if (equipoLS.serie === infoEquipo.serie) {
-                equiposLS = equipoLS.serie;
+            if (identificacion.toUpperCase().substr(0, 2) === 'PS' || identificacion.toUpperCase().substr(0, 2) === 'LA' || identificacion.toUpperCase().substr(0, 2) === 'GC') {
+
+                if (equipoLS.terminal === infoEquipo.terminal) {
+                    equiposLS = equipoLS.terminal;
+                }
+
+            } else {
+                // esto es para los equipos normales
+                if (equipoLS.serie === infoEquipo.serie) {
+                    equiposLS = equipoLS.serie;
+                }
+
 
             }
+
+
 
         });
 
@@ -113,14 +125,28 @@ async function leerDatosEquiposAutorizar() {
 
         })
 
-        if (equiposLS === infoEquipo.serie) { //si la terminal que entra existe en el localstorage ya cargado, 
+        if (identificacion.toUpperCase().substr(0, 2) === 'PS' || identificacion.toUpperCase().substr(0, 2) === 'LA') {
 
-            $("#loaderAutorizar").remove();
-            alertNegative('Esta serie ya fue agregada en la caja');
-            $("#enviar").show();
-            return false;
+            if (equiposLS === infoEquipo.terminal) { //si la terminal que ingresa existe en ellocalstorage
+                $("#loaderAutorizar").remove();
+                alertNegative('Esta serie ya fue agregada en la caja');
+                $("#enviar").show();
+                return false;
+            }
 
-        } else if ($("#input-serie-aut").val() === '') {
+        } else {
+
+
+            if (equiposLS === infoEquipo.serie) { //si la terminal que ingresa existe en ellocalstorage
+                $("#loaderAutorizar").remove();
+                alertNegative('Esta serie ya fue agregada en la caja');
+                $("#enviar").show();
+                return false;
+            }
+
+        }
+
+        if ($("#input-serie-aut").val() === '') {
 
             $("#enviar").show();
             $("#loaderAutorizar").remove();
@@ -141,7 +167,7 @@ async function leerDatosEquiposAutorizar() {
                 $("#abrirfirmar").hide()
                 $("#enviar").show();
                 $("#loaderAutorizar").remove();
-                alertNegative('Si queres cargar equipos de otro cliente: Hace clic en "Salir de transacci��n"');
+                alertNegative('Si queres cargar equipos de otro cliente: Hace clic en "Salir de transacción"');
                 return false;
 
             }
@@ -242,8 +268,8 @@ function insertarEquiposAut(infoEquipo) {
     if (nombreEmpresaCaja === 'PS') {
         row.innerHTML = `
  <div class="lista">
-<span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-<span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
 <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
 <span><strong>Nro Sim Card:</strong>  ${infoEquipo.tarjeta} </span>
 <span><strong>Estado:</strong>  ${infoEquipo.estado} </span>
@@ -266,8 +292,8 @@ function insertarEquiposAut(infoEquipo) {
     if (nombreEmpresaCaja === 'LA' || nombreEmpresaCaja === 'GC') {
         row.innerHTML = `
  <div class="lista">
-<span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-<span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
 <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
 <span><strong>Estado:</strong>  ${infoEquipo.estado} </span>
 <span><strong>C.Telefonico:</strong>  ${infoEquipo.accesorioUnoLS} </span>

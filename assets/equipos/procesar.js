@@ -305,8 +305,8 @@ function insertarEquipos(infoEquipo) {
 
         row.innerHTML = `
 <div class="lista">
-<span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-<span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
 <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
 <span><strong>Sim Card:</strong>  ${infoEquipo.tarjeta} </span>
 <span><strong>Estado:</strong>  ${infoEquipo.estado} </span>
@@ -328,8 +328,8 @@ function insertarEquipos(infoEquipo) {
 
         row.innerHTML = `
 <div class="lista">
-<span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-<span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+<span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
 <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
 <span><strong>Estado:</strong>  ${infoEquipo.estado} </span>
 <span><strong>C.Telefonico:</strong>  ${infoEquipo.accesorioUnoLS} </span>
@@ -649,8 +649,8 @@ function leerLocalStorageAlRecargarPagina() {
         if (nombreEmpresaCajaRC === 'PS') {
             row.innerHTML = `
         <div class="lista">
-        <span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-        <span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+        <span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+        <span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
         <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
         <span><strong>Sim Card:</strong>  ${infoEquipo.tarjeta} </span>
         <span><strong>Motivo:</strong>  ${infoEquipo.motivoRetiro} </span>
@@ -674,8 +674,8 @@ function leerLocalStorageAlRecargarPagina() {
         if (nombreEmpresaCajaRC === 'LA' || nombreEmpresaCajaRC === 'GC') {
             row.innerHTML = `
             <div class="lista">
-        <span><strong>Terminal:</strong>  ${infoEquipo.terminal} </span>
-        <span><strong>Serie:</strong>  ${infoEquipo.serie} </span>
+        <span><strong>Terminal:</strong>  ${infoEquipo.serie} </span>
+        <span><strong>Serie:</strong>  ${infoEquipo.terminal} </span>
         <span><strong>Identificacion:</strong>  ${infoEquipo.identificacion} </span>
         <span><strong>Estado:</strong>  ${infoEquipo.estado} </span>
         <span><strong>C.Telefonico:</strong>  ${infoEquipo.accesorioUnoLS} </span>

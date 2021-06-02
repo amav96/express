@@ -6,9 +6,9 @@ Vue.component("table-cobertura", {
                       :snackbar="snackbar"
                       />
                   </template>
-
+            
                 <template v-if="pagination.display" >
-                   
+                
                         <div class="my-1 d-flex justify-center" >
                             <v-btn
                                 >
@@ -97,7 +97,6 @@ Vue.component("table-cobertura", {
             // This closes the dialog when clicking outside of its container.
             this.$emit("childrenDialog", false);
         },
-
         openDialogEdit(bool, data) {
             this.editedItem = data;
 

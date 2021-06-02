@@ -37,7 +37,7 @@ Vue.component('update-collector', {
 
                     </v-row>
 
-                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal </h6>
+                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <v-text-field
@@ -50,6 +50,7 @@ Vue.component('update-collector', {
                                 flat
                                 />
                             </v-col>
+
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <v-text-field
                                 label="Hasta"
@@ -151,23 +152,14 @@ Vue.component('update-collector', {
             saveLoading: false,
             zone: [],
             selectZone: [],
-
             error: {
                 display: false,
                 text: ''
             },
             cp_start: '',
             cp_end: '',
-            overlay: {
-                absolute: true,
-                opacity: 2,
-                overlay: true,
-            },
             saveSuccess: false,
             saveFlag: false,
-            id_replace: [],
-            id_deleteByRepeat: '',
-            $_id_transito: ''
         }
     },
     methods: {
@@ -313,15 +305,6 @@ Vue.component('update-collector', {
                 }, 700);
 
             }
-        },
-        exist(res) {
-            var text = res.data[0].name_user + ' ya tiene asignado el codigo '
-            res.data.forEach((val) => {
-                text = text + ' ' + val.postal_code
-            })
-
-            this.error.display = true
-            this.error.text = text
         },
         getDateTime() {
             var today = new Date();

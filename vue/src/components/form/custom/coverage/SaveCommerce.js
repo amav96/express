@@ -3,7 +3,6 @@ Vue.component('save-commerce', {
         `
             <div>
                 <v-container>
-                
                     <template v-if="!saveSuccess">
                         <h6 class="ml-4 my-5"> Comercio </h6>
                         <v-row class="d-flex justify-center flex-row" >
@@ -13,40 +12,37 @@ Vue.component('save-commerce', {
                                 :title="save.commerce.title_field" 
                                 :url="save.commerce.url_users" />
                             </v-col>
-                            
-                                <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
-                                    <template v-if="infoUser.length !== 0">
-                                        <v-alert
-                                        class="py-5"
-                                        border="right"
-                                        colored-border
-                                        type="info"
-                                        elevation="2"
-                                        icon="mdi-store"
-                                        >
-                                        <v-row class="mx-1 d-flex justify-between ">
-                                            <v-col cols="12" lg="6" class="pa-1 " >
-                                                <strong>Nombre :</strong> {{infoUser.name_user}}
-                                            </v-col>
-                                            <v-col cols="12" lg="6" class="pa-1 ">
-                                                <strong>Pais :</strong> {{infoUser.country}}
-                                            </v-col>
-                                            <v-col cols="12" lg="6" class="pa-1 ">
-                                                <strong>Provincia :</strong> {{infoUser.province}}
-                                            </v-col>
-                                            <v-col cols="12" lg="6" class="pa-1 ">
-                                                <strong>Localidad :</strong> {{infoUser.locate}}
-                                            </v-col>
-                                            <v-col cols="12" lg="6" class="pa-1 ">
-                                                <strong>Dirección :</strong> {{infoUser.home_address}}
-                                            </v-col>
-                                            
-                                        </v-row>
-                                        </v-alert>
-                                    </template>
-                                </v-col>
+                            <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
+                                <template v-if="infoUser.length !== 0">
+                                    <v-alert
+                                    class="py-5"
+                                    border="right"
+                                    colored-border
+                                    type="info"
+                                    elevation="2"
+                                    icon="mdi-store"
+                                    >
+                                    <v-row class="mx-1 d-flex justify-between ">
+                                        <v-col cols="12" lg="6" class="pa-1 " >
+                                            <strong>Nombre :</strong> {{infoUser.name_user}}
+                                        </v-col>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>Pais :</strong> {{infoUser.country}}
+                                        </v-col>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>Provincia :</strong> {{infoUser.province}}
+                                        </v-col>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>Localidad :</strong> {{infoUser.locate}}
+                                        </v-col>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>Dirección :</strong> {{infoUser.home_address}}
+                                        </v-col>
+                                    </v-row>
+                                    </v-alert>
+                                </template>  
+                            </v-col> 
                         </v-row>
-                        <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
                             <template v-if="errorGeocoding !== ''">
                                 <v-row class="d-flex justify-center mx-2" >
                                     <v-col cols="12">
@@ -60,8 +56,7 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-
-                        
+                        <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
                             <geocoding-simple
                             @setErrorGeocoding="errorGeocoding = $event"
                             @setResultGeocoding="resultGeocoding = $event"
@@ -112,8 +107,8 @@ Vue.component('save-commerce', {
                                         </v-icon>
                                     </v-btn>
                                 </v-col>
-
                             </v-row>
+                            
                             <template v-if="srcMap !== ''" >
                                 <v-row class="d-flex justify-center flex-column align-content-center" >
                                     <v-col  cols="12" xl="8" lg="8" >
@@ -241,11 +236,6 @@ Vue.component('save-commerce', {
             },
             cp_start: '',
             cp_end: '',
-            overlay: {
-                absolute: true,
-                opacity: 2,
-                overlay: true,
-            },
             saveSuccess: false,
             saveFlag: false
         }
@@ -451,7 +441,6 @@ Vue.component('save-commerce', {
             },
             deep: true
         }
-
     },
 
 })

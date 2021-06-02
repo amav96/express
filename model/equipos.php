@@ -815,7 +815,7 @@ class Equipos
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) ) ";
 
         $countGestionByWord = $this->db->query($sql);
-        if($countGestionByWord && $countGestionByWord->num_rows>0){
+        if($countGestionByWord && $countGestionByWord->fetch_object()->count > 0){
             $result = $countGestionByWord;
         }else {
             $result = false;
@@ -845,7 +845,7 @@ class Equipos
         $sql.="AGAINST ('$wordClean' IN BOOLEAN MODE) and g.status_gestion = 'transito') ";
         
         $countGestionByWord = $this->db->query($sql);
-        if($countGestionByWord && $countGestionByWord->num_rows> 0){
+        if($countGestionByWord && $countGestionByWord->fetch_object()->count > 0){
             $result = $countGestionByWord;
         }else {
             $result = false;
@@ -927,7 +927,7 @@ class Equipos
         $sql.=" )";
 
         $countFilterToGestionByFilter =  $this->db->query($sql);
-        if($countFilterToGestionByFilter->num_rows>0){
+        if($countFilterToGestionByFilter->fetch_object()->count > 0){
             $result = $countFilterToGestionByFilter;
         }else {
             $result = false;
@@ -945,10 +945,11 @@ class Equipos
         if(is_array($filterArray)){
             $filterPush = [];
             for($i=0;$i<count($filterArray);$i++){
-                array_push($filterPush,'+"'.$filterArray[$i].'"');
+                array_push($filterPush,'+'.$filterArray[$i].'*');
             }
             $filterFinally = implode(",",$filterPush);
             $filterClean = str_replace(","," ",$filterFinally);
+
         }
 
         $sql ="";
@@ -969,8 +970,11 @@ class Equipos
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
+        
+       
+
         $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
-        if($countFilterToGestionByDateAndFilter->num_rows>0){
+        if($countFilterToGestionByDateAndFilter->fetch_object()->count > 0){
             $result = $countFilterToGestionByDateAndFilter;
         }else {
             $result = false;
@@ -988,7 +992,7 @@ class Equipos
         if(is_array($filterArray)){
             $filterPush = [];
             for($i=0;$i<count($filterArray);$i++){
-                array_push($filterPush,'+"'.$filterArray[$i].'"');
+                array_push($filterPush,'+'.$filterArray[$i].'*');
             }
             $filterFinally = implode(",",$filterPush);
             $filterClean = str_replace(","," ",$filterFinally);
@@ -1012,10 +1016,9 @@ class Equipos
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user = $id_recolector and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        
-    
+
         $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
-        if($countFilterToGestionByDateAndFilter->num_rows>0){
+        if($countFilterToGestionByDateAndFilter->fetch_object()->count > 0){
             $result = $countFilterToGestionByDateAndFilter;
         }else {
             $result = false;
@@ -1329,7 +1332,7 @@ class Equipos
                 if(is_array($filterArray)){
                     $filterPush = [];
                     for($i=0;$i<count($filterArray);$i++){
-                        array_push($filterPush,'+"'.$filterArray[$i].'"');
+                        array_push($filterPush,'+'.$filterArray[$i].'*');
                     }
                     $filterFinally = implode(",",$filterPush);
                     $filterClean = str_replace(","," ",$filterFinally);
@@ -1382,7 +1385,7 @@ class Equipos
         if(is_array($filterArray)){
             $filterPush = [];
             for($i=0;$i<count($filterArray);$i++){
-                array_push($filterPush,'+"'.$filterArray[$i].'"');
+                array_push($filterPush,'+'.$filterArray[$i].'*');
             }
             $filterFinally = implode(",",$filterPush);
             $filterClean = str_replace(","," ",$filterFinally);

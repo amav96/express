@@ -124,11 +124,6 @@ Vue.component('save-collector', {
             },
             cp_start: '',
             cp_end: '',
-            overlay: {
-                absolute: true,
-                opacity: 2,
-                overlay: true,
-            },
             saveSuccess: false,
             saveFlag: false
 

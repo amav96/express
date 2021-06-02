@@ -1,6 +1,5 @@
-Vue.component('form-number-and-word',{
-    template : /*html*/ 
-    `      
+Vue.component('form-number-and-word', {
+    template: /*html*/ `      
         <div>
             <v-card>
                 <form 
@@ -13,6 +12,9 @@ Vue.component('form-number-and-word',{
                                 label="Desde"
                                 hide-details="auto"
                                 type="text"
+                                outlined
+                                dense
+                                flat
                                 >
                             </v-text-field >
                             </v-col>
@@ -22,15 +24,20 @@ Vue.component('form-number-and-word',{
                                 label="Desde"
                                 hide-details="auto"
                                 type="text"
+                                outlined
+                                dense
+                                flat
                             
                                 >
                                 </v-text-field >
                             </v-col>
 
                             <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
-                                <v-select
-                                style="height:50px;"
-                                ></v-select>
+                                <select-auto-complete-simple-id
+                                @exportVal="setData($event)"
+                                :title="search.title" 
+                                :url="search.url"
+                                />
                             </v-col>
 
                             <v-col class="d-flex justify-center" cols="12"  lg="2" md ="2">
@@ -53,16 +60,20 @@ Vue.component('form-number-and-word',{
         </div>
        
     `,
-    props:[],
+    props: ['search'],
     data() {
         return {
-           dateStart: '',
-           dateEnd: '',
-           word:'',
-           items: []
+            dateStart: '',
+            dateEnd: '',
+            word: '',
+            items: []
         }
     },
     methods: {
+        setData(data) {
+            console.log(data)
+        }
     }
+
 
 })

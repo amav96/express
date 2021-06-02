@@ -7,7 +7,8 @@ Vue.component('message-snack', {
                 v-model="snackbar.snack"
                 color="success"
                 :timeout="snackbar.timeout"
-                centered
+                
+                width="100%"
                 >
                    {{snackbar.textSnack}}
                 <template v-slot:action="{ attrs }">

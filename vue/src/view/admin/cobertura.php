@@ -283,6 +283,7 @@
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
+                      :search="search"
                       />
                     </v-col>
                 </template>
@@ -359,14 +360,14 @@
         data(){
             return {
                 dialogFullScreen : {
-                  display : true,
+                  display : false,
                   title : ''
                 },
                 save : {
-                  action : 'update',
-                  type:'collector',
+                  action : '',
+                  type:'',
                   collector :{
-                    display : true,
+                    display : false,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
                     title_field : 'Ingrese Recolector',
                   },
@@ -397,7 +398,11 @@
 
                   },
                   confirm : false
-                },  
+                },
+                search : {
+                  title: 'Pais',
+                  url :API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry'
+                }, 
                 dialogChoose : {
                   chooseNext: {
                     display: false,
@@ -558,35 +563,31 @@
             this[function_name]()
           },
           $_showAllCoverage(){
-             if(!this.showAllCoverage.display){
+            this.resetPagination()
+            this.formRangeNumberAndWord.display = false
+            this.showAllEmptyCoverage.display = false
+            this.showAllCoverage.display = false 
+            this.$nextTick(() => {
               this.showAllCoverage.display = true
-              this.$nextTick(() => {
-                this.formRangeNumberAndWord.display = false
-                this.showAllEmptyCoverage.display = false
-                
-                this.itemsButtons[0].active = true //todo
-                this.itemsButtons[1].active = false //rangeNumber
-                this.itemsButtons[2].active = false //empty
-                this.tableAndAccesorys()
-              });
-             }
+              this.itemsButtons[0].active = true //todo
+              this.itemsButtons[1].active = false //rangeNumber
+              this.itemsButtons[2].active = false //empty
+            })  
           },
           $_showAllEmptyCoverage(){
-              if(!this.showAllEmptyCoverage.display){
-              this.showAllCoverage.display = false  
+            this.resetPagination()
+            this.formRangeNumberAndWord.display = false
+            this.showAllCoverage.display = false  
+            this.showAllEmptyCoverage.display = false
               this.$nextTick(() => {
-                this.formRangeNumberAndWord.display = false,
                 this.showAllEmptyCoverage.display = true
-        
                 this.itemsButtons[0].active = false //todo
                 this.itemsButtons[1].active = false //rangeNumber
                 this.itemsButtons[2].active = true //empty
-                this.tableAndAccesorys()
               });
-              }
+              
           },
           $_formRangeNumberAndWord(){
-            if(!this.formRangeNumberAndWord.display){
               this.showAllCoverage.display = false
               this.showAllEmptyCoverage.display = false
               this.formRangeNumberAndWord.display = true,
@@ -594,10 +595,19 @@
               this.itemsButtons[0].active = false //todo
               this.itemsButtons[1].active = true //rangeNumber
               this.itemsButtons[2].active = false //empty
-
-              this.tableAndAccesorys()
-            }
+              // si no queres mostrar la tabla al llegar aca, solo escondela
            
+          },
+          resetPagination(){
+            this.pagination = {
+                    display: false,
+                    totalPage : 0, 
+                    rowForPage:10,
+                    pageCurrent: 1,
+                    totalCountResponse:0,
+                    fromRow:0,
+                    limit:10
+                }
           },
           getAdmin(){
 
@@ -613,9 +623,10 @@
             
           },
           tableAndAccesorys(){
-            if(this.table.display){
-              this.table.display = false
-            }
+            this.table.display = false
+            this.$nextTick(() => {
+              this.table.display = true
+            })
           },
 
         },

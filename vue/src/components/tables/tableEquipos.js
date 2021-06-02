@@ -1,6 +1,5 @@
-Vue.component("table-equipos", {    
-  template: /*html*/
-    `
+Vue.component("table-equipos", {
+    template: /*html*/ `
         <div>
 
             <template>
@@ -70,7 +69,7 @@ Vue.component("table-equipos", {
                             v-for="row in dataResponseDB"
                             >
                             <td>
-                                <span v-if="row.contacto === '' || row.contacto === null || row.contacto.length < 5" >
+                                <span v-if="row.contacto === '' || row.contacto === null" >
                                 </span>
                                 <v-btn v-else 
                                 color="indigo"
@@ -166,15 +165,15 @@ Vue.component("table-equipos", {
             </template>
         </div>
     `,
-        props: [
-            "dataResponseDB",
-            "columns",
-            "url_actions",
-            "admin",
-            "country_admin"
-        ],
-        data() {
-            return {
+    props: [
+        "dataResponseDB",
+        "columns",
+        "url_actions",
+        "admin",
+        "country_admin"
+    ],
+    data() {
+        return {
             search: "",
             page: 1,
             editedItem: [],
@@ -197,77 +196,77 @@ Vue.component("table-equipos", {
                 characteristic: [{ number: "+54" }, { number: "+598" }],
             },
             detailNotice: {
-                dialog : false,
-                data : []
+                dialog: false,
+                data: []
             },
-            updateProperty : {
-                disabled : false
+            updateProperty: {
+                disabled: false
             },
-            deleteProperty : {
-                disabled : false
+            deleteProperty: {
+                disabled: false
             }
         };
-        },
-        methods: {
-            filterOnlyCapsText(value, search, item) {
+    },
+    methods: {
+        filterOnlyCapsText(value, search, item) {
             return (
                 value != null &&
                 search != null &&
                 typeof value === "string" &&
                 value.toString().toLocaleUpperCase().indexOf(search) !== -1
             );
-            },
-            showDialog(item) {
+        },
+        showDialog(item) {
             this.$emit("childrenDialog", true);
 
             this.$emit("childrenBodyDialogTemplate", item);
-            },
-            closedDialogOutSide() {
+        },
+        closedDialogOutSide() {
             // This closes the dialog when clicking outside of its container.
             this.$emit("childrenDialog", false);
-            },
-            urlRemito(remito) {
-                window.open(
-                    this.url_actions.showInvoice + "&cd=" + remito + "&tp=rmkcmmownloqwld",
-                    "_blank"
-                );
-            },
-            openDialogEdit(bool, data) {
-                this.editedItem = data;
-               
-                this.dialogUpdate = bool;
-                this.title = "Editar equipos gestionados";
-                if (this.status.length === 0) {
-                    const url = this.url_actions.status;
-                    axios
+        },
+        urlRemito(remito) {
+            window.open(
+                this.url_actions.showInvoice + "&cd=" + remito + "&tp=rmkcmmownloqwld",
+                "_blank"
+            );
+        },
+        openDialogEdit(bool, data) {
+            this.editedItem = data;
+
+            this.dialogUpdate = bool;
+            this.title = "Editar equipos gestionados";
+            if (this.status.length === 0) {
+                const url = this.url_actions.status;
+                axios
                     .get(url)
                     .then((res) => {
                         if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 53");
-                        return;
+                            alertNegative("Mensaje CODIGO 53");
+                            return;
                         }
                         this.status = res.data;
                     })
                     .catch((err) => {
                         console.log(err);
                     });
-                }
-            },
-            openDialogDelete(bool, data) {
+            }
+        },
+        openDialogDelete(bool, data) {
             this.editedItem = data;
             this.dialogDelete = bool;
             this.title = "¿Estas seguro/a?";
-            },
-            openDialogSendInvoice(bool, data) {
+        },
+        openDialogSendInvoice(bool, data) {
             this.sendInvoice.data = data;
             this.sendInvoice.dialog = bool;
             this.sendInvoice.title = "Enviar remito";
-            },
-            openDialogDetailNotice(bool, data){
-                this.detailNotice.dialog = bool;
-                this.detailNotice.data = data;
-            },
-            updateRow() {
+        },
+        openDialogDetailNotice(bool, data) {
+            this.detailNotice.dialog = bool;
+            this.detailNotice.data = data;
+        },
+        updateRow() {
             var hoy = new Date();
             var getMinutos = hoy.getMinutes();
             var getSegundos = hoy.getSeconds();
@@ -313,27 +312,27 @@ Vue.component("table-equipos", {
 
             axios
                 .get(url, {
-                params: {
-                    dataRequest,
-                },
+                    params: {
+                        dataRequest,
+                    },
                 })
                 .then((res) => {
-                if(res.data.error){
-                    this.updateProperty.disabled = false
-                    alertNegative("Mensaje CODIGO 51");
-                    return;
-                }
+                    if (res.data.error) {
+                        this.updateProperty.disabled = false
+                        alertNegative("Mensaje CODIGO 51");
+                        return;
+                    }
 
-                this.message = "Actualizado correctamente";
-                this.alert_flag = true;
-                this.updateProperty.disabled = false
+                    this.message = "Actualizado correctamente";
+                    this.alert_flag = true;
+                    this.updateProperty.disabled = false
                 })
                 .catch((err) => {
                     this.updateProperty.disabled = false
-                console.log(err);
+                    console.log(err);
                 });
-            },
-            deleteRow() {
+        },
+        deleteRow() {
             this.deleteProperty.disabled = true
             const id = this.editedItem.id;
             const data = this.dataResponseDB;
@@ -374,45 +373,45 @@ Vue.component("table-equipos", {
             };
             axios
                 .get(url, {
-                params: {
-                    dataRequest,
-                },
+                    params: {
+                        dataRequest,
+                    },
                 })
                 .then((res) => {
-                if (res.data.error) {
-                    alertNegative("Mensaje CODIGO 50");
-                    this.deleteProperty.disabled = false
-                    return;
-                }
+                    if (res.data.error) {
+                        alertNegative("Mensaje CODIGO 50");
+                        this.deleteProperty.disabled = false
+                        return;
+                    }
 
-                const found = data.filter((data) => data.id !== id);
-                this.$emit("updateDelete", found);
-                this.dialogDelete = false;
-                this.deleteProperty.disabled = false
-                this.snackbar.snack = true;
-                this.snackbar.textSnack = "Eliminado correctamente";
-                this.snackbar.timeout = 2500;
+                    const found = data.filter((data) => data.id !== id);
+                    this.$emit("updateDelete", found);
+                    this.dialogDelete = false;
+                    this.deleteProperty.disabled = false
+                    this.snackbar.snack = true;
+                    this.snackbar.textSnack = "Eliminado correctamente";
+                    this.snackbar.timeout = 2500;
                 })
                 .catch((err) => {
-                console.log(err);
+                    console.log(err);
                 });
-            },
-            dateFormat(date){
-               
-                if(date !== undefined && date !== null && date !== ''){
-                    var arrayDateTime = date.trim().split(' ');
-                    var arrayDate = arrayDateTime[0].split('-')
-                    var dateFormated = arrayDate[2]+ '/' + arrayDate[1] + '/' + arrayDate[0]
-                    var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
-                    return dateTimeFormated
-                }
+        },
+        dateFormat(date) {
+
+            if (date !== undefined && date !== null && date !== '') {
+                var arrayDateTime = date.trim().split(' ');
+                var arrayDate = arrayDateTime[0].split('-')
+                var dateFormated = arrayDate[2] + '/' + arrayDate[1] + '/' + arrayDate[0]
+                var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
+                return dateTimeFormated
             }
-        },
-        computed: {
-            headers() {
+        }
+    },
+    computed: {
+        headers() {
             return this.columns;
-            },
-           
         },
-       
+
+    },
+
 });

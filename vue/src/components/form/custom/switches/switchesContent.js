@@ -32,7 +32,15 @@ Vue.component('switches-content', {
                                 <strong> Nombre: </strong> &nbsp; {{item.name}}
                             </v-card-title>
                             <v-card-title class="text-sm-body-2 py-1">
-                                <strong> Tipo: </strong> &nbsp; {{type(item.type)}}
+                            
+                                <strong> Tipo: </strong> &nbsp; 
+                                <v-chip
+                                class="ma-2"
+                                :color="colorByType(item.type)"
+                                >
+                                {{type(item.type)}}
+                                </v-chip>
+                                
                             </v-card-title>
                             <div class="blue-grey lighten-5" >
                                 <v-switch
@@ -100,6 +108,16 @@ Vue.component('switches-content', {
                 postal_code: item.postal_code
             }
             return value
+        },
+        colorByType(type) {
+
+            if (type === 'collector') {
+                return 'info'
+            }
+            if (type === 'commerce') {
+                return 'amber accent-3'
+            }
+
         }
     },
     watch: {
@@ -109,5 +127,5 @@ Vue.component('switches-content', {
         options(val) {
             this.clearOptions()
         }
-    }
+    },
 })

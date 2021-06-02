@@ -123,4 +123,5 @@ Vue.component('form-all', {
         this.countAllCoverage()
     },
 
+
 })
