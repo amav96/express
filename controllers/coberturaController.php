@@ -80,6 +80,87 @@ public function countAllEmptyCoverage(){
 
 }
 
+public function countPostalCodeRangeAndCountry(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
+    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
+    $id_country = isset($Request->id_country) ? $Request->id_country : false;
+
+    $count = new Cobertura();
+    $count->setPostal_code($cp_start);
+    $count->setPostal_code_range($cp_end);
+    $count->setId_country($id_country);
+    $count = $count->countPostalCodeRangeAndCountry();
+    if($count){
+        foreach($count as $element){
+                    $object=array(
+                        'success' => true,
+                        'count' => $element["count"],
+                    );
+            }
+    }else{$object=array('error' => true,);}
+    
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+}
+
+public function countCoverageByUsers(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $id_user = isset($Request->id_user) ? $Request->id_user : false; 
+   
+    $count = new Cobertura();
+    $count->setId_user($id_user);
+    $count = $count->countCoverageByUsers();
+     if($count){
+         foreach($count as $element){
+                     $object=array(
+                         'success' => true,
+                         'count' => $element["count"],
+                     );
+             }
+     }else{$object=array('error' => true,);}
+    
+     $jsonstring = json_encode($object);
+     echo $jsonstring;
+
+}
+
+//CONTADORES FILTRO
+
+public function countFilterByWordByPostalCodeRangeAndCountry(){
+  
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
+    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
+    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+
+    $count = new Cobertura();
+    $count->setPostal_code($cp_start);
+    $count->setPostal_code_range($cp_end);
+    $count->setId_country($id_country);
+    $count->setFilter($filter);
+    $count = $count->countFilterByWordByPostalCodeRangeAndCountry();
+    if($count){
+        foreach($count as $element){
+                    $object=array(
+                        'success' => true,
+                        'count' => $element["count"],
+                    );
+            }
+        }else{$object=array('error' => true,);}
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+}
+
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 
 public function getAllCoverage(){
@@ -114,7 +195,7 @@ public function getAllCoverage(){
                     'name_country' => $element['name_country'],
                     'type' => $element["type"],
                     'id_user' => $element["id_user"],
-                    'name_assigned' => $element["id_user"],
+                    'name_assigned' => $element["name_assigned"],
                     'customer_service_hours' => $element["customer_service_hours"],
                     'lat' => $element["lat"],
                     'lng' => $element["lng"],
@@ -186,6 +267,84 @@ public function getAllEmptyCoverage(){
 
 }
 
+public function getPostalCodeRangeAndCountry(){
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+
+    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
+    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
+    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
+
+    $get = new Cobertura();
+    $get->setPostal_code($cp_start);
+    $get->setPostal_code_range($cp_end);
+    $get->setId_country($id_country);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+    $get = $get->getPostalCodeRangeAndCountry();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
+}
+
+public function getCoverageByUsers(){
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $id_user = isset($Request->id_user) ? $Request->id_user : false; 
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
+   
+    $get = new Cobertura();
+    $get->setId_user($id_user);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+
+    $get = $get->getCoverageByUsers();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
+
+}
+
+//BUSCADORES FILTRO
+
+public function getFilterByWordByPostalCodeRangeAndCountry(){
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
+    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
+    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
+    $filter = isset($Request->filter) ? $Request->filter : false;
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false; 
+    
+    $get = new Cobertura();
+    $get->setPostal_code($cp_start);
+    $get->setPostal_code_range($cp_end);
+    $get->setId_country($id_country);
+    $get->setFilter($filter);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+
+    $get = $get->getFilterByWordByPostalCodeRangeAndCountry();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
+
+}
+
+// BUSCADORES DIRECTOS QUE RECUPERAN DATOS LUEGO DE INSERTAR, ACTUALIZAR O 
+
 public function getRecentCodes(){
     Utils::AuthAdmin();
     $postal_code = isset($_GET['postal_code']) ? $_GET['postal_code'] : false ;
@@ -232,6 +391,8 @@ public function getRecentCodes(){
     $jsonstring = json_encode($object);
     echo $jsonstring;
 }
+
+//ACCIONES
 
 
 public function save(){

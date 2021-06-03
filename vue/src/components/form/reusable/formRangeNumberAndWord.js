@@ -8,15 +8,15 @@ Vue.component('form-number-and-word', {
                     <v-container fluid>
                         <v-row align="center"  class="d-flex justify-center" >
                             <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
-                            <v-text-field
-                                label="Desde"
-                                hide-details="auto"
-                                type="text"
-                                outlined
-                                dense
-                                flat
-                                >
-                            </v-text-field >
+                                <v-text-field
+                                    label="Desde"
+                                    hide-details="auto"
+                                    type="text"
+                                    outlined
+                                    dense
+                                    flat
+                                    >
+                                </v-text-field >
                             </v-col>
 
                             <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
@@ -27,7 +27,6 @@ Vue.component('form-number-and-word', {
                                 outlined
                                 dense
                                 flat
-                            
                                 >
                                 </v-text-field >
                             </v-col>

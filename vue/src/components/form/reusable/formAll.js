@@ -19,8 +19,8 @@ Vue.component('form-all', {
                             this.error(error);
                             return;
                         }
-
-                        // settings values for pagination after to fetch count
+                        this.resetPagination()
+                            // settings values for pagination after to fetch count
                         const totalCountResponse = parseInt(res.data.count)
                         const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
                         this.$emit('TotalPage', totalPage)
@@ -118,9 +118,22 @@ Vue.component('form-all', {
             this.$emit('setShowFilter', false)
             return
         },
+        resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 0,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
+        }
     },
     created() {
         this.countAllCoverage()
+
     },
 
 

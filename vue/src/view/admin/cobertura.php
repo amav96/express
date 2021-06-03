@@ -116,6 +116,7 @@
                 <template v-if="showAllCoverage.display">
                     <form-all
                     :showAll="showAllCoverage"
+                    @resetPagination="pagination = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
                     @dynamicDataToSearch ="dynamicDataToSearch = $event"
@@ -138,6 +139,7 @@
                 <template v-if="showAllEmptyCoverage.display">
                     <form-all
                     :showAll="showAllEmptyCoverage"
+                    @resetPagination="pagination = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
                     @dynamicDataToSearch ="dynamicDataToSearch = $event"
@@ -278,7 +280,6 @@
                     </template>
                   </d-full-screen>
                 </template>
-
 
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
@@ -563,7 +564,7 @@
             this[function_name]()
           },
           $_showAllCoverage(){
-            this.resetPagination()
+            
             this.formRangeNumberAndWord.display = false
             this.showAllEmptyCoverage.display = false
             this.showAllCoverage.display = false 
@@ -575,7 +576,7 @@
             })  
           },
           $_showAllEmptyCoverage(){
-            this.resetPagination()
+            
             this.formRangeNumberAndWord.display = false
             this.showAllCoverage.display = false  
             this.showAllEmptyCoverage.display = false
@@ -599,8 +600,9 @@
            
           },
           resetPagination(){
+            console.log("hola")
             this.pagination = {
-                    display: false,
+                    display: true,
                     totalPage : 0, 
                     rowForPage:10,
                     pageCurrent: 1,
