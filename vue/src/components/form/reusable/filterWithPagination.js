@@ -2,6 +2,7 @@ Vue.component('filter-with-pagination', {
     template: //html 
         `
         <div>
+        {{data}}
             <v-container>
             <v-form @submit.prevent="tryCountSearch" id="form-search">
                 <v-row>
@@ -83,7 +84,6 @@ Vue.component('filter-with-pagination', {
                     }
                 })
                 .then(res => {
-                    console.log(res)
                     if (res.data.error) {
                         this.loaderFilter = false
                         this.alert_flag = true

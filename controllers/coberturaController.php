@@ -150,6 +150,29 @@ public function countCoverageByUsers(){
 
 //CONTADORES FILTRO
 
+public function countFilterCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+  
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+
+    $count = new Cobertura();
+    $count->setFilter($filter);
+    $count = $count->countFilterCoverage();
+    if($count){
+        foreach($count as $element){
+                    $object=array(
+                        'success' => true,
+                        'count' => $element["count"],
+                    );
+            }
+        }else{$object=array('error' => true,);}
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+}
+
 public function countFilterAllHistoryCoverage(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
@@ -159,16 +182,16 @@ public function countFilterAllHistoryCoverage(){
     $count = new Cobertura();
     $count->setFilter($filter);
     $count = $count->countFilterAllHistoryCoverage();
-    // if($count){
-    //     foreach($count as $element){
-    //                 $object=array(
-    //                     'success' => true,
-    //                     'count' => $element["count"],
-    //                 );
-    //         }
-    //     }else{$object=array('error' => true,);}
-    //     $jsonstring = json_encode($object);
-    //     echo $jsonstring;
+     if($count){
+         foreach($count as $element){
+                     $object=array(
+                         'success' => true,
+                         'count' => $element["count"],
+                     );
+             }
+         }else{$object=array('error' => true,);}
+         $jsonstring = json_encode($object);
+         echo $jsonstring;
 
 }
 
@@ -228,9 +251,9 @@ public function countFilterEmptyCoverage(){
 public function getAllCoverage(){
     Utils::AuthAdmin();
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $request =  json_decode($dataRequest);
-    $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
-    $limit = isset($request->limit) ? $request->limit : false;
+    $Request =  json_decode($dataRequest);
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
 
     $get = new cobertura();
     $get->setFromRow($fromRow);
@@ -332,6 +355,28 @@ public function getCoverageByUsers(){
 
 //BUSCADORES FILTRO
 
+public function getFilterCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+  
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
+
+    $get = new cobertura();
+    $get->setFilter($filter);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+    $get = $get-> getFilterCoverage();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
+
+}
+
 public function getFilterByWordByPostalCodeRangeAndCountry(){
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
@@ -381,6 +426,26 @@ public function getFilterEmptyCoverage(){
         $jsonstring = json_encode($object); echo $jsonstring;
     }
 
+}
+
+public function getFilterAllHistoryCoverage(){
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false; 
+    
+    $get = new Cobertura();
+    $get->setFilter($filter);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+
+    $get = $get->getFilterAllHistoryCoverage();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
 }
 
 // BUSCADORES DIRECTOS QUE RECUPERAN DATOS LUEGO DE INSERTAR, ACTUALIZAR O 
@@ -465,7 +530,7 @@ public function save(){
         $save->setPostal_code($postal_code);
 
         if($id_user){
-        
+            // este valida commerce y collector
             $verifyNotExistUser = $save->verifyNotExistUser();
         }else {
            
@@ -617,6 +682,83 @@ public function update(){
     }
 }
 
+public function updateOnlyOne(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+
+    $id = isset($Request->id) ? $Request->id : false ;
+    $postal_code = isset($Request->postal_code) ? $Request->postal_code : false ;
+    $home_address = isset($Request->home_address) ? $Request->home_address : false ;
+    $lat = isset($Request->lat) ? $Request->lat : false ;
+    $lng = isset($Request->lng) ? $Request->lng : false ;
+    $id_user = isset($Request->id_user) && !empty($Request->id_user)? $Request->id_user : false ;
+    $type = isset($Request->type) ? $Request->type : false ;
+    $admin = isset($Request->admin) ? $Request->admin : false ;
+    $created_at = isset($Request->created_at) ? $Request->created_at : false ;
+    $timeSchedule = isset($Request->timeSchedule) ? $Request->timeSchedule : false ;
+
+    $update = new cobertura();
+    $update->setId_user($id_user);
+    $update->setHome_address($home_address);
+    $update->setType($type);
+    $update->setUser_managent_id($admin);
+    $update->setCreated_at($created_at);
+    $update->setCustomer_service_hours($timeSchedule);
+    $update->setLat($lat);
+    $update->setLng($lng);
+    $update->setId($id);
+    $update->setPostal_code($postal_code);
+    $process = false;
+    $object= false;
+
+    if(!$update->verifyExist()){
+        if($update->removeToHistory()){
+            if($update->update()){
+                $process = true;
+            } else {$object=array('error' => 'not_update');}
+        } else {$object=array('error' => 'not_removeToHistory');}
+    }else  {$object=array('error' => 'exist');}
+   
+    if($process){
+        if($update->getCodesById()){
+           $this->showCoverage($update->getCodesById());
+        }
+    }
+    else {$object=array('error' => 'not_process_or_exist');}
+    if($object && is_array($object)){
+        $jsonstring = json_encode($object);echo $jsonstring;
+    }
+
+
+}
+
+public function removeAndDelete(){
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+
+    $id = isset($Request->id) ? $Request->id : false ;
+    $admin = isset($Request->admin) ? $Request->admin : false ;
+    $motive = isset($Request->motive) ? $Request->motive : false ;
+    $created_at = isset($Request->created_at) ? $Request->created_at : false ;
+    if($this->validateRemoveAndDelete($Request)){
+        $removeAndDelete = new cobertura();
+        $removeAndDelete->setId($id);
+        $removeAndDelete->setUser_managent_id($admin);
+        $removeAndDelete->setMotive($motive);
+        $removeAndDelete->setCreated_at($created_at);
+    
+        if($removeAndDelete->removeToHistory()){
+            if($removeAndDelete->delete()){
+                $object=array('success' => true);
+            }
+        }else {$object=array('error' => 'not_remove');}
+
+        $jsonstring = json_encode($object);echo $jsonstring;
+    }
+}
+
+
 public function showCoverage($response){
     if($response){
         foreach ($response as $element){
@@ -656,6 +798,30 @@ public function getDataTime($data){
     }
    
    
+}
+
+
+//validate
+
+public function validateRemoveAndDelete($Request){
+
+    if(!isset($Request->motive) || $Request->motive === '' ||$Request->motive === 0 ){
+        $object=array('error' => 'Debes ingresar un motivo');
+        $jsonstring = json_encode($object);echo $jsonstring;
+        return false;
+    }
+    if(!isset($Request->admin) || $Request->admin === '' ||$Request->admin === 0 ){
+        $object=array('error' => 'No se reconoce el operador/a');
+        $jsonstring = json_encode($object);echo $jsonstring;
+        return false;
+    }
+    if(!isset($Request->id) || $Request->id === '' ||$Request->id === 0 ){
+        $object=array('error' => 'No hay registro seleccionado para eliminar');
+        $jsonstring = json_encode($object);echo $jsonstring;
+        return false;
+    }
+
+    return true;
 }
 
 // SCOPE
@@ -856,6 +1022,8 @@ public function getAllPointInZone(){
     $jsonstring = json_encode($object);
     echo $jsonstring;
 }
+
+
 
 
 }

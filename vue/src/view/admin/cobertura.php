@@ -116,6 +116,8 @@
                 <template v-if="showAllCoverage.display">
                     <form-all
                     :showAll="showAllCoverage"
+                    :base_url_to_count_search_word_controller="showAllCoverage.filter_count"
+                    :base_url_to_get_search_word_controller="showAllCoverage.filter_get"
                     @resetPagination="pagination = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
@@ -302,13 +304,13 @@
                     @dynamicDataToSearch="dynamicDataToSearch = $event"
                     @urlTryPagination="urlTryPagination = $event"
                     :urlTryPagination="urlTryPagination"
-                    :dataResponseDB="dataResponseDB" 
-                    @setAfterDataResponse="dataResponseDB = $event"
-                    @restoreBeforeDataResponse="dataResponseDB = $event"
+                    :dataResponseDB="table.dataResponseDB" 
+                    @setAfterDataResponse="table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
                     @setFlagFiltering ="filter.filtering = $event"
-                    @restoreOldDataResponse="dataResponseDB = $event"
+                    @restoreOldDataResponse="table.dataResponseDB = $event"
                     @restoreOldPagination="pagination = $event"
                     @restoreOldParametersToCall="dynamicDataToSearch = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
@@ -424,8 +426,10 @@
                     display : false,
                     base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllCoverage',
                     base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllCoverage',
+                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterCoverage',
+                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage',
                     subheader: false,
-                    filteringSearchWord : false,
+                    filteringSearchWord : true,
                     export : false
                 },
                 showAllEmptyCoverage : {

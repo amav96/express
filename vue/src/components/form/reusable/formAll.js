@@ -1,15 +1,11 @@
 Vue.component('form-all', {
     template: /*html*/ `      
     `,
-    props: ['showAll', 'pagination'],
-    data() {
-        return {
-
-        }
-    },
+    props: ['showAll', 'pagination', 'base_url_to_count_search_word_controller', 'base_url_to_get_search_word_controller'],
     methods: {
-        async countAllCoverage() {
+        async countAll() {
             try {
+                this.resetPagination()
                 this.$emit('loadingTable', true)
                 await axios.get(this.showAll.base_url_count)
                     .then(res => {
@@ -19,14 +15,14 @@ Vue.component('form-all', {
                             this.error(error);
                             return;
                         }
-                        this.resetPagination()
-                            // settings values for pagination after to fetch count
+
+                        // settings values for pagination after to fetch count
                         const totalCountResponse = parseInt(res.data.count)
                         const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
                         this.$emit('TotalPage', totalPage)
                         this.$emit('totalCountResponse', totalCountResponse)
 
-                        this.getAllCoverage(this.showAll.base_url_data)
+                        this.getAll(this.showAll.base_url_data)
                             .then(() => {
                                 // show status if is true
                                 if (this.showAll.subheader) {
@@ -40,8 +36,6 @@ Vue.component('form-all', {
                                     this.$emit('setUrlSearchController', this.base_url_to_count_search_word_controller)
                                     this.$emit('setUrlGetDataSearchController', this.base_url_to_get_search_word_controller)
                                     const search = {
-                                        dateStart: this.dateStart,
-                                        dateEnd: this.dateEnd,
                                         word: this.word,
                                     }
                                     this.$emit('setDataDynamicToFilter', search)
@@ -58,7 +52,7 @@ Vue.component('form-all', {
                 return;
             }
         },
-        async getAllCoverage(url) {
+        async getAll(url) {
 
             const dataRequest = {
                 fromRow: this.pagination.fromRow,
@@ -132,7 +126,10 @@ Vue.component('form-all', {
         }
     },
     created() {
-        this.countAllCoverage()
+        console.log(this.pagination)
+        console.log(this.showAll.base_url_count)
+
+        this.countAll()
 
     },
 

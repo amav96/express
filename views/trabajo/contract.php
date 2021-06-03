@@ -147,7 +147,7 @@
 
                 <div class="alert alert-danger">
                     <h4>Importante!</h4>
-                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>El <strong>CBU/RUT</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
                     <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
                 </div>
 
@@ -275,7 +275,7 @@
 
             <div class="alert alert-danger">
                     <h4>Importante!</h4>
-                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>El <strong>CBU/RUT</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
                     <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
                 </div>
 
@@ -520,7 +520,7 @@
 
                 <div class="alert alert-danger">
                     <h4>Importante!</h4>
-                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>El <strong>CBU/RUT</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
                     <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
                 </div>
 
@@ -696,7 +696,7 @@
 
                 <div class="alert alert-danger">
                     <h4>Importante!</h4>
-                    <p>El <strong>CBU</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
+                    <p>El <strong>CBU/RUT</strong> a declarar tiene que pertenecer al CUIT <strong><?= $contrato->cuit ?></strong></p>
                     <p>De no ser asi, los pagos <strong>no podran</strong> ser efectuados</p>
                 </div>
 
