@@ -302,6 +302,10 @@ class cobertura{
 
       //CONTADORES FILTRO
 
+      public function countFilterAllHistoryCoverage(){
+            
+      }
+
       public function countFilterByWordByPostalCodeRangeAndCountry(){
             $cp_start = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
             $cp_end = !empty($this->getPostal_code_range()) ? $this->getPostal_code_range() : false ;
@@ -446,7 +450,7 @@ class cobertura{
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
             GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
-            
+
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){ $result = $execute;}
             else{$result = false;}

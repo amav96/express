@@ -150,6 +150,28 @@ public function countCoverageByUsers(){
 
 //CONTADORES FILTRO
 
+public function countFilterAllHistoryCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+
+    $count = new Cobertura();
+    $count->setFilter($filter);
+    $count = $count->countFilterAllHistoryCoverage();
+    // if($count){
+    //     foreach($count as $element){
+    //                 $object=array(
+    //                     'success' => true,
+    //                     'count' => $element["count"],
+    //                 );
+    //         }
+    //     }else{$object=array('error' => true,);}
+    //     $jsonstring = json_encode($object);
+    //     echo $jsonstring;
+
+}
+
 public function countFilterByWordByPostalCodeRangeAndCountry(){
   
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
