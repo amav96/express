@@ -220,16 +220,12 @@ class cobertura{
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
             WHERE c.status='active'";
-            
 
-            $countAllCoverage = $this->db->query($sql);
+            $execute = $this->db->query($sql);
 
-            if($countAllCoverage && $countAllCoverage->fetch_object()->count > 0){
-                  $result = $countAllCoverage;
-            }else {
-                  $result = false;
-            }
-
+            if($execute && $execute->fetch_object()->count > 0){
+                  $result = $execute;
+            }else {$result = false;}
             return $result;
 
       }
@@ -244,8 +240,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = po.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON po.id_country = co.id
-            WHERE c.postal_code IS NULL";
-            
+            WHERE c.postal_code IS NULL"; 
 
             $countAllEmptyCoverage = $this->db->query($sql);
 
@@ -257,6 +252,21 @@ class cobertura{
 
             return $result;
 
+      }
+
+      public function countAllHistoryCoverage(){
+
+            $sql = "SELECT count(DISTINCT(c.id)) as 'count'
+            FROM history_coverage c
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id";
+
+            $execute = $this->db->query($sql);
+
+            if($execute && $execute->fetch_object()->count > 0){
+                  $result = $execute;
+            }else {$result = false;}
+            return $result;
       }
 
       public function countPostalCodeRangeAndCountry(){
@@ -288,6 +298,7 @@ class cobertura{
             return $result;
 
       }
+
 
       //CONTADORES FILTRO
 
@@ -332,14 +343,49 @@ class cobertura{
 
       }
 
+      public function countFilterEmptyCoverage(){
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+
+            $sql="SELECT count(distinct(l.id)) as 'count'
+      	FROM postal_code po
+      	LEFT JOIN coverage c ON c.postal_code = po.postal_code
+      	left JOIN provinceint p ON p.postal_code = po.postal_code
+      	LEFT JOIN localities l ON l.postal_code = po.postal_code
+      	LEFT JOIN province pr ON pr.id = po.id_province
+      	left JOIN users u ON c.id_user = u.id
+      	LEFT JOIN country co ON po.id_country = co.id
+      	where(
+      	MATCH (pr.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (p.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (l.locate) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (co.country) 
+      	AGAINST ('$filter') 
+     	 )
+      	AND c.postal_code IS NULL";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->fetch_object()->count > 0){
+                  $result = $exe;
+            }else {
+                  $result = false;
+            }
+
+            return $result;
+
+      }
+
       //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
       public function  getAllCoverage(){
 
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
-            if(gettype($fromRow) !==  'string'){
-                  $fromRow = '0';
-              }
+            if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
             c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.created_at
@@ -351,18 +397,10 @@ class cobertura{
             LEFT JOIN country co ON c.id_country = co.id
             WHERE c.status='active' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit  ;";
 
-            $getAllCoverage = $this->db->query($sql);
-
-            if($getAllCoverage && $getAllCoverage->num_rows>0){
-                  
-                  $result = $getAllCoverage;
-            }else{
-                  $result = false;
-            }
-
+            $execute = $this->db->query($sql);
+            if($execute && $execute->num_rows>0){ $result = $execute;}
+            else{$result = false;}
             return $result;
-
-
       }
 
       public function getAllEmptyCoverage(){
@@ -387,19 +425,33 @@ class cobertura{
             GROUP BY l.id 
             order BY c.postal_code ASC limit $fromRow,$limit  ;";
 
-
-            $getAllEmptyCoverage = $this->db->query($sql);
-
-            if($getAllEmptyCoverage && $getAllEmptyCoverage->num_rows>0){
-                  
-                  $result = $getAllEmptyCoverage;
-            }else{
-                  $result = false;
-            }
-
+            $execute = $this->db->query($sql);
+            if($execute && $execute->num_rows>0){$result = $execute;}
+            else{$result = false;}
             return $result;
+      }
 
+      public function getAllHistoryCoverage(){
+
+            $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+            $limit = ($this->getLimit())?$this->getLimit() : false ;
+            if(gettype($fromRow) !==  'string'){$fromRow = '0';}
+
+            $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.created_at
+            FROM history_coverage c
+            left JOIN provinceint p ON p.postal_code = c.postal_code
+            LEFT JOIN localities l ON l.postal_code = c.postal_code
+            LEFT JOIN province pr ON pr.id = l.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
             
+            $execute = $this->db->query($sql);
+            if($execute && $execute->num_rows>0){ $result = $execute;}
+            else{$result = false;}
+            return $result;;
+
       }
 
       public function getPostalCodeRangeAndCountry(){
@@ -494,6 +546,47 @@ class cobertura{
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
             return $result;
+
+      }
+
+      public function getFilterEmptyCoverage(){
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+            $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+            $limit = ($this->getLimit())?$this->getLimit() : false ;
+            if(gettype($fromRow) !==  'string'){$fromRow = '0';}
+
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',
+		co.country as 'name_country',
+      	c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.created_at
+      	FROM postal_code po
+      	LEFT JOIN coverage c ON c.postal_code = po.postal_code
+      	left JOIN provinceint p ON p.postal_code = po.postal_code
+      	LEFT JOIN localities l ON l.postal_code = po.postal_code
+      	LEFT JOIN province pr ON pr.id = po.id_province
+      	left JOIN users u ON c.id_user = u.id
+      	LEFT JOIN country co ON po.id_country = co.id
+      	where(
+      	MATCH (pr.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (p.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (l.locate) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (co.country) 
+      	AGAINST ('$filter') 
+     	 )
+      	AND c.postal_code IS NULL 
+      	GROUP BY l.id 
+      	ORDER BY  c.postal_code ASC limit $fromRow,$limit ";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
 
       }
 

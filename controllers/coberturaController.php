@@ -80,6 +80,23 @@ public function countAllEmptyCoverage(){
 
 }
 
+public function countAllHistoryCoverage(){
+
+    $count = new Cobertura();
+    $count = $count->countAllHistoryCoverage();
+    if($count){
+        foreach($count as $element){
+                    $object=array(
+                        'success' => true,
+                        'count' => $element["count"],
+                    );
+            }
+        }else{$object=array('error' => true,);}
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+}
+
 public function countPostalCodeRangeAndCountry(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
@@ -161,6 +178,29 @@ public function countFilterByWordByPostalCodeRangeAndCountry(){
         echo $jsonstring;
 }
 
+public function countFilterEmptyCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+  
+    $filter = isset($Request->filter) ? $Request->filter : false; 
+
+    $count = new Cobertura();
+    $count->setFilter($filter);
+    $count = $count->countFilterEmptyCoverage();
+    if($count){
+        foreach($count as $element){
+                    $object=array(
+                        'success' => true,
+                        'count' => $element["count"],
+                    );
+            }
+        }else{$object=array('error' => true,);}
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+}
+
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 
 public function getAllCoverage(){
@@ -170,46 +210,15 @@ public function getAllCoverage(){
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
     $limit = isset($request->limit) ? $request->limit : false;
 
-    $getAllCoverage = new cobertura();
-    $getAllCoverage->setFromRow($fromRow);
-    $getAllCoverage->setLimit($limit);
-    $getAllCoverage = $getAllCoverage-> getAllCoverage();
-
-    if(is_object($getAllCoverage)){
-        
-    foreach($getAllCoverage as $element){
-
-                $arrayDateTime = explode(' ', trim($element["created_at"]));
-                $arrayDate = explode('-',$arrayDateTime[0]);
-                $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
-                $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
-
-                $object[]=array(
-                    'success' => true,
-                    'id' => $element["id"],
-                    'postal_code' => $element["postal_code"],
-                    'locate' => $element["locate"],
-                    'home_address' => $element["home_address"], 
-                    'provinceInt' => $element["provinceInt"], 
-                    'province' => $element["province"],
-                    'name_country' => $element['name_country'],
-                    'type' => $element["type"],
-                    'id_user' => $element["id_user"],
-                    'name_assigned' => $element["name_assigned"],
-                    'customer_service_hours' => $element["customer_service_hours"],
-                    'lat' => $element["lat"],
-                    'lng' => $element["lng"],
-                    'created_at' => $dateTimeFormated
-                );
-        }
-    }else{
-        $object=array(
-            'error' => true,
-        );
+    $get = new cobertura();
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+    $get = $get-> getAllCoverage();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
     }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
 }
 
 public function getAllEmptyCoverage(){
@@ -219,55 +228,39 @@ public function getAllEmptyCoverage(){
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
     $limit = isset($request->limit) ? $request->limit : false;
 
-    $getAllEmptyCoverage = new cobertura();
-    $getAllEmptyCoverage->setFromRow($fromRow);
-    $getAllEmptyCoverage->setLimit($limit);
-    $getAllEmptyCoverage = $getAllEmptyCoverage-> getAllEmptyCoverage();
-
-    if(is_object($getAllEmptyCoverage)){
-        
-    foreach($getAllEmptyCoverage as $element){
-                
-                if(!empty($element["created_at"]) && $element["created_at"] !== null){
-                    $arrayDateTime = explode(' ', trim($element["created_at"]));
-                    $arrayDate = explode('-',$arrayDateTime[0]);
-                    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
-                    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
-                }else{
-                    $dateTimeFormated = $element["created_at"];
-                }
-                
-
-                $object[]=array(
-                    'success' => true,
-                    'id' => $element["id"],
-                    'postal_code' => $element["postal_code"],
-                    'locate' => $element["locate"],
-                    'home_address' => $element["home_address"], 
-                    'provinceInt' => $element["provinceInt"], 
-                    'province' => $element["province"],
-                    'name_country' => $element['name_country'],
-                    'type' => $element["type"],
-                    'id_user' => $element["id_user"],
-                    'name_assigned' => $element["id_user"],
-                    'customer_service_hours' => $element["customer_service_hours"],
-                    'lat' => $element["lat"],
-                    'lng' => $element["lng"],
-                    'created_at' => $dateTimeFormated
-                );
-        }
-    }else{
-        $object=array(
-            'error' => true,
-        );
+    $get = new cobertura();
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+    $get = $get-> getAllEmptyCoverage();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
     }
 
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
+}
+
+public function getAllHistoryCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
+
+    $get = new cobertura();
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+    $get = $get-> getAllHistoryCoverage();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
 
 }
 
 public function getPostalCodeRangeAndCountry(){
+   
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
 
@@ -292,6 +285,7 @@ public function getPostalCodeRangeAndCountry(){
 }
 
 public function getCoverageByUsers(){
+    
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
     
@@ -312,6 +306,7 @@ public function getCoverageByUsers(){
     }
 
 }
+
 
 //BUSCADORES FILTRO
 
@@ -335,6 +330,29 @@ public function getFilterByWordByPostalCodeRangeAndCountry(){
     $get->setLimit($limit);
 
     $get = $get->getFilterByWordByPostalCodeRangeAndCountry();
+    if($get){$this->showCoverage($get);}
+    else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
+
+}
+
+public function getFilterEmptyCoverage(){
+
+    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+    $Request =  json_decode($dataRequest);
+    
+    $filter = isset($Request->filter) ? $Request->filter : false;
+    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false; 
+    
+    $get = new Cobertura();
+    $get->setFilter($filter);
+    $get->setFromRow($fromRow);
+    $get->setLimit($limit);
+
+    $get = $get->getFilterEmptyCoverage();
     if($get){$this->showCoverage($get);}
     else{
         $object=array('error' => true);
@@ -605,11 +623,16 @@ public function showCoverage($response){
 }
 
 public function getDataTime($data){
-    $arrayDateTime = explode(' ', trim($data));
-    $arrayDate = explode('-',$arrayDateTime[0]);
-    $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
-    $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
-    return $dateTimeFormated;
+    if($data){
+        $arrayDateTime = explode(' ', trim($data));
+        $arrayDate = explode('-',$arrayDateTime[0]);
+        $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+        $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+        return $dateTimeFormated;
+    }else {
+        return '';
+    }
+   
    
 }
 
