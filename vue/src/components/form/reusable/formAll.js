@@ -1,5 +1,6 @@
 Vue.component('form-all', {
-    template: /*html*/ `      
+    template: /*html*/ ` 
+         
     `,
     props: ['showAll', 'pagination', 'base_url_to_count_search_word_controller', 'base_url_to_get_search_word_controller'],
     methods: {
@@ -126,11 +127,9 @@ Vue.component('form-all', {
         }
     },
     created() {
-        console.log(this.pagination)
-        console.log(this.showAll.base_url_count)
-
         this.countAll()
-
+        console.log(this.base_url_to_count_search_word_controller)
+        console.log(this.base_url_to_get_search_word_controller)
     },
 
 

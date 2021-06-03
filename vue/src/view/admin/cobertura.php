@@ -141,6 +141,8 @@
                 <template v-if="showAllEmptyCoverage.display">
                     <form-all
                     :showAll="showAllEmptyCoverage"
+                    :base_url_to_count_search_word_controller="showAllEmptyCoverage.filter_count"
+                    :base_url_to_get_search_word_controller="showAllEmptyCoverage.filter_get"
                     @resetPagination="pagination = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
@@ -436,8 +438,10 @@
                     display : false,
                     base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllEmptyCoverage',
                     base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllEmptyCoverage',
+                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterEmptyCoverage',
+                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage',
                     subheader: false,
-                    filteringSearchWord : false,
+                    filteringSearchWord : true,
                     export : false
                 },
                 itemsButtons:[
