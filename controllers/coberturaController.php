@@ -101,10 +101,10 @@ public function countPostalCodeRangeAndCountry(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
-    
-    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
-    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
-    $id_country = isset($Request->id_country) ? $Request->id_country : false;
+
+    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+    $id_country = isset($Request->word->id) ? $Request->word->id : false;
 
     $count = new Cobertura();
     $count->setPostal_code($cp_start);
@@ -199,10 +199,10 @@ public function countFilterByWordByPostalCodeRangeAndCountry(){
   
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
-    
-    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
-    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
-    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
+
+    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+    $id_country = isset($Request->word->id) ? $Request->word->id : false;
     $filter = isset($Request->filter) ? $Request->filter : false; 
 
     $count = new Cobertura();
@@ -309,9 +309,9 @@ public function getPostalCodeRangeAndCountry(){
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
 
-    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
-    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
-    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
+    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+    $id_country = isset($Request->word->id) ? $Request->word->id : false;
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
     $limit = isset($Request->limit) ? $Request->limit : false;
 
@@ -381,10 +381,10 @@ public function getFilterByWordByPostalCodeRangeAndCountry(){
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
     
-    $cp_start = isset($Request->cp_start) ? $Request->cp_start : false; 
-    $cp_end = isset($Request->cp_end) ? $Request->cp_end : false; 
-    $id_country = isset($Request->id_country) ? $Request->id_country : false; 
-    $filter = isset($Request->filter) ? $Request->filter : false;
+    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+    $id_country = isset($Request->word->id) ? $Request->word->id : false;
+    $filter = isset($Request->filter) ? $Request->filter : false; 
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
     $limit = isset($Request->limit) ? $Request->limit : false; 
     

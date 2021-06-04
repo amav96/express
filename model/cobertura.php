@@ -325,7 +325,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      )";
+     	      ) or c.postal_code = '$filter'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -398,9 +398,9 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	 )
+     	      )
       	AND c.postal_code IS NULL";
-
+            
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){
                   $result = $exe;
@@ -436,7 +436,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      )";
+     	      ) or c.postal_code = '$filter'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -599,7 +599,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) and c.status='active' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
+     	      )  and c.status='active' or c.postal_code = '$filter' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){$result = $execute;}
@@ -656,7 +656,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',
+            $sql="SELECT c.id,po.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',
 		co.country as 'name_country',
       	c.type,c.id_user,u.name AS 'name_assigned',c.customer_service_hours, c.lat ,c.lng , c.created_at
       	FROM postal_code po
@@ -719,7 +719,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) GROUP BY c.id 
+     	      ) or c.postal_code = '$filter' GROUP BY c.id 
       	ORDER BY  c.postal_code ASC limit $fromRow,$limit ";
 
             $exe = $this->db->query($sql);
@@ -996,6 +996,7 @@ class cobertura{
             WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
             and c.id_user != '$id_user' AND c.type not IN('mail','station') 
             GROUP BY c.id order by c.postal_code";
+
 
             $getAllPointInZone = $this->db->query($sql);
             if($getAllPointInZone && $getAllPointInZone->num_rows>0){

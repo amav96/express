@@ -151,8 +151,12 @@ class pdf extends FPDF
                                         ($detail["estado"] === 'RECUPERADO')
                                         ? $fpdf->Cell(16.9,10,'B','B',0,'C',1)
                                         : $fpdf->Cell(16.9,10,'A','B',0,'C',1);
-                                    
                                         $fpdf->Ln();
+                                        if($detail["accesorios"] !== ''){
+                                            $fpdf->Cell(196,8,'Observacion: '.' '.utf8_decode($detail["accesorios"]),'B',0,'C',0);
+                                            $fpdf->Ln();
+                                        }
+                                      
                                   }
 
                       $fpdf->Output('I','Remitos.pdf');

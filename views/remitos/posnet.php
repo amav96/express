@@ -16,28 +16,116 @@ class pdf extends FPDF
     {
         $remito = new Equipos();
         $remito ->setOrden($_GET["cd"]);
-        $cliente = $remito->obtainCustomerDataToIssueInvoice();
-        $getCliente= $cliente->fetch_object();
+         $cliente = $remito->obtainCustomerDataToIssueInvoice();
+         $getCliente= $cliente->fetch_object();
 
-        $this->SetFillColor(18,64,97);
-        $this->Rect(0,255,220,50,'F');
-        $this->SetFont('Arial','B',10);
-        $this->SetTextColor(255,255,255);
-        $this->SetY(-20);
-        $this->SetX(80);
-        $this->Write(15,$getCliente->id_orden_pass.'.');
-        $this->Write(15,$getCliente->id_user);
+        
+        //abajo de los datos----------------
+        $this->SetLineWidth(1);
+        $this->SetTextColor(40,40,40);
+        $this->SetFillColor(255,255,255);
+        $this->SetDrawColor(80,80,80);
+        $this->SetFont('Arial','B',7);
+
+        $firma = $remito->getSignatureData();
+        $datosfirma = $firma->fetch_object();
+
+        if(is_object($datosfirma)){
+            $path = 'resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png';
+        
+            if(file_exists($path)){
+                
+            $this->Image('resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png',46,172.5,40,32);
+            $this->SetDrawColor(255,255,255);
+            $this->SetFont('Arial','B',7);
+            $this->SetY(194);
+            $this->SetX(90);
+            $this->Cell(58,9,utf8_decode($datosfirma->aclaracion),1,0,'C',1);
+            $this->Cell(38,9,utf8_decode($datosfirma->documento),1,0,'C',1);
+            }else{
+            $this->Image('estilos/imagenes/empresas/firmadefect.png',46,172.5,40,32);
+            $this->SetDrawColor(255,255,255);
+            $this->SetFont('Arial','B',7);
+            $this->SetY(194);
+            $this->SetX(90);
+            $this->Cell(58,9,utf8_decode('No quiso firmar'),1,0,'C',1);
+            $this->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
+            }
+        }else{
+
+            $this->Image('estilos/imagenes/empresas/firmadefect.png',46,172.5,40,32);
+            $this->SetDrawColor(255,255,255);
+            $this->SetFont('Arial','B',7);
+            $this->SetY(194);
+            $this->SetX(90);
+            $this->Cell(58,9,utf8_decode('No quiso firmar'),1,0,'C',1);
+            $this->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
+        }
+
+            $this->SetLineWidth(0.5);
+            $this->SetTextColor(40,40,40);
+            $this->SetFillColor(255,255,255);
+            $this->SetDrawColor(80,80,80);
+            $this->SetFont('Arial','B',7);
+
+            $this->SetY(204);
+            $this->SetX(50);
+            $this->Cell(46,7,'Firma',1,0,'C',1);
+            $this->Cell(46,7,'Aclaracion',1,0,'C',1);
+            $this->Cell(46,7,'Dni',1,0,'C',1);
+
+
+
+            $this->SetY(212);
+
+            $this->Cell(196,5,'Entregamos a Posnet S.R.L y esta recibe el equipamiento cuyos datos figuran en el presente informe, a revisar y sin prestar conformidad  respecto de su estado y fun-',0,0,'C',1);
+            $this->Ln();
+            $this->Cell(196,5,'cionamiento. Si Posnet S.R.L   determinara la existencia de componentes danados y/o faltantes nos obligamos a continuar abonando el servicio hasta su devolucion   ',0,0,'C',1);
+            $this->Ln();
+            $this->Cell(196,5,'y/o reparacion o bien hasta el efectivo pago de los cargos correspondientes. Dejamos constancia asimismo de la inexistencia de operaciones cargadas en el equipa-  ',0,0,'C',1);
+            $this->Ln();
+            $this->Cell(196,5,'pendientes de cierre de lote.                                                                                                                                                                                                                                             ',0,0,'C',1);
+            $this->Ln();
+            $this->Cell(196,5,'                                                                                                                                                 ',0,0,'C',1);
+
+            $this->SetTextColor(255,255,255);
+            $this->SetFillColor(79,199,255);
+            $this->SetFont('Arial','B',10);
+            $this->SetY(232);
+            $this->SetX(10);
+            $this->SetTextColor(255,255,255);
+            $this->SetFillColor(79,199,255);
+            $this->Cell(196,5,'RECOLECTOR                                                                         ENTREGA Nro '.$getCliente->orden,0,0,'C',1);
+            $this->SetX(40);
+            $this->SetLineWidth(0.2);
+            $this->SetFillColor(240,240,240);
+            $this->SetTextColor(40,40,40);
+            $this->SetDrawColor(255,255,255);
+            $this->SetY(240);
+            $this->SetX(10);
+            $this->Cell(31,9,'Retira:',1,0,'C',1);
+            $this->SetX(37);
+            $this->Cell(69.5,9,utf8_decode($getCliente->id_user),1,0,'C',1);
+            $this->SetX(106.5);
+            $this->Cell(30,9,'Fecha Emision:',1,0,'C',1);
+            $this->SetX(137);
+            $this->Cell(70,9,date('d/m/Y'),1,0,'C',1);
+
+        
+
+            $this->SetFillColor(18,64,97);
+            $this->Rect(0,255,220,50,'F');
+            $this->SetFont('Arial','B',10);
+            $this->SetTextColor(255,255,255);
+            $this->SetY(-20);
+            $this->SetX(80);
+            $this->Write(15,$getCliente->id_orden_pass.'.');
+            $this->Write(15,$getCliente->id_user);
     
     }
 }
 
 $datosfirma = $firma->fetch_object();
-
-// print_r($datosfirma);
-
-// echo "hola";
-// die();
-
 
 $fpdf = new pdf('P','mm','letter',true);
                      $fpdf->AddPage('portrait', 'letter');
@@ -151,97 +239,6 @@ $fpdf->SetTextColor(255,255,255);
 $fpdf->SetFillColor(79,199,255);
 $fpdf->Cell(196,5,' DATOS DEL EQUIPO / TERMINAL / COMPONENTES - RETIRADOS',0,0,'C',1);
 
-//abajo de los datos----------------
-$fpdf->SetLineWidth(1);
-$fpdf->SetTextColor(40,40,40);
-$fpdf->SetFillColor(255,255,255);
-$fpdf->SetDrawColor(80,80,80);
-$fpdf->SetFont('Arial','B',7);
-
-$firma = $remito->getSignatureData();
-$datosfirma = $firma->fetch_object();
-
-if(is_object($datosfirma)){
-    $path = 'resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png';
-   
-    if(file_exists($path)){
-        
-        $fpdf->Image('resources/firmas/'.$datosfirma->created_at.$datosfirma->orden_general.'.png',46,172.5,40,32);
-        $fpdf->SetDrawColor(255,255,255);
-        $fpdf->SetFont('Arial','B',7);
-        $fpdf->SetY(194);
-        $fpdf->SetX(90);
-        $fpdf->Cell(58,9,utf8_decode($datosfirma->aclaracion),1,0,'C',1);
-        $fpdf->Cell(38,9,utf8_decode($datosfirma->documento),1,0,'C',1);
-    }else{
-        $fpdf->Image('estilos/imagenes/empresas/firmadefect.png',46,172.5,40,32);
-    $fpdf->SetDrawColor(255,255,255);
-    $fpdf->SetFont('Arial','B',7);
-    $fpdf->SetY(194);
-    $fpdf->SetX(90);
-    $fpdf->Cell(58,9,utf8_decode('No quiso firmar'),1,0,'C',1);
-    $fpdf->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
-    }
-}else{
-
-    $fpdf->Image('estilos/imagenes/empresas/firmadefect.png',46,172.5,40,32);
-    $fpdf->SetDrawColor(255,255,255);
-    $fpdf->SetFont('Arial','B',7);
-    $fpdf->SetY(194);
-    $fpdf->SetX(90);
-    $fpdf->Cell(58,9,utf8_decode('No quiso firmar'),1,0,'C',1);
-    $fpdf->Cell(38,9,utf8_decode($getCliente->identificacion),1,0,'C',1);
-}
-
-$fpdf->SetLineWidth(0.5);
-$fpdf->SetTextColor(40,40,40);
-$fpdf->SetFillColor(255,255,255);
-$fpdf->SetDrawColor(80,80,80);
-$fpdf->SetFont('Arial','B',7);
-
-$fpdf->SetY(204);
-$fpdf->SetX(50);
-$fpdf->Cell(46,7,'Firma',1,0,'C',1);
-$fpdf->Cell(46,7,'Aclaracion',1,0,'C',1);
-$fpdf->Cell(46,7,'Dni',1,0,'C',1);
-
-
-
-$fpdf->SetY(212);
-
-$fpdf->Cell(196,5,'Entregamos a Posnet S.R.L y esta recibe el equipamiento cuyos datos figuran en el presente informe, a revisar y sin prestar conformidad  respecto de su estado y fun-',0,0,'C',1);
-$fpdf->Ln();
-$fpdf->Cell(196,5,'cionamiento. Si Posnet S.R.L   determinara la existencia de componentes danados y/o faltantes nos obligamos a continuar abonando el servicio hasta su devolucion   ',0,0,'C',1);
-$fpdf->Ln();
-$fpdf->Cell(196,5,'y/o reparacion o bien hasta el efectivo pago de los cargos correspondientes. Dejamos constancia asimismo de la inexistencia de operaciones cargadas en el equipa-  ',0,0,'C',1);
-$fpdf->Ln();
-$fpdf->Cell(196,5,'pendientes de cierre de lote.                                                                                                                                                                                                                                             ',0,0,'C',1);
-$fpdf->Ln();
-$fpdf->Cell(196,5,'                                                                                                                                                 ',0,0,'C',1);
-
-$fpdf->SetTextColor(255,255,255);
-$fpdf->SetFillColor(79,199,255);
-$fpdf->SetFont('Arial','B',10);
-$fpdf->SetY(232);
-$fpdf->SetX(10);
-$fpdf->SetTextColor(255,255,255);
-$fpdf->SetFillColor(79,199,255);
-$fpdf->Cell(196,5,'RECOLECTOR                                                                         ENTREGA Nro '.$getCliente->orden,0,0,'C',1);
-$fpdf->SetX(40);
-$fpdf->SetLineWidth(0.2);
-$fpdf->SetFillColor(240,240,240);
-$fpdf->SetTextColor(40,40,40);
-$fpdf->SetDrawColor(255,255,255);
-$fpdf->SetY(240);
-$fpdf->SetX(10);
-$fpdf->Cell(31,9,'Retira:',1,0,'C',1);
-$fpdf->SetX(37);
-$fpdf->Cell(69.5,9,utf8_decode($getCliente->id_user),1,0,'C',1);
-$fpdf->SetX(106.5);
-$fpdf->Cell(30,9,'Fecha Emision:',1,0,'C',1);
-$fpdf->SetX(137);
-$fpdf->Cell(70,9,date('d/m/Y'),1,0,'C',1);
-
 
 //aca termina ---------------------------
 $fpdf->SetFont('Arial','B',8.5);
@@ -310,19 +307,23 @@ $total= 0;
                  ($detail["estado"] === 'RECUPERADO')
                  ?$fpdf->Cell(33,6,'B','B',0,'C',1)
                  :$fpdf->Cell(33,6,'A','B',0,'C',1) ; 
-                 $fpdf->Ln(5.5);
+                 $fpdf->Ln();
+                if($detail["accesorios"] !== ''){
+                    $fpdf->Cell(196,8,'Observacion: '.' '.utf8_decode($detail["accesorios"]),'B',0,'C',0);
+                    $fpdf->Ln();
+                }
                  $fpdf->SetTextColor(255,255,255);
                  $fpdf->SetFillColor(80,80,80);
                  $fpdf->Cell(196,1,'',0,0,'C',1);
                  $fpdf->Ln();
 
-               
+
                 $fpdf->SetTextColor(0,0,0);
                 $fpdf->SetFillColor(255,255,255);
                 $fpdf->SetDrawColor(80,80,80);
                 
                 $fpdf->Ln();
-                $fpdf->SetAutoPageBreak(10,105);
+                $fpdf->SetAutoPageBreak(10,120);
             }
 
                         $fpdf->Output('I','Remitos.pdf');

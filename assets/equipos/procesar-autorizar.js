@@ -14,7 +14,7 @@ async function leerDatosEquiposAutorizar() {
         var accesorioDosLS = $('input[name="accesorio-dos-aut"]:checked').val()
         var accesorioTresLS = $('input[name="accesorio-tres-aut"]:checked').val()
         var accesorioCuatroLS = $('input[name="accesorio-cuatro-aut"]:checked').val()
-        var accesorios = document.getElementById('input-otrosaccesorios-en-base').value
+        var accesorios = document.getElementById('input-otrosaccesorios-aut').value
         var id = document.getElementById('idServ').value
         var identificacion = document.getElementById('input-identificacion-aut').value
 

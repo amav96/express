@@ -36,10 +36,7 @@ Vue.component('form-all', {
                                     this.$emit('setShowFilter', true)
                                     this.$emit('setUrlSearchController', this.base_url_to_count_search_word_controller)
                                     this.$emit('setUrlGetDataSearchController', this.base_url_to_get_search_word_controller)
-                                    const search = {
-                                        word: this.word,
-                                    }
-                                    this.$emit('setDataDynamicToFilter', search)
+
                                 }
                             })
                     })
@@ -97,6 +94,7 @@ Vue.component('form-all', {
                     // setting flag filtering
                     this.$emit('filtering', true)
 
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -128,8 +126,6 @@ Vue.component('form-all', {
     },
     created() {
         this.countAll()
-        console.log(this.base_url_to_count_search_word_controller)
-        console.log(this.base_url_to_get_search_word_controller)
     },
 
 

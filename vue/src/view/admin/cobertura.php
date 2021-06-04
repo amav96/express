@@ -113,6 +113,25 @@
                   />
                 </transition>
 
+                <div class="d-flex justify-center  flex-row my-2">
+                  <div class="mx-1">
+                      <v-btn 
+                          color="primary" 
+                          @click="openDialogChoose('create')"
+                          >
+                          Crear
+                      </v-btn>
+                  </div>
+                  <div class="mx-1" >
+                      <v-btn 
+                          color="orange"
+                          @click="openDialogChoose('update')" 
+                          >
+                          Actualizar
+                      </v-btn>
+                  </div>
+                </div>
+
                 <template v-if="showAllCoverage.display">
                     <form-all
                     :showAll="showAllCoverage"
@@ -130,7 +149,6 @@
                     @setShowFilter="filter.display = $event"
                     @setUrlSearchController="filter.url_searchCountController = $event"
                     @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     :pagination="pagination"
@@ -155,7 +173,6 @@
                     @setShowFilter="filter.display = $event"
                     @setUrlSearchController="filter.url_searchCountController = $event"
                     @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
                     :pagination="pagination"
@@ -163,30 +180,60 @@
                     />
                 </template>
 
-                <div class="d-flex justify-center  flex-row my-2">
-                  <div class="mx-1">
-                      <v-btn 
-                          color="primary" 
-                          @click="openDialogChoose('create')"
-                          >
-                          Crear
-                      </v-btn>
-                  </div>
-                  <div class="mx-1" >
-                      <v-btn 
-                          color="orange"
-                          @click="openDialogChoose('update')" 
-                          >
-                          Actualizar
-                      </v-btn>
-                  </div>
-                </div>
+                <template v-if="showAllHistory.display">
+                    <form-all
+                    :showAll="showAllHistory"
+                    :base_url_to_count_search_word_controller="showAllHistory.filter_count"
+                    :base_url_to_get_search_word_controller="showAllHistory.filter_get"
+                    @resetPagination="pagination = $event"
+                    @totalCountResponse = "pagination.totalCountResponse = $event"
+                    @TotalPage = "pagination.totalPage = $event"
+                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
+                    @response="table.dataResponseDB = $event"
+                    @loadingTable="table.loading = $event"
+                    @showTable="table.display = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setErrorGlobal="error = $event"
+                    @setShowFilter="filter.display = $event"
+                    @setUrlSearchController="filter.url_searchCountController = $event"
+                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @filtering="filter.filtering = $event"
+                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                    :pagination="pagination"
+                    @setPaginateDisplay="pagination.display = $event"
+                    />
+                </template>
+
+                <template v-if="showZoneByUser.display">
+                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                      <form-number-and-word
+                      :formRangeNumberAndWord="showZoneByUser"
+                      :pagination="pagination"
+                      @response="table.dataResponseDB = $event"
+                      @loadingTable="table.loading = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setUrlSearchController="filter.url_searchCountController = $event"
+                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @showPagination="pagination.display = $event"
+                      @setParametersToFilter="filter.dynamicDataToFilter = $event"
+                      @setShowFilter="filter.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @setParametersToPagination ="dynamicDataToSearch = $event"          
+                      />
+                    </v-col>
+                </template>
+
                 <template>
                       <message-snack
                       :snackbar="snackbar"
                       />
                 </template>
-
+  
                 <template>
                   <dialog-choose-next
                   :dialogChoose="dialogChoose"
@@ -194,7 +241,7 @@
                   @back="backChoose($event)"
                   />
                 </template>
-
+      
                 <template>
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display && save.action === 'create'">
@@ -284,11 +331,28 @@
                     </template>
                   </d-full-screen>
                 </template>
-
+            
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
+                      :formRangeNumberAndWord="formRangeNumberAndWord"
                       :search="search"
+                      :pagination="pagination"
+                      @response="table.dataResponseDB = $event"
+                      @loadingTable="table.loading = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setUrlSearchController="filter.url_searchCountController = $event"
+                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @showPagination="pagination.display = $event"
+                      @setParametersToFilter="filter.dynamicDataToFilter = $event"
+                      @setShowFilter="filter.display = $event"
+                      @filtering="filter.filtering = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @setParametersToPagination ="dynamicDataToSearch = $event"          
                       />
                     </v-col>
                 </template>
@@ -297,9 +361,10 @@
                 <template v-if="table.loading" >
                  <loader-line />
                 </template>
-                
-                <template v-if="filter.display">
+              
+                <template v-if="table.display && filter.display">
                     <filter-with-pagination
+                    ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
                     @setCountPagination="pagination = $event"
@@ -311,6 +376,7 @@
                     @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     :dynamicDataToSearch="dynamicDataToSearch"
                     @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
+                    
                     @setFlagFiltering ="filter.filtering = $event"
                     @restoreOldDataResponse="table.dataResponseDB = $event"
                     @restoreOldPagination="pagination = $event"
@@ -345,7 +411,7 @@
                 <template v-if="loaderLine" >
                   <loader-line />
                 </template>
-
+  
                 <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table.display && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
@@ -404,10 +470,6 @@
                   },
                   confirm : false
                 },
-                search : {
-                  title: 'Pais',
-                  url :API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry'
-                }, 
                 dialogChoose : {
                   chooseNext: {
                     display: false,
@@ -422,7 +484,20 @@
                   }
                 },
                 formRangeNumberAndWord : {
-                    display : true
+                    display : true,
+                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countPostalCodeRangeAndCountry',
+                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
+                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterByWordByPostalCodeRangeAndCountry',
+                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
+                    subheader: false,
+                    filteringSearchWord : true,
+                    export : false,
+                    pagination: true,
+                    select : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
+                      title: 'Pais'
+                    }
                 },
                 showAllCoverage : {
                     display : false,
@@ -432,7 +507,13 @@
                     filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage',
                     subheader: false,
                     filteringSearchWord : true,
-                    export : false
+                    export : false,
+                    select : {
+                      display: false,
+                      url : '',
+                      title: ''
+                    }
+                    
                 },
                 showAllEmptyCoverage : {
                     display : false,
@@ -442,12 +523,49 @@
                     filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage',
                     subheader: false,
                     filteringSearchWord : true,
-                    export : false
+                    export : false,
+                    select : {
+                      display: false,
+                      url : '',
+                      title: ''
+                    }
+                },
+                showAllHistory : {
+                    display : false,
+                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllHistoryCoverage',
+                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
+                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterAllHistoryCoverage',
+                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
+                    subheader: false,
+                    filteringSearchWord : true,
+                    export : false,
+                    select : {
+                      display: false,
+                      url : '',
+                      title: ''
+                    }
+                },
+                showZoneByUser : {
+                    display : false,
+                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllHistoryCoverage',
+                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
+                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterAllHistoryCoverage',
+                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
+                    subheader: false,
+                    filteringSearchWord : true,
+                    export : false,
+                    select : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
+                      title: 'Usuario'
+                    }
                 },
                 itemsButtons:[
-                    { title: 'Mostrar asignado', icon: 'mdi-account', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
+                    { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
                     { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
-                    { title: 'Zonas vacias', icon: 'mdi-alert', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom<"},
+                    { title: 'Zonas vacias', icon: 'mdi-alert-circle-outline', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom"},
+                    { title: 'Historial', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
+                    { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showZoneByUser', active :  false, color :"bg-blue-custom"},
                 ],
                 admin : '',
                 url_actions : {
@@ -509,13 +627,15 @@
                     dynamicDataToFilter : [],
                     url_searchCountController: '',
                     url_searchGetDataController: '',
-                    filtering: false
+                    filtering: false,
+                    reset: false
                 },
                 snackbar :{
                   snack : false,
                   timeout : -1,
                   textSnack : ''
-                }
+                },
+                resetGlobal : false
             }
         },
         methods:{
@@ -572,52 +692,89 @@
             this[function_name]()
           },
           $_showAllCoverage(){
-            
+            this.table.display = false
             this.formRangeNumberAndWord.display = false
             this.showAllEmptyCoverage.display = false
             this.showAllCoverage.display = false 
+            this.showAllHistory.display = false
+            this.showZoneByUser.display = false
             this.$nextTick(() => {
               this.showAllCoverage.display = true
               this.itemsButtons[0].active = true //todo
               this.itemsButtons[1].active = false //rangeNumber
               this.itemsButtons[2].active = false //empty
+              this.itemsButtons[3].active = false //history
+              this.itemsButtons[4].active = false //user by zone
             })  
           },
           $_showAllEmptyCoverage(){
-            
+            this.table.display = false
             this.formRangeNumberAndWord.display = false
             this.showAllCoverage.display = false  
             this.showAllEmptyCoverage.display = false
+            this.showAllHistory.display = false
+            this.showZoneByUser.display = false
+           
               this.$nextTick(() => {
                 this.showAllEmptyCoverage.display = true
                 this.itemsButtons[0].active = false //todo
                 this.itemsButtons[1].active = false //rangeNumber
                 this.itemsButtons[2].active = true //empty
+                this.itemsButtons[3].active = false //history
+                this.itemsButtons[4].active = false //user by zone
               });
               
           },
           $_formRangeNumberAndWord(){
+              this.table.display = false
               this.showAllCoverage.display = false
               this.showAllEmptyCoverage.display = false
-              this.formRangeNumberAndWord.display = true,
-
+              this.formRangeNumberAndWord.display = true
+              this.showAllHistory.display = false
+            this.$nextTick(() => {
               this.itemsButtons[0].active = false //todo
               this.itemsButtons[1].active = true //rangeNumber
               this.itemsButtons[2].active = false //empty
+              this.itemsButtons[3].active = false //history
+              this.itemsButtons[4].active = false //user by zone
               // si no queres mostrar la tabla al llegar aca, solo escondela
-           
+            });
           },
-          resetPagination(){
-            console.log("hola")
-            this.pagination = {
-                    display: true,
-                    totalPage : 0, 
-                    rowForPage:10,
-                    pageCurrent: 1,
-                    totalCountResponse:0,
-                    fromRow:0,
-                    limit:10
-                }
+          $_showAllHistory(){
+              this.table.display = false
+              this.formRangeNumberAndWord.display = false
+              this.showAllCoverage.display = false  
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
+              this.showZoneByUser.display = false
+           
+              this.$nextTick(() => {
+                this.showAllHistory.display = true
+                this.itemsButtons[0].active = false //todo
+                this.itemsButtons[1].active = false //rangeNumber
+                this.itemsButtons[2].active = false //empty
+                this.itemsButtons[3].active = true //history
+                this.itemsButtons[4].active = false //user by zone
+              });
+              
+          },
+          $_showZoneByUser(){
+              this.table.display = false
+              this.formRangeNumberAndWord.display = false
+              this.showAllCoverage.display = false  
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
+              this.showZoneByUser.display = false
+           
+              this.$nextTick(() => {
+                this.showZoneByUser.display = true
+                this.itemsButtons[0].active = false //todo
+                this.itemsButtons[1].active = false //rangeNumber
+                this.itemsButtons[2].active = false //empty
+                this.itemsButtons[3].active = false //history
+                this.itemsButtons[4].active = true ////user by zone
+              });
+              
           },
           getAdmin(){
 
@@ -638,13 +795,13 @@
               this.table.display = true
             })
           },
+          
 
         },
         created(){
           this.getAdmin()
-        },
+        }, 
         
-       
     })
 </script>
 

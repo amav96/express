@@ -2,7 +2,6 @@ Vue.component('filter-with-pagination', {
     template: //html 
         `
         <div>
-        {{data}}
             <v-container>
             <v-form @submit.prevent="tryCountSearch" id="form-search">
                 <v-row>
@@ -72,9 +71,7 @@ Vue.component('filter-with-pagination', {
         tryCountSearch() {
             this.loaderFilter = true
             const dynamicData = JSON.parse(JSON.stringify(this.filter.dynamicDataToFilter))
-            const buildFilter = {
-                filter: this.data
-            }
+            const buildFilter = { filter: this.data }
             this.objectFilter = {...dynamicData, ...buildFilter }
             const dataRequest = this.objectFilter
             const url = this.filter.url_searchCountController
@@ -84,6 +81,7 @@ Vue.component('filter-with-pagination', {
                     }
                 })
                 .then(res => {
+
                     if (res.data.error) {
                         this.loaderFilter = false
                         this.alert_flag = true
@@ -147,7 +145,6 @@ Vue.component('filter-with-pagination', {
                     }
                 })
                 .then(res => {
-
                     if (this.filter.filtering) {
                         this.oldDataResponseDB = this.dataResponseDB
                         this.$emit('setFlagFiltering', false)
@@ -161,6 +158,10 @@ Vue.component('filter-with-pagination', {
                     console.log(err)
                     this.loaderFilter = false
                 })
+        },
+        resetFilter() {
+
+            this.oldDataResponseDB = []
         }
     },
     watch: {
@@ -174,6 +175,11 @@ Vue.component('filter-with-pagination', {
                     this.$emit('setFlagFiltering', true)
                 }
             }
-        }
+        },
+
+    },
+
+    destroyed() {
+        this.resetFilter()
     }
 })
