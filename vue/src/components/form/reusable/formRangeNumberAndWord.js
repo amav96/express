@@ -4,7 +4,7 @@ Vue.component('form-number-and-word', {
             <v-card>
                 <form 
                 id="sendFormRangeNumberAndWord"
-                @submit.prevent="_countData"
+                @submit.prevent="_getData"
                 class="d-flex justify-center flex-row align-center  flex-wrap ">
                     <v-container fluid>
                         <v-row align="center"  class="d-flex justify-center" >
@@ -37,8 +37,8 @@ Vue.component('form-number-and-word', {
                             <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
                                 <select-auto-complete-simple-id
                                 @exportVal="setData($event)"
-                                :title="formRangeNumberAndWord.select.title" 
-                                :url="formRangeNumberAndWord.select.url"
+                                :title="resources.select.title" 
+                                :url="resources.select.url"
                                 />
                             </v-col>
 
@@ -63,7 +63,7 @@ Vue.component('form-number-and-word', {
         </div>
        
     `,
-    props: ['formRangeNumberAndWord', 'pagination'],
+    props: ['resources', 'pagination'],
     data() {
         return {
             numberStart: '',
@@ -76,99 +76,96 @@ Vue.component('form-number-and-word', {
         setData(data) {
             this.word = data
         },
-        async _countData() {
-            const url = this.formRangeNumberAndWord.base_url_count
-            const dataRequest = {
+        async _getData() {
+            try {
+                this.resources.pagination ? this.$resetPagination() : false;
+
+                this.$emit('loadingTable', true)
+                const dataRequest = {
                     numberStart: this.numberStart,
                     numberEnd: this.numberEnd,
-                    word: this.word
+                    word: this.word,
+                    fromRow: this.pagination.fromRow,
+                    limit: this.pagination.limit
                 }
-                //COUNT NO NECESITA PAGINACION!!
-            await axios.get(url, {
-                    params: { dataRequest }
-                })
-                .then(res => {
-                    if (res.data.error) {
-                        const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                        this.error(error);
-                        return;
-                    }
-                    //PAGINATION
-                    this.formRangeNumberAndWord.pagination ? this.$pagination(res) : false;
-                    //SUBHEADER
-                    this.formRangeNumberAndWord.subheader ?
-                        this.showStatus(this.base_url_header) :
-                        this.$emit('setDisplayHeaders', false);
-                    //FILTER
-                    if (this.formRangeNumberAndWord.filteringSearchWord) {
-                        this.$emit('setShowFilter', true)
-                        this.$emit('setUrlSearchController', this.formRangeNumberAndWord.filter_count)
-                        this.$emit('setUrlGetDataSearchController', this.formRangeNumberAndWord.filter_get)
-                        const parameters = {
-                            numberStart: this.numberStart,
-                            numberEnd: this.numberEnd,
-                            word: this.word
+                const url = this.resources.url.getData
+
+                await axios.get(url, { params: { dataRequest } })
+                    .then(res => {
+                        if (res.data.error) {
+                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
+                            this.error(error);
+                            return;
                         }
-                        this.$emit('setParametersToFilter', parameters)
-                    }
-                    //EXPORT 
-                    this.formRangeNumberAndWord.export ?
-                        this.$emit('setDisplayExportExcel', this.formRangeNumberAndWord.export) :
-                        false;
 
-                    this.getAll();
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+                        //PAGINATION
+                        this.resources.pagination ? this.$pagination(res) : false;
 
-        },
-        async getAll() {
-            const dataRequest = {
-                numberStart: this.numberStart,
-                numberEnd: this.numberEnd,
-                word: this.word,
-                fromRow: this.pagination.fromRow,
-                limit: this.pagination.limit
+                        //SUBHEADER
+                        this.resources.subheader ?
+                            this.showStatus(this.base_url_header) :
+                            this.$emit('setDisplayHeaders', false);
+
+                        //FILTER
+                        if (this.resources.filter) {
+
+                            this.$emit('setFilter', true)
+                            this.$emit('setShowFilter', true)
+                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
+                            const parameters = {
+                                numberStart: this.numberStart,
+                                numberEnd: this.numberEnd,
+                                word: this.word,
+                                fromRow: this.pagination.fromRow,
+                                limit: this.pagination.limit
+                            }
+                            this.$emit('setParametersToFilter', parameters)
+                        }
+                        //EXPORT 
+                        this.resources.export ?
+                            this.$emit('setDisplayExportExcel', this.resources.export) :
+                            false;
+
+                        this.$emit('response', res.data)
+                        this.$emit('showTable', true)
+                        this.$emit('loadingTable', false)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
+            } catch (err) {
+                const error = { type: 'no-exist', text: err, time: 4000 }
+                this.error(error);
+                return;
             }
-            const url = this.formRangeNumberAndWord.base_url_data
-            await axios.get(url, { params: { dataRequest } })
-                .then(res => {
-                    if (res.data.error) {
-                        const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                        this.error(error);
-                        return;
-                    }
-
-                    this.$emit('response', res.data)
-                    this.$emit('showTable', true)
-
-                    this.$emit('loadingTable', false)
-
-
-                    //PAGINATION
-                    this.formRangeNumberAndWord.pagination ? this.$emit('urlTryPagination', url) : false;
-                    //FILTER 
-                    this.formRangeNumberAndWord.filteringSearchWord ? this.$emit('filtering', true) : false;
-
-                })
-                .catch(err => {
-                    console.log(err)
-                    const error = { type: 'no-exist', text: err, time: 4000 }
-                    this.error(error);
-                    return;
-                })
+        },
+        $resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 1,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
         },
         $pagination(res) {
+            // setTimeout(() => {
+            // this.$emit("showPagination", true)
+
             // settings values for pagination after to fetch count
             const totalCountResponse = parseInt(res.data.count)
             const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-            this.$emit('TotalPage', totalPage)
             this.$emit('totalCountResponse', totalCountResponse)
-            this.$emit('showPagination', true)
+            console.log(totalPage)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('urlTryPagination', this.resources.url.getData)
 
-            // seteo los parametros de la paginacion 
-            const parametersToPagination = {
+            //seteo los parametros de la paginacion
+            const parametersDynamicToPagination = {
                 numberStart: this.numberStart,
                 numberEnd: this.numberEnd,
                 word: this.word,
@@ -176,7 +173,8 @@ Vue.component('form-number-and-word', {
                 limit: this.pagination.limit
             }
 
-            this.$emit('setParametersToPagination', parametersToPagination)
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+                // }, 2000);
 
         },
         error(error) {

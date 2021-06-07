@@ -7,16 +7,15 @@ Vue.component('form-search-by-word-and-range-date', {
                 id="sendFormWordAndRange"
                 class="d-flex justify-center flex-row align-center  flex-wrap ">
                     <v-container fluid>
+                   title {{resources.select.title}} <br>
+                   url {{resources.select.url}} <br>
                         <v-row align="center"  class="d-flex justify-center" >
                             <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
-                                <v-select
-                                style="height:50px;"
-                                :items="dataSelect"
-                                :item-text="showDataSelect"
-                                item-value="id"
-                                label="Recolector"
-                                v-model="word"
-                                ></v-select>
+                                <select-auto-complete-simple-id
+                                @exportVal="setSelect($event)"
+                                :title="resources.select.title" 
+                                :url="resources.select.url"
+                                />
                             </v-col>
 
                             <v-col class="d-flex justify-center" cols="12"  lg="3" md ="4">
@@ -61,7 +60,7 @@ Vue.component('form-search-by-word-and-range-date', {
         </div>
        
     `,
-    props: ['base_url_data_select', 'showDataSelect', 'dataSelect', 'searchByWordAndRangeDate', 'pagination', 'subheaders', 'base_url_header', 'base_url_to_count_search_word_controller', 'base_url_to_get_search_word_controller', 'filter', ],
+    props: ['resources', 'pagination'],
     data() {
         return {
             dateStart: '',
@@ -71,48 +70,60 @@ Vue.component('form-search-by-word-and-range-date', {
         }
     },
     methods: {
-        async countSearchByWordAndRangeDate() {
+
+        async _getData() {
             try {
+                this.resources.pagination ? this.$resetPagination() : false;
+
                 this.$emit('loadingTable', true)
-                await axios.get(this.searchByWordAndRangeDate.base_url_count, {
-                        params: {
-                            dateStart: this.dateStart,
-                            dateEnd: this.dateEnd,
-                            word: this.word,
-                        }
-                    })
+                const dataRequest = {
+                    dateStart: this.dateStart,
+                    dateEnd: this.dateEnd,
+                    word: this.word,
+                    fromRow: this.pagination.fromRow,
+                    limit: this.pagination.limit
+                }
+                const url = this.resources.url.getData
+
+                await axios.get(url, { params: { dataRequest } })
                     .then(res => {
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
                             return;
                         }
-                        // settings values for pagination after to fetch count
-                        const totalCountResponse = parseInt(res.data.count)
-                        const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-                        this.$emit('TotalPage', totalPage)
-                        this.$emit('totalCountResponse', totalCountResponse)
-                        this.searchWordAndRangeDate(this.searchByWordAndRangeDate.base_url_data)
-                            .then(() => {
-                                // show status if is true
-                                if (this.searchByWordAndRangeDate.subheader) {
-                                    this.showStatus(this.base_url_header)
-                                } else {
-                                    this.$emit('setDisplayHeaders', false)
-                                }
-                                // if filter is true, activate
-                                if (this.searchByWordAndRangeDate.filteringSearchWord) {
-                                    this.$emit('setShowFilter', true)
-                                    this.$emit('setUrlSearchController', this.base_url_to_count_search_word_controller)
-                                    this.$emit('setUrlGetDataSearchController', this.base_url_to_get_search_word_controller)
-                                    const search = {
-                                        dateStart: this.dateStart,
-                                        dateEnd: this.dateEnd,
-                                        word: this.word,
-                                    }
-                                    this.$emit('setDataDynamicToFilter', search)
-                                }
-                            })
+
+                        //PAGINATION
+                        this.resources.pagination ? this.$pagination(res) : false;
+
+                        //SUBHEADER
+                        this.resources.subheader ?
+                            this.showStatus(this.base_url_header) :
+                            this.$emit('setDisplayHeaders', false);
+
+                        //FILTER
+                        if (this.resources.filter) {
+
+                            this.$emit('setFilter', true)
+                            this.$emit('setShowFilter', true)
+                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
+                            const parameters = {
+                                dateStart: this.dateStart,
+                                dateEnd: this.dateEnd,
+                                word: this.word,
+                                fromRow: this.pagination.fromRow,
+                                limit: this.pagination.limit
+                            }
+                            this.$emit('setParametersToFilter', parameters)
+                        }
+                        //EXPORT 
+                        this.resources.export ?
+                            this.$emit('setDisplayExportExcel', this.resources.export) :
+                            false;
+
+                        this.$emit('response', res.data)
+                        this.$emit('showTable', true)
+                        this.$emit('loadingTable', false)
                     })
                     .catch(err => {
                         console.log(err);
@@ -123,105 +134,58 @@ Vue.component('form-search-by-word-and-range-date', {
                 this.error(error);
                 return;
             }
-
         },
-        async searchWordAndRangeDate(base_url) {
-            const dataRequest = {
+        $resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 1,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
+        },
+        $pagination(res) {
+            // setTimeout(() => {
+            // this.$emit("showPagination", true)
+
+            // settings values for pagination after to fetch count
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            this.$emit('totalCountResponse', totalCountResponse)
+            console.log(totalPage)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('urlTryPagination', this.resources.url.getData)
+
+            //seteo los parametros de la paginacion
+            const parametersDynamicToPagination = {
                 dateStart: this.dateStart,
                 dateEnd: this.dateEnd,
                 word: this.word,
                 fromRow: this.pagination.fromRow,
                 limit: this.pagination.limit
             }
-            await axios.get(base_url, {
-                    params: {
-                        dataRequest
-                    }
-                })
-                .then(res => {
 
-                    if (res.data.error) {
-                        const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                        this.error(error);
-                        return;
-                    }
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+                // }, 2000);
 
-                    // setting dinamic data search for pagination
-                    const dynamicDataToSearch = {
-                        dateStart: this.dateStart,
-                        dateEnd: this.dateEnd,
-                        word: this.word,
-                        fromRow: this.pagination.fromRow,
-                        limit: this.pagination.limit
-                    }
-
-                    this.$emit('dynamicDataToSearch', dynamicDataToSearch)
-
-                    this.$emit('response', res.data)
-                    this.$emit('showTable', true)
-                    this.$emit('setPaginateDisplay', true)
-                    this.$emit('loadingTable', false)
-
-                    if (this.searchByWordAndRangeDate.export) {
-                        this.$emit('setDisplayExportExcel', this.searchByWordAndRangeDate.export)
-                    } else {
-                        this.$emit('setDisplayExportExcel', this.searchByWordAndRangeDate.export)
-                    }
-
-                    //  settings url to fetch from pagination
-                    this.$emit('urlTryPagination', base_url)
-
-                    // setting flag filtering
-                    this.$emit('filtering', true)
-
-                })
-                .catch(err => {
-                    const error = { type: 'no-exist', text: err, time: 4000 }
-                    this.error(error);
-                    return;
-                })
         },
-        async getDataSelect() {
-            let dataPost = new FormData()
-            dataPost.append('key', 'all')
-                // this should change yes or yes
-
-            try {
-
-                await axios.post(this.base_url_data_select, dataPost)
-                    .then(res => {
-
-                        if (res.data.count <= '0') {
-                            const error = { type: 'no-exist', text: 'No se pudieron cargar los usuarios', time: 4000 }
-                            this.error(error);
-                            return;
-                        }
-                        const ordenadosAlfabeticamente = res.data.sort(function(prev, next) {
-                            if (prev.nombre > next.nombre) {
-                                return 1
-                            }
-                            if (prev.nombre < next.nombre) {
-                                return -1
-                            }
-                            return 0
-                        })
-
-                        this.items = ordenadosAlfabeticamente
-                        this.$emit('childrenProcessDataSelect', this.items);
-                        this.$emit('childrenDataSelect', this.items);
-                    })
-                    .catch(err => {
-                        const error = { type: 'no-exist', text: err, time: 4000 }
-                        this.error(error);
-                        return;
-                    })
-
-            } catch (err) {
-                const error = { type: 'no-exist', text: err, time: 4000 }
-                this.error(error);
-                return;
-            }
-
+        emit(eventName, value) {
+            // This method should be used when it is very important and time consuming to update reactive data.
+            return new Promise((resolve, reject) => {
+                this.$emit(eventName, value)
+                this.$nextTick(resolve)
+            })
+        },
+        error(error) {
+            this.$emit('setErrorGlobal', error)
+            this.$emit('loadingTable', false)
+            this.$emit('showTable', false)
+            this.$emit('response', [])
+            this.emit('setShowFilter', false)
+            return
         },
         async showStatus(base_url) {
             this.$emit('setSubHeadersLoader', true)
@@ -246,21 +210,9 @@ Vue.component('form-search-by-word-and-range-date', {
                     console.log(err)
                 })
         },
-        emit(eventName, value) {
-            // This method should be used when it is very important and time consuming to update reactive data.
-            return new Promise((resolve, reject) => {
-                this.$emit(eventName, value)
-                this.$nextTick(resolve)
-            })
-        },
-        error(error) {
-            this.$emit('setErrorGlobal', error)
-            this.$emit('loadingTable', false)
-            this.$emit('showTable', false)
-            this.$emit('response', [])
-            this.emit('setShowFilter', false)
-            return
-        },
+        $_setSelect() {
+
+        }
 
     },
     computed: {
@@ -276,9 +228,6 @@ Vue.component('form-search-by-word-and-range-date', {
             }
         }
     },
-    created() {
-        this.getDataSelect()
 
-    }
 
 })

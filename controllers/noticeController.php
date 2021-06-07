@@ -10,6 +10,7 @@ if (isset($_GET['notice'])) {
   require '../resources/phpmailer/phpmailer/src/SMTP.php';
 
   require_once '../model/notice.php';
+  require_once '../model/usuario.php';
   require_once '../config/db.php';
   require_once '../helpers/utils.php';
   require_once "../vendor/autoload.php";
@@ -21,6 +22,7 @@ if (isset($_GET['notice'])) {
 } else {
 
   require_once 'model/notice.php';
+  require_once 'model/usuario.php';
   require 'resources/phpmailer/phpmailer/src/Exception.php';
   require 'resources/phpmailer/phpmailer/src/PHPMailer.php';
   require 'resources/phpmailer/phpmailer/src/SMTP.php';
@@ -592,67 +594,6 @@ class noticeController
 
   //COUNT NOTICES
 
-  public function countNoticeByWord()
-  {
-
-    if ($_GET) {
-      $word = isset($_GET['word']) ? $_GET['word'] : false;
-
-      $countNoticeByWord = new Notice();
-      $countNoticeByWord->setWord($word);
-      $countNoticeByWord = $countNoticeByWord->countNoticeByWord();
-
-      if (is_object($countNoticeByWord)) {
-
-        foreach ($countNoticeByWord as $element)
-
-          $objeto = array(
-            'success' => true,
-            'count' => $element["count"]
-          );
-      } else {
-        $objeto = array(
-          'error' => true,
-        );
-      }
-
-      $jsonstring = json_encode($objeto);
-      echo $jsonstring;
-    }
-  }
-
-  public function countNoticeRangeDate()
-  {
-
-    if ($_GET) {
-
-      $dateStart = isset($_GET['dateStart']) ? $_GET['dateStart'] : false;
-      $dateEnd = isset($_GET['dateEnd']) ? $_GET['dateEnd'] : false;
-
-      $countNoticeRangeDate = new Notice();
-      $countNoticeRangeDate->setDateStart($dateStart);
-      $countNoticeRangeDate->setDateEnd($dateEnd);
-      $countNoticeRangeDate = $countNoticeRangeDate->countNoticeRangeDate();
-
-      if (is_object($countNoticeRangeDate)) {
-
-        foreach ($countNoticeRangeDate as $element)
-
-          $objeto = array(
-            'success' => true,
-            'count' => $element["count"]
-          );
-      } else {
-        $objeto = array(
-          'error' => true,
-        );
-      }
-
-      $jsonstring = json_encode($objeto);
-      echo $jsonstring;
-    }
-  }
-
   public function countNoticeRangeDateAndWord()
   {
 
@@ -751,58 +692,41 @@ class noticeController
 
   //DATA NOTICES
 
-  public function noticeByWord()
+  public function getNoticeByWord()
   {
 
     if ($_GET) {
 
-      $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false;
-      $request =  json_decode($dataRequest);
+      $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+      $Request =  json_decode($dataRequest);
+      $word = !empty($Request->word) ? $Request->word : false;
+      $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+      $limit = isset($Request->limit) ? $Request->limit : false;
 
-      $word = !empty($request->word) ? $request->word : false;
-      $fromRow = $request->fromRow;
-      $limit = $request->limit;
+      $get = new Notice();
+      $get->setWord($word);
+      $get->setFromRow($fromRow);
+      $get->setLimit($limit);
 
-      $noticeByWord = new Notice();
-      $noticeByWord->setWord($word);
-      $noticeByWord->setFromRow($fromRow);
-      $noticeByWord->setLimit($limit);
-      $noticeByWord = $noticeByWord->noticeByWord();
-
-      if (is_object($noticeByWord)) {
-
-        foreach ($noticeByWord as $element)
-
-          $objeto[] = array(
-            'success' => true,
-            'id' => $element["id"],
-            'direccion' => $element["direccion"],
-            'localidad' => $element["localidad"],
-            'provincia' => $element["provincia"],
-            'nombre_cliente' => $element["nombre_cliente"],
-            'aviso' => $element["aviso"],
-            'contacto' => $element["contacto"],
-            'country' => $element["country"],
-            'id_user' => $element["id_user"],
-            'name' => $element["name"],
-            'identificacion' => $element["identificacion"],
-            'latAviso' => $element["latAviso"],
-            'lngAviso' => $element["lngAviso"],
-            'means' => $element["means"],
-            'fecha_aviso_visita' => $element["created_at"],
-          );
-      } else {
-        $objeto[] = array(
-          'error' => true,
-        );
+      $count = $get->countNoticeByWord();
+      if($count){
+          $data = $get->getNoticeByWord();
+          if($data){
+              $this->showNotice($count,$data);
+          }else{
+              $object=array('error' => true);
+              $jsonstring = json_encode($object); echo $jsonstring;
+          }
+      }else{
+          $object=array('error' => true);
+          $jsonstring = json_encode($object); echo $jsonstring;
       }
 
-      $jsonstring = json_encode($objeto);
-      echo $jsonstring;
+   
     }
   }
 
-  public function noticeRangeDate()
+  public function getNoticeRangeDate()
   {
 
     if ($_GET) {
@@ -815,44 +739,26 @@ class noticeController
       $fromRow = $request->fromRow;
       $limit = $request->limit;
 
+      $get = new Notice();
+      $get->setDateStart($dateStart);
+      $get->setDateEnd($dateEnd);
+      $get->setFromRow($fromRow);
+      $get->setLimit($limit);
 
-      $noticeRangeDate = new Notice();
-      $noticeRangeDate->setDateStart($dateStart);
-      $noticeRangeDate->setDateEnd($dateEnd);
-      $noticeRangeDate->setFromRow($fromRow);
-      $noticeRangeDate->setLimit($limit);
-      $noticeRangeDate = $noticeRangeDate->noticeRangeDate();
-
-      if (is_object($noticeRangeDate)) {
-
-        foreach ($noticeRangeDate as $element)
-
-          $objeto[] = array(
-            'success' => true,
-            'id' => $element["id"],
-            'direccion' => $element["direccion"],
-            'localidad' => $element["localidad"],
-            'provincia' => $element["provincia"],
-            'nombre_cliente' => $element["nombre_cliente"],
-            'aviso' => $element["aviso"],
-            'contacto' => $element["contacto"],
-            'country' => $element["country"],
-            'id_user' => $element["id_user"],
-            'name' => $element["name"],
-            'identificacion' => $element["identificacion"],
-            'latAviso' => $element["latAviso"],
-            'lngAviso' => $element["lngAviso"],
-            'means' => $element["means"],
-            'fecha_aviso_visita' => $element["created_at"],
-          );
-      } else {
-        $objeto[] = array(
-          'error' => true,
-        );
+      $count = $get->countNoticeRangeDate();
+      if($count){
+          $data = $get->getNoticeRangeDate();
+          if($data){
+              $this->showNotice($count,$data);
+          }else{
+              $object=array('error' => true);
+              $jsonstring = json_encode($object); echo $jsonstring;
+          }
+      }else{
+          $object=array('error' => true);
+          $jsonstring = json_encode($object); echo $jsonstring;
       }
 
-      $jsonstring = json_encode($objeto);
-      echo $jsonstring;
     }
   }
 
@@ -1185,6 +1091,58 @@ class noticeController
     return $result;
   }
 
+  // HELPER
+
+  public function showNotice($count,$data){
+
+    if($count && $data){
+       
+        foreach ($count as $dataCounter){
+          $arrCount = $dataCounter["count"];
+        }
+
+        foreach($data as $dataResponse){
+          $arrData[]=array(
+              'success' => true,
+              'id' => $dataResponse["id"],
+              'direccion' => $dataResponse["direccion"],
+              'localidad' => $dataResponse["localidad"],
+              'provincia' => $dataResponse["provincia"],
+              'nombre_cliente' => $dataResponse["nombre_cliente"],
+              'aviso' => $dataResponse["aviso"],
+              'contacto' => $dataResponse["contacto"],
+              'country' => $dataResponse["country"],
+              'id_user' => $dataResponse["id_user"],
+              'name' => $dataResponse["name"],
+              'identificacion' => $dataResponse["identificacion"],
+              'latAviso' => $dataResponse["latAviso"],
+              'lngAviso' => $dataResponse["lngAviso"],
+              'means' => $dataResponse["means"],
+              'fecha_aviso_visita' => $this->getDataTime($dataResponse["created_at"]),
+          );
+      }
+
+      $object = array(
+        'count' => $arrCount,
+        'data' => $arrData
+      );
+  
+       $jsonstring = json_encode($object);
+       echo $jsonstring;
+    }
+  }
+
+  public function getDataTime($data){
+    if($data){
+        $arrayDateTime = explode(' ', trim($data));
+        $arrayDate = explode('-',$arrayDateTime[0]);
+        $dateFormated = $arrayDate[2].'/'.$arrayDate[1].'/'.$arrayDate[0];
+        $dateTimeFormated = $dateFormated.' '.$arrayDateTime[1];
+        return $dateTimeFormated;
+    }else {
+        return '';
+    }
+  }
   // templates emails for Loops Especific
 
   public function headNoticeVisit()

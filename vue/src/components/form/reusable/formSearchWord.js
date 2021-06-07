@@ -5,7 +5,7 @@ Vue.component('form-search-word', {
        <div  >
              <v-card>           
                 <form 
-                @submit.prevent="countSearchByWord" 
+                @submit.prevent="_getData()" 
                 id="sendFormWord" 
                 class="d-flex justify-center flex-row align-center  flex-wrap ">
                     <v-container fluid>
@@ -40,119 +40,71 @@ Vue.component('form-search-word', {
        </div>
     
     `,
-    props: ['titleFormId', 'pagination', 'searchByWord', 'subheaders', 'base_url_header', 'filter', 'base_url_to_count_search_word_controller', 'base_url_to_get_search_word_controller'],
+    props: ['resources', 'pagination'],
     data() {
         return {
             word: '',
         }
     },
     methods: {
-        async countSearchByWord() {
+        async _getData() {
             try {
+                if (resources.paginate) { this.$resetPagination() }
                 this.$emit('loadingTable', true)
-                const url = this.searchByWord.base_url_count
-                await axios.get(url, {
-                        params: {
-                            word: this.word,
-                        }
-                    })
+                const dataRequest = {
+                    word: this.word,
+                    fromRow: this.pagination.fromRow,
+                    limit: this.pagination.limit
+                }
+                const url = this.resources.url.getData
+                await axios.get(url, { params: { dataRequest } })
                     .then(res => {
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
                             return;
                         }
-                        // settings values for pagination after to fetch count
-                        const totalCountResponse = parseInt(res.data.count)
-                        const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-                        this.$emit('TotalPage', totalPage)
-                        this.$emit('totalCountResponse', totalCountResponse)
-                        const urlData = this.searchByWord.base_url_data
-                        this.searchSearchById(urlData)
-                            .then(() => {
-                                // show status if is true
+                        //PAGINATION
+                        this.resources.pagination ? this.$pagination(res) : false;
+                        //SUBHEADER
+                        this.resources.subheader ?
+                            this.showStatus(this.base_url_header) :
+                            this.$emit('setDisplayHeaders', false);
 
-                                if (this.searchByWord.subheader) {
-                                    this.showStatus(this.base_url_header)
-                                } else {
-                                    this.$emit('setDisplayHeaders', false)
-                                }
+                        //FILTER
+                        if (this.resources.filter) {
 
-                                // if searchALL is true, activate
-                                if (this.searchByWord.filteringSearchWord) {
-                                    this.$emit('setShowFilter', true)
-                                    this.$emit('setUrlSearchController', this.base_url_to_count_search_word_controller)
-                                    this.$emit('setUrlGetDataSearchController', this.base_url_to_get_search_word_controller)
-                                    const search = {
-                                        word: this.word,
-                                    }
-                                    this.$emit('setDataDynamicToFilter', search)
-                                }
-                            })
+                            this.$emit('setFilter', true)
+                            this.$emit('setShowFilter', true)
+                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
+                            let parameters = {
+                                word: this.word,
+                                fromRow: this.pagination.fromRow,
+                                limit: this.pagination.limit
+                            }
+                            this.$emit('setParametersToFilter', parameters)
+                        }
+                        //EXPORT 
+                        if (this.resources.export.display) {
+                            this.$exportExcel()
+                        }
 
+                        this.$emit('response', res.data.data)
+                        this.$emit('showTable', true)
+                        this.$emit('loadingTable', false)
 
                     })
-                    .catch(err => {
-                        console.log(err);
-                    })
+
+
+                .catch(err => {
+                    console.log(err);
+                })
 
             } catch (err) {
                 const error = { type: 'no-exist', text: err, time: 4000 }
                 this.error(error);
                 return;
             }
-
-
-        },
-        async searchSearchById(base_url) {
-
-            const dataRequest = {
-                word: this.word,
-                fromRow: this.pagination.fromRow,
-                limit: this.pagination.limit
-            }
-            await axios.get(base_url, {
-                    params: {
-                        dataRequest
-                    }
-                })
-                .then(res => {
-                    if (res.data.error) {
-                        const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                        this.error(error);
-                        return;
-                    }
-                    // setting dinamic data search for pagination
-                    const dynamicDataToSearch = {
-                        word: this.word,
-                        fromRow: this.pagination.fromRow,
-                        limit: this.pagination.limit
-                    }
-
-                    this.$emit('loadingTable', false)
-                    this.$emit('dynamicDataToSearch', dynamicDataToSearch)
-                    this.$emit('response', res.data)
-                    this.$emit('setPaginateDisplay', true)
-                    this.$emit('showTable', true)
-
-                    if (this.searchByWord.export) {
-                        this.$emit('setDisplayExportExcel', this.searchByWord.export)
-                    } else {
-                        this.$emit('setDisplayExportExcel', this.searchByWord.export)
-                    }
-
-                    //  settings url to fetch from pagination
-                    this.$emit('urlTryPagination', base_url)
-
-                    // setting flag filtering
-                    this.$emit('filtering', true)
-                })
-                .catch(err => {
-                    const error = { type: 'no-exist', text: err, time: 4000 }
-                    this.error(error);
-                    return;
-                })
-
         },
         async showStatus(base_url) {
             this.$emit('setSubHeadersLoader', true)
@@ -195,6 +147,41 @@ Vue.component('form-search-word', {
 
             return
         },
+        $resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 1,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
+        },
+        $pagination(res) {
+            // settings values for pagination after to fetch count
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            this.$emit('totalCountResponse', totalCountResponse)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('urlTryPagination', this.resources.url.getData)
+
+            // seteo los parametros de la paginacion 
+            const parametersDynamicToPagination = {
+                word: this.word,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
+        $exportExcel() {
+            this.$emit('setExportDisplay', true)
+            let parameters = { word: this.word }
+            this.$emit('setParametersToExport', parameters)
+            this.$emit('setUrlExport', this.resources.export.url)
+        }
 
     },
     computed: {

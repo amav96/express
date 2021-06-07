@@ -29,100 +29,7 @@ public function admin(){
 }
 
 //CONTADORES DE COBERTURA PARA PAGINACIONES
-public function countAllCoverage(){
-    
-    $countAllCoverage = new cobertura();
-    $countAllCoverage = $countAllCoverage-> countAllCoverage();
 
-    if(is_object($countAllCoverage)){
-        
-    foreach($countAllCoverage as $element){
-
-                $object=array(
-                    'success' => true,
-                    'count' => $element["count"],
-                    
-                );
-        }
-    }else{
-        $object=array(
-            'error' => true,
-        );
-    }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-}
-
-public function countAllEmptyCoverage(){
-
-    $countAllEmptyCoverage = new cobertura();
-    $countAllEmptyCoverage = $countAllEmptyCoverage-> countAllEmptyCoverage();
-
-    if(is_object($countAllEmptyCoverage)){
-        
-    foreach($countAllEmptyCoverage as $element){
-
-                $object=array(
-                    'success' => true,
-                    'count' => $element["count"],
-                    
-                );
-        }
-    }else{
-        $object=array(
-            'error' => true,
-        );
-    }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-
-}
-
-public function countAllHistoryCoverage(){
-
-    $count = new Cobertura();
-    $count = $count->countAllHistoryCoverage();
-    if($count){
-        foreach($count as $element){
-                    $object=array(
-                        'success' => true,
-                        'count' => $element["count"],
-                    );
-            }
-        }else{$object=array('error' => true,);}
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
-
-}
-
-public function countPostalCodeRangeAndCountry(){
-
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-
-    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
-    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
-    $id_country = isset($Request->word->id) ? $Request->word->id : false;
-
-    $count = new Cobertura();
-    $count->setPostal_code($cp_start);
-    $count->setPostal_code_range($cp_end);
-    $count->setId_country($id_country);
-    $count = $count->countPostalCodeRangeAndCountry();
-    if($count){
-        foreach($count as $element){
-                    $object=array(
-                        'success' => true,
-                        'count' => $element["count"],
-                    );
-            }
-    }else{$object=array('error' => true,);}
-    
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-}
 
 public function countCoverageByUsers(){
 
@@ -148,108 +55,11 @@ public function countCoverageByUsers(){
 
 }
 
-//CONTADORES FILTRO
-
-public function countFilterCoverage(){
-
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-  
-    $filter = isset($Request->filter) ? $Request->filter : false; 
-
-    $count = new Cobertura();
-    $count->setFilter($filter);
-    $count = $count->countFilterCoverage();
-    if($count){
-        foreach($count as $element){
-                    $object=array(
-                        'success' => true,
-                        'count' => $element["count"],
-                    );
-            }
-        }else{$object=array('error' => true,);}
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
-
-}
-
-public function countFilterAllHistoryCoverage(){
-
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-    $filter = isset($Request->filter) ? $Request->filter : false; 
-
-    $count = new Cobertura();
-    $count->setFilter($filter);
-    $count = $count->countFilterAllHistoryCoverage();
-     if($count){
-         foreach($count as $element){
-                     $object=array(
-                         'success' => true,
-                         'count' => $element["count"],
-                     );
-             }
-         }else{$object=array('error' => true,);}
-         $jsonstring = json_encode($object);
-         echo $jsonstring;
-
-}
-
-public function countFilterByWordByPostalCodeRangeAndCountry(){
-  
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-
-    $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
-    $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
-    $id_country = isset($Request->word->id) ? $Request->word->id : false;
-    $filter = isset($Request->filter) ? $Request->filter : false; 
-
-    $count = new Cobertura();
-    $count->setPostal_code($cp_start);
-    $count->setPostal_code_range($cp_end);
-    $count->setId_country($id_country);
-    $count->setFilter($filter);
-    $count = $count->countFilterByWordByPostalCodeRangeAndCountry();
-    if($count){
-        foreach($count as $element){
-                    $object=array(
-                        'success' => true,
-                        'count' => $element["count"],
-                    );
-            }
-        }else{$object=array('error' => true,);}
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
-}
-
-public function countFilterEmptyCoverage(){
-
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-  
-    $filter = isset($Request->filter) ? $Request->filter : false; 
-
-    $count = new Cobertura();
-    $count->setFilter($filter);
-    $count = $count->countFilterEmptyCoverage();
-    if($count){
-        foreach($count as $element){
-                    $object=array(
-                        'success' => true,
-                        'count' => $element["count"],
-                    );
-            }
-        }else{$object=array('error' => true,);}
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
-
-}
 
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 
 public function getAllCoverage(){
-    Utils::AuthAdmin();
+    
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
@@ -258,16 +68,25 @@ public function getAllCoverage(){
     $get = new cobertura();
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-    $get = $get-> getAllCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+
+    $count = $get->countAllCoverage();
+    if($count){
+        $data = $get->getAllCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
+
 }
 
 public function getAllEmptyCoverage(){
-    Utils::AuthAdmin();
+     Utils::AuthAdmin();
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $request =  json_decode($dataRequest);
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
@@ -276,9 +95,17 @@ public function getAllEmptyCoverage(){
     $get = new cobertura();
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-    $get = $get-> getAllEmptyCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+
+    $count = $get->countAllEmptyCoverage();
+    if($count){
+        $data = $get->getAllEmptyCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -288,16 +115,24 @@ public function getAllEmptyCoverage(){
 public function getAllHistoryCoverage(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-    $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-    $limit = isset($Request->limit) ? $Request->limit : false;
+    $request =  json_decode($dataRequest);
+    $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
+    $limit = isset($request->limit) ? $request->limit : false;
 
     $get = new cobertura();
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-    $get = $get-> getAllHistoryCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+
+    $count = $get->countAllHistoryCoverage();
+    if($count){
+        $data = $get->getAllHistoryCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -308,6 +143,8 @@ public function getPostalCodeRangeAndCountry(){
    
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
+
+  
 
     $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
     $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
@@ -321,9 +158,17 @@ public function getPostalCodeRangeAndCountry(){
     $get->setId_country($id_country);
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-    $get = $get->getPostalCodeRangeAndCountry();
-    if($get){$this->showCoverage($get);}
-    else{
+
+    $count = $get->countPostalCodeRangeAndCountry();
+    if($count){
+        $data = $get->getPostalCodeRangeAndCountry();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -343,12 +188,12 @@ public function getCoverageByUsers(){
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
 
-    $get = $get->getCoverageByUsers();
-    if($get){$this->showCoverage($get);}
-    else{
-        $object=array('error' => true);
-        $jsonstring = json_encode($object); echo $jsonstring;
-    }
+    // $get = $get->getCoverageByUsers();
+    // if($get){$this->showCoverage($get);}
+    // else{
+    //     $object=array('error' => true);
+    //     $jsonstring = json_encode($object); echo $jsonstring;
+    // }
 
 }
 
@@ -368,9 +213,16 @@ public function getFilterCoverage(){
     $get->setFilter($filter);
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-    $get = $get-> getFilterCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+    $count = $get->countFilterCoverage();
+    if($count){
+        $data = $get->getFilterCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -396,9 +248,16 @@ public function getFilterByWordByPostalCodeRangeAndCountry(){
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
 
-    $get = $get->getFilterByWordByPostalCodeRangeAndCountry();
-    if($get){$this->showCoverage($get);}
-    else{
+    $count = $get->countFilterByWordByPostalCodeRangeAndCountry();
+    if($count){
+        $data = $get->getFilterByWordByPostalCodeRangeAndCountry();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -409,19 +268,24 @@ public function getFilterEmptyCoverage(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
-    
-    $filter = isset($Request->filter) ? $Request->filter : false;
+    $filter = isset($Request->filter) ? $Request->filter : false; 
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-    $limit = isset($Request->limit) ? $Request->limit : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
     
-    $get = new Cobertura();
+    $get = new cobertura();
     $get->setFilter($filter);
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-
-    $get = $get->getFilterEmptyCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+    $count = $get->countFilterEmptyCoverage();
+    if($count){
+        $data = $get->getFilterEmptyCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -433,16 +297,22 @@ public function getFilterAllHistoryCoverage(){
     $Request =  json_decode($dataRequest);
     $filter = isset($Request->filter) ? $Request->filter : false; 
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-    $limit = isset($Request->limit) ? $Request->limit : false; 
+    $limit = isset($Request->limit) ? $Request->limit : false;
     
-    $get = new Cobertura();
+    $get = new cobertura();
     $get->setFilter($filter);
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
-
-    $get = $get->getFilterAllHistoryCoverage();
-    if($get){$this->showCoverage($get);}
-    else{
+    $count = $get->countFilterAllHistoryCoverage();
+    if($count){
+        $data = $get->getFilterAllHistoryCoverage();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
         $object=array('error' => true);
         $jsonstring = json_encode($object); echo $jsonstring;
     }
@@ -673,7 +543,7 @@ public function update(){
         $idFinally = array_filter($idModified);
         $update->setId($idFinally);
         if($update->getCodesById()){
-           $this->showCoverage($update->getCodesById());
+           $this->showCoverage($count =0,$update->getCodesById());
         }
     }
     else {$object=array('error' => 'not_process');}
@@ -722,7 +592,7 @@ public function updateOnlyOne(){
    
     if($process){
         if($update->getCodesById()){
-           $this->showCoverage($update->getCodesById());
+           $this->showCoverage($count = 0,$update->getCodesById());
         }
     }
     else {$object=array('error' => 'not_process_or_exist');}
@@ -758,29 +628,35 @@ public function removeAndDelete(){
     }
 }
 
+// HELPER
+public function showCoverage($count,$data){
 
-public function showCoverage($response){
-    if($response){
-        foreach ($response as $element){
-            $object[]=array(
-                'success' => true,
-                'id' => $element["id"],
-                'postal_code' => $element["postal_code"],
-                'locate' => $element["locate"],
-                'home_address' => $element["home_address"], 
-                'provinceInt' => $element["provinceInt"], 
-                'province' => $element["province"],
-                'name_country' => $element['name_country'],
-                'type' => $element["type"],
-                'id_user' => $element["id_user"],
-                'name_assigned' => $element["id_user"],
-                'customer_service_hours' => $element["customer_service_hours"],
-                'lat' => $element["lat"],
-                'lng' => $element["lng"],
-                'created_at' => $this->getDataTime($element["created_at"])
-            );
+    if($count && $data){
+       
+        foreach ($count as $dataCounter){
+            $object=array('count' => $dataCounter["count"],);
+                foreach($data as $dataResponse){
+                    $object[]=array(
+                        'success' => true,
+                        'id' => $dataResponse["id"],
+                        'postal_code' => $dataResponse["postal_code"],
+                        'locate' => $dataResponse["locate"],
+                        'home_address' => $dataResponse["home_address"], 
+                        'provinceInt' => $dataResponse["provinceInt"], 
+                        'province' => $dataResponse["province"],
+                        'name_country' => $dataResponse['name_country'],
+                        'type' => $dataResponse["type"],
+                        'id_user' => $dataResponse["id_user"],
+                        'name_assigned' => $dataResponse["id_user"],
+                        'customer_service_hours' => $dataResponse["customer_service_hours"],
+                        'lat' => $dataResponse["lat"],
+                        'lng' => $dataResponse["lng"],
+                        'created_at' => $this->getDataTime($dataResponse["created_at"])
+                    );
+                }
         }
     }
+
 
     $jsonstring = json_encode($object);
     echo $jsonstring;

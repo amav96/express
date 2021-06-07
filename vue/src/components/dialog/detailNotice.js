@@ -1,5 +1,5 @@
-Vue.component('dialog-detail-notice',{
-    template : //html 
+Vue.component('dialog-detail-notice', {
+    template: //html 
         `       
                 <div>
                     <v-dialog
@@ -61,7 +61,7 @@ Vue.component('dialog-detail-notice',{
                                                             <strong>Fecha de envio</strong>
                                                         </v-list-item-title>
                                                         <v-list-item-subtitle >
-                                                            {{ dateFormat(detailNotice.data.fecha_aviso_visita) }}
+                                                            {{ detailNotice.data.fecha_aviso_visita }}
                                                         </v-list-item-subtitle>
                                                     </v-col>
 
@@ -110,34 +110,23 @@ Vue.component('dialog-detail-notice',{
                
             </div>
         `,
-    props:['detailNotice',],
-    data (){
-    return {
-    }
+    props: ['detailNotice', ],
+    data() {
+        return {}
     },
-    methods : {
-    
-        closeDialog(){
+    methods: {
+
+        closeDialog() {
             this.$emit('openDialog', false)
         },
-        showMap(){
-            
+        showMap() {
+
             const lat = this.detailNotice.data.latAviso
             const lng = this.detailNotice.data.lngAviso
-            const coordinates = lat +','+ lng
-            
-             window.open('https://google.com.sa/maps/search/'+coordinates+'',"_blank")
+            const coordinates = lat + ',' + lng
+
+            window.open('https://google.com.sa/maps/search/' + coordinates + '', "_blank")
         },
-        dateFormat(date){
-            if(date !== undefined && date !== null && date !== ''){
-             var arrayDateTime = date.trim().split(' ');
-             var arrayDate = arrayDateTime[0].split('-')
-             var dateFormated = arrayDate[2]+ '/' + arrayDate[1] + '/' + arrayDate[0]
-             var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
-             return dateTimeFormated
-            }
-            
-        }
     },
-   
-    })
+
+})

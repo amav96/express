@@ -5,7 +5,7 @@ Vue.component('excel-export', {
             <v-btn
             class="text-white my-2"
             color="success"
-            @click="exportExcel"
+            @click="exportDocument"
             >
             <span v-if="!flagLoader" >excel</span>
             <v-icon v-if="!flagLoader" right >mdi-file-excel</v-icon>
@@ -34,71 +34,76 @@ Vue.component('excel-export', {
         </v-container>
     </div>
     `,
-    props: ['dynamicDataToSearch','url_actions'],
+    props: ['url_actions', 'exportExcel'],
     data() {
         return {
-            download : false,
-            path : '',
-            flagLoader : false,
-            clickDownload : true
+            download: false,
+            path: '',
+            flagLoader: false,
+            clickDownload: true
         }
     },
     methods: {
-        exportExcel() {
+        async exportDocument() {
             this.flagLoader = true
-            const dataRequest = this.dynamicDataToSearch
-            
-            const url = this.url_actions.export
-            axios.get(url, {
-                params: {
-                    dataRequest
-                }
-            })
-            .then(res => {
-                if(res.data.error){
-                    alertNegative("Mensaje CODIGO 54")
-                    return
-                }
-                    this.flagLoader = false
-                    this.path = this.url_actions.download_excel+res.data.path
-                    this.download = true
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        },
-        donwloadFile(){
-            if(this.clickDownload){
-               this.clickDownload = false;
-               window.open(this.path)
-
-            setTimeout(() => {
-                const url = this.url_actions.delete_excel
-                axios.get(url,{
-                    params:{
-                        path : this.path
+            const dataRequest = this.exportExcel.parameters
+            const url = this.exportExcel.url
+            await axios.get(url, {
+                    params: {
+                        dataRequest
                     }
                 })
                 .then(res => {
-                    if(res.data.error){
-                        alertNegative("Mensaje CODIGO 53");
+
+                    if (res.data.error) {
+                        alertNegative("Mensaje CODIGO 54")
+                        return
                     }
-                    this.clickDownload = true;
-                    this.download = false;
+                    this.flagLoader = false
+                    this.path = this.url_actions.download_excel + res.data.path
+                    this.download = true
                 })
                 .catch(err => {
                     console.log(err)
                 })
-                
-            }, 10000);
-        }
-            
+        },
+        donwloadFile() {
+            if (this.clickDownload) {
+                this.clickDownload = false;
+                window.open(this.path)
+
+                setTimeout(() => {
+                    const url = this.url_actions.delete_excel
+                    axios.get(url, {
+                            params: {
+                                path: this.path
+                            }
+                        })
+                        .then(res => {
+                            if (res.data.error) {
+                                alertNegative("Mensaje CODIGO 53");
+                            }
+                            this.clickDownload = true;
+                            this.download = false;
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+
+                }, 10000);
+            }
+
         }
     },
-    watch : {
-        dynamicDataToSearch(){
-            this.download = false
+    watch: {
+
+        exportExcel: {
+            handler(val) {
+                this.download = false
+            },
+
+            deep: true
         }
     }
-   
+
 })

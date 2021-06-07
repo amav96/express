@@ -1689,11 +1689,8 @@ class equipoController
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->fromArray([$header], NULL, 'A1');
-        
                 $columnArray = array_chunk($arrayRow, 1);
                 $rowCount = 1;
-
-
 
                 foreach($columnArray as $element){
                     $rowCount++;
@@ -1728,6 +1725,7 @@ class equipoController
                     $sheet->setCellValue('X'.$rowCount, $element[0]["contacto"]);
                     $sheet->setCellValue('Y'.$rowCount, $element[0]["fecha_aviso_visita"]);
                 }
+                
         $writer = new Xlsx($spreadsheet);
         # Le pasamos la ruta de guardado
         date_default_timezone_set('America/Argentina/Buenos_Aires');

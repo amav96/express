@@ -4,7 +4,7 @@ Vue.component('form-search-date', {
             <div>
                 <v-card>
                     <v-form
-                    @submit.prevent="countSearchInRangeDate" 
+                    @submit.prevent="_getData" 
                     id="sendFormRangeDate" 
                     class="d-flex justify-center flex-row align-center  flex-wrap ">
                         <v-container fluid>
@@ -51,7 +51,7 @@ Vue.component('form-search-date', {
                 </v-card>
             </div>
     `,
-    props: ['titleFormRangeDate', 'pagination', 'subheaders', 'base_url_header', 'base_url_to_count_search_word_controller', 'base_url_to_get_search_word_controller', 'filter', 'searchByRangeDate'],
+    props: ['resources', 'pagination'],
     data() {
         return {
             dateStart: '',
@@ -168,6 +168,67 @@ Vue.component('form-search-date', {
                     return;
                 })
         },
+        async _getData() {
+            try {
+                if (this.resources.pagination) { this.$resetPagination() }
+                this.$emit('loadingTable', true)
+                const dataRequest = {
+                    dateStart: this.dateStart,
+                    dateEnd: this.dateEnd,
+                    fromRow: this.pagination.fromRow,
+                    limit: this.pagination.limit
+                }
+                const url = this.resources.url.getData
+                await axios.get(url, { params: { dataRequest } })
+                    .then(res => {
+                        if (res.data.error) {
+                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
+                            this.error(error);
+                            return;
+                        }
+                        //PAGINATION
+                        this.resources.pagination ? this.$pagination(res) : false;
+                        //SUBHEADER
+                        this.resources.subheader ?
+                            this.showStatus(this.base_url_header) :
+                            this.$emit('setDisplayHeaders', false);
+
+                        //FILTER
+                        if (this.resources.filter) {
+
+                            this.$emit('setFilter', true)
+                            this.$emit('setShowFilter', true)
+                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
+                            let parameters = {
+                                dateStart: this.dateStart,
+                                dateEnd: this.dateEnd,
+                                fromRow: this.pagination.fromRow,
+                                limit: this.pagination.limit
+                            }
+                            this.$emit('setParametersToFilter', parameters)
+                        }
+                        //EXPORT 
+                        if (this.resources.export.display) {
+                            this.$exportExcel()
+                        }
+
+                        this.$emit('response', res.data.data)
+                        this.$emit('showTable', true)
+                        this.$emit('loadingTable', false)
+
+                    })
+
+
+                .catch(err => {
+                    console.log(err);
+                })
+
+            } catch (err) {
+                const error = { type: 'no-exist', text: err, time: 4000 }
+                this.error(error);
+                return;
+            }
+        },
         async showStatus(base_url) {
 
             this.$emit('setSubHeadersLoader', true)
@@ -207,6 +268,45 @@ Vue.component('form-search-date', {
             this.$emit('response', [])
             return
         },
+        $resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 1,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
+        },
+        $pagination(res) {
+            // settings values for pagination after to fetch count
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            this.$emit('totalCountResponse', totalCountResponse)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('urlTryPagination', this.resources.url.getData)
+
+            // seteo los parametros de la paginacion 
+            const parametersDynamicToPagination = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
+        $exportExcel() {
+            this.$emit('setExportDisplay', true)
+            let parameters = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+            }
+            this.$emit('setParametersToExport', parameters)
+            this.$emit('setUrlExport', this.resources.export.url)
+        }
 
     },
     computed: {

@@ -134,96 +134,111 @@
 
                 <template v-if="showAllCoverage.display">
                     <form-all
-                    :showAll="showAllCoverage"
-                    :base_url_to_count_search_word_controller="showAllCoverage.filter_count"
-                    :base_url_to_get_search_word_controller="showAllCoverage.filter_get"
+                    :resources="showAllCoverage"
+                    :pagination="pagination"
                     @resetPagination="pagination = $event"
+                    @loadingTable="table.loading = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="table.dataResponseDB = $event"
-                    @loadingTable="table.loading = $event"
-                    @showTable="table.display = $event"
                     @urlTryPagination="urlTryPagination = $event"
+                    @response="table.dataResponseDB = $event"
+                    @showTable="table.display = $event"
                     @setErrorGlobal="error = $event"
+                    @setParametersToFilter="filter.parameters = $event"
                     @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setUrlFilter="filter.url = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    :pagination="pagination"
-                    @setPaginateDisplay="pagination.display = $event"
+                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"  
                     />
+                </template>
+
+                <template v-if="formRangeNumberAndWord.display">
+                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
+                      <form-number-and-word
+                      :resources="formRangeNumberAndWord"
+                      :pagination="pagination"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @showPagination="pagination.display = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setParametersToFilter="filter.parameters = $event"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
+                      @filtering="filter.filtering = $event"
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"           
+                      />
+                    </v-col>
                 </template>
 
                 <template v-if="showAllEmptyCoverage.display">
                     <form-all
-                    :showAll="showAllEmptyCoverage"
-                    :base_url_to_count_search_word_controller="showAllEmptyCoverage.filter_count"
-                    :base_url_to_get_search_word_controller="showAllEmptyCoverage.filter_get"
+                    :resources="showAllEmptyCoverage"
+                    :pagination="pagination"
                     @resetPagination="pagination = $event"
+                    @loadingTable="table.loading = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="table.dataResponseDB = $event"
-                    @loadingTable="table.loading = $event"
-                    @showTable="table.display = $event"
                     @urlTryPagination="urlTryPagination = $event"
+                    @response="table.dataResponseDB = $event"
+                    @showTable="table.display = $event"
                     @setErrorGlobal="error = $event"
+                    @setParametersToFilter="filter.parameters = $event"
                     @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setUrlFilter="filter.url = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    :pagination="pagination"
-                    @setPaginateDisplay="pagination.display = $event"
+                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"  
                     />
                 </template>
 
                 <template v-if="showAllHistory.display">
                     <form-all
-                    :showAll="showAllHistory"
-                    :base_url_to_count_search_word_controller="showAllHistory.filter_count"
-                    :base_url_to_get_search_word_controller="showAllHistory.filter_get"
+                    :resources="showAllHistory"
+                    :pagination="pagination"
                     @resetPagination="pagination = $event"
+                    @loadingTable="table.loading = $event"
                     @totalCountResponse = "pagination.totalCountResponse = $event"
                     @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="table.dataResponseDB = $event"
-                    @loadingTable="table.loading = $event"
-                    @showTable="table.display = $event"
                     @urlTryPagination="urlTryPagination = $event"
+                    @response="table.dataResponseDB = $event"
+                    @showTable="table.display = $event"
                     @setErrorGlobal="error = $event"
+                    @setParametersToFilter="filter.parameters = $event"
                     @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
+                    @setUrlFilter="filter.url = $event"
                     @filtering="filter.filtering = $event"
                     @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    :pagination="pagination"
-                    @setPaginateDisplay="pagination.display = $event"
+                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
                     />
                 </template>
 
                 <template v-if="showZoneByUser.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
-                      :formRangeNumberAndWord="showZoneByUser"
+                      :resources="showZoneByUser"
                       :pagination="pagination"
-                      @response="table.dataResponseDB = $event"
+                      @resetPagination="pagination = $event"
                       @loadingTable="table.loading = $event"
-                      @showTable="table.display = $event"
-                      @setErrorGlobal="error = $event"
-                      @setUrlSearchController="filter.url_searchCountController = $event"
-                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
                       @urlTryPagination="urlTryPagination = $event"
                       @showPagination="pagination.display = $event"
-                      @setParametersToFilter="filter.dynamicDataToFilter = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
                       @filtering="filter.filtering = $event"
-                      @TotalPage = "pagination.totalPage = $event"
-                      @totalCountResponse = "pagination.totalCountResponse = $event"
-                      @setParametersToPagination ="dynamicDataToSearch = $event"          
+                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"           
                       />
                     </v-col>
                 </template>
@@ -331,32 +346,7 @@
                     </template>
                   </d-full-screen>
                 </template>
-            
-                <template v-if="formRangeNumberAndWord.display">
-                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
-                      <form-number-and-word
-                      :formRangeNumberAndWord="formRangeNumberAndWord"
-                      :search="search"
-                      :pagination="pagination"
-                      @response="table.dataResponseDB = $event"
-                      @loadingTable="table.loading = $event"
-                      @showTable="table.display = $event"
-                      @setErrorGlobal="error = $event"
-                      @setUrlSearchController="filter.url_searchCountController = $event"
-                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                      @urlTryPagination="urlTryPagination = $event"
-                      @showPagination="pagination.display = $event"
-                      @setParametersToFilter="filter.dynamicDataToFilter = $event"
-                      @setShowFilter="filter.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @TotalPage = "pagination.totalPage = $event"
-                      @totalCountResponse = "pagination.totalCountResponse = $event"
-                      @setParametersToPagination ="dynamicDataToSearch = $event"          
-                      />
-                    </v-col>
-                </template>
-
+          
               </div> 
                 <template v-if="table.loading" >
                  <loader-line />
@@ -367,21 +357,19 @@
                     ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
-                    @setCountPagination="pagination = $event"
-                    @dynamicDataToSearch="dynamicDataToSearch = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    :urlTryPagination="urlTryPagination"
                     :dataResponseDB="table.dataResponseDB" 
-                    @setAfterDataResponse="table.dataResponseDB = $event"
-                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
-                    
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
+                    :urlTryPagination="urlTryPagination"
                     @setFlagFiltering ="filter.filtering = $event"
-                    @restoreOldDataResponse="table.dataResponseDB = $event"
-                    @restoreOldPagination="pagination = $event"
-                    @restoreOldParametersToCall="dynamicDataToSearch = $event"
+                    @setAfterDataResponse="table.dataResponseDB = $event"
+                    @setPagination="pagination = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
                     @restoreUrlPagination="urlTryPagination = $event"
+                    @restoreOldPagination="pagination = $event"
+                    @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
+                    @restoreOldDataResponse="table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     />
                 </template>
 
@@ -390,7 +378,7 @@
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
                       :url_actions="url_actions"
-                      :dynamicDataToSearch="dynamicDataToSearch"
+                      :parametersDynamicToPaginate="parametersDynamicToPaginate"
                       />
                     </v-row>
                   </div>
@@ -412,7 +400,7 @@
                   <loader-line />
                 </template>
   
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table.display && pagination.display">
+                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -421,8 +409,8 @@
                     @setFromRow="pagination.fromRow = $event"
                     @updateDataResponseDB="table.dataResponseDB = $event"
                     @showLoaderLine="loaderLine =  $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
+                    @updateDynamicParametersToCall="parametersDynamicToPaginate = $event"
                     @restauratePagination="pagination = $event"
                     />
                 </template>
@@ -485,80 +473,84 @@
                 },
                 formRangeNumberAndWord : {
                     display : true,
-                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countPostalCodeRangeAndCountry',
-                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
-                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterByWordByPostalCodeRangeAndCountry',
-                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
+                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
+                    },
                     subheader: false,
-                    filteringSearchWord : true,
+                    filter : true,
                     export : false,
-                    pagination: true,
                     select : {
-                      display: true,
+                      display: false,
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
                       title: 'Pais'
-                    }
+                    },
+                    pagination:true
                 },
                 showAllCoverage : {
                     display : false,
-                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllCoverage',
-                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllCoverage',
-                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterCoverage',
-                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage',
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllCoverage',
+                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage',
+                    },
                     subheader: false,
-                    filteringSearchWord : true,
+                    filter : true,
                     export : false,
                     select : {
                       display: false,
                       url : '',
                       title: ''
-                    }
+                    },
+                    pagination:true
                     
                 },
                 showAllEmptyCoverage : {
                     display : false,
-                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllEmptyCoverage',
-                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllEmptyCoverage',
-                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterEmptyCoverage',
-                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage',
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllEmptyCoverage',
+                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage',
+                    },
                     subheader: false,
-                    filteringSearchWord : true,
+                    filter : true,
                     export : false,
                     select : {
                       display: false,
                       url : '',
                       title: ''
-                    }
+                    },
+                    pagination:true
                 },
                 showAllHistory : {
                     display : false,
-                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllHistoryCoverage',
-                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
-                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterAllHistoryCoverage',
-                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
+                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
+                    },
                     subheader: false,
-                    filteringSearchWord : true,
+                    filter : true,
                     export : false,
                     select : {
                       display: false,
                       url : '',
                       title: ''
-                    }
+                    },
+                    pagination:true
                 },
                 showZoneByUser : {
-                    display : false,
-                    base_url_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countAllHistoryCoverage',
-                    base_url_data : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
-                    filter_count : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=countFilterAllHistoryCoverage',
-                    filter_get : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
+                    display : true,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
+                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
+                    },
                     subheader: false,
-                    filteringSearchWord : true,
+                    filter : true,
                     export : false,
                     select : {
-                      display: true,
+                      display: false,
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
                       title: 'Usuario'
-                    }
+                    },
+                    pagination:true
                 },
                 itemsButtons:[
                     { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
@@ -589,7 +581,7 @@
                     fromRow:0,
                     limit:10
                 },
-                dynamicDataToSearch : [],
+                parametersDynamicToPaginate : [],
                 loaderLine: false,
                 columns: [
                    
@@ -624,11 +616,10 @@
                 },
                 filter : {
                     display: false,
-                    dynamicDataToFilter : [],
-                    url_searchCountController: '',
-                    url_searchGetDataController: '',
-                    filtering: false,
-                    reset: false
+                    parameters : [],
+                    url:'',
+                    reset: false,
+                    pagination : true
                 },
                 snackbar :{
                   snack : false,
@@ -731,6 +722,7 @@
               this.showAllEmptyCoverage.display = false
               this.formRangeNumberAndWord.display = true
               this.showAllHistory.display = false
+              
             this.$nextTick(() => {
               this.itemsButtons[0].active = false //todo
               this.itemsButtons[1].active = true //rangeNumber

@@ -535,8 +535,8 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND c.postal_code >= '$cp_start' AND c.postal_code <= '$cp_end'
-            AND c.id_country = '$id_country' GROUP BY c.id limit $fromRow,$limit;";
+            WHERE c.status='active' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
+            AND c.id_country = '$id_country' GROUP BY c.id ORDER BY  c.postal_code ASC limit $fromRow,$limit;";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -640,7 +640,7 @@ class cobertura{
             MATCH (co.country) 
             AGAINST ('$filter') 
             )
-            and c.status = 'active' and c.postal_code >= '$cp_start' and c.postal_code <= '$cp_end' and c.id_country = '$id_country'
+            and c.status = 'active' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
             GROUP BY c.id ORDER BY  c.postal_code ASC limit $fromRow,$limit";
 
             $exe = $this->db->query($sql);

@@ -311,13 +311,9 @@ class Notice{
         WHERE   ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
         AGAINST ('$filterClean' IN BOOLEAN MODE) )";
 
-        $countNoticeByWord = $this->db->query($sql);
-        if($countNoticeByWord && $countNoticeByWord->fetch_object()->count > 0){
-            $result = $countNoticeByWord;
-        }else {
-            $result = false;
-        }
-
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
     }
 
@@ -439,7 +435,7 @@ class Notice{
 
     //DATA NOTICES
 
-    public function noticeByWord(){
+    public function getNoticeByWord(){
 
         $word = !empty($this->getWord()) ? $this-> getWord(): false ;
         $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
@@ -468,17 +464,14 @@ class Notice{
         AGAINST ('$filterClean' IN BOOLEAN MODE) ) GROUP BY n.id 
         ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
 
-        $noticeByWord = $this->db->query($sql);
-        if($noticeByWord && $noticeByWord->num_rows>0){
-            $result = $noticeByWord;
-
-        }else {
-            $result = false;
-        }
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
+
     }
 
-    public function noticeRangeDate(){
+    public function getNoticeRangeDate(){
 
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
         $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
@@ -655,6 +648,7 @@ class Notice{
         inner join users u ON u.id = n.id_user
         WHERE ( MATCH (n.aviso,n.contacto,n.country,n.identificacion,n.lat,n.lng,n.means)
         AGAINST ('$filterClean' IN BOOLEAN MODE) ) GROUP BY n.id ORDER BY n.created_at";
+
         
         $getDataManagementExportByWord = $this->db->query($sql);
         if($getDataManagementExportByWord->num_rows>0){

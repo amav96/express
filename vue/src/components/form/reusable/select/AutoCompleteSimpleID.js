@@ -61,6 +61,7 @@ Vue.component('select-auto-complete-simple-id', {
                     const data = res.data
                     this.items = data
                     this.data = data
+
                 })
                 .catch(err => {
                     console.log(err)

@@ -28,6 +28,7 @@
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js?v=12052021"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js?v=12052021"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 
 
 <!-- pagination component -->
@@ -102,34 +103,31 @@
                   @clearingError="error = $event"
                   />
                 </transition>
+
                 <template v-if="formId">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-search-word
-                      :searchByWord="searchByWord"
+                      :resources="searchByWord"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
                       @totalCountResponse = "pagination.totalCountResponse = $event"
                       @TotalPage = "pagination.totalPage = $event"
-                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                      @response="dataResponseDB = $event"
-                      @loadingTable="loadingTable = $event"
-                      @showTable="table = $event"
-                      @urlTryPagination="urlTryPagination = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
-                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event"
-                      :pagination="pagination"
-                      :subheaders="subheaders"
-                      :base_url_header="base_url_header"
-                      :filter="filter"
-                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
-                      @setUrlSearchController="filter.url_searchCountController = $event"
-                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @setUrlFilter="filter.url = $event"
                       @filtering="filter.filtering = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                      @setDisplayHeaders="subheaders.active = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"   
                       />
                     </v-col>
                 </template>
@@ -137,105 +135,93 @@
                 <template v-if="formRangeDate">
                   <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
                     <form-search-date
-                    :searchByRangeDate="searchByRangeDate"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="dataResponseDB = $event"
-                    @loadingTable="loadingTable = $event"
-                    @showTable="table = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setErrorGlobal="error = $event"
-                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                    @setSubHeadersLoader="subheaders.loader = $event"
-                    :pagination="pagination"
-                    :subheaders="subheaders"
-                    :base_url_header="base_url_header"
-                    :filter="filter"
-                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    @setDisplayHeaders="subheaders.active = $event"
-                    @setPaginateDisplay="pagination.display = $event"
+                      :resources="searchByRangeDate"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
+                      @filtering="filter.filtering = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"   
                     />
                     </v-col>
                 </template>
-  
+
+                
                 <template v-if="formWordAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
                     <form-search-by-word-and-range-date 
-                    :searchByWordAndRangeDate="searchByWordAndRangeDate"
-                    :base_url_data_select="base_url_data_select" 
-                    @childrenProcessDataSelect="processDataSelect($event)"
-                    :dataSelect="dataSelect"
-                    :showDataSelect="showDataSelect"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="dataResponseDB = $event"
-                    @loadingTable="loadingTable = $event"
-                    @showTable="table = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setErrorGlobal="error = $event"
-                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                    @setSubHeadersLoader="subheaders.loader = $event"
-                    :pagination="pagination"
-                    :subheaders="subheaders"
-                    :base_url_header="base_url_header"
-                    :filter="filter"
-                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
-                    @setDisplayHeaders="subheaders.active = $event"
-                    @setPaginateDisplay="pagination.display = $event"
-
+                      :resources="searchByWordAndRangeDate"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
+                      @filtering="filter.filtering = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"   
                       />
                       </v-col>
                 </template>  
-
               </div> 
 
                 <template v-if="loadingTable" >
                  <loader-line />
                 </template>
                 
-                <template v-if="filter.display">
+                <template v-if="table.display && filter.display">
                     <filter-with-pagination
+                    ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
-                    @setCountPagination="pagination = $event"
-                    @dynamicDataToSearch="dynamicDataToSearch = $event"
-                    @urlTryPagination="urlTryPagination = $event"
+                    :dataResponseDB="table.dataResponseDB" 
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
                     :urlTryPagination="urlTryPagination"
-                    :dataResponseDB="dataResponseDB" 
-                    @setAfterDataResponse="dataResponseDB = $event"
-                    @restoreBeforeDataResponse="dataResponseDB = $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
                     @setFlagFiltering ="filter.filtering = $event"
-                    @restoreOldDataResponse="dataResponseDB = $event"
-                    @restoreOldPagination="pagination = $event"
-                    @restoreOldParametersToCall="dynamicDataToSearch = $event"
+                    @setAfterDataResponse="table.dataResponseDB = $event"
+                    @setPagination="pagination = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
+                    @setParametersToExport="exportExcel.parameters = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
+                    @restoreOldPagination="pagination = $event"
+                    @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
+                    @restoreOldDataResponse="table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     />
                 </template>
 
-                <template v-if="table && displayExportFromComponentAccesores">
+                <template v-if="table.display && exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
                       :url_actions="url_actions"
-                      :dynamicDataToSearch="dynamicDataToSearch"
+                      :exportExcel="exportExcel"
                       />
                     </v-row>
                   </div>
@@ -244,21 +230,20 @@
 
                 <template>
                     <v-btn
-                      v-if="table"
+                      v-if="table.display"
                       >
                       Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
                     </v-btn>
                 </template>
         
-                <template v-if="table">
+                <template v-if="table.display">
                     <table-avisos
                       :admin="admin"
-                      :dataResponseDB="dataResponseDB" 
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
                       :url_actions="url_actions"
-                      @updateDelete="dataResponseDB = $event"
+                      @updateDelete="table.dataResponseDB = $event"
                     />
                 </template>
 
@@ -266,17 +251,17 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table && pagination.display">
+                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
                     :loaderLine="loaderLine"
                     @setPageCurrent= "pagination.pageCurrent = $event"
                     @setFromRow="pagination.fromRow = $event"
-                    @updateDataResponseDB="dataResponseDB = $event"
+                    @updateDataResponseDB="table.dataResponseDB = $event"
                     @showLoaderLine="loaderLine =  $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
+                    @updateDynamicParametersToCall="parametersDynamicToPaginate = $event"
                     @restauratePagination="pagination = $event"
                     />
                 </template>
@@ -291,37 +276,71 @@
               formWordAndRangeDate:false,
               dataSelect:[],
               searchByWord : {
-                filteringSearchWord : false, 
-                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeByWord',
-                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeByWord',
-                export : true,
-                subheader : false
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'noticeController.php?notice=getNoticeByWord',
+                      getDataFilter: '',
+                    },
+                    subheader: false,
+                    filter : false,
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                    },
+                    select : {
+                      display: false,
+                      url : '',
+                      title: ''
+                    },
+                    pagination:true
               },
               searchByRangeDate : {
-                filteringSearchWord : true, 
-                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDate',
-                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDate',
-                export : true,
-                subheader : false
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'noticeController.php?notice=getNoticeRangeDate',
+                      getDataFilter: '',
+                    },
+                    subheader: false,
+                    filter : false,
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                    },
+                    select : {
+                      display: false,
+                      url : '',
+                      title: ''
+                    },
+                    pagination:true
                
               },
               searchByWordAndRangeDate: {
-                filteringSearchWord : true, 
-                base_url_count : API_BASE_CONTROLLER + 'noticeController.php?notice=countNoticeRangeDateAndWord',
-                base_url_data : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
-                export : true,
-                subheader : false 
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
+                      getDataFilter: '',
+                    },
+                    subheader: false,
+                    filter : false,
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
+                      title: 'Recolector'
+                    },
+                    pagination:true
               },
-              base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
               base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=countFilterSearchController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=getDataSearchWordNoticeController',
               url_actions : {
-                export : API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
-                download_excel : API_BASE_EXCEL,
-                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
                 showInvoice : API_BASE_URL + 'equipo/remito',
                 status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                download_excel : API_BASE_EXCEL,
               },
               urlTryPagination:'',
               pagination : {
@@ -333,9 +352,25 @@
                   fromRow:0,
                   limit:10
               },
-              dynamicDataToSearch : [],
+              parametersDynamicToPaginate : [],
+              subheaders : {
+                active : false,
+                dataResponseDB : [],
+                loader : false
+              },
+              filter : {
+                display: false,
+                    parameters : [],
+                    url:'',
+                    reset: false,
+                    pagination : true
+              },
+              exportExcel : {
+                display : false,
+                parameters:[],
+                url : ''
+              },
               loaderLine: false,
-              dataResponseDB: [],
               columns: [
                 { text: 'Detalle'},
                 { text: 'Aviso'},
@@ -348,8 +383,11 @@
                 { text: 'Fecha'},
               ],
               loadingTable : false,
-              table: false,
-              displayExportFromComponentAccesores :false,
+              table : {
+                    display : false,
+                    loading: false,
+                    dataResponseDB: []
+                },
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [
@@ -365,18 +403,7 @@
                 text: null,
                 time: null
               },
-              subheaders : {
-                active : false,
-                dataResponseDB : [],
-                loader : false
-              },
-              filter : {
-                display: false,
-                dynamicDataToFilter : [],
-                url_searchCountController: '',
-                url_searchGetDataController: '',
-                filtering: false
-              },
+              
             }
         },
         methods:{
@@ -445,8 +472,8 @@
               this.itemsButtons[1].active = false
               this.itemsButtons[2].active = false
 
-              if(this.table){
-                this.table= false
+              if(this.table.display){
+                this.table.display= false
                 this.filter.display= false
               }
           },
@@ -460,8 +487,8 @@
               this.itemsButtons[1].active = true
               this.itemsButtons[2].active = false
         
-              if(this.table){
-                this.table= false
+              if(this.table.display){
+                this.table.display= false
                 this.filter.display= false
               } 
           },
@@ -476,8 +503,8 @@
             this.itemsButtons[2].active = true
            
 
-            if(this.table){
-              this.table= false
+            if(this.table.display){
+              this.table.display= false
               this.filter.display= false
             }
           },

@@ -3,7 +3,7 @@ Vue.component('filter-with-pagination', {
         `
         <div>
             <v-container>
-            <v-form @submit.prevent="tryCountSearch" id="form-search">
+            <v-form @submit.prevent="tryFilter" id="form-search">
                 <v-row>
                     <v-col cols="12"md="4">
                         <v-text-field
@@ -44,10 +44,9 @@ Vue.component('filter-with-pagination', {
               ></v-progress-linear>
             </v-form>
             </v-container>
-
         </div>
     `,
-    props: ['filter', 'pagination', 'dataResponseDB', 'dynamicDataToSearch', 'urlTryPagination'],
+    props: ['filter', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination'],
     data() {
         return {
             data: '',
@@ -57,7 +56,8 @@ Vue.component('filter-with-pagination', {
             oldUrl: [],
             oldPagination: [],
             alert_flag: false,
-            loaderFilter: false
+            loaderFilter: false,
+            activate: false
         }
     },
     methods: {
@@ -68,20 +68,19 @@ Vue.component('filter-with-pagination', {
                 this.$nextTick(resolve)
             })
         },
-        tryCountSearch() {
+        async tryFilter() {
+            // este activate es para detectar cuando realizar una busqueda realmente,
+            // asi al momento de restaurar la data, no restaura a cada rato
+            this.activate = true
             this.loaderFilter = true
-            const dynamicData = JSON.parse(JSON.stringify(this.filter.dynamicDataToFilter))
+            const parameters = JSON.parse(JSON.stringify(this.filter.parameters))
             const buildFilter = { filter: this.data }
-            this.objectFilter = {...dynamicData, ...buildFilter }
+            this.objectFilter = {...parameters, ...buildFilter }
             const dataRequest = this.objectFilter
-            const url = this.filter.url_searchCountController
-            axios.get(url, {
-                    params: {
-                        dataRequest
-                    }
-                })
-                .then(res => {
 
+            const url = this.filter.url
+            await axios.get(url, { params: { dataRequest } })
+                .then(res => {
                     if (res.data.error) {
                         this.loaderFilter = false
                         this.alert_flag = true
@@ -89,94 +88,75 @@ Vue.component('filter-with-pagination', {
                             this.alert_flag = false
                         }, 3000);
                         return
-                    } else {
-
-                        //    settins value before the update
-                        if (this.filter.filtering) {
-                            this.oldParametersToCall = this.dynamicDataToSearch
-                            this.oldUrl = this.urlTryPagination
-                                //setting values for pagination before to fetch new count 
-                            this.oldPagination = this.pagination
-                        }
-
-                        // settings values for pagination after to fetch count
-                        const totalCountResponse = parseInt(res.data.count)
-                        const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-
-                        const pagination = {
-                            display: true,
-                            totalPage,
-                            rowForPage: 10,
-                            pageCurrent: 1,
-                            totalCountResponse,
-                            fromRow: 0,
-                            limit: 10
-                        }
-
-                        //  settings url to fetch from pagination
-                        this.$emit('urlTryPagination', this.filter.url_searchGetDataController)
-
-                        this.emit('setCountPagination', pagination)
-                            .then(() => {
-
-                                this.getFilter();
-                            })
                     }
-                })
-                .catch(err => {
-                    this.loaderFilter = false
-                    console.log(err)
-                })
-        },
-        getFilter() {
-            // tengo que pedir datos al controlador de datos. Cuando devuelva datos tengo que setear la 
-            // dynamicDataToSearch del componente pagination
-            const url = this.filter.url_searchGetDataController
-            const pagination = {
-                fromRow: this.pagination.fromRow,
-                limit: this.pagination.limit
-            }
-            const dynamicDataToSearch = this.objectFilter
-            const dataRequest = {...pagination, ...dynamicDataToSearch }
-            this.$emit('dynamicDataToSearch', dataRequest)
-            axios.get(url, {
-                    params: {
-                        dataRequest
-                    }
-                })
-                .then(res => {
-                    if (this.filter.filtering) {
-                        this.oldDataResponseDB = this.dataResponseDB
-                        this.$emit('setFlagFiltering', false)
-                    }
+
+                    this.oldParametersToCall = this.parametersDynamicToPaginate
+                    this.oldUrl = this.urlTryPagination
+                        //setting values for pagination before to fetch new count 
+                    this.oldPagination = this.pagination
+                    this.oldDataResponseDB = this.dataResponseDB
+                    this.$emit('setFlagFiltering', false)
                     const newDataResponse = res.data
                     this.$emit('setAfterDataResponse', newDataResponse)
                     this.loaderFilter = false
 
+                    //PAGINATION
+                    if (this.filter.pagination) {
+                        this.$pagination(res)
+                    }
+
                 })
                 .catch(err => {
-                    console.log(err)
                     this.loaderFilter = false
+                    console.log(err)
                 })
         },
+
         resetFilter() {
 
             this.oldDataResponseDB = []
-        }
+        },
+        $pagination(res) {
+            // settings values for pagination after to fetch count
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            const pagination = {
+                display: true,
+                totalPage,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+
+            this.emit('setPagination', pagination)
+            this.$emit('urlTryPagination', this.filter.url)
+
+            //seteo los parametros de la paginacion 
+            const parametersDynamicToPagination = {
+                filter: this.data,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
     },
     watch: {
         data(value) {
             if (value === '') {
-                if (this.oldDataResponseDB.length > 0) {
-                    this.$emit('restoreUrlPagination', this.oldUrl)
-                    this.$emit('restoreOldPagination', this.oldPagination)
-                    this.$emit('restoreOldParametersToCall', this.oldParametersToCall)
-                    this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
-                    this.$emit('setFlagFiltering', true)
+                if (this.activate) {
+                    if (Object.keys(this.oldDataResponseDB).length > 0) {
+                        this.$emit('restoreUrlPagination', this.oldUrl)
+                        this.$emit('restoreOldPagination', this.oldPagination)
+                        this.$emit('restoreOldParametersToCall', this.oldParametersToCall)
+                        this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
+                        this.$emit('setFlagFiltering', true)
+                    }
+                    this.activate = false
                 }
             }
         },
-
     },
 
     destroyed() {
