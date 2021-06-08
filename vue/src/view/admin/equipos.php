@@ -107,31 +107,28 @@
                 <template v-if="formEquipos">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-search-word
-                      :searchByWord="searchEquiposByWord"
+                      :resources="searchEquiposByWord"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
                       @totalCountResponse = "pagination.totalCountResponse = $event"
                       @TotalPage = "pagination.totalPage = $event"
-                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                      @response="dataResponseDB = $event"
-                      @loadingTable="loadingTable = $event"
-                      @showTable="table = $event"
-                      @urlTryPagination="urlTryPagination = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
-                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event"
-                      :pagination="pagination"
-                      :subheaders="subheaders"
-                      :base_url_header="base_url_header"
-                      :filter="filter"
-                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
-                      @setUrlSearchController="filter.url_searchCountController = $event"
-                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @setUrlFilter="filter.url = $event"
                       @filtering="filter.filtering = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event" 
                       @setDisplayHeaders="subheaders.active = $event"
-                      @setPaginateDisplay="pagination.display = $event"
                       />
                     </v-col>
                 </template>
@@ -139,63 +136,60 @@
                 <template v-if="formId">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-search-word
-                      :searchByWord="searchByWord"
+                      :resources="searchByWord"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
                       @totalCountResponse = "pagination.totalCountResponse = $event"
                       @TotalPage = "pagination.totalPage = $event"
-                      @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                      @response="dataResponseDB = $event"
-                      @loadingTable="loadingTable = $event"
-                      @showTable="table = $event"
-                      @urlTryPagination="urlTryPagination = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
-                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event"
-                      :pagination="pagination"
-                      :subheaders="subheaders"
-                      :base_url_header="base_url_header"
-                      :filter="filter"
-                      :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                      :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
-                      @setUrlSearchController="filter.url_searchCountController = $event"
-                      @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                      @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
+                      @setUrlFilter="filter.url = $event"
                       @filtering="filter.filtering = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event" 
                       @setDisplayHeaders="subheaders.active = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      
                       />
                     </v-col>
                 </template>
 
+                {{parametersDynamicToPaginate}}
+
                 <template v-if="formRangeDate">
                   <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
                     <form-search-date
-                    :searchByRangeDate="searchByRangeDate"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="dataResponseDB = $event"
-                    @loadingTable="loadingTable = $event"
-                    @showTable="table = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setErrorGlobal="error = $event"
-                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                    @setSubHeadersLoader="subheaders.loader = $event"
-                    :pagination="pagination"
-                    :subheaders="subheaders"
-                    :base_url_header="base_url_header"
-                    :filter="filter"
-                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    @setDisplayHeaders="subheaders.active = $event"
-                    @setPaginateDisplay="pagination.display = $event"
+                      :resources="searchByRangeDate"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
+                      @filtering="filter.filtering = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"   
+                      @setDisplayHeaders="subheaders.active = $event"
                     />
                     </v-col>
                 </template>
@@ -238,48 +232,50 @@
                 </template>  
 
               </div> 
-                <template v-if="loadingTable" >
+
+              <template v-if="table.loading" >
                  <loader-line />
                 </template>
-
+            
                 <template v-if="subheaders.loader" >
                  <loader-line />
                 </template>
 
-                <template v-if="table && subheaders.active ">
+                <template v-if="table.display && subheaders.active ">
                     <sub-headers
                     @setDisplayHeaders="subheaders.active = $event"
                     :subheaders="subheaders"
                     />
                 </template>
-          
-                <template v-if="filter.display">
+
+                <template v-if="table.display && filter.display">
                     <filter-with-pagination
+                    ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
-                    @setCountPagination="pagination = $event"
-                    @dynamicDataToSearch="dynamicDataToSearch = $event"
-                    @urlTryPagination="urlTryPagination = $event"
+                    :dataResponseDB="table.dataResponseDB" 
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
                     :urlTryPagination="urlTryPagination"
-                    :dataResponseDB="dataResponseDB" 
-                    @setAfterDataResponse="dataResponseDB = $event"
-                    @restoreBeforeDataResponse="dataResponseDB = $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @restoreDynamicDataToSearch="dynamicDataToSearch = $event"
                     @setFlagFiltering ="filter.filtering = $event"
-                    @restoreOldDataResponse="dataResponseDB = $event"
-                    @restoreOldPagination="pagination = $event"
-                    @restoreOldParametersToCall="dynamicDataToSearch = $event"
+                    @setAfterDataResponse="table.dataResponseDB = $event"
+                    @setPagination="pagination = $event"
+                    @urlTryPagination="urlTryPagination = $event"
+                    @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
+                    @setParametersToExport="exportExcel.parameters = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
+                    @restoreOldPagination="pagination = $event"
+                    @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
+                    @restoreOldDataResponse="table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     />
                 </template>
 
-                <template v-if="table && displayExportFromComponentAccesores">
+                <template v-if="table.display && exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
                       :url_actions="url_actions"
-                      :dynamicDataToSearch="dynamicDataToSearch"
+                      :exportExcel="exportExcel"
                       />
                     </v-row>
                   </div>
@@ -287,21 +283,21 @@
 
                 <template>
                     <v-btn
-                      v-if="table"
+                      v-if="table.display"
                       >
                       Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
                     </v-btn>
                 </template>
         
-                <template v-if="table">
+                <template v-if="table.display">
                     <table-equipos
                       :admin="admin"
-                      :dataResponseDB="dataResponseDB" 
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
                       :url_actions="url_actions"
-                      @updateDelete="dataResponseDB = $event"
+                      @updateDelete="table.dataResponseDB = $event"
+                      :t="t"
                     />
                 </template>
 
@@ -309,17 +305,17 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage !== null && pagination.totalPage >0 && table && pagination.display">
+                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
                     :loaderLine="loaderLine"
                     @setPageCurrent= "pagination.pageCurrent = $event"
                     @setFromRow="pagination.fromRow = $event"
-                    @updateDataResponseDB="dataResponseDB = $event"
+                    @updateDataResponseDB="table.dataResponseDB = $event"
                     @showLoaderLine="loaderLine =  $event"
-                    :dynamicDataToSearch="dynamicDataToSearch"
-                    @updateDynamicParametersToCall="dynamicDataToSearch = $event"
+                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
+                    @updateDynamicParametersToCall="parametersDynamicToPaginate = $event"
                     @restauratePagination="pagination = $event"
                     />
                 </template>
@@ -334,26 +330,79 @@
               formWordAndRangeDate:false,
               dataSelect:[],
               searchEquiposByWord: {
-                filteringSearchWord : false,
-                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countEquiposByWord',
-                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=equiposByWord',
-                export : false,
-                subheader : false
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getEquiposByWord',
+                      getDataFilter: '',
+                    },
+                    subheader: false,
+                    filter : false,
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
+                    select : {
+                      display: false,
+                      url : '',
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true,
               },
               searchByWord : {
-                filteringSearchWord : false, 
-                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWord',
-                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionByWord',
-                export : true,
-                subheader : true
-                
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionByWord',
+                      getDataFilter: '',
+                    },
+                    subheader: {
+                      display : true,
+                      url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
+                    },
+                    filter : false,
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                      url_filter: '',
+                    },
+                    select : {
+                      display: false,
+                      url : '',
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true,
               },
               searchByRangeDate : {
-                filteringSearchWord : true, 
-                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionRangeDate',
-                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionRangeDate',
-                export : true,
-                subheader : true
+                display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionRangeDate',
+                      getDataFilter: API_BASE_CONTROLLER + 'equipoController.php?equipo=getFilterGestionRangeDateAndFilter',
+                    },
+                    subheader: {
+                      display : true,
+                      url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
+                    },
+                    filter : true,
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                      url_filter: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                    },
+                    select : {
+                      display: false,
+                      url : '',
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true,
                
               },
               searchByWordAndRangeDate: {
@@ -365,11 +414,9 @@
                 
               },
               base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
-              base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
               base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countFilterSearchController',
               base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
               url_actions : {
-                export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
                 download_excel : API_BASE_EXCEL,
                 delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
                 showInvoice : API_BASE_URL + 'equipo/remito',
@@ -389,9 +436,26 @@
                   fromRow:0,
                   limit:10
               },
-              dynamicDataToSearch : [],
+              parametersDynamicToPaginate : [],
+              subheaders : {
+                active : false,
+                dataResponseDB : [],
+                loader : false
+              },
+              filter : {
+                display: false,
+                    parameters : [],
+                    url:'',
+                    reset: false,
+                    pagination : true
+              },
+              exportExcel : {
+                display : false,
+                parameters:[],
+                url : ''
+              },
               loaderLine: false,
-              dataResponseDB: [],
+              loadingTable : false,
               columns: [
                 { text: 'Aviso visita'},
                 { text: 'Identificacion'},
@@ -423,8 +487,11 @@
                 // contacto
                 // fecha_aviso_visita
               ],
-              loadingTable : false,
-              table: false,
+              table : {
+                    display : false,
+                    loading: false,
+                    dataResponseDB: []
+                },
               displayExportFromComponentAccesores :false,
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
@@ -441,18 +508,7 @@
                 text: null,
                 time: null
               },
-              subheaders : {
-                active : false,
-                dataResponseDB : [],
-                loader : false
-              },
-              filter : {
-                display: false,
-                dynamicDataToFilter : [],
-                url_searchCountController: '',
-                url_searchGetDataController: '',
-                filtering: false
-              },
+              t: 'gestion'
             }
         },
         methods:{
@@ -516,14 +572,15 @@
             this.formId = false
             this.formRangeDate = false
             this.formWordAndRangeDate = false
+            this.t= 'equipos'
               
               this.itemsButtons[0].active = true
               this.itemsButtons[1].active = false
               this.itemsButtons[2].active = false
               this.itemsButtons[3].active = false
-
-              if(this.table){
-                this.table= false
+              
+              if(this.table.display.display){
+                this.table.display= false
                 this.filter.display= false
                 this.subheaders.loader = false
               }
@@ -535,14 +592,15 @@
               this.formId = true
               this.formRangeDate = false
               this.formWordAndRangeDate = false
+              this.t= 'gestion'
             
               this.itemsButtons[0].active = false
               this.itemsButtons[1].active = true
               this.itemsButtons[2].active = false
               this.itemsButtons[3].active = false
 
-              if(this.table){
-                this.table= false
+              if(this.table.display){
+                this.table.display= false
                 this.filter.display= false
                 this.subheaders.loader = false
               }
@@ -552,14 +610,15 @@
               this.formId = false
               this.formRangeDate = true
               this.formWordAndRangeDate = false
+              this.t= 'gestion'
 
               this.itemsButtons[0].active = false
               this.itemsButtons[1].active = false
               this.itemsButtons[3].active = false
               this.itemsButtons[2].active = true
             
-              if(this.table){
-                this.table= false
+              if(this.table.display){
+                this.table.display= false
                 this.filter.display= false
                 this.subheaders.loader = false
             }
@@ -570,14 +629,15 @@
             this.formId = false
             this.formRangeDate = false
             this.formWordAndRangeDate = true
+            this.t= 'gestion'
 
             this.itemsButtons[0].active = false
             this.itemsButtons[1].active = false
             this.itemsButtons[2].active = false
             this.itemsButtons[3].active = true
 
-            if(this.table){
-                this.table= false
+            if(this.table.display){
+                this.table.display= false
                 this.filter.display= false
                 this.subheaders.loader = false
             }

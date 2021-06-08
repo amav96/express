@@ -127,7 +127,7 @@
                       @filtering="filter.filtering = $event"
                       @urlTryPagination="urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event"   
+                      @setSubHeadersLoader="subheaders.loader = $event"     
                       />
                     </v-col>
                 </template>
@@ -190,7 +190,7 @@
                 </template>  
               </div> 
 
-                <template v-if="loadingTable" >
+                <template v-if="table.loading" >
                  <loader-line />
                 </template>
                 
@@ -225,17 +225,8 @@
                       />
                     </v-row>
                   </div>
-                 
                 </template>
 
-                <template>
-                    <v-btn
-                      v-if="table.display"
-                      >
-                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
-                    </v-btn>
-                </template>
-        
                 <template v-if="table.display">
                     <table-avisos
                       :admin="admin"
@@ -328,14 +319,14 @@
                     },
                     select : {
                       display: false,
-                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
-                      title: 'Recolector'
+                      url : API_BASE_CONTROLLER + 'noticeController.php?notice=getAllUserCollectorAndCommerce',
+                      title: 'Usuario',
+                      class: 'mx-4',
+                      outlined: false,
+                      dense: false
                     },
                     pagination:true
               },
-              base_url_header: API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion',
-              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=countFilterSearchController',
-              base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'noticeController.php?notice=getDataSearchWordNoticeController',
               url_actions : {
                 showInvoice : API_BASE_URL + 'equipo/remito',
                 status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
@@ -382,12 +373,11 @@
                 { text: 'Lng'},
                 { text: 'Fecha'},
               ],
-              loadingTable : false,
               table : {
                     display : false,
                     loading: false,
                     dataResponseDB: []
-                },
+              },
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [

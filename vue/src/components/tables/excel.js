@@ -54,7 +54,6 @@ Vue.component('excel-export', {
                     }
                 })
                 .then(res => {
-
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 54")
                         return

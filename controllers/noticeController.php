@@ -772,48 +772,32 @@ class noticeController
       $dateStart = !empty($request->dateStart) ? $request->dateStart : false;
       $dateEnd = !empty($request->dateEnd) ? $request->dateEnd : false;
       $word = !empty($request->word) ? $request->word : false;
-
       $fromRow = $request->fromRow;
       $limit = $request->limit;
 
-      $noticeRangeDateAndWord = new Notice();
-      $noticeRangeDateAndWord->setDateStart($dateStart);
-      $noticeRangeDateAndWord->setDateEnd($dateEnd);
-      $noticeRangeDateAndWord->setWord($word);
-      $noticeRangeDateAndWord->setFromRow($fromRow);
-      $noticeRangeDateAndWord->setLimit($limit);
-      $noticeRangeDateAndWord = $noticeRangeDateAndWord->noticeRangeDateAndWord();
+     
 
-      if (is_object($noticeRangeDateAndWord)) {
+      $get = new Notice();
+      $get->setDateStart($dateStart);
+      $get->setDateEnd($dateEnd);
+      $get->setWord($word);
+      $get->setFromRow($fromRow);
+      $get->setLimit($limit);
 
-        foreach ($noticeRangeDateAndWord as $element)
-
-          $objeto[] = array(
-            'success' => true,
-            'id' => $element["id"],
-            'direccion' => $element["direccion"],
-            'localidad' => $element["localidad"],
-            'provincia' => $element["provincia"],
-            'nombre_cliente' => $element["nombre_cliente"],
-            'aviso' => $element["aviso"],
-            'contacto' => $element["contacto"],
-            'country' => $element["country"],
-            'id_user' => $element["id_user"],
-            'name' => $element["name"],
-            'identificacion' => $element["identificacion"],
-            'latAviso' => $element["latAviso"],
-            'lngAviso' => $element["lngAviso"],
-            'means' => $element["means"],
-            'fecha_aviso_visita' => $element["created_at"],
-          );
-      } else {
-        $objeto[] = array(
-          'error' => true,
-        );
+      $count = $get->countNoticeRangeDateAndWord();
+      if($count){
+          $data = $get->getNoticeRangeDateAndWord();
+          if($data){
+              $this->showNotice($count,$data);
+          }else{
+              $object=array('error' => true);
+              $jsonstring = json_encode($object); echo $jsonstring;
+          }
+      }else{
+          $object=array('error' => true);
+          $jsonstring = json_encode($object); echo $jsonstring;
       }
 
-      $jsonstring = json_encode($objeto);
-      echo $jsonstring;
     }
   }
 
@@ -1143,6 +1127,34 @@ class noticeController
         return '';
     }
   }
+
+  // SCOPE
+
+  public function getAllUserCollectorAndCommerce(){
+    $get = new Usuario();
+    $data = $get->getAllUserCollectorAndCommerce();
+    if($data){
+        foreach ($data as $element){
+            $object[] = array(
+                'success' => true,
+                'id' => $element["id"],
+                'name_user' => $element["name_user"],
+                'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.$element["role"],
+            );
+        }
+        
+    }else {
+        $object = array(
+            'error' => true,
+        );
+
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+    
+  }
+
   // templates emails for Loops Especific
 
   public function headNoticeVisit()

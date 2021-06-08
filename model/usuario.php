@@ -1183,6 +1183,12 @@
                     return $result;
                 }
 
-                
+                public function getAllUserCollectorAndCommerce(){
+                    $sql = "SELECT id,name as 'name_user',role FROM users WHERE role in('recolector','comercio') AND status_process = 'active' order by name asc";
+
+                    $exe =  $this->db->query($sql);
+                    if($exe && $exe->num_rows>0){$result = $exe;}
+                    else {$result = false;}
+                    return $result;}
 
  }

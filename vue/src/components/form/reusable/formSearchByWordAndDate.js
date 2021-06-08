@@ -3,16 +3,17 @@ Vue.component('form-search-by-word-and-range-date', {
         <div>
             <v-card>
                 <form 
-                @submit.prevent="countSearchByWordAndRangeDate"
+                @submit.prevent="_getData"
                 id="sendFormWordAndRange"
                 class="d-flex justify-center flex-row align-center  flex-wrap ">
                     <v-container fluid>
-                   title {{resources.select.title}} <br>
-                   url {{resources.select.url}} <br>
                         <v-row align="center"  class="d-flex justify-center" >
                             <v-col class="d-flex justify-center" cols="12"  lg="4" md ="4" >
                                 <select-auto-complete-simple-id
-                                @exportVal="setSelect($event)"
+                                :classCustom="resources.select.class"
+                                :outlined="resources.select.outlined"
+                                :dense="resources.select.dense"
+                                @exportVal="$_setSelect($event)"
                                 :title="resources.select.title" 
                                 :url="resources.select.url"
                                 />
@@ -117,11 +118,13 @@ Vue.component('form-search-by-word-and-range-date', {
                             this.$emit('setParametersToFilter', parameters)
                         }
                         //EXPORT 
-                        this.resources.export ?
-                            this.$emit('setDisplayExportExcel', this.resources.export) :
-                            false;
+                        if (this.resources.export.display) {
+                            this.$exportExcel()
+                        } else {
+                            this.$emit('setExportDisplay', false)
+                        }
 
-                        this.$emit('response', res.data)
+                        this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
                         this.$emit('loadingTable', false)
                     })
@@ -210,8 +213,18 @@ Vue.component('form-search-by-word-and-range-date', {
                     console.log(err)
                 })
         },
-        $_setSelect() {
-
+        $_setSelect(data) {
+            this.word = data.id
+        },
+        $exportExcel() {
+            this.$emit('setExportDisplay', true)
+            let parameters = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+                word: this.word,
+            }
+            this.$emit('setParametersToExport', parameters)
+            this.$emit('setUrlExport', this.resources.export.url)
         }
 
     },

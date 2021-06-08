@@ -1,6 +1,4 @@
 <?php 
-
-
 class Notice{
 
     private $aviso;
@@ -327,13 +325,9 @@ class Notice{
         inner JOIN equipos e ON n.identificacion = e.identificacion
         WHERE  n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        $countNoticeRangeDate = $this->db->query($sql);
-        if($countNoticeRangeDate && $countNoticeRangeDate->fetch_object()->count > 0){
-            $result = $countNoticeRangeDate;
-        }else {
-            $result = false;
-        }
-
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
 
     }
@@ -342,20 +336,16 @@ class Notice{
 
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
         $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
-        $word = !empty($this->getId_recolector()) ? $this->getId_recolector() : false ;
+        $word = !empty($this->getWord()) ? $this->getWord() : false ;
 
         $sql = "SELECT COUNT(DISTINCT(n.id)) as 'count' FROM notice_management n
         inner JOIN users u ON u.id = n.id_user 
         inner JOIN equipos e ON n.identificacion = e.identificacion
         WHERE n.id_user = $word and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        $countNoticeRangeDateAndWord = $this->db->query($sql);
-        if($countNoticeRangeDateAndWord && $countNoticeRangeDateAndWord->fetch_object()->count > 0){
-            $result = $countNoticeRangeDateAndWord;
-        }else {
-            $result = false;
-        }
-
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
 
     }
@@ -500,7 +490,7 @@ class Notice{
         return $result;
     }
 
-    public function noticeRangeDateAndWord(){
+    public function getNoticeRangeDateAndWord(){
 
         $dateStart = !empty($this->getDateStart()) ? $this->getDateStart() : false ;
         $dateEnd = !empty($this->getDateEnd()) ? $this->getDateEnd() : false ;
@@ -519,14 +509,9 @@ class Notice{
         WHERE n.id_user =$word  and n.created_at BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')
         GROUP BY n.id ORDER BY n.created_at DESC LIMIT $fromRow, $limit";
 
-        $noticeRangeDateAndWord = $this->db->query($sql);
-        if($noticeRangeDateAndWord && $noticeRangeDateAndWord->num_rows>0){
-            $result = $noticeRangeDateAndWord;
-
-        }else {
-            $result = false;
-        }
-
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
     }
 
@@ -792,6 +777,7 @@ class Notice{
 
     }
 
+    
 
     public function addCount($email){
         

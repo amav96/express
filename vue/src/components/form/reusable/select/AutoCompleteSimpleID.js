@@ -11,9 +11,9 @@ Vue.component('select-auto-complete-simple-id', {
         item-value="id"
         :search-input.sync.trim="search"
         cache-items
-        class="mx-4"
-        outlined
-        dense
+        :class="classCustom"
+        :outlined="outlined"
+        :dense="dense"
         :label="title"
         flat
         ref="autocomplete"
@@ -31,6 +31,15 @@ Vue.component('select-auto-complete-simple-id', {
         title: {
             type: String
         },
+        outlined: {
+            type: Boolean
+        },
+        classCustom: {
+            type: String
+        },
+        dense: {
+            type: Boolean
+        }
     },
     data() {
         return {

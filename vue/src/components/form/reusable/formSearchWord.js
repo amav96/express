@@ -49,7 +49,7 @@ Vue.component('form-search-word', {
     methods: {
         async _getData() {
             try {
-                if (resources.paginate) { this.$resetPagination() }
+                this.resources.pagination ? this.$resetPagination() : false;
                 this.$emit('loadingTable', true)
                 const dataRequest = {
                     word: this.word,
@@ -67,8 +67,8 @@ Vue.component('form-search-word', {
                         //PAGINATION
                         this.resources.pagination ? this.$pagination(res) : false;
                         //SUBHEADER
-                        this.resources.subheader ?
-                            this.showStatus(this.base_url_header) :
+                        this.resources.subheader.display ?
+                            this.showStatus(this.resources.subheader.url) :
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
@@ -106,9 +106,9 @@ Vue.component('form-search-word', {
                 return;
             }
         },
-        async showStatus(base_url) {
+        async showStatus(url) {
             this.$emit('setSubHeadersLoader', true)
-            await axios.get(base_url, {
+            await axios.get(url, {
                     params: {
                         word: this.word
                     }

@@ -12,10 +12,9 @@ Vue.component('select-auto-complete-search-id', {
             item-value="id"
             :search-input.sync.trim="search"
             cache-items
-            class="mx-4"
-            outlined
+            :class="classCustom"
+            :outlined="outlined"
             dense
-            
             :label="title"
             flat
             return-object
@@ -33,7 +32,14 @@ Vue.component('select-auto-complete-search-id', {
         },
         searchID: {
             type: String
+        },
+        outlined: {
+            type: Boolean
+        },
+        classCustom: {
+            type: String
         }
+
     },
     data() {
         return {

@@ -65,9 +65,11 @@ Vue.component("table-equipos", {
                         </thead>
                         <tbody>
                             <tr 
-                           
-                            v-for="row in dataResponseDB"
+                            v-for="row in table.dataResponseDB"
                             >
+
+                            <template v-if="t === 'gestion'">
+
                             <td>
                                 <span v-if="row.contacto === '' || row.contacto === null" >
                                 </span>
@@ -83,13 +85,18 @@ Vue.component("table-equipos", {
                                 </v-btn>
                                
                             </td>
+
                             <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
                             <td><strong>{{row.estado}}</strong></td>
-                            <td><strong>{{dateFormat(row.created_at)}}</strong></td>
+                            <td><strong>{{row.created_at}}</strong></td>
                             <td>{{row.empresa}}</td>
                             <td>{{row.terminal}}</td>
                             <td>{{row.serie}}</td>
-                            <td>{{row.name}} - {{row.recolector}}</td>
+        
+                            <td>
+                            {{row.name}} - {{row.recolector}}
+                            </td>
+
                             <td>{{row.emailcliente}}</td>
                             <td>{{row.serie_base}}</td>
                             <td>{{row.tarjeta}}</td>
@@ -99,14 +106,14 @@ Vue.component("table-equipos", {
                             <td>{{row.accesorio_tres}}</td>
                             <td>{{row.accesorio_cuatro}}</td>
                             <td>{{row.motivo}}</td>
-                            
                             <td>{{row.nombre_cliente}}</td>
                             <td>{{row.direccion}}</td>
                             <td>{{row.provincia}}</td>
                             <td>{{row.localidad}}</td>
                             <td>{{row.codigo_postal}}</td>
-                            <td>{{row.remito}}</td>
-                            
+                            <td >
+                            {{row.remito}}
+                            </td>
                             <td>
                                 <v-btn 
                                 v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
@@ -140,24 +147,69 @@ Vue.component("table-equipos", {
                                 
                                 </span>
                             </td>
+
                             <td>
-                            <v-btn 
-                            v-if="row.estado !== '' && row.estado !== null"
-                            color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
-                                <v-icon left>
-                                        mdi-trash-can-outline
-                                </v-icon>
-                                Eliminar 
-                            </v-btn>
-                            <v-btn
-                            v-if="row.estado !== '' && row.estado !== null"
-                             color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
-                                <v-icon left>
-                                            mdi-pencil
-                                </v-icon>
-                                Editar 
-                            </v-btn>
+                                <v-btn 
+                                v-if="row.estado !== '' && row.estado !== null"
+                                color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
+                                    <v-icon left>
+                                            mdi-trash-can-outline
+                                    </v-icon>
+                                    Eliminar 
+                                </v-btn>
+                                <v-btn
+                                v-if="row.estado !== '' && row.estado !== null"
+                                color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
+                                    <v-icon left>
+                                                mdi-pencil
+                                    </v-icon>
+                                    Editar 
+                                </v-btn>
                             </td>  
+                           
+                            </template>
+
+
+                            <template v-if="t === 'equipos'">
+                            <td>
+                            </td>
+
+                            <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{row.empresa}}</td>
+                            <td>{{row.terminal}}</td>
+                            <td>{{row.serie}}</td>
+        
+                            <td>
+                            </td>
+
+                            <td>{{row.emailcliente}}</td>
+                            <td>{{row.serie_base}}</td>
+                            <td>{{row.tarjeta}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{row.nombre_cliente}}</td>
+                            <td>{{row.direccion}}</td>
+                            <td>{{row.provincia}}</td>
+                            <td>{{row.localidad}}</td>
+                            <td>{{row.codigo_postal}}</td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>  
+                            
+                            <td>
+                            </td>
+
+                            <td>
+                            </td> 
+                            </template>
+
                             </tr>
                         </tbody>
                         </template>
@@ -170,7 +222,9 @@ Vue.component("table-equipos", {
         "columns",
         "url_actions",
         "admin",
-        "country_admin"
+        "country_admin",
+        'table',
+        't'
     ],
     data() {
         return {
@@ -204,7 +258,8 @@ Vue.component("table-equipos", {
             },
             deleteProperty: {
                 disabled: false
-            }
+            },
+
         };
     },
     methods: {
@@ -334,8 +389,10 @@ Vue.component("table-equipos", {
         },
         deleteRow() {
             this.deleteProperty.disabled = true
-            const id = this.editedItem.id;
-            const data = this.dataResponseDB;
+            const id_gestion = this.editedItem.id_gestion;
+            const id_equipo = this.editedItem.id_equipo;
+            const data = this.table.dataResponseDB;
+            console.log(this.editedItem)
 
             var hoy = new Date();
             var getMinutos = hoy.getMinutes();
@@ -367,7 +424,8 @@ Vue.component("table-equipos", {
 
             const url = this.url_actions.delete_management;
             const dataRequest = {
-                id,
+                id_gestion,
+                id_equipo,
                 created_at,
                 id_user_update: this.admin,
             };
@@ -384,7 +442,8 @@ Vue.component("table-equipos", {
                         return;
                     }
 
-                    const found = data.filter((data) => data.id !== id);
+
+                    const found = data.filter((data) => data.id_gestion !== id_gestion);
                     this.$emit("updateDelete", found);
                     this.dialogDelete = false;
                     this.deleteProperty.disabled = false
@@ -396,16 +455,8 @@ Vue.component("table-equipos", {
                     console.log(err);
                 });
         },
-        dateFormat(date) {
 
-            if (date !== undefined && date !== null && date !== '') {
-                var arrayDateTime = date.trim().split(' ');
-                var arrayDate = arrayDateTime[0].split('-')
-                var dateFormated = arrayDate[2] + '/' + arrayDate[1] + '/' + arrayDate[0]
-                var dateTimeFormated = dateFormated + ' ' + arrayDateTime[1]
-                return dateTimeFormated
-            }
-        }
+
     },
     computed: {
         headers() {

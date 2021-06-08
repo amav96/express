@@ -59,115 +59,6 @@ Vue.component('form-search-date', {
         }
     },
     methods: {
-        async countSearchInRangeDate() {
-            try {
-                this.$emit('loadingTable', true)
-
-                await axios.get(this.searchByRangeDate.base_url_count, {
-                        params: {
-                            dateStart: this.dateStart,
-                            dateEnd: this.dateEnd
-                        }
-                    })
-                    .then(res => {
-                        if (res.data.error) {
-                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                            this.error(error);
-                            return;
-                        }
-                        // settings values for pagination after to fetch count
-                        const totalCountResponse = parseInt(res.data.count)
-                        const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-                        this.$emit('TotalPage', totalPage)
-                        this.$emit('totalCountResponse', totalCountResponse)
-                        this.searchInRangeDate(this.searchByRangeDate.base_url_data)
-                            .then(() => {
-                                // show status if is true
-                                if (this.searchByRangeDate.subheader) {
-                                    this.showStatus(this.base_url_header)
-                                } else {
-                                    this.$emit('setDisplayHeaders', false)
-                                }
-
-                                // if filter is true, activate
-                                if (this.searchByRangeDate.filteringSearchWord) {
-                                    this.$emit('setShowFilter', true)
-                                    this.$emit('setUrlSearchController', this.base_url_to_count_search_word_controller)
-                                    this.$emit('setUrlGetDataSearchController', this.base_url_to_get_search_word_controller)
-                                    const search = {
-                                        dateStart: this.dateStart,
-                                        dateEnd: this.dateEnd
-                                    }
-                                    this.$emit('setDataDynamicToFilter', search)
-                                }
-                            })
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-
-            } catch (err) {
-                const error = { type: 'no-exist', text: err, time: 4000 }
-                this.error(error);
-                return;
-            }
-
-        },
-        async searchInRangeDate(base_url) {
-            const dataRequest = {
-                dateStart: this.dateStart,
-                dateEnd: this.dateEnd,
-                fromRow: this.pagination.fromRow,
-                limit: this.pagination.limit
-            }
-            await axios.get(base_url, {
-                    params: {
-                        dataRequest
-                    }
-                })
-                .then(res => {
-
-                    if (res.data.error) {
-                        const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
-                        this.error(error);
-                        return;
-                    }
-
-                    // setting dinamic data search for pagination
-                    const dynamicDataToSearch = {
-                        dateStart: this.dateStart,
-                        dateEnd: this.dateEnd,
-                        fromRow: this.pagination.fromRow,
-                        limit: this.pagination.limit
-                    }
-
-                    this.$emit('dynamicDataToSearch', dynamicDataToSearch)
-
-
-                    this.$emit('response', res.data)
-                    this.$emit('showTable', true)
-                    this.$emit('setPaginateDisplay', true)
-                    this.$emit('loadingTable', false)
-
-                    if (this.searchByRangeDate.export) {
-                        this.$emit('setDisplayExportExcel', this.searchByRangeDate.export)
-                    } else {
-                        this.$emit('setDisplayExportExcel', this.searchByRangeDate.export)
-                    }
-
-                    //  settings url to fetch from pagination
-                    this.$emit('urlTryPagination', base_url)
-
-                    // setting flag filtering
-                    this.$emit('filtering', true)
-                })
-                .catch(err => {
-
-                    const error = { type: 'no-exist', text: err, time: 4000 }
-                    this.error(error);
-                    return;
-                })
-        },
         async _getData() {
             try {
                 if (this.resources.pagination) { this.$resetPagination() }
@@ -189,8 +80,8 @@ Vue.component('form-search-date', {
                         //PAGINATION
                         this.resources.pagination ? this.$pagination(res) : false;
                         //SUBHEADER
-                        this.resources.subheader ?
-                            this.showStatus(this.base_url_header) :
+                        this.resources.subheader.display ?
+                            this.showStatus(this.resources.subheader.url) :
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
@@ -229,25 +120,26 @@ Vue.component('form-search-date', {
                 return;
             }
         },
-        async showStatus(base_url) {
-
+        async showStatus(url) {
             this.$emit('setSubHeadersLoader', true)
-            await axios.get(base_url, {
+            await axios.get(url, {
                     params: {
                         dateStart: this.dateStart,
-                        dateEnd: this.dateEnd
+                        dateEnd: this.dateEnd,
                     }
                 })
                 .then(res => {
 
                     this.$emit('setSubHeadersLoader', false)
                     if (res.data.error) {
-                        this.$emit('setDisplayHeaders', false)
+                        this.$emit("setDisplayHeaders", false)
                         return
                     }
-                    this.$emit('setSubHeadersDataResponseDB', res.data)
-                    this.$emit('setDisplayHeaders', true)
-
+                    this.emit('setSubHeadersDataResponseDB', [])
+                    this.emit('setSubHeadersDataResponseDB', res.data)
+                        .then(() => {
+                            this.$emit('setDisplayHeaders', true)
+                        })
                 })
                 .catch(err => {
                     console.log(err)
