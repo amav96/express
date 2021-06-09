@@ -28,6 +28,8 @@
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 
 <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/sub-headers.js"></script>
@@ -148,23 +150,21 @@
                       @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
                       @setExportDisplay="exportExcel.display = $event"
+                      @setExportByFilterDisplay="filter.export.display = $event"
                       @setParametersToExport="exportExcel.parameters = $event"
                       @setUrlExport="exportExcel.url = $event"
+                      @setUrlFilterExportExcel="filter.export.url = $event"
                       @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
                       @setUrlFilter="filter.url = $event"
                       @filtering="filter.filtering = $event"
                       @urlTryPagination="urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event" 
+                      @setSubHeadersLoader="subheaders.loader = $event"   
                       @setDisplayHeaders="subheaders.active = $event"
-                      
                       />
                     </v-col>
                 </template>
-
-                {{parametersDynamicToPaginate}}
-
                 <template v-if="formRangeDate">
                   <v-col class="d-flex justify-center m-2" cols="12" lg="12"  >
                     <form-search-date
@@ -180,8 +180,10 @@
                       @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
                       @setExportDisplay="exportExcel.display = $event"
+                      @setExportByFilterDisplay="filter.export.display = $event"
                       @setParametersToExport="exportExcel.parameters = $event"
                       @setUrlExport="exportExcel.url = $event"
+                      @setUrlFilterExportExcel="filter.export.url = $event"
                       @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
                       @setUrlFilter="filter.url = $event"
@@ -196,36 +198,31 @@
   
                 <template v-if="formWordAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
-                    <form-search-by-word-and-range-date 
-                    :searchByWordAndRangeDate="searchByWordAndRangeDate"
-                    :base_url_data_select="base_url_data_select" 
-                    @childrenProcessDataSelect="processDataSelect($event)"
-                    :dataSelect="dataSelect"
-                    :showDataSelect="showDataSelect"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @dynamicDataToSearch ="dynamicDataToSearch = $event"
-                    @response="dataResponseDB = $event"
-                    @loadingTable="loadingTable = $event"
-                    @showTable="table = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setErrorGlobal="error = $event"
-                    @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                    @setSubHeadersLoader="subheaders.loader = $event"
-                    :pagination="pagination"
-                    :subheaders="subheaders"
-                    :base_url_header="base_url_header"
-                    :filter="filter"
-                    :base_url_to_count_search_word_controller="base_url_to_count_search_word_controller"
-                    :base_url_to_get_search_word_controller="base_url_to_get_search_word_controller"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlSearchController="filter.url_searchCountController = $event"
-                    @setUrlGetDataSearchController="filter.url_searchGetDataController = $event"
-                    @setDataDynamicToFilter="filter.dynamicDataToFilter = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel=" displayExportFromComponentAccesores = $event"
-                    @setDisplayHeaders="subheaders.active = $event"
-                    @setPaginateDisplay="pagination.display = $event"
+                    <form-search-by-word-and-range-date
+                      :resources="searchByWordAndRangeDate"
+                      :pagination="pagination"
+                      @showPagination="pagination.display = $event"
+                      @resetPagination="pagination = $event"
+                      @loadingTable="table.loading = $event"
+                      @totalCountResponse = "pagination.totalCountResponse = $event"
+                      @TotalPage = "pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      @response="table.dataResponseDB = $event"
+                      @showTable="table.display = $event"
+                      @setErrorGlobal="error = $event"
+                      @setExportDisplay="exportExcel.display = $event"
+                      @setExportByFilterDisplay="filter.export.display = $event"
+                      @setParametersToExport="exportExcel.parameters = $event"
+                      @setUrlExport="exportExcel.url = $event"
+                      @setUrlFilterExportExcel="filter.export.url = $event"
+                      @setParametersToFilter="filter.parameters = $event"
+                      @setShowFilter="filter.display = $event"
+                      @setUrlFilter="filter.url = $event"
+                      @filtering="filter.filtering = $event"
+                      @urlTryPagination="urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="subheaders.loader = $event"   
+                      @setDisplayHeaders="subheaders.active = $event"
 
                       />
                       </v-col>
@@ -241,16 +238,15 @@
                  <loader-line />
                 </template>
 
-                <template v-if="table.display && subheaders.active ">
+                <template v-if="showTable() && subheaders.active ">
                     <sub-headers
                     @setDisplayHeaders="subheaders.active = $event"
                     :subheaders="subheaders"
                     />
                 </template>
 
-                <template v-if="table.display && filter.display">
+                <template v-if="showTable() && filter.display">
                     <filter-with-pagination
-                    ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
                     :dataResponseDB="table.dataResponseDB" 
@@ -261,20 +257,20 @@
                     @setPagination="pagination = $event"
                     @urlTryPagination="urlTryPagination = $event"
                     @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
-                    @setParametersToExport="exportExcel.parameters = $event"
+                    @setParametersToExportExcel="exportExcel.parameters = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
                     @restoreOldPagination="pagination = $event"
                     @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
                     @restoreOldDataResponse="table.dataResponseDB = $event"
                     @restoreBeforeDataResponse="table.dataResponseDB = $event"
+                    @setUrlExportByFilter="exportExcel.url = $event"
                     />
                 </template>
 
-                <template v-if="table.display && exportExcel.display">
+                <template v-if="showTable() && exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
-                      :url_actions="url_actions"
                       :exportExcel="exportExcel"
                       />
                     </v-row>
@@ -283,20 +279,24 @@
 
                 <template>
                     <v-btn
-                      v-if="table.display"
+                      v-if="showTable()"
                       >
                       Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
                     </v-btn>
                 </template>
         
-                <template v-if="table.display">
+                <template v-if="showTable()">
                     <table-equipos
                       :admin="admin"
                       :columns="columns"
+                      :columnsAlternative="columnsAlternative"
                       :loadingTable="loadingTable"
                       :table="table"
                       :url_actions="url_actions"
+                      :pagination="pagination"
+                      @setSnackbar="snackbar = $event"
                       @updateDelete="table.dataResponseDB = $event"
+                      @subtractTotalCount="pagination.totalCountResponse = $event"
                       :t="t"
                     />
                 </template>
@@ -305,7 +305,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
+                <template v-if="showTable()">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -317,6 +317,12 @@
                     :parametersDynamicToPaginate="parametersDynamicToPaginate"
                     @updateDynamicParametersToCall="parametersDynamicToPaginate = $event"
                     @restauratePagination="pagination = $event"
+                    />
+                </template>
+
+                <template>
+                    <message-snack
+                    :snackbar="snackbar"
                     />
                 </template>
           </v-app>
@@ -331,94 +337,119 @@
               dataSelect:[],
               searchEquiposByWord: {
                 display : false,
-                    url: {
-                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getEquiposByWord',
-                      getDataFilter: '',
-                    },
-                    subheader: false,
-                    filter : false,
-                    export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
-                    },
-                    select : {
-                      display: false,
-                      url : '',
-                      title: '',
-                      class: '',
-                      outlined: false,
-                      dense: false
-                    },
-                    pagination:true,
+                url: {
+                  getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getEquiposByWord',
+                },
+                subheader: {
+                  display : false,
+                  url :''
+                },
+                filter : {
+                  display: false,
+                  url : ''
+                },
+                export : {
+                  display : false,
+                  url: '',
+                  url_filter: '',
+                },
+                select : {
+                  display: false,
+                  url : '',
+                  title: '',
+                  class: '',
+                  outlined: false,
+                  dense: false
+                },
+                pagination:true,
               },
               searchByWord : {
-                display : false,
-                    url: {
-                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionByWord',
-                      getDataFilter: '',
-                    },
-                    subheader: {
-                      display : true,
-                      url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
-                    },
-                    filter : false,
-                    export : {
-                      display : true,
-                      url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
-                      url_filter: '',
-                    },
-                    select : {
-                      display: false,
-                      url : '',
-                      title: '',
-                      class: '',
-                      outlined: false,
-                      dense: false
-                    },
-                    pagination:true,
+                display : true,
+                url: {
+                  getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionByWord',
+                },
+                subheader: {
+                  display : true,
+                  url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
+                },
+                filter : {
+                  display: false,
+                  url : API_BASE_CONTROLLER + 'equipoController.php?equipo=getFilterGestionRangeDateAndFilter'
+                },
+                export : {
+                  display : true,
+                  url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                  url_filter: '',
+                },
+                select : {
+                  display: false,
+                  url : '',
+                  title: '',
+                  class: '',
+                  outlined: false,
+                  dense: false
+                },
+                pagination:true,
               },
               searchByRangeDate : {
                 display : false,
+                url: {
+                  getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionRangeDate',
+                },
+                subheader: {
+                  display : true,
+                  url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
+                },
+                filter : {
+                  display: true,
+                  url : API_BASE_CONTROLLER + 'equipoController.php?equipo=getFilterGestionRangeDateAndFilter'
+                },
+                export : {
+                  display : true,
+                  url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                  url_filter: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
+                },
+                select : {
+                  display: false,
+                  url : '',
+                  title: '',
+                  class: '',
+                  outlined: false,
+                  dense: false
+                },
+                pagination:true,
+               
+              },
+              searchByWordAndRangeDate: {
+                display : false,
                     url: {
-                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionRangeDate',
-                      getDataFilter: API_BASE_CONTROLLER + 'equipoController.php?equipo=getFilterGestionRangeDateAndFilter',
+                      getData : API_BASE_CONTROLLER + 'equipoController.php?equipo=getGestionWordAndRangeDate',
                     },
                     subheader: {
                       display : true,
                       url : API_BASE_CONTROLLER + 'equipoController.php?equipo=countStatusGestion'
                     },
-                    filter : true,
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'equipoController.php?equipo=getFilterGestionRangeDateAndWordAndFilter'
+                    },
                     export : {
                       display : true,
                       url: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
                       url_filter: API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
                     },
                     select : {
-                      display: false,
-                      url : '',
-                      title: '',
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'equipoController.php?equipo=getAllUserCollectorAndCommerce',
+                      title: 'Usuario',
                       class: '',
                       outlined: false,
                       dense: false
                     },
                     pagination:true,
-               
-              },
-              searchByWordAndRangeDate: {
-                filteringSearchWord : true, 
-                base_url_count : API_BASE_CONTROLLER + 'equipoController.php?equipo=countGestionByWordAndDateRange',
-                base_url_data : API_BASE_CONTROLLER + 'equipoController.php?equipo=gestionWordAndRangeDate',
-                export : true,
-                subheader : true
                 
               },
-              base_url_data_select:  API_BASE_CONTROLLER + 'usuarioController.php?usuario=dataUsers',
-              base_url_to_count_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=countFilterSearchController',
-              base_url_to_get_search_word_controller: API_BASE_CONTROLLER + 'equipoController.php?equipo=getDataSearchWordGestionController',
               url_actions : {
-                download_excel : API_BASE_EXCEL,
-                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
                 showInvoice : API_BASE_URL + 'equipo/remito',
                 status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
                 update_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
@@ -444,15 +475,21 @@
               },
               filter : {
                 display: false,
-                    parameters : [],
-                    url:'',
-                    reset: false,
-                    pagination : true
+                parameters : [],
+                url:'',
+                export:{
+                  display: false,
+                  url: ''
+                },
+                reset: false,
+                pagination : true
               },
               exportExcel : {
                 display : false,
                 parameters:[],
-                url : ''
+                url : '',
+                download_excel : API_BASE_EXCEL,
+                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
               },
               loaderLine: false,
               loadingTable : false,
@@ -465,7 +502,6 @@
                 { text: 'Terminal'},
                 { text: 'Serie'},
                 { text: 'Recolector'},
-                { text: 'email'},
                 { text: 'Serie Base',},
                 { text: 'Tarjeta/C.Red'},
                 { text: 'Chip alternativo'},
@@ -483,16 +519,27 @@
                 { text: 'Ver'},
                 { text: 'Enviar'},
                 { text: 'Accion'},
-                // means
-                // contacto
-                // fecha_aviso_visita
+              ],
+              columnsAlternative:[
+                { text: 'Identificacion'},
+                { text: 'Estado'},
+                { text: 'Empresa'},
+                { text: 'Terminal'},
+                { text: 'Serie'},
+                { text: 'email'},
+                { text: 'Serie Base',},
+                { text: 'Tarjeta/C.Red'},
+                { text: 'Nombre cliente'},
+                { text: 'Direccion'},
+                { text: 'Provincia'},
+                { text: 'Localidad'},
+                { text: 'Codigo postal'},
               ],
               table : {
                     display : false,
                     loading: false,
                     dataResponseDB: []
                 },
-              displayExportFromComponentAccesores :false,
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [
@@ -508,7 +555,13 @@
                 text: null,
                 time: null
               },
-              t: 'gestion'
+              t: 'gestion',
+              snackbar:{
+                display:false,
+                text:'',
+                timeout:-1,
+                color:''
+              },
             }
         },
         methods:{
@@ -568,6 +621,10 @@
           },
           $_formEquipos(){
 
+            this.table.display= false
+            this.filter.display= false
+            this.subheaders.loader = false
+
             this.formEquipos = true
             this.formId = false
             this.formRangeDate = false
@@ -579,14 +636,13 @@
               this.itemsButtons[2].active = false
               this.itemsButtons[3].active = false
               
-              if(this.table.display.display){
-                this.table.display= false
-                this.filter.display= false
-                this.subheaders.loader = false
-              }
+  
 
           },
           $_formId(){
+                this.table.display= false
+                this.filter.display= false
+                this.subheaders.loader = false
 
               this.formEquipos = false
               this.formId = true
@@ -599,31 +655,31 @@
               this.itemsButtons[2].active = false
               this.itemsButtons[3].active = false
 
-              if(this.table.display){
-                this.table.display= false
-                this.filter.display= false
-                this.subheaders.loader = false
-              }
           },
           $_formRangeDate(){
-              this.formEquipos = false
-              this.formId = false
-              this.formRangeDate = true
-              this.formWordAndRangeDate = false
-              this.t= 'gestion'
 
-              this.itemsButtons[0].active = false
-              this.itemsButtons[1].active = false
-              this.itemsButtons[3].active = false
-              this.itemsButtons[2].active = true
-            
-              if(this.table.display){
-                this.table.display= false
-                this.filter.display= false
-                this.subheaders.loader = false
-            }
+            this.table.display= false
+            this.filter.display= false
+            this.subheaders.loader = false
+
+            this.formEquipos = false
+            this.formId = false
+            this.formRangeDate = true
+            this.formWordAndRangeDate = false
+            this.t= 'gestion'
+
+            this.itemsButtons[0].active = false
+            this.itemsButtons[1].active = false
+            this.itemsButtons[3].active = false
+            this.itemsButtons[2].active = true
+          
+             
           },
           $_formWordAndRangeDate(){
+
+            this.table.display= false
+            this.filter.display= false
+            this.subheaders.loader = false
               
             this.formEquipos = false
             this.formId = false
@@ -636,11 +692,7 @@
             this.itemsButtons[2].active = false
             this.itemsButtons[3].active = true
 
-            if(this.table.display){
-                this.table.display= false
-                this.filter.display= false
-                this.subheaders.loader = false
-            }
+            
           },
           $_getAdmin(){
 
@@ -654,6 +706,13 @@
               this.country_admin = country
             }
             
+          },
+          showTable(){
+            if(this.table.display && this.pagination.totalCountResponse>0){
+              return true
+            }else {
+              return false
+            }
           }
         },
         created(){

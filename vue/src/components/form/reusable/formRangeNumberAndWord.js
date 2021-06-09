@@ -14,8 +14,6 @@ Vue.component('form-number-and-word', {
                                     label="Desde"
                                     hide-details="auto"
                                     type="text"
-                                    outlined
-                                    dense
                                     flat
                                     >
                                 </v-text-field >
@@ -27,8 +25,6 @@ Vue.component('form-number-and-word', {
                                 label="Desde"
                                 hide-details="auto"
                                 type="text"
-                                outlined
-                                dense
                                 flat
                                 >
                                 </v-text-field >
@@ -102,31 +98,17 @@ Vue.component('form-number-and-word', {
                         this.resources.pagination ? this.$pagination(res) : false;
 
                         //SUBHEADER
-                        this.resources.subheader ?
-                            this.showStatus(this.base_url_header) :
+                        this.resources.subheader.display ?
+                            this.showStatus(this.resources.subheader.url) :
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
-                        if (this.resources.filter) {
-
-                            this.$emit('setFilter', true)
-                            this.$emit('setShowFilter', true)
-                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
-                            const parameters = {
-                                numberStart: this.numberStart,
-                                numberEnd: this.numberEnd,
-                                word: this.word,
-                                fromRow: this.pagination.fromRow,
-                                limit: this.pagination.limit
-                            }
-                            this.$emit('setParametersToFilter', parameters)
-                        }
+                        this.resources.filter.display ? this.$filter() : this.$emit('setShowFilter', false);
                         //EXPORT 
-                        this.resources.export ?
-                            this.$emit('setDisplayExportExcel', this.resources.export) :
-                            false;
+                        this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
 
-                        this.$emit('response', res.data)
+
+                        this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
                         this.$emit('loadingTable', false)
                     })
@@ -139,6 +121,14 @@ Vue.component('form-number-and-word', {
                 this.error(error);
                 return;
             }
+        },
+        error(error) {
+            this.$emit('setErrorGlobal', error)
+            this.$emit('loadingTable', false)
+            this.$emit('showTable', false)
+            this.$emit('response', [])
+            this.$emit('setShowFilter', false)
+            return
         },
         $resetPagination() {
             const pagination = {
@@ -153,18 +143,14 @@ Vue.component('form-number-and-word', {
             this.$emit("resetPagination", pagination)
         },
         $pagination(res) {
-            // setTimeout(() => {
-            // this.$emit("showPagination", true)
-
             // settings values for pagination after to fetch count
             const totalCountResponse = parseInt(res.data.count)
             const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
             this.$emit('totalCountResponse', totalCountResponse)
-            console.log(totalPage)
             this.$emit('TotalPage', totalPage)
             this.$emit('urlTryPagination', this.resources.url.getData)
 
-            //seteo los parametros de la paginacion
+            // seteo los parametros de la paginacion 
             const parametersDynamicToPagination = {
                 numberStart: this.numberStart,
                 numberEnd: this.numberEnd,
@@ -172,18 +158,43 @@ Vue.component('form-number-and-word', {
                 fromRow: this.pagination.fromRow,
                 limit: this.pagination.limit
             }
-
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
-                // }, 2000);
 
         },
-        error(error) {
-            this.$emit('setErrorGlobal', error)
-            this.$emit('loadingTable', false)
-            this.$emit('showTable', false)
-            this.$emit('response', [])
-            this.$emit('setShowFilter', false)
-            return
+        $filter() {
+
+            this.$emit('setShowFilter', true)
+            this.$emit('setUrlFilter', this.resources.filter.url)
+            let parameters = {
+                numberStart: this.numberStart,
+                numberEnd: this.numberEnd,
+                word: this.word,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersToFilter', parameters)
+
+            // set filter by export 
+            if (this.resources.export.display) {
+                this.$emit('setUrlFilterExportExcel', this.resources.export.url_filter)
+                this.$emit('setExportByFilterDisplay', true)
+            } else {
+                this.$emit('setExportByFilterDisplay', true)
+            }
+
+        },
+        $_setSelect(data) {
+            this.word = data.id
+        },
+        $exportExcel() {
+            this.$emit('setExportDisplay', true)
+            let parameters = {
+                numberStart: this.numberStart,
+                numberEnd: this.numberEnd,
+                word: this.word,
+            }
+            this.$emit('setParametersToExport', parameters)
+            this.$emit('setUrlExport', this.resources.export.url)
         },
     },
     computed: {

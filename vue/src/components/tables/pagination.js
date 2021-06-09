@@ -43,6 +43,7 @@ Vue.component('pagination-custom', {
 
         },
         tryFetch(dataRequest) {
+
             const url = this.urlTryPagination
             axios.get(url, {
                     params: {

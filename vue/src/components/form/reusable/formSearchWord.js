@@ -72,22 +72,9 @@ Vue.component('form-search-word', {
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
-                        if (this.resources.filter) {
-
-                            this.$emit('setFilter', true)
-                            this.$emit('setShowFilter', true)
-                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
-                            let parameters = {
-                                word: this.word,
-                                fromRow: this.pagination.fromRow,
-                                limit: this.pagination.limit
-                            }
-                            this.$emit('setParametersToFilter', parameters)
-                        }
+                        this.resources.filter.display ? this.$filter() : this.$emit('setShowFilter', false);
                         //EXPORT 
-                        if (this.resources.export.display) {
-                            this.$exportExcel()
-                        }
+                        this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
 
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
@@ -175,6 +162,26 @@ Vue.component('form-search-word', {
             }
 
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
+        $filter() {
+
+            this.$emit('setShowFilter', true)
+            this.$emit('setUrlFilter', this.resources.filter.url)
+            let parameters = {
+                word: this.word,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersToFilter', parameters)
+
+            // set filter by export 
+            if (this.resources.export.display) {
+                this.$emit('setUrlFilterExportExcel', this.resources.export.url_filter)
+                this.$emit('setExportByFilterDisplay', true)
+            } else {
+                this.$emit('setExportByFilterDisplay', true)
+            }
+
         },
         $exportExcel() {
             this.$emit('setExportDisplay', true)

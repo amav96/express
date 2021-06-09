@@ -47,180 +47,160 @@ Vue.component("table-equipos", {
                 />
             </template>
 
-                <template>
-                    <message-snack
-                    :snackbar="snackbar"
-                    />
-                </template>
+                <template v-if="t === 'gestion'">
 
-            <template>
                     <v-simple-table>
                         <template v-slot:default>
-                        <thead>
-                            <tr  class="bg-blue-custom">
-                                <th v-for="column in columns" class="text-left text-white">
-                                {{column.text}}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr 
-                            v-for="row in table.dataResponseDB"
-                            >
-
-                            <template v-if="t === 'gestion'">
-
-                            <td>
-                                <span v-if="row.contacto === '' || row.contacto === null" >
-                                </span>
-                                <v-btn v-else 
-                                color="indigo"
-                                small @click="openDialogDetailNotice(true,row)"
+                            <thead>
+                                <tr  class="bg-blue-custom">
+                                    <th v-for="column in columns" class="text-left text-white">
+                                    {{column.text}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr 
+                                v-for="row in table.dataResponseDB"
                                 >
-                                    <v-icon color="white" left>
-                                    mdi-email-open-outline
-                                    </v-icon>
-                                    <span class="text-white" >detalle </span>
+                                    <td>
+                                        <span v-if="row.contacto === '' || row.contacto === null" >
+                                        </span>
+                                        <v-btn v-else 
+                                        color="indigo"
+                                        small @click="openDialogDetailNotice(true,row)"
+                                        >
+                                            <v-icon color="white" left>
+                                            mdi-email-open-outline
+                                            </v-icon>
+                                            <span class="text-white" >detalle </span>
+                                            
+                                        </v-btn>
                                     
-                                </v-btn>
-                               
-                            </td>
+                                    </td>
 
-                            <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
-                            <td><strong>{{row.estado}}</strong></td>
-                            <td><strong>{{row.created_at}}</strong></td>
-                            <td>{{row.empresa}}</td>
-                            <td>{{row.terminal}}</td>
-                            <td>{{row.serie}}</td>
-        
-                            <td>
-                            {{row.name}} - {{row.recolector}}
-                            </td>
+                                    <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
+                                    <td><strong>{{row.estado}}</strong></td>
+                                    <td><strong>{{row.created_at}}</strong></td>
+                                    <td>{{row.empresa}}</td>
+                                    <td>{{row.terminal}}</td>
+                                    <td>{{row.serie}}</td>
 
-                            <td>{{row.emailcliente}}</td>
-                            <td>{{row.serie_base}}</td>
-                            <td>{{row.tarjeta}}</td>
-                            <td>{{row.chip_alternativo}}</td>
-                            <td>{{row.accesorio_uno}}</td>
-                            <td>{{row.accesorio_dos}}</td>
-                            <td>{{row.accesorio_tres}}</td>
-                            <td>{{row.accesorio_cuatro}}</td>
-                            <td>{{row.motivo}}</td>
-                            <td>{{row.nombre_cliente}}</td>
-                            <td>{{row.direccion}}</td>
-                            <td>{{row.provincia}}</td>
-                            <td>{{row.localidad}}</td>
-                            <td>{{row.codigo_postal}}</td>
-                            <td >
-                            {{row.remito}}
-                            </td>
-                            <td>
-                                <v-btn 
-                                v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
-                                color="blue-grey"
-                                class="white--text"
-                                @click="urlRemito(row.remito)"
-                                >
-                                Ver remito
-                                </v-btn>
-                                <span
-                                v-else
-                                >
-                                
-                                </span>
-                            </td>  
-                            
-                            <td>
-                                <v-btn  
-                                v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
-                                color="warning" 
-                                @click="openDialogSendInvoice(true,row)"
-                                > 
-                                    <v-icon left>
-                                    mdi-email-plus
-                                    </v-icon>
-                                    Enviar Remito
-                                </v-btn>
-                                <span
-                                v-else
-                                >
-                                
-                                </span>
-                            </td>
+                                    <td>
+                                    {{row.name}} - {{row.recolector}}
+                                    </td>
+                                    <td>{{row.serie_base}}</td>
+                                    <td>{{row.tarjeta}}</td>
+                                    <td>{{row.chip_alternativo}}</td>
+                                    <td>{{row.accesorio_uno}}</td>
+                                    <td>{{row.accesorio_dos}}</td>
+                                    <td>{{row.accesorio_tres}}</td>
+                                    <td>{{row.accesorio_cuatro}}</td>
+                                    <td>{{row.motivo}}</td>
+                                    <td>{{row.nombre_cliente}}</td>
+                                    <td>{{row.direccion}}</td>
+                                    <td>{{row.provincia}}</td>
+                                    <td>{{row.localidad}}</td>
+                                    <td>{{row.codigo_postal}}</td>
+                                    <td >
+                                    {{row.remito}}
+                                    </td>
+                                    <td>
+                                        <v-btn 
+                                        v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
+                                        color="blue-grey"
+                                        class="white--text"
+                                        @click="urlRemito(row.remito)"
+                                        >
+                                        Ver remito
+                                        </v-btn>
+                                        <span
+                                        v-else
+                                        >
+                                        
+                                        </span>
+                                    </td>  
+                                    
+                                    <td>
+                                        <v-btn  
+                                        v-if="row.estado === 'RECUPERADO' || row.estado === 'AUTORIZAR'"
+                                        color="warning" 
+                                        @click="openDialogSendInvoice(true,row)"
+                                        > 
+                                            <v-icon left>
+                                            mdi-email-plus
+                                            </v-icon>
+                                            Enviar Remito
+                                        </v-btn>
+                                        <span
+                                        v-else
+                                        >
+                                        
+                                        </span>
+                                    </td>
 
-                            <td>
-                                <v-btn 
-                                v-if="row.estado !== '' && row.estado !== null"
-                                color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
-                                    <v-icon left>
-                                            mdi-trash-can-outline
-                                    </v-icon>
-                                    Eliminar 
-                                </v-btn>
-                                <v-btn
-                                v-if="row.estado !== '' && row.estado !== null"
-                                color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
-                                    <v-icon left>
-                                                mdi-pencil
-                                    </v-icon>
-                                    Editar 
-                                </v-btn>
-                            </td>  
-                           
-                            </template>
+                                    <td>
+                                        <v-btn 
+                                        v-if="row.estado !== '' && row.estado !== null"
+                                        color="error" small @click="openDialogDelete(true,row)" class="ma-1" >
+                                            <v-icon left>
+                                                    mdi-trash-can-outline
+                                            </v-icon>
+                                            Eliminar 
+                                        </v-btn>
+                                        <v-btn
+                                        v-if="row.estado !== '' && row.estado !== null"
+                                        color="success" small @click="openDialogEdit(true,row)" class="ma-1" >
+                                            <v-icon left>
+                                                        mdi-pencil
+                                            </v-icon>
+                                            Editar 
+                                        </v-btn>
+                                    </td> 
+                                </tr>
+                            </tbody>
+                        </template> 
+                    </v-simple-table>
+                </template>
 
+                <template v-if="t === 'equipos'">
 
-                            <template v-if="t === 'equipos'">
-                            <td>
-                            </td>
-
-                            <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{row.empresa}}</td>
-                            <td>{{row.terminal}}</td>
-                            <td>{{row.serie}}</td>
-        
-                            <td>
-                            </td>
-
-                            <td>{{row.emailcliente}}</td>
-                            <td>{{row.serie_base}}</td>
-                            <td>{{row.tarjeta}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{row.nombre_cliente}}</td>
-                            <td>{{row.direccion}}</td>
-                            <td>{{row.provincia}}</td>
-                            <td>{{row.localidad}}</td>
-                            <td>{{row.codigo_postal}}</td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>  
-                            
-                            <td>
-                            </td>
-
-                            <td>
-                            </td> 
-                            </template>
-
-                            </tr>
-                        </tbody>
+                    <v-simple-table>
+                        <template v-slot:default>
+                            <thead>
+                                <tr  class="bg-blue-custom">
+                                    <th v-for="column in columnsAlternative" class="text-left text-white">
+                                    {{column.text}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="row in table.dataResponseDB">
+                                    <td style="color:#0093f5;" ><strong> {{row.identificacion}} </strong></td>
+                                    <td><strong>{{row.estado}}</strong></td>
+                                    <td>{{row.empresa}}</td>
+                                    <td>{{row.terminal}}</td>
+                                    <td>{{row.serie}}</td>
+                                    <td>{{row.emailcliente}}</td>
+                                    <td>{{row.serie_base}}</td>
+                                    <td>{{row.tarjeta}}</td>
+                                    <td>{{row.nombre_cliente}}</td>
+                                    <td>{{row.direccion}}</td>
+                                    <td>{{row.provincia}}</td>
+                                    <td>{{row.localidad}}</td>
+                                    <td>{{row.codigo_postal}}</td>
+                                </tr>
+                            </tbody>
                         </template>
                     </v-simple-table>
-            </template>
+                </template>
         </div>
     `,
     props: [
         "dataResponseDB",
         "columns",
+        "columnsAlternative",
         "url_actions",
+        "pagination",
         "admin",
         "country_admin",
         'table',
@@ -352,7 +332,7 @@ Vue.component("table-equipos", {
 
             const dataRequest = {
                 id_equipo: this.editedItem.id_equipo,
-                id: this.editedItem.id,
+                id: this.editedItem.id_gestion,
                 estado: this.editedItem.estado,
                 serie: this.editedItem.serie,
                 terminal: this.editedItem.terminal,
@@ -374,13 +354,16 @@ Vue.component("table-equipos", {
                 .then((res) => {
                     if (res.data.error) {
                         this.updateProperty.disabled = false
-                        alertNegative("Mensaje CODIGO 51");
+                        const snackbar = { display: true, text: 'Algo salio mal 107', timeout: 3500, color: 'error' }
+                        this.$emit("setSnackbar", snackbar)
+                        this.dialogUpdate = false;
                         return;
                     }
 
-                    this.message = "Actualizado correctamente";
-                    this.alert_flag = true;
+                    const snackbar = { display: true, text: 'Actualizado correctamente', timeout: 3500, color: 'success' }
+                    this.$emit("setSnackbar", snackbar)
                     this.updateProperty.disabled = false
+                    this.dialogUpdate = false;
                 })
                 .catch((err) => {
                     this.updateProperty.disabled = false
@@ -391,8 +374,7 @@ Vue.component("table-equipos", {
             this.deleteProperty.disabled = true
             const id_gestion = this.editedItem.id_gestion;
             const id_equipo = this.editedItem.id_equipo;
-            const data = this.table.dataResponseDB;
-            console.log(this.editedItem)
+
 
             var hoy = new Date();
             var getMinutos = hoy.getMinutes();
@@ -437,25 +419,26 @@ Vue.component("table-equipos", {
                 })
                 .then((res) => {
                     if (res.data.error) {
-                        alertNegative("Mensaje CODIGO 50");
+                        const snackbar = { display: true, text: 'Algo salió mal 101', timeout: 3500, color: 'error' }
+                        this.$emit("setSnackbar", snackbar)
                         this.deleteProperty.disabled = false
                         return;
                     }
+                    const snackbar = { display: true, text: 'Eliminado correctamente', timeout: 3500, color: 'success' }
+                    this.$emit("setSnackbar", snackbar)
 
-
+                    const data = this.table.dataResponseDB;
+                    const totalCountCurrent = this.pagination.totalCountResponse - 1
+                    this.$emit("subtractTotalCount", totalCountCurrent)
                     const found = data.filter((data) => data.id_gestion !== id_gestion);
                     this.$emit("updateDelete", found);
                     this.dialogDelete = false;
                     this.deleteProperty.disabled = false
-                    this.snackbar.snack = true;
-                    this.snackbar.textSnack = "Eliminado correctamente";
-                    this.snackbar.timeout = 2500;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-
 
     },
     computed: {

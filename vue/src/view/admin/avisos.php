@@ -127,7 +127,8 @@
                       @filtering="filter.filtering = $event"
                       @urlTryPagination="urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="subheaders.loader = $event"     
+                      @setSubHeadersLoader="subheaders.loader = $event" 
+                      @setDisplayHeaders="subheaders.active = $event"
                       />
                     </v-col>
                 </template>
@@ -147,8 +148,10 @@
                       @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
                       @setExportDisplay="exportExcel.display = $event"
+                      @setExportByFilterDisplay="filter.export.display = $event"
                       @setParametersToExport="exportExcel.parameters = $event"
                       @setUrlExport="exportExcel.url = $event"
+                      @setUrlFilterExportExcel="filter.export.url = $event"
                       @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
                       @setUrlFilter="filter.url = $event"
@@ -156,6 +159,7 @@
                       @urlTryPagination="urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
                       @setSubHeadersLoader="subheaders.loader = $event"   
+                      @setDisplayHeaders="subheaders.active = $event"
                     />
                     </v-col>
                 </template>
@@ -163,7 +167,7 @@
                 
                 <template v-if="formWordAndRangeDate">
                   <v-col class=" d-flex justify-center m-2" cols="12" lg="12" >
-                    <form-search-by-word-and-range-date 
+                      <form-search-by-word-and-range-date
                       :resources="searchByWordAndRangeDate"
                       :pagination="pagination"
                       @showPagination="pagination.display = $event"
@@ -176,8 +180,10 @@
                       @showTable="table.display = $event"
                       @setErrorGlobal="error = $event"
                       @setExportDisplay="exportExcel.display = $event"
+                      @setExportByFilterDisplay="filter.export.display = $event"
                       @setParametersToExport="exportExcel.parameters = $event"
                       @setUrlExport="exportExcel.url = $event"
+                      @setUrlFilterExportExcel="filter.export.url = $event"
                       @setParametersToFilter="filter.parameters = $event"
                       @setShowFilter="filter.display = $event"
                       @setUrlFilter="filter.url = $event"
@@ -185,18 +191,29 @@
                       @urlTryPagination="urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="subheaders.dataResponseDB = $event"
                       @setSubHeadersLoader="subheaders.loader = $event"   
+                      @setDisplayHeaders="subheaders.active = $event"
                       />
                       </v-col>
                 </template>  
               </div> 
 
-                <template v-if="table.loading" >
+              <template v-if="table.loading" >
                  <loader-line />
                 </template>
-                
-                <template v-if="table.display && filter.display">
+            
+                <template v-if="subheaders.loader" >
+                 <loader-line />
+                </template>
+
+                <template v-if="showTable() && subheaders.active ">
+                    <sub-headers
+                    @setDisplayHeaders="subheaders.active = $event"
+                    :subheaders="subheaders"
+                    />
+                </template>
+
+                <template v-if="showTable() && filter.display">
                     <filter-with-pagination
-                    ref="reFilter"
                     :pagination = "pagination"
                     :filter="filter"
                     :dataResponseDB="table.dataResponseDB" 
@@ -207,34 +224,44 @@
                     @setPagination="pagination = $event"
                     @urlTryPagination="urlTryPagination = $event"
                     @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
-                    @setParametersToExport="exportExcel.parameters = $event"
+                    @setParametersToExportExcel="exportExcel.parameters = $event"
                     @restoreUrlPagination="urlTryPagination = $event"
                     @restoreOldPagination="pagination = $event"
                     @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
                     @restoreOldDataResponse="table.dataResponseDB = $event"
                     @restoreBeforeDataResponse="table.dataResponseDB = $event"
+                    @setUrlExportByFilter="exportExcel.url = $event"
                     />
                 </template>
 
-                <template v-if="table.display && exportExcel.display">
+                <template v-if="showTable() && exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
-                      :url_actions="url_actions"
                       :exportExcel="exportExcel"
                       />
                     </v-row>
                   </div>
                 </template>
 
-                <template v-if="table.display">
+                <template>
+                    <v-btn
+                      v-if="showTable()"
+                      >
+                      Total Registros <strong> &nbsp; {{pagination.totalCountResponse}}</strong>
+                    </v-btn>
+                </template>
+        
+                <template v-if="showTable()">
                     <table-avisos
                       :admin="admin"
                       :columns="columns"
                       :loadingTable="loadingTable"
                       :table="table"
                       :url_actions="url_actions"
-                      @updateDelete="table.dataResponseDB = $event"
+                      :pagination="pagination"
+                      @setSnackbar="snackbar = $event"
+                     
                     />
                 </template>
 
@@ -242,7 +269,7 @@
                   <loader-line />
                 </template>
 
-                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
+                <template v-if="showTable()">
                     <pagination-custom 
                     :pagination="pagination"
                     :urlTryPagination="urlTryPagination"
@@ -256,6 +283,12 @@
                     @restauratePagination="pagination = $event"
                     />
                 </template>
+
+                <template>
+                    <message-snack
+                    :snackbar="snackbar"
+                    />
+                </template>
           </v-app>
         `,
         data(){
@@ -267,69 +300,92 @@
               formWordAndRangeDate:false,
               dataSelect:[],
               searchByWord : {
-                display : false,
+                    display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'noticeController.php?notice=getNoticeByWord',
-                      getDataFilter: '',
                     },
-                    subheader: false,
-                    filter : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : ''
+                    },
                     export : {
-                      display : true,
+                      display : false,
                       url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                      url_filter: '',
                     },
                     select : {
                       display: false,
                       url : '',
-                      title: ''
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
+                    pagination:true,
               },
               searchByRangeDate : {
-                display : false,
+                    display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'noticeController.php?notice=getNoticeRangeDate',
-                      getDataFilter: '',
                     },
-                    subheader: false,
-                    filter : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : ''
+                    },
                     export : {
                       display : true,
                       url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                      url_filter: '',
                     },
                     select : {
                       display: false,
                       url : '',
-                      title: ''
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
-               
+                    pagination:true,
               },
               searchByWordAndRangeDate: {
-                display : false,
+                    display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'noticeController.php?notice=noticeRangeDateAndWord',
-                      getDataFilter: '',
                     },
-                    subheader: false,
-                    filter : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : ''
+                    },
                     export : {
                       display : true,
                       url: API_BASE_CONTROLLER + 'noticeController.php?notice=exportNotice',
+                      url_filter: '',
                     },
                     select : {
-                      display: false,
+                      display: true,
                       url : API_BASE_CONTROLLER + 'noticeController.php?notice=getAllUserCollectorAndCommerce',
                       title: 'Usuario',
                       class: 'mx-4',
                       outlined: false,
                       dense: false
                     },
-                    pagination:true
+                    pagination:true,
               },
               url_actions : {
                 showInvoice : API_BASE_URL + 'equipo/remito',
-                status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
+                status : '',
                 delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
                 download_excel : API_BASE_EXCEL,
               },
@@ -351,17 +407,24 @@
               },
               filter : {
                 display: false,
-                    parameters : [],
-                    url:'',
-                    reset: false,
-                    pagination : true
+                parameters : [],
+                url:'',
+                export:{
+                  display: false,
+                  url: ''
+                },
+                reset: false,
+                pagination : true
               },
               exportExcel : {
                 display : false,
                 parameters:[],
-                url : ''
+                url : '',
+                download_excel : API_BASE_EXCEL,
+                delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
               },
               loaderLine: false,
+              loadingTable : false,
               columns: [
                 { text: 'Detalle'},
                 { text: 'Aviso'},
@@ -377,7 +440,7 @@
                     display : false,
                     loading: false,
                     dataResponseDB: []
-              },
+                },
               bodyDialog: [],
               titleDialog: 'Detalle del aviso',
               templateDialog: [
@@ -387,11 +450,17 @@
                   { title: 'Identificacion', icon: 'mdi-truck-delivery-outline', methods: '$_formId', active : true },
                   { title: 'Rango fecha', icon: 'mdi-calendar-range', methods : '$_formRangeDate', active : false },
                   { title: 'Recolector y Rango fecha', icon: 'mdi-account-clock-outline' ,methods: '$_formWordAndRangeDate', active : false },
-                ],
+              ],
               error: {
                 type: null,
                 text: null,
                 time: null
+              },
+              snackbar:{
+                display:false,
+                text:'',
+                timeout:-1,
+                color:''
               },
               
             }
@@ -510,6 +579,13 @@
               this.country_admin = country
             }
             
+          },
+          showTable(){
+            if(this.table.display && this.pagination.totalCountResponse>0){
+              return true
+            }else {
+              return false
+            }
           }
         },
         created(){

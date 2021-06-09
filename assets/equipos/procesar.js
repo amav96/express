@@ -82,13 +82,13 @@ async function leerDatosEquipos() {
 
         if (identificacion.toUpperCase().substr(0, 2) === 'PS' || identificacion.toUpperCase().substr(0, 2) === 'LA') {
 
-            var terminal = document.getElementById('input-serie-en-base').value
-            var serie = document.getElementById('input-terminal-en-base').value
+            var terminal = document.getElementById('input-serie-en-base').value.replace(/[^0-9a-zA-Z]+/g, "")
+            var serie = document.getElementById('input-terminal-en-base').value.replace(/[^0-9a-zA-Z]+/g, "")
 
         } else {
 
-            var terminal = document.getElementById('input-terminal-en-base').value
-            var serie = document.getElementById('input-serie-en-base').value
+            var terminal = document.getElementById('input-terminal-en-base').value.replace(/[^0-9a-zA-Z]+/g, "")
+            var serie = document.getElementById('input-serie-en-base').value.replace(/[^0-9a-zA-Z]+/g, "")
         }
 
         var serie_base = document.getElementById('input-base-serie').value

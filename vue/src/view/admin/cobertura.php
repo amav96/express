@@ -25,6 +25,7 @@
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formId.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCollector.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/SaveCommerce.js"></script>
@@ -83,7 +84,7 @@
                         > 
                         <div class="d-flex justify-center flex-row flex-wrap" >
                           <div  
-                            v-for="item in itemsButtons"
+                            v-for="item in MAINRESOURCES.itemsButtons"
                             :key="item.title"
                             link
                             >
@@ -107,9 +108,9 @@
             
                 <transition name="slide-fade">
                   <error-global 
-                  v-if="error.type !== null" 
-                  :error="error"
-                  @clearingError="error = $event"
+                  v-if="MAINRESOURCES.error.type !== null" 
+                  :error="MAINRESOURCES.error"
+                  @clearingError="MAINRESOURCES.error = $event"
                   />
                 </transition>
 
@@ -131,121 +132,157 @@
                       </v-btn>
                   </div>
                 </div>
-
                 <template v-if="showAllCoverage.display">
                     <form-all
-                    :resources="showAllCoverage"
-                    :pagination="pagination"
-                    @resetPagination="pagination = $event"
-                    @loadingTable="table.loading = $event"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @response="table.dataResponseDB = $event"
-                    @showTable="table.display = $event"
-                    @setErrorGlobal="error = $event"
-                    @setParametersToFilter="filter.parameters = $event"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlFilter="filter.url = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"  
+                      :resources="showAllCoverage"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
                     />
                 </template>
 
                 <template v-if="formRangeNumberAndWord.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
-                      :resources="formRangeNumberAndWord"
-                      :pagination="pagination"
-                      @resetPagination="pagination = $event"
-                      @loadingTable="table.loading = $event"
-                      @totalCountResponse = "pagination.totalCountResponse = $event"
-                      @TotalPage = "pagination.totalPage = $event"
-                      @urlTryPagination="urlTryPagination = $event"
-                      @showPagination="pagination.display = $event"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @setErrorGlobal="error = $event"
-                      @setParametersToFilter="filter.parameters = $event"
-                      @setShowFilter="filter.display = $event"
-                      @setUrlFilter="filter.url = $event"
-                      @filtering="filter.filtering = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"           
+                        :resources="formRangeNumberAndWord"
+                        :pagination="MAINRESOURCES.pagination"
+                        @showPagination="MAINRESOURCES.pagination.display = $event"
+                        @resetPagination="MAINRESOURCES.pagination = $event"
+                        @loadingTable="MAINRESOURCES.table.loading = $event"
+                        @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                        @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                        @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                        @response="MAINRESOURCES.table.dataResponseDB = $event"
+                        @showTable="MAINRESOURCES.table.display = $event"
+                        @setErrorGlobal="MAINRESOURCES.error = $event"
+                        @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                        @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                        @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                        @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                        @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                        @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                        @setShowFilter="MAINRESOURCES.filter.display = $event"
+                        @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                        @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                        @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                        @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                        @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"         
                       />
                     </v-col>
                 </template>
 
                 <template v-if="showAllEmptyCoverage.display">
                     <form-all
-                    :resources="showAllEmptyCoverage"
-                    :pagination="pagination"
-                    @resetPagination="pagination = $event"
-                    @loadingTable="table.loading = $event"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @response="table.dataResponseDB = $event"
-                    @showTable="table.display = $event"
-                    @setErrorGlobal="error = $event"
-                    @setParametersToFilter="filter.parameters = $event"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlFilter="filter.url = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"  
+                      :resources="showAllEmptyCoverage"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"   
                     />
                 </template>
 
                 <template v-if="showAllHistory.display">
                     <form-all
-                    :resources="showAllHistory"
-                    :pagination="pagination"
-                    @resetPagination="pagination = $event"
-                    @loadingTable="table.loading = $event"
-                    @totalCountResponse = "pagination.totalCountResponse = $event"
-                    @TotalPage = "pagination.totalPage = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @response="table.dataResponseDB = $event"
-                    @showTable="table.display = $event"
-                    @setErrorGlobal="error = $event"
-                    @setParametersToFilter="filter.parameters = $event"
-                    @setShowFilter="filter.display = $event"
-                    @setUrlFilter="filter.url = $event"
-                    @filtering="filter.filtering = $event"
-                    @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                    @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"
+                      :resources="showAllHistory"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
                     />
                 </template>
 
-                <template v-if="showZoneByUser.display">
-                    <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
-                      <form-number-and-word
+                <template v-if="showZoneByUser.display" >
+                  <form-id
                       :resources="showZoneByUser"
-                      :pagination="pagination"
-                      @resetPagination="pagination = $event"
-                      @loadingTable="table.loading = $event"
-                      @totalCountResponse = "pagination.totalCountResponse = $event"
-                      @TotalPage = "pagination.totalPage = $event"
-                      @urlTryPagination="urlTryPagination = $event"
-                      @showPagination="pagination.display = $event"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @setErrorGlobal="error = $event"
-                      @setParametersToFilter="filter.parameters = $event"
-                      @setShowFilter="filter.display = $event"
-                      @setUrlFilter="filter.url = $event"
-                      @filtering="filter.filtering = $event"
-                      @setDisplayExportExcel="displayExportFromComponentAccesores = $event"
-                      @setParametersDynamicToPagination ="parametersDynamicToPaginate = $event"           
-                      />
-                    </v-col>
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
+                  />
                 </template>
+
 
                 <template>
                       <message-snack
-                      :snackbar="snackbar"
+                      :snackbar="MAINRESOURCES.snackbar"
                       />
                 </template>
   
@@ -348,32 +385,33 @@
                 </template>
           
               </div> 
-                <template v-if="table.loading" >
+                <template v-if="MAINRESOURCES.table.loading" >
                  <loader-line />
                 </template>
               
-                <template v-if="table.display && filter.display">
+                <template v-if="showTable() && MAINRESOURCES.filter.display">
                     <filter-with-pagination
-                    ref="reFilter"
-                    :pagination = "pagination"
-                    :filter="filter"
-                    :dataResponseDB="table.dataResponseDB" 
-                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
-                    :urlTryPagination="urlTryPagination"
-                    @setFlagFiltering ="filter.filtering = $event"
-                    @setAfterDataResponse="table.dataResponseDB = $event"
-                    @setPagination="pagination = $event"
-                    @urlTryPagination="urlTryPagination = $event"
-                    @setParametersDynamicToPagination="parametersDynamicToPaginate = $event" 
-                    @restoreUrlPagination="urlTryPagination = $event"
-                    @restoreOldPagination="pagination = $event"
-                    @restoreOldParametersToCall="parametersDynamicToPaginate = $event"
-                    @restoreOldDataResponse="table.dataResponseDB = $event"
-                    @restoreBeforeDataResponse="table.dataResponseDB = $event"
+                    :pagination = "MAINRESOURCES.pagination"
+                    :filter="MAINRESOURCES.filter"
+                    :dataResponseDB="MAINRESOURCES.table.dataResponseDB" 
+                    :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
+                    :urlTryPagination="MAINRESOURCES.urlTryPagination"
+                    @setFlagFiltering ="MAINRESOURCES.filter.filtering = $event"
+                    @setAfterDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setPagination="MAINRESOURCES.pagination = $event"
+                    @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                    @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
+                    @setParametersToExportExcel="MAINRESOURCES.exportExcel.parameters = $event"
+                    @restoreUrlPagination="MAINRESOURCES.urlTryPagination = $event"
+                    @restoreOldPagination="MAINRESOURCES.pagination = $event"
+                    @restoreOldParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                    @restoreOldDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
                     />
                 </template>
 
-                <template v-if="table && displayExportFromComponentAccesores">
+                <template v-if="MAINRESOURCES.table.display && MAINRESOURCES.exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
@@ -385,33 +423,32 @@
                  
                 </template>
               
-                <template v-if="table.display">
+                <template v-if="showTable()">
                     <table-cobertura
                       :admin="admin"
-                      :columns="columns"
-                      :table="table"
-                      :url_actions="url_actions"
-                      @updateDelete="table.dataResponseDB = $event"
-                      :pagination="pagination"
+                      :columns="MAINRESOURCES.columns"
+                      :table="MAINRESOURCES.table"
+                      :url_actions="MAINRESOURCES.url_actions"
+                      :pagination="MAINRESOURCES.pagination"
                     />
                 </template>
 
-                <template v-if="loaderLine" >
+                <template v-if="MAINRESOURCES.loaderLine" >
                   <loader-line />
                 </template>
   
-                <template v-if="pagination.totalPage >0 && table.display && pagination.display">
+                <template v-if="showTable()">
                     <pagination-custom 
-                    :pagination="pagination"
-                    :urlTryPagination="urlTryPagination"
-                    :loaderLine="loaderLine"
-                    @setPageCurrent= "pagination.pageCurrent = $event"
-                    @setFromRow="pagination.fromRow = $event"
-                    @updateDataResponseDB="table.dataResponseDB = $event"
-                    @showLoaderLine="loaderLine =  $event"
-                    :parametersDynamicToPaginate="parametersDynamicToPaginate"
-                    @updateDynamicParametersToCall="parametersDynamicToPaginate = $event"
-                    @restauratePagination="pagination = $event"
+                    :pagination="MAINRESOURCES.pagination"
+                    :urlTryPagination="MAINRESOURCES.urlTryPagination"
+                    :loaderLine="MAINRESOURCES.loaderLine"
+                    @setPageCurrent= "MAINRESOURCES.pagination.pageCurrent = $event"
+                    @setFromRow="MAINRESOURCES.pagination.fromRow = $event"
+                    @updateDataResponseDB="MAINRESOURCES.table.dataResponseDB = $event"
+                    @showLoaderLine="MAINRESOURCES.loaderLine =  $event"
+                    :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
+                    @updateDynamicParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                    @restauratePagination="MAINRESOURCES.pagination = $event"
                     />
                 </template>
           </v-app>
@@ -475,158 +512,225 @@
                     display : true,
                     url: {
                       getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
-                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
                     },
-                    subheader: false,
-                    filter : true,
-                    export : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
                     select : {
                       display: false,
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
-                      title: 'Pais'
+                      title: 'Pais',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
+                    pagination:true, 
                 },
                 showAllCoverage : {
                     display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllCoverage',
-                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage',
                     },
-                    subheader: false,
-                    filter : true,
-                    export : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
                     select : {
                       display: false,
                       url : '',
-                      title: ''
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
-                    
+                    pagination:true,  
                 },
                 showAllEmptyCoverage : {
                     display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllEmptyCoverage',
-                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage',
                     },
-                    subheader: false,
-                    filter : true,
-                    export : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterEmptyCoverage'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
                     select : {
                       display: false,
                       url : '',
-                      title: ''
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
+                    pagination:true,
                 },
                 showAllHistory : {
                     display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
-                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage',
                     },
-                    subheader: false,
-                    filter : true,
-                    export : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
                     select : {
                       display: false,
                       url : '',
-                      title: ''
+                      title: '',
+                      class: '',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
+                    pagination:true, 
                 },
                 showZoneByUser : {
-                    display : true,
+                    display : false,
                     url: {
-                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
-                      getDataFilter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry',
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
                     },
-                    subheader: false,
-                    filter : true,
-                    export : false,
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
                     select : {
                       display: false,
-                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
-                      title: 'Usuario'
+                      url : API_BASE_CONTROLLER + 'noticeController.php?notice=getAllUserCollectorAndCommerce',
+                      title: 'Usuario',
+                      class: 'mx-4',
+                      outlined: false,
+                      dense: false
                     },
-                    pagination:true
+                    pagination:true,
                 },
-                itemsButtons:[
-                    { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
-                    { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
-                    { title: 'Zonas vacias', icon: 'mdi-alert-circle-outline', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom"},
-                    { title: 'Historial', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
-                    { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showZoneByUser', active :  false, color :"bg-blue-custom"},
-                ],
-                admin : '',
-                url_actions : {
-                  export : API_BASE_CONTROLLER + 'equipoController.php?equipo=exportEquipos',
-                  download_excel : API_BASE_EXCEL,
-                  delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
-                  showInvoice : API_BASE_URL + 'equipo/remito',
-                  status : API_BASE_CONTROLLER + 'equipoController.php?equipo=estados',
-                  update_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=updateGestion',
-                  delete_management : API_BASE_CONTROLLER + 'equipoController.php?equipo=deleteGestion',
-                  send_invoice : API_BASE_URL + 'helpers/email.php?email=remito',
-                  save_data_customer : API_BASE_CONTROLLER + 'equipoController.php?equipo=saveDataCustomer',
-                },
-                urlTryPagination:'',
-                pagination : {
-                    display: false,
-                    totalPage : 0, 
-                    rowForPage:10,
-                    pageCurrent: 1,
-                    totalCountResponse:0,
-                    fromRow:0,
-                    limit:10
-                },
-                parametersDynamicToPaginate : [],
-                loaderLine: false,
-                columns: [
-                   
-                    { text: 'Codigo Postal'},
-                    { text: 'Localidad'},
-                    { text: 'Provincia Int'},
-                    { text: 'Provincia'},
-                    { text: 'Direccion'},
-                    { text: 'Horarios'},
-                    { text: 'Pais'},
-                    { text: 'Tipo'},
-                    { text: 'Nombre Asignado'},
-                    { text: 'ID_asignado'},
-                    { text: 'fecha'},
-
-                ],
-                table : {
-                    display : false,
-                    loading: false,
-                    dataResponseDB: []
-                },
-                displayExportFromComponentAccesores :false,     
-                error: {
-                    type: null,
-                    text: null,
-                    time: null
-                },
-                subheaders : {
+                admin : '',  
+                MAINRESOURCES : {
+                    url_actions : {
+                      download_excel : API_BASE_EXCEL,
+                      delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                  },
+                  urlTryPagination:'',
+                  pagination : {
+                      display: false,
+                      totalPage : 0, 
+                      rowForPage:10,
+                      pageCurrent: 1,
+                      totalCountResponse:0,
+                      fromRow:0,
+                      limit:10
+                  },
+                  parametersDynamicToPaginate : [],
+                  subheaders : {
                     active : false,
                     dataResponseDB : [],
                     loader : false
-                },
-                filter : {
+                  },
+                  filter : {
                     display: false,
                     parameters : [],
                     url:'',
+                    export:{
+                      display: false,
+                      url: ''
+                    },
                     reset: false,
                     pagination : true
+                  },
+                  exportExcel : {
+                    display : false,
+                    parameters:[],
+                    url : '',
+                    download_excel : API_BASE_EXCEL,
+                    delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                  },
+                  loaderLine: false,
+                  loadingTable : false,
+                  columns: [
+                      
+                      { text: 'Codigo Postal'},
+                      { text: 'Localidad'},
+                      { text: 'Provincia Int'},
+                      { text: 'Provincia'},
+                      { text: 'Direccion'},
+                      { text: 'Horarios'},
+                      { text: 'Pais'},
+                      { text: 'Tipo'},
+                      { text: 'Nombre Asignado'},
+                      { text: 'ID_asignado'},
+                      { text: 'fecha'},
+
+                  ],
+                  table : {
+                        display : false,
+                        loading: false,
+                        dataResponseDB: []
+                    },
+                  itemsButtons:[
+                      { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
+                      { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
+                      { title: 'Zonas vacias', icon: 'mdi-alert-circle-outline', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom"},
+                      { title: 'Historial', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
+                      { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showZoneByUser', active :  false, color :"bg-blue-custom"},
+                  ],
+                  error: {
+                    type: null,
+                    text: null,
+                    time: null
+                  },
+                  snackbar:{
+                    display:false,
+                    text:'',
+                    timeout:-1,
+                    color:''
+                  },
+
                 },
-                snackbar :{
-                  snack : false,
-                  timeout : -1,
-                  textSnack : ''
-                },
-                resetGlobal : false
+                
             }
         },
         methods:{
@@ -683,7 +787,7 @@
             this[function_name]()
           },
           $_showAllCoverage(){
-            this.table.display = false
+            this.MAINRESOURCES.table.display = false
             this.formRangeNumberAndWord.display = false
             this.showAllEmptyCoverage.display = false
             this.showAllCoverage.display = false 
@@ -691,15 +795,15 @@
             this.showZoneByUser.display = false
             this.$nextTick(() => {
               this.showAllCoverage.display = true
-              this.itemsButtons[0].active = true //todo
-              this.itemsButtons[1].active = false //rangeNumber
-              this.itemsButtons[2].active = false //empty
-              this.itemsButtons[3].active = false //history
-              this.itemsButtons[4].active = false //user by zone
+              this.MAINRESOURCES.itemsButtons[0].active = true //todo
+              this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
+              this.MAINRESOURCES.itemsButtons[2].active = false //empty
+              this.MAINRESOURCES.itemsButtons[3].active = false //history
+              this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
             })  
           },
           $_showAllEmptyCoverage(){
-            this.table.display = false
+            this.MAINRESOURCES.table.display = false
             this.formRangeNumberAndWord.display = false
             this.showAllCoverage.display = false  
             this.showAllEmptyCoverage.display = false
@@ -708,32 +812,32 @@
            
               this.$nextTick(() => {
                 this.showAllEmptyCoverage.display = true
-                this.itemsButtons[0].active = false //todo
-                this.itemsButtons[1].active = false //rangeNumber
-                this.itemsButtons[2].active = true //empty
-                this.itemsButtons[3].active = false //history
-                this.itemsButtons[4].active = false //user by zone
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
+                this.MAINRESOURCES.itemsButtons[2].active = true //empty
+                this.MAINRESOURCES.itemsButtons[3].active = false //history
+                this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
               });
               
           },
           $_formRangeNumberAndWord(){
-              this.table.display = false
+              this.MAINRESOURCES.table.display = false
               this.showAllCoverage.display = false
               this.showAllEmptyCoverage.display = false
               this.formRangeNumberAndWord.display = true
               this.showAllHistory.display = false
               
             this.$nextTick(() => {
-              this.itemsButtons[0].active = false //todo
-              this.itemsButtons[1].active = true //rangeNumber
-              this.itemsButtons[2].active = false //empty
-              this.itemsButtons[3].active = false //history
-              this.itemsButtons[4].active = false //user by zone
+              this.MAINRESOURCES.itemsButtons[0].active = false //todo
+              this.MAINRESOURCES.itemsButtons[1].active = true //rangeNumber
+              this.MAINRESOURCES.itemsButtons[2].active = false //empty
+              this.MAINRESOURCES.itemsButtons[3].active = false //history
+              this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
               // si no queres mostrar la tabla al llegar aca, solo escondela
             });
           },
           $_showAllHistory(){
-              this.table.display = false
+              this.MAINRESOURCES.table.display = false
               this.formRangeNumberAndWord.display = false
               this.showAllCoverage.display = false  
               this.showAllEmptyCoverage.display = false
@@ -742,16 +846,16 @@
            
               this.$nextTick(() => {
                 this.showAllHistory.display = true
-                this.itemsButtons[0].active = false //todo
-                this.itemsButtons[1].active = false //rangeNumber
-                this.itemsButtons[2].active = false //empty
-                this.itemsButtons[3].active = true //history
-                this.itemsButtons[4].active = false //user by zone
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
+                this.MAINRESOURCES.itemsButtons[2].active = false //empty
+                this.MAINRESOURCES.itemsButtons[3].active = true //history
+                this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
               });
               
           },
           $_showZoneByUser(){
-              this.table.display = false
+              this.MAINRESOURCES.table.display = false
               this.formRangeNumberAndWord.display = false
               this.showAllCoverage.display = false  
               this.showAllEmptyCoverage.display = false
@@ -760,11 +864,11 @@
            
               this.$nextTick(() => {
                 this.showZoneByUser.display = true
-                this.itemsButtons[0].active = false //todo
-                this.itemsButtons[1].active = false //rangeNumber
-                this.itemsButtons[2].active = false //empty
-                this.itemsButtons[3].active = false //history
-                this.itemsButtons[4].active = true ////user by zone
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
+                this.MAINRESOURCES.itemsButtons[2].active = false //empty
+                this.MAINRESOURCES.itemsButtons[3].active = false //history
+                this.MAINRESOURCES.itemsButtons[4].active = true ////user by zone
               });
               
           },
@@ -782,11 +886,18 @@
             
           },
           tableAndAccesorys(){
-            this.table.display = false
+            this.MAINRESOURCES.table.display = false
             this.$nextTick(() => {
-              this.table.display = true
+              this.MAINRESOURCES.table.display = true
             })
           },
+          showTable(){
+            if(this.MAINRESOURCES.table.display && this.MAINRESOURCES.pagination.totalCountResponse>0){
+              return true
+            }else {
+              return false
+            }
+          }
           
 
         },

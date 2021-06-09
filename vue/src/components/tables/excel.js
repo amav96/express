@@ -6,6 +6,7 @@ Vue.component('excel-export', {
             class="text-white my-2"
             color="success"
             @click="exportDocument"
+            :disabled="flagLoader"
             >
             <span v-if="!flagLoader" >excel</span>
             <v-icon v-if="!flagLoader" right >mdi-file-excel</v-icon>
@@ -20,21 +21,19 @@ Vue.component('excel-export', {
             <span v-if="flagLoader">
                 <strong>Esto puedo demorar...</strong>
             </span>
-            
             <v-btn
             v-if="download"
             color="error"
             class="text-white my-2"
             @click="donwloadFile"
             >
-           
             Descargar
             <v-icon right >mdi-download</v-icon>
             </v-btn>
         </v-container>
     </div>
     `,
-    props: ['url_actions', 'exportExcel'],
+    props: ['exportExcel'],
     data() {
         return {
             download: false,
@@ -47,6 +46,7 @@ Vue.component('excel-export', {
         async exportDocument() {
             this.flagLoader = true
             const dataRequest = this.exportExcel.parameters
+
             const url = this.exportExcel.url
             await axios.get(url, {
                     params: {
@@ -59,7 +59,7 @@ Vue.component('excel-export', {
                         return
                     }
                     this.flagLoader = false
-                    this.path = this.url_actions.download_excel + res.data.path
+                    this.path = this.exportExcel.download_excel + res.data.path
                     this.download = true
                 })
                 .catch(err => {
@@ -72,7 +72,7 @@ Vue.component('excel-export', {
                 window.open(this.path)
 
                 setTimeout(() => {
-                    const url = this.url_actions.delete_excel
+                    const url = this.exportExcel.delete_excel
                     axios.get(url, {
                             params: {
                                 path: this.path
@@ -94,15 +94,6 @@ Vue.component('excel-export', {
 
         }
     },
-    watch: {
 
-        exportExcel: {
-            handler(val) {
-                this.download = false
-            },
-
-            deep: true
-        }
-    }
 
 })

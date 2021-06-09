@@ -816,7 +816,10 @@ class Equipos
         $sql.="SELECT COUNT(*) as 'count'
         FROM gestion g 
         INNER JOIN equipos e ON (g.id_equipo = e.id) 
-        WHERE g.status_gestion = 'transito' and  g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word' ";
+        WHERE g.status_gestion = 'transito' 
+        and  g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word' ";
+
+    
 
         $execute = $this->db->query($sql);
         if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -856,13 +859,10 @@ class Equipos
         'ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito'
         and g.id_user =$word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59');";
 
-        $countGestionByWordAndDateRange = $this->db->query($sql);
-        if($countGestionByWordAndDateRange && $countGestionByWordAndDateRange->fetch_object()->count > 0){
-            $result = $countGestionByWordAndDateRange;
-        }else {
-            $result = false;
-        }
-        
+
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
     }
 
@@ -903,7 +903,7 @@ class Equipos
         return $result;
     }
 
-    public function countFilterToGestionByDateAndFilter(){
+    public function countDataFilterToGestionByDateAndFilter(){
 
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
@@ -919,26 +919,23 @@ class Equipos
         $sql.=" (MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) ";
         $sql.="AGAINST ";
-        $sql.="('$filter') ";
+        $sql.="('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filter' ) ";
+        $sql.="AGAINST ('$filter*' IN BOOLEAN MODE ) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-    
+       
 
-        $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
-        if($countFilterToGestionByDateAndFilter->fetch_object()->count > 0){
-            $result = $countFilterToGestionByDateAndFilter;
-        }else {
-            $result = false;
-        }
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
     }
 
-    public function countFilterToGestionByWordAndDateAndFilter(){
+    public function countFilterGestionRangeDateAndWordAndFilter(){
         $dateStart = !empty($this->getFechaStart()) ? $this-> getFechaStart(): false ;
         $dateEnd = !empty($this->getFechaEnd()) ? $this-> getFechaEnd(): false ;
         $id_recolector = !empty($this->getId_recolector()) ? $this-> getId_recolector(): false ;
@@ -954,24 +951,20 @@ class Equipos
         $sql.="(  MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) ";
         $sql.="AGAINST ";
-        $sql.="('$filter') ";
+        $sql.="('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filter') ";
+        $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user = $id_recolector and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-
-        $countFilterToGestionByDateAndFilter =  $this->db->query($sql);
-        if($countFilterToGestionByDateAndFilter->fetch_object()->count > 0){
-            $result = $countFilterToGestionByDateAndFilter;
-        }else {
-            $result = false;
-        }
+        $execute = $this->db->query($sql);
+        if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
+        else {$result = false;}
         return $result;
     }
-
+    
     // ESTADOS
 
     public function countEstadoGestionByRangeDate(){
@@ -985,7 +978,6 @@ class Equipos
         ON e.id=g.id_equipo
         WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and status_gestion='transito' and ";
         $sql.= " g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.estado WITH ROLLUP";
-
 
 
         $contador = $this->db->query($sql);
@@ -1012,6 +1004,8 @@ class Equipos
         ON e.id=g.id_equipo
         WHERE  g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito' ";
         $sql.= "and g.id_user = $word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.estado WITH ROLLUP";
+
+    
 
         $contador = $this->db->query($sql);
 
@@ -1137,7 +1131,7 @@ class Equipos
                
     }
 
-    public function gestionByWordAndRangeDate(){
+    public function getGestionWordAndRangeDate(){
 
         $dateStart = ($this->getfechaStart())?$this->getfechaStart() : false ;
         $dateEnd = ($this->getfechaEnd())?$this->getfechaEnd() : false ;
@@ -1149,21 +1143,16 @@ class Equipos
         }
             $result = false;
             $sql ="";
-            $sql.= "SELECT e.id as 'id_equipo' ,g.id,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
-            g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,e.emailcliente,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
+            $sql.= "SELECT e.id as 'id_equipo' ,g.id as 'id_gestion',g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
+            g.accesorio_tres,g.accesorio_cuatro,g.estado,g.status_gestion,g.motivo,g.created_at,e.empresa,e.identificacion,e.nombre_cliente,e.direccion, e.provincia, e.localidad, e.codigo_postal ,e.emailcliente,u.name,u.name,g.lat as 'latGestion' ,g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,n.contacto,n.created_at as 'fecha_aviso_visita' ";
             $sql.= "from gestion g inner join equipos e on e.identificacion = g.identificacion left join users u ON u.id = g.id_user
             LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
             $sql.="WHERE  g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') ";
             $sql.="and g.id_user = $word and g.status_gestion = 'transito' and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at DESC LIMIT $fromRow,$limit";
 
-            $getGestionByWordAndRangeDate = $this->db->query($sql);
-            
-            if($getGestionByWordAndRangeDate && $getGestionByWordAndRangeDate->num_rows>0){
-                $result = $getGestionByWordAndRangeDate;
-            
-            }else{
-                $result = false;
-            }
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
             return $result;
        
     }
@@ -1224,11 +1213,11 @@ class Equipos
             }
             
             $sql ="";
-            $sql.="SELECT e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
-            g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
+            $sql.="SELECT g.id as 'id_gestion',e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
+            g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,g.status_gestion,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
             n.created_at AS 'fecha_aviso_visita',
             MATCH (g.identificacion) 
-            AGAINST ('$filter' ) AS relevanceIdentification ";
+            AGAINST ('$filter*' IN BOOLEAN MODE) AS relevanceIdentification ";
             $sql.="FROM  ";
             $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
             $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
@@ -1237,22 +1226,18 @@ class Equipos
             $sql.="(";
             $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
             e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-            $sql.="('$filter') ";
+            $sql.="('$filter*' IN BOOLEAN MODE) ";
             $sql.="OR  ";
             $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-            $sql.="AGAINST ('$filter') ";
+            $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
             $sql.="OR "; 
             $sql.="u.name LIKE '%$filter%') and g.created_at
             BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') ORDER BY relevanceIdentification desc ";
             $sql.="limit $fromRow,$limit ";
 
-            $getDataFilterToGestionByDateAndFilter =  $this->db->query($sql);
-            if($getDataFilterToGestionByDateAndFilter->num_rows>0){
-                $result = $getDataFilterToGestionByDateAndFilter;
-            }else {
-                $result = false;
-            }
-    
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
             return $result;
     }
 
@@ -1270,11 +1255,11 @@ class Equipos
         
 
         $sql ="";
-        $sql.="SELECT e.id as 'id_equipo',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
-        g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
+        $sql.="SELECT e.id as 'id_equipo',g.id as 'id_gestion',e.empresa,e.nombre_cliente,e.direccion,localidad,e.codigo_postal,e.provincia,e.emailcliente,e.nombre_cliente,g.id,
+        g.id_orden_pass,g.id_orden,g.id_user,g.identificacion,g.terminal,g.serie,g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,g.accesorio_tres,g.accesorio_cuatro,g.motivo,g.created_at,g.lat as 'latGestion',g.lng as 'lngGestion',g.estado,g.status_gestion,u.name,n.means,n.contacto,n.lat as 'latAviso',n.lng as 'lngAviso',
         n.created_at AS 'fecha_aviso_visita',
         MATCH (g.identificacion) 
-        AGAINST ('$filter' ) AS relevanceIdentification ";
+        AGAINST ('$filter*' IN BOOLEAN MODE ) AS relevanceIdentification ";
         $sql.="FROM  ";
         $sql.="equipos e INNER JOIN gestion g ON (g.id_equipo = e.id) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
@@ -1283,25 +1268,19 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter') ";
+        $sql.="('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filter') ";
+        $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion ='transito' and g.id_user = $id_recolector  and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59') ORDER BY relevanceIdentification desc ";
         $sql.="limit $fromRow,$limit ";
         
-        
-        $getDataFilterToGestionByDateAndFilter =  $this->db->query($sql);
-        if($getDataFilterToGestionByDateAndFilter->num_rows>0){
-            $result = $getDataFilterToGestionByDateAndFilter;
-        }else {
-            $result = false;
-        }
-
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
-
 
     }
 
@@ -1324,19 +1303,13 @@ class Equipos
         INNER JOIN gestion g ON (g.id_equipo = e.id) 
         INNER JOIN users u ON (u.id = g.id_user) 
         LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) 
-        WHERE g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word' 
-        and g.status_gestion = 'transito'";
+        WHERE g.status_gestion = 'transito' and g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word'";
 
-        $getDataManagementExportByWord =  $this->db->query($sql);
-        if($getDataManagementExportByWord->num_rows>0){
-            $result = $getDataManagementExportByWord;
-        }else {
-            $result = false;
-        }
 
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
-
-
     }
 
     public function getDataManagementExportByDateRange(){
@@ -1352,17 +1325,10 @@ class Equipos
         LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
         $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion = 'transito' and  g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at";
 
-       
-
-        $getDataManagementExportByDateRange = $this->db->query($sql);
-        if($getDataManagementExportByDateRange->num_rows>0){
-            $result = $getDataManagementExportByDateRange;
-        }else {
-            $result = false;
-        }
-
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
-
     }
 
     public function getDataManagementExportByDateRangeAndFilter(){
@@ -1382,21 +1348,17 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter'" ;
+        $sql.="('$filter*' IN BOOLEAN MODE)" ;
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filter'" ;
+        $sql.="AGAINST ('$filter*' IN BOOLEAN MODE)" ;
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        $getDataManagementExportByDateRangeAndFilter =  $this->db->query($sql);
-        if($getDataManagementExportByDateRangeAndFilter->num_rows>0){
-            $result = $getDataManagementExportByDateRangeAndFilter;
-        }else {
-            $result = false;
-        }
-
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
 
 
@@ -1416,13 +1378,9 @@ class Equipos
         LEFT JOIN notice n ON g.id_orden_pass = n.id_orden  ";  
         $sql.="WHERE g.estado IN('RECUPERADO','AUTORIZAR','NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO','NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA','DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO','ENTREGO-EN-SUCURSAL') and g.status_gestion='transito' and g.id_user = $word and g.created_at BETWEEN('$dateStart') and ('$dateEnd 23:59:59') GROUP BY g.id ORDER BY g.created_at";
 
-        $getDataManagementExportByDateRangeAndWord = $this->db->query($sql);
-        if($getDataManagementExportByDateRangeAndWord->num_rows>0){
-            $result = $getDataManagementExportByDateRangeAndWord;
-        }else {
-            $result = false;
-        }
-
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
 
     }
@@ -1446,21 +1404,18 @@ class Equipos
         $sql.="(";
         $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
         e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter') ";
+        $sql.="('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR  ";
         $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
-        $sql.="AGAINST ('$filter') ";
+        $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user= $word and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
-        $getDataManagementExportByDateRangeAndWordAndFilter =  $this->db->query($sql);
-        if($getDataManagementExportByDateRangeAndWordAndFilter->num_rows>0){
-            $result = $getDataManagementExportByDateRangeAndWordAndFilter;
-        }else {
-            $result = false;
-        }
 
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = $exe;}
+        else {$result = false;}
         return $result;
     }
 

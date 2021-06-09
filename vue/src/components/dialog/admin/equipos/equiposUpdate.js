@@ -1,6 +1,6 @@
-Vue.component('dialog-equipos-update',{
-template : //html 
-    `
+Vue.component('dialog-equipos-update', {
+    template: //html 
+        `
             <v-dialog
             v-model="dialogUpdate"
             max-width="500px"
@@ -103,10 +103,6 @@ template : //html
                         
                     </v-card-text>
             <v-card-actions>
-                <message-alert
-                :message="message"
-                :alert_flag="alert_flag"
-                />
                 <v-spacer></v-spacer>
                 <v-btn
                 color="error"
@@ -126,37 +122,37 @@ template : //html
                
         </v-dialog>
     `,
-    props:['dialogUpdate','title','editedItem','status','accesorios','message','alert_flag','updateProperty'],
-data (){
-return {
-    downInner : false,
-}
-},
-methods : {
-    onClickOutside(){
-         // I close the dialog by clicking outside of its container. In the current child component
-         if (this.downInner === false) {
+    props: ['dialogUpdate', 'title', 'editedItem', 'status', 'accesorios', 'message', 'alert_flag', 'updateProperty'],
+    data() {
+        return {
+            downInner: false,
+        }
+    },
+    methods: {
+        onClickOutside() {
+            // I close the dialog by clicking outside of its container. In the current child component
+            if (this.downInner === false) {
+                this.$emit('openDialog', false)
+                if (this.alert_flag) {
+                    this.$emit('message', '')
+                    this.$emit('alert_flag', false)
+                }
+            }
+            this.downInner = false;
+        },
+        closeDialog() {
             this.$emit('openDialog', false)
-            if(this.alert_flag){
+            if (this.alert_flag) {
                 this.$emit('message', '')
                 this.$emit('alert_flag', false)
             }
-          }
-          this.downInner = false;
+        },
+        update() {
+            this.$emit("setDisabled", true)
+            this.$emit('updateRow')
+        },
+
+
     },
-    closeDialog(){
-        this.$emit('openDialog', false)
-        if(this.alert_flag){
-            this.$emit('message', '')
-            this.$emit('alert_flag', false)
-        }
-    },
-    update(){
-        this.$emit("setDisabled",true)
-        this.$emit('updateRow')
-    },
-   
-    
-},
 
 })

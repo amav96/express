@@ -75,7 +75,6 @@ Vue.component('form-search-by-word-and-range-date', {
         async _getData() {
             try {
                 this.resources.pagination ? this.$resetPagination() : false;
-
                 this.$emit('loadingTable', true)
                 const dataRequest = {
                     dateStart: this.dateStart,
@@ -98,31 +97,15 @@ Vue.component('form-search-by-word-and-range-date', {
                         this.resources.pagination ? this.$pagination(res) : false;
 
                         //SUBHEADER
-                        this.resources.subheader ?
-                            this.showStatus(this.base_url_header) :
+                        this.resources.subheader.display ?
+                            this.showStatus(this.resources.subheader.url) :
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
-                        if (this.resources.filter) {
-
-                            this.$emit('setFilter', true)
-                            this.$emit('setShowFilter', true)
-                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
-                            const parameters = {
-                                dateStart: this.dateStart,
-                                dateEnd: this.dateEnd,
-                                word: this.word,
-                                fromRow: this.pagination.fromRow,
-                                limit: this.pagination.limit
-                            }
-                            this.$emit('setParametersToFilter', parameters)
-                        }
+                        this.resources.filter.display ? this.$filter() : this.$emit('setShowFilter', false);
                         //EXPORT 
-                        if (this.resources.export.display) {
-                            this.$exportExcel()
-                        } else {
-                            this.$emit('setExportDisplay', false)
-                        }
+                        this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
+
 
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
@@ -137,58 +120,6 @@ Vue.component('form-search-by-word-and-range-date', {
                 this.error(error);
                 return;
             }
-        },
-        $resetPagination() {
-            const pagination = {
-                display: true,
-                totalPage: 1,
-                rowForPage: 10,
-                pageCurrent: 1,
-                totalCountResponse: 0,
-                fromRow: 0,
-                limit: 10
-            }
-            this.$emit("resetPagination", pagination)
-        },
-        $pagination(res) {
-            // setTimeout(() => {
-            // this.$emit("showPagination", true)
-
-            // settings values for pagination after to fetch count
-            const totalCountResponse = parseInt(res.data.count)
-            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
-            this.$emit('totalCountResponse', totalCountResponse)
-            console.log(totalPage)
-            this.$emit('TotalPage', totalPage)
-            this.$emit('urlTryPagination', this.resources.url.getData)
-
-            //seteo los parametros de la paginacion
-            const parametersDynamicToPagination = {
-                dateStart: this.dateStart,
-                dateEnd: this.dateEnd,
-                word: this.word,
-                fromRow: this.pagination.fromRow,
-                limit: this.pagination.limit
-            }
-
-            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
-                // }, 2000);
-
-        },
-        emit(eventName, value) {
-            // This method should be used when it is very important and time consuming to update reactive data.
-            return new Promise((resolve, reject) => {
-                this.$emit(eventName, value)
-                this.$nextTick(resolve)
-            })
-        },
-        error(error) {
-            this.$emit('setErrorGlobal', error)
-            this.$emit('loadingTable', false)
-            this.$emit('showTable', false)
-            this.$emit('response', [])
-            this.emit('setShowFilter', false)
-            return
         },
         async showStatus(base_url) {
             this.$emit('setSubHeadersLoader', true)
@@ -213,6 +144,73 @@ Vue.component('form-search-by-word-and-range-date', {
                     console.log(err)
                 })
         },
+        emit(eventName, value) {
+            // This method should be used when it is very important and time consuming to update reactive data.
+            return new Promise((resolve, reject) => {
+                this.$emit(eventName, value)
+                this.$nextTick(resolve)
+            })
+        },
+        error(error) {
+            this.$emit('setErrorGlobal', error)
+            this.$emit('loadingTable', false)
+            this.$emit('showTable', false)
+            this.$emit('response', [])
+            this.emit('setShowFilter', false)
+            return
+        },
+        $resetPagination() {
+            const pagination = {
+                display: true,
+                totalPage: 1,
+                rowForPage: 10,
+                pageCurrent: 1,
+                totalCountResponse: 0,
+                fromRow: 0,
+                limit: 10
+            }
+            this.$emit("resetPagination", pagination)
+        },
+        $pagination(res) {
+            // settings values for pagination after to fetch count
+            const totalCountResponse = parseInt(res.data.count)
+            const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
+            this.$emit('totalCountResponse', totalCountResponse)
+            this.$emit('TotalPage', totalPage)
+            this.$emit('urlTryPagination', this.resources.url.getData)
+
+            // seteo los parametros de la paginacion 
+            const parametersDynamicToPagination = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+                word: this.word,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
+        $filter() {
+
+            this.$emit('setShowFilter', true)
+            this.$emit('setUrlFilter', this.resources.filter.url)
+            let parameters = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+                word: this.word,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersToFilter', parameters)
+
+            // set filter by export 
+            if (this.resources.export.display) {
+                this.$emit('setUrlFilterExportExcel', this.resources.export.url_filter)
+                this.$emit('setExportByFilterDisplay', true)
+            } else {
+                this.$emit('setExportByFilterDisplay', true)
+            }
+
+        },
         $_setSelect(data) {
             this.word = data.id
         },
@@ -221,7 +219,7 @@ Vue.component('form-search-by-word-and-range-date', {
             let parameters = {
                 dateStart: this.dateStart,
                 dateEnd: this.dateEnd,
-                word: this.word,
+                word: this.word
             }
             this.$emit('setParametersToExport', parameters)
             this.$emit('setUrlExport', this.resources.export.url)

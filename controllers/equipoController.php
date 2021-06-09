@@ -2,6 +2,7 @@
 if (isset($_GET['equipo'])) {
     session_start();
     require_once '../model/equipos.php';
+    require_once '../model/usuario.php';
     require_once '../config/db.php';
     require_once "../vendor/autoload.php";
 
@@ -9,7 +10,7 @@ if (isset($_GET['equipo'])) {
     $usuario = new equipoController();
     $usuario->$accion();
 } else {
-
+    require_once 'model/usuario.php';
     require_once 'model/equipos.php';
     require_once "vendor/autoload.php";
 }
@@ -836,133 +837,6 @@ class equipoController
 
     //CONTADORES
 
-    public function countGestionRangeDate(){
-        if ($_GET) {
-
-            $dateStart = isset($_GET["dateStart"]) ? $_GET["dateStart"] : false;
-            $dateEnd = isset($_GET["dateEnd"]) ? $_GET["dateEnd"] : false;
-
-            $countGestionRangeDate = new Equipos();
-            $countGestionRangeDate->setFechaStart($dateStart);
-            $countGestionRangeDate->setFechaEnd($dateEnd);
-            $countGestionRangeDate =$countGestionRangeDate->countGestionRangeDate();
-        
-            if (is_object($countGestionRangeDate)) {
-                foreach ($countGestionRangeDate as $element) {
-                   
-                      $objeto = array(
-
-                          'success' => true,
-                          'count' => $element["count"]
-                      );
-                }
-            } else {
-                $objeto = array(
-                    'error' => true,
-                );
-            }
-
-            
-             $jsonstring = json_encode($objeto);
-             echo $jsonstring;
-        }
-    }
-
-    public function countGestionByWordAndDateRange(){
-
-        if ($_GET) {
-
-            $word = isset($_GET["word"]) ? $_GET["word"] : false;
-            $dateStart = isset($_GET["dateStart"]) ? $_GET["dateStart"] : false;
-            $dateEnd = isset($_GET["dateEnd"]) ? $_GET["dateEnd"] : false;
-            
-            $countGestionByWordAndDateRange = new Equipos();
-            $countGestionByWordAndDateRange->setFechaStart($dateStart);
-            $countGestionByWordAndDateRange->setFechaEnd($dateEnd);
-            $countGestionByWordAndDateRange->setWord($word);
-            $countGestionByWordAndDateRange =$countGestionByWordAndDateRange->countGestionByWordAndDateRange();
-        
-            if (is_object($countGestionByWordAndDateRange)) {
-               
-                foreach ($countGestionByWordAndDateRange as $element) {
-                      $objeto = array(
-                          'success' => true,
-                          'count' => $element["count"]
-                      );
-                }
-            } else {
-                $objeto = array(
-                    'error' => true,
-                );
-            }
-
-             $jsonstring = json_encode($objeto);
-             echo $jsonstring;
-        }
-
-    }
-  
-    public function countGestion()
-    {
-     
-        if ($_GET) {
-            $id = isset($_GET["id"]) ? $_GET["id"] : false;
-            $gestion = new Equipos();
-            $gestion->setIdentificacionCliente($id);
-
-            $gestion = $gestion->getTransit();
-
-            if (is_object($gestion)) {
-
-                foreach ($gestion as $element) {
-                     $objeto[] = array(
-                         'success' => true,
-                         'identificacion' => $element["identificacion"],
-                         'estado' => $element["estado"],
-                         'empresa' => $element["empresa"],
-                         'terminal' => $element["terminal"],
-                         'serie' => $element["serie"],
-                         'orden' => $element["id_orden"],
-                         'recolector' => $element["id_user"],
-                         'name' => $element["name"],
-                         'serie_base' => $element["serie_base"],
-                         'tarjeta' => $element["tarjeta"],
-                         'chip_alternativo' => $element["chip_alternativo"],
-                         'accesorio_uno' => $element["accesorio_uno"],
-                         'accesorio_dos' => $element["accesorio_dos"],
-                         'accesorio_tres' => $element["accesorio_tres"],
-                         'accesorio_cuatro' => $element["accesorio_cuatro"],
-                         'motivo' => $element["motivo"],
-                         'created_at' => $element["created_at"],
-                         'nombre_cliente' => $element["nombre_cliente"],
-                         'direccion' => $element["direccion"],
-                         'provincia' => $element["provincia"],
-                         'localidad' => $element["localidad"],
-                         'codigo_postal' => $element["codigo_postal"],
-                         'remito' => $element["id_orden_pass"],
-                         'id' => $element["id"],
-                         'id_equipo' => $element["id_equipo"],
-                         'latGestion' => $element["latGestion"],
-                         'lngGestion' => $element["lngGestion"],
-                         'lat' => $element["lat"],
-                         'lng' => $element["lng"],
-                         'means' => $element["means"],
-                         'contacto' => $element["contacto"],
-                         'fecha_aviso_visita' => $element["fecha_aviso_visita"],
-                     );
-                }
-            } else {
-
-                $objeto = array(
-                    'error' => true,
-                );
-            }
-
-            $jsonstring = json_encode($objeto);
-            echo $jsonstring;
-        }
-    }
-
     public function countStatusCustomer()
     {
         if ($_POST) {
@@ -1048,76 +922,12 @@ class equipoController
         }
     }
 
-    public function countFilterSearchController(){
-
-
-        if($_GET){
-
-            $dataRequest = json_decode($_GET['dataRequest']);
-            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ;
-            $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ;  
-            $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
-
-         
-
-
-            if($dateStart && $dateEnd  && $filter){
-                $countFilterSearchController =  new Equipos();
-                $countFilterSearchController->setFechaStart($dateStart);
-                $countFilterSearchController->setFechaEnd($dateEnd);
-                $countFilterSearchController->setFilter($filter);
-                $countFilterSearchController = $countFilterSearchController->countFilterToGestionByDateAndFilter();
-
-            }
-
-            if(!$dateStart && !$dateEnd && $word && $filter){
-                $countFilterSearchController =  new Equipos();
-                $countFilterSearchController->setFilter($filter);
-                $countFilterSearchController= $countFilterSearchController->countFilterToGestionByFilter();
-
-            }
-
-            if($dateStart && $dateEnd && $word && $filter){
-               
-                $countFilterSearchController =  new Equipos();
-                $countFilterSearchController->setFechaStart($dateStart);
-                $countFilterSearchController->setFechaEnd($dateEnd);
-                $countFilterSearchController->setId_recolector($word);
-                $countFilterSearchController->setFilter($filter);
-                $countFilterSearchController = $countFilterSearchController->countFilterToGestionByWordAndDateAndFilter();
-            }
-
-           
-            if(is_object($countFilterSearchController)){
-               
-                 foreach ($countFilterSearchController as $element) {
-                   
-                     $objeto = array(
-    
-                         'success' => true,
-                         'count' => $element["count"]
-                     );
-                 }
-            }else {
-                $objeto = array(
-    
-                    'error' => true,
-            
-                );
-            }
-            $jsonString = json_encode($objeto);
-            echo $jsonString;
-        }
-       
-    }
-
     //BUSCADORES DIRECTOS DE GESTION PARA TABLAS
 
     public function getEquiposByWord(){
 
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $request =  json_decode($dataRequest);
+        $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $request =  json_decode($Request);
         $word = isset($request->word) ? $request->word : false; 
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;
@@ -1144,13 +954,10 @@ class equipoController
 
     }
 
-     
-
-
     public function getGestionByWord(){
 
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $request =  json_decode($dataRequest);
+        $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $request =  json_decode($Request);
         $word = isset($request->word) ? $request->word : false; 
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;
@@ -1180,8 +987,8 @@ class equipoController
     public function getGestionRangeDate()
     {
         if($_GET){
-            $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-            $request =  json_decode($dataRequest);
+            $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+            $request =  json_decode($Request);
             $dateStart = !empty($request->dateStart) ? $request->dateStart: false; 
             $dateEnd = !empty($request->dateEnd) ? $request->dateEnd: false; 
             $fromRow = $request->fromRow;
@@ -1212,89 +1019,51 @@ class equipoController
         } 
     }
 
-    public function gestionWordAndRangeDate(){
+    public function getGestionWordAndRangeDate(){
 
         if($_GET){
-
-            $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-            $request =  json_decode($dataRequest);
+            $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+            $request =  json_decode($Request);
             $word = !empty($request->word) ? $request->word: false; 
             $dateStart = !empty($request->dateStart) ? $request->dateStart: false; 
             $dateEnd = !empty($request->dateEnd) ? $request->dateEnd: false; 
             $fromRow = $request->fromRow;
             $limit = $request->limit;
     
-            $gestion = new Equipos();
-            $gestion->setWord($word);
-            $gestion->setFechaStart($dateStart);
-            $gestion->setFechaEnd($dateEnd);
-            $gestion->setFromRow($fromRow);
-            $gestion->setLimit($limit);
-            $gestion = $gestion->gestionByWordAndRangeDate();
-
-            if (is_object($gestion)) {
-                foreach ($gestion as $element) {
-                        $objeto[] = array(
-                            'success' => true,
-                            'id_equipo' => $element["id_equipo"],
-                            'id' => $element["id"],
-                            'identificacion' => $element["identificacion"],
-                            'estado' => $element["estado"],
-                            'empresa' => $element["empresa"],
-                            'terminal' => $element["terminal"],
-                            'serie' => $element["serie"],
-                            'orden' => $element["id_orden"],
-                            'recolector' => $element["id_user"],
-                            'serie_base' => $element["serie_base"],
-                            'tarjeta' => $element["tarjeta"],
-                            'chip_alternativo' => $element["chip_alternativo"],
-                            'accesorio_uno' => $element["accesorio_uno"],
-                            'accesorio_dos' => $element["accesorio_dos"],
-                            'accesorio_tres' => $element["accesorio_tres"],
-                            'accesorio_cuatro' => $element["accesorio_cuatro"],
-                            'motivo' => $element["motivo"],
-                            'created_at' => $element["created_at"],
-                            'nombre_cliente' => $element["nombre_cliente"],
-                            'direccion' => $element["direccion"],
-                            'provincia' => $element["provincia"],
-                            'localidad' => $element["localidad"],
-                            'codigo_postal' => $element["codigo_postal"],
-                            'emailcliente' => $element["emailcliente"],
-                            'remito' => $element["id_orden_pass"],
-                            'name' => $element["name"],
-                            'latAviso' => $element["latAviso"],
-                            'lngAviso' => $element["lngAviso"],
-                            'latGestion' => $element["latGestion"],
-                            'lngGestion' => $element["lngGestion"],
-                            'means' => $element["means"],
-                            'contacto' => $element["contacto"],
-                            'fecha_aviso_visita' => $element["fecha_aviso_visita"],
-                            
-                        );
+            $get = new Equipos();
+            $get->setWord($word);
+            $get->setFechaStart($dateStart);
+            $get->setFechaEnd($dateEnd);
+            $get->setFromRow($fromRow);
+            $get->setLimit($limit);
+        
+            $count = $get->countGestionByWordAndDateRange();
+            if($count){
+                $data = $get->getGestionWordAndRangeDate();
+                if($data){
+                    $this->showEquipment($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
                 }
-            } else {
-                $objeto = array(
-                    'error' => true,
-                );
-            }
-                $jsonstring = json_encode($objeto);
-                echo $jsonstring;
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }         
            }
-       
-
     }
 
     // FILTER
 
     public function getFilterGestionRangeDateAndFilter(){
 
-        $dataRequest = json_decode($_GET['dataRequest']);
+        $Request = json_decode($_GET['dataRequest']);
 
-        $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-        $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
-        $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ; 
-        $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
-        $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ;
+        $dateStart = isset($Request->dateStart) ? $Request->dateStart : false ; 
+        $dateEnd = isset($Request->dateEnd) ? $Request->dateEnd : false ; 
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
 
         $get =  new Equipos();
         $get->setFechaStart($dateStart);
@@ -1303,20 +1072,68 @@ class equipoController
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
 
+        $count = $get->countDataFilterToGestionByDateAndFilter();
+            if($count){
+                $data = $get->getDataFilterToGestionByDateAndFilter();
+                if($data){
+                    $this->showEquipment($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        
+    }
+
+    public function getFilterGestionRangeDateAndWordAndFilter(){
+
+        $Request = json_decode($_GET['dataRequest']);
+
+        $dateStart = isset($Request->dateStart) ? $Request->dateStart : false ; 
+        $dateEnd = isset($Request->dateEnd) ? $Request->dateEnd : false ;
+        $word = isset($Request->word) ? $Request->word : false ; 
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
+
+        $get =  new Equipos();
+        $get->setFechaStart($dateStart);
+        $get->setFechaEnd($dateEnd);
+        $get->setId_recolector($word);
+        $get->setFilter($filter);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countFilterGestionRangeDateAndWordAndFilter();
+            if($count){
+                $data = $get->getDataFilterToGestionByDateAndWordAndFilter();
+                if($data){
+                    $this->showEquipment($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
     }
 
     public function getDataSearchWordGestionController(){
 
         if($_GET){
 
-            $dataRequest = json_decode($_GET['dataRequest']);
+            $Request = json_decode($_GET['dataRequest']);
 
-            $dateStart = isset($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-            $dateEnd = isset($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
-            $filter = isset($dataRequest->filter) ? $dataRequest->filter : false ; 
-            $word = isset($dataRequest->word) ? $dataRequest->word : false ; 
-            $fromRow = isset($dataRequest->fromRow) ? $dataRequest->fromRow : false ; 
-            $limit = isset($dataRequest->limit) ? $dataRequest->limit : false ; 
+            $dateStart = isset($Request->dateStart) ? $Request->dateStart : false ; 
+            $dateEnd = isset($Request->dateEnd) ? $Request->dateEnd : false ; 
+            $filter = isset($Request->filter) ? $Request->filter : false ; 
+            $word = isset($Request->word) ? $Request->word : false ; 
+            $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+            $limit = isset($Request->limit) ? $Request->limit : false ; 
 
             if($dateStart && $dateEnd && $filter){
                 $getDataSearchWordGestionController =  new Equipos();
@@ -1358,19 +1175,20 @@ class equipoController
     public function exportEquipos(){
         if($_GET){
 
-            $dataRequest = json_decode($_GET['dataRequest']);
-            $dateStart = !empty($dataRequest->dateStart) ? $dataRequest->dateStart : false ; 
-            $dateEnd = !empty($dataRequest->dateEnd) ? $dataRequest->dateEnd : false ; 
-            $filter = !empty($dataRequest->filter) ? $dataRequest->filter : false ; 
-            $word = !empty($dataRequest->word) ? $dataRequest->word : false ; 
+
+            $Request = json_decode($_GET['dataRequest']);
+            
+            $dateStart = !empty($Request->dateStart) ? $Request->dateStart : false ; 
+            $dateEnd = !empty($Request->dateEnd) ? $Request->dateEnd : false ; 
+            $filter = !empty($Request->filter) ? $Request->filter : false ; 
+            $word = !empty($Request->word) ? $Request->word : false ; 
 
             if($word && !$dateStart && !$dateEnd && !$filter){
                 //busqueda input word(identificacion,terminal,serie,etc)
                  $exportEquipos =  new Equipos();
                  $exportEquipos->setWord($word);
                  $exportEquipos =  $exportEquipos->getDataManagementExportByWord();
-             }
-
+            }
             if($dateStart && $dateEnd && !$filter && !$word){
                 //busqueda inputs rango de fecha
                 $exportEquipos =  new Equipos();
@@ -1378,8 +1196,7 @@ class equipoController
                 $exportEquipos->setFechaEnd($dateEnd);
                 $exportEquipos =  $exportEquipos->getDataManagementExportByDateRange();
             }
-           
-             if($dateStart && $dateEnd && $filter){
+            if($dateStart && $dateEnd && $filter){
                  //busqueda inputs rango de fecha y filtro
                 
                  $exportEquipos =  new Equipos();
@@ -1397,7 +1214,6 @@ class equipoController
                 $exportEquipos->setWord($word);
                 $exportEquipos =  $exportEquipos->getDataManagementExportByDateRangeAndWord();
             }
-
             if($dateStart && $dateEnd && $word && $filter){
                 //busqueda inputs rango de fecha , palabra(recolector) y filtro
                 $exportEquipos =  new Equipos();
@@ -1425,6 +1241,7 @@ class equipoController
                     }
                 
             }
+
             $jsonString = json_encode($objectResponse);
             echo $jsonString;
         }
@@ -1731,23 +1548,51 @@ class equipoController
         }
     }
 
+     // SCOPE
+
+    public function getAllUserCollectorAndCommerce(){
+        $get = new Usuario();
+        $data = $get->getAllUserCollectorAndCommerce();
+        if($data){
+            foreach ($data as $element){
+                $object[] = array(
+                    'success' => true,
+                    'id' => $element["id"],
+                    'name_user' => $element["name_user"],
+                    'slug' => $element["name_alternative"].' '.$element["name_user"].' '.'ID: '.$element["id"].' '.$element["role"],
+                );
+            }
+            
+        }else {
+            $object = array(
+                'error' => true,
+            );
+
+        }
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+        
+    }
+
     //ACCIONES DE GESTION
 
     public function updateGestion()
     {
 
-        $dataRequest = json_decode($_GET['dataRequest']);
-        $id_equipo = isset($dataRequest->id_equipo) ?$dataRequest->id_equipo : false ; 
-        $id = isset($dataRequest->id) ?$dataRequest->id : false ; 
-        $estado = isset($dataRequest->estado) ?$dataRequest->estado : false ; 
-        $serie = isset($dataRequest->serie) ?$dataRequest->serie : false ; 
-        $terminal = isset($dataRequest->terminal) ?$dataRequest->terminal : false ; 
-        $accesorio_uno = isset($dataRequest->accesorio_uno) ?$dataRequest->accesorio_uno : false ; 
-        $accesorio_dos = isset($dataRequest->accesorio_dos) ?$dataRequest->accesorio_dos : false ; 
-        $accesorio_tres = isset($dataRequest->accesorio_tres) ?$dataRequest->accesorio_tres : false ; 
-        $accesorio_cuatro = isset($dataRequest->accesorio_cuatro) ?$dataRequest->accesorio_cuatro : false ; 
-        $fecha_update = isset($dataRequest->created_at) ?$dataRequest->created_at : false ; 
-        $id_user_update = isset($dataRequest->id_user_update) ?$dataRequest->id_user_update : false ;
+        $Request = json_decode($_GET['dataRequest']);
+
+        $id_equipo = isset($Request->id_equipo) ?$Request->id_equipo : false ; 
+        $id = isset($Request->id) ?$Request->id : false ; 
+        $estado = isset($Request->estado) ?$Request->estado : false ; 
+        $serie = isset($Request->serie) ?$Request->serie : false ; 
+        $terminal = isset($Request->terminal) ?$Request->terminal : false ; 
+        $accesorio_uno = isset($Request->accesorio_uno) ?$Request->accesorio_uno : false ; 
+        $accesorio_dos = isset($Request->accesorio_dos) ?$Request->accesorio_dos : false ; 
+        $accesorio_tres = isset($Request->accesorio_tres) ?$Request->accesorio_tres : false ; 
+        $accesorio_cuatro = isset($Request->accesorio_cuatro) ?$Request->accesorio_cuatro : false ; 
+        $fecha_update = isset($Request->created_at) ?$Request->created_at : false ; 
+        $id_user_update = isset($Request->id_user_update) ?$Request->id_user_update : false ;
 
         $updateGestion = new Equipos();
         $updateGestion->setGuiaEquipo($id);
@@ -1791,12 +1636,12 @@ class equipoController
 
     public function deleteGestion(){
 
-        $dataRequest = json_decode($_GET['dataRequest']);
+        $Request = json_decode($_GET['dataRequest']);
 
-        $id_gestion = isset($dataRequest->id_gestion) ?$dataRequest->id_gestion : false ; 
-        $id_equipo = isset($dataRequest->id_equipo) ?$dataRequest->id_equipo : false ; 
-        $fecha_update = isset($dataRequest->created_at) ?$dataRequest->created_at : false ; 
-        $id_user_update = isset($dataRequest->id_user_update) ?$dataRequest->id_user_update : false ;
+        $id_gestion = isset($Request->id_gestion) ?$Request->id_gestion : false ; 
+        $id_equipo = isset($Request->id_equipo) ?$Request->id_equipo : false ; 
+        $fecha_update = isset($Request->created_at) ?$Request->created_at : false ; 
+        $id_user_update = isset($Request->id_user_update) ?$Request->id_user_update : false ;
 
         $delete = new Equipos();
         $delete->setGuiaEquipo($id_gestion);

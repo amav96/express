@@ -20,13 +20,13 @@ async function leerDatosEquiposAutorizar() {
 
         if (identificacion.toUpperCase().substr(0, 2) === 'PS' || identificacion.toUpperCase().substr(0, 2) === 'LA') {
 
-            var terminal = document.getElementById('input-serie-aut').value
-            var serie = document.getElementById('input-terminal-aut').value
+            var terminal = document.getElementById('input-serie-aut').value.replace(/[^0-9a-zA-Z]+/g, "")
+            var serie = document.getElementById('input-terminal-aut').value.replace(/[^0-9a-zA-Z]+/g, "")
 
         } else {
 
-            var terminal = document.getElementById('input-terminal-aut').value
-            var serie = document.getElementById('input-serie-aut').value
+            var terminal = document.getElementById('input-terminal-aut').value.replace(/[^0-9a-zA-Z]+/g, "")
+            var serie = document.getElementById('input-serie-aut').value.replace(/[^0-9a-zA-Z]+/g, "")
         }
 
 

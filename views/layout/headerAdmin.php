@@ -128,7 +128,7 @@
             <div class="mini-box-panel">
                 <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/admin">
                     <div class="item">
-                    <i class="fas fa-globe-americas"></i>
+                    <i class="fas fa-map-marked-alt"></i>
                     </div>
                 </a>
             </div>
@@ -167,6 +167,10 @@
 
             <li>
                 <a href="<?= base_url ?>notice/admin"><i class="fas fa-mail-bulk"></i>Gestión de avisos</a>
+            </li>
+
+            <li>
+                <a href="<?= base_url ?>cobertura/admin"><i class="fas fa-map-marked-alt"></i>Cobertura</a>
             </li>
 
             <!-- <li>

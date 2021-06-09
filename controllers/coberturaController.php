@@ -634,33 +634,40 @@ public function showCoverage($count,$data){
     if($count && $data){
        
         foreach ($count as $dataCounter){
-            $object=array('count' => $dataCounter["count"],);
-                foreach($data as $dataResponse){
-                    $object[]=array(
-                        'success' => true,
-                        'id' => $dataResponse["id"],
-                        'postal_code' => $dataResponse["postal_code"],
-                        'locate' => $dataResponse["locate"],
-                        'home_address' => $dataResponse["home_address"], 
-                        'provinceInt' => $dataResponse["provinceInt"], 
-                        'province' => $dataResponse["province"],
-                        'name_country' => $dataResponse['name_country'],
-                        'type' => $dataResponse["type"],
-                        'id_user' => $dataResponse["id_user"],
-                        'name_assigned' => $dataResponse["id_user"],
-                        'customer_service_hours' => $dataResponse["customer_service_hours"],
-                        'lat' => $dataResponse["lat"],
-                        'lng' => $dataResponse["lng"],
-                        'created_at' => $this->getDataTime($dataResponse["created_at"])
-                    );
-                }
+          $arrCount = $dataCounter["count"];
         }
+
+        foreach($data as $dataResponse){
+          $arrData[]=array(
+            'success' => true,
+            'id' => $dataResponse["id"],
+            'postal_code' => $dataResponse["postal_code"],
+            'locate' => $dataResponse["locate"],
+            'home_address' => $dataResponse["home_address"], 
+            'provinceInt' => $dataResponse["provinceInt"], 
+            'province' => $dataResponse["province"],
+            'name_country' => $dataResponse['name_country'],
+            'type' => $dataResponse["type"],
+            'id_user' => $dataResponse["id_user"],
+            'name_assigned' => $dataResponse["id_user"],
+            'customer_service_hours' => $dataResponse["customer_service_hours"],
+            'lat' => $dataResponse["lat"],
+            'lng' => $dataResponse["lng"],
+            'created_at' => $this->getDataTime($dataResponse["created_at"])
+          );
+      }
+
+      $object = array(
+        'count' => $arrCount,
+        'data' => $arrData
+      );
+  
+       $jsonstring = json_encode($object);
+       echo $jsonstring;
     }
-
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
 }
+
+// HELPER
 
 public function getDataTime($data){
     if($data){

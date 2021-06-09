@@ -81,27 +81,14 @@ Vue.component('form-search-date', {
                         this.resources.pagination ? this.$pagination(res) : false;
                         //SUBHEADER
                         this.resources.subheader.display ?
-                            this.showStatus(this.resources.subheader.url) :
+                            this.$showStatus(this.resources.subheader.url) :
                             this.$emit('setDisplayHeaders', false);
 
                         //FILTER
-                        if (this.resources.filter) {
+                        this.resources.filter.display ? this.$filter() : this.$emit('setShowFilter', false);
 
-                            this.$emit('setFilter', true)
-                            this.$emit('setShowFilter', true)
-                            this.$emit('setUrlFilter', this.resources.url.getDataFilter)
-                            let parameters = {
-                                dateStart: this.dateStart,
-                                dateEnd: this.dateEnd,
-                                fromRow: this.pagination.fromRow,
-                                limit: this.pagination.limit
-                            }
-                            this.$emit('setParametersToFilter', parameters)
-                        }
                         //EXPORT 
-                        if (this.resources.export.display) {
-                            this.$exportExcel()
-                        }
+                        this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
 
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
@@ -120,7 +107,7 @@ Vue.component('form-search-date', {
                 return;
             }
         },
-        async showStatus(url) {
+        async $showStatus(url) {
             this.$emit('setSubHeadersLoader', true)
             await axios.get(url, {
                     params: {
@@ -189,6 +176,27 @@ Vue.component('form-search-date', {
             }
 
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+        },
+        $filter() {
+
+            this.$emit('setShowFilter', true)
+            this.$emit('setUrlFilter', this.resources.filter.url)
+            let parameters = {
+                dateStart: this.dateStart,
+                dateEnd: this.dateEnd,
+                fromRow: this.pagination.fromRow,
+                limit: this.pagination.limit
+            }
+            this.$emit('setParametersToFilter', parameters)
+
+            // set filter by export 
+            if (this.resources.export.display) {
+                this.$emit('setUrlFilterExportExcel', this.resources.export.url_filter)
+                this.$emit('setExportByFilterDisplay', true)
+            } else {
+                this.$emit('setExportByFilterDisplay', true)
+            }
+
         },
         $exportExcel() {
             this.$emit('setExportDisplay', true)
