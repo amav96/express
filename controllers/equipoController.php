@@ -169,10 +169,7 @@ class equipoController
         if ($_POST) {
             $data = $_POST["sendData"];
 
-            echo '<pre>';
-            print_r($data);
-            echo '</pre>';
-            die();
+            
             if (is_array($data)) {
 
                 $count = count($data);

@@ -69,6 +69,13 @@
         `
         <v-app class="empujarParaArriba elevation" >
           <div >
+          <v-overlay v-if="!doom" opacity="2" color="white" >
+            <v-progress-circular
+              indeterminate
+              size="64"
+              color="info"
+            ></v-progress-circular>
+          </v-overlay>
               <v-row  
                 class=" bg-blue-custom justify-center align-items-center  flex-column m-0 py-2"
                 wrap
@@ -275,7 +282,7 @@
                       @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
                       @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
                       @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
-                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
                   />
                 </template>
 
@@ -298,93 +305,94 @@
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display && save.action === 'create'">
                         <save-collector 
-                        :pagination="pagination"  
+                        :pagination="MAINRESOURCES.pagination"  
                         :admin="admin" 
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
-                        @response="table.dataResponseDB = $event"
-                        @showTable="table.display = $event"
-                        @filtering="filter.filtering = $event"
-                        @setPaginateDisplay="pagination.display = $event"
+                        @response="MAINRESOURCES.table.dataResponseDB = $event"
+                        @showTable="MAINRESOURCES.table.display = $event"
+                        @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                         @setDialogDisplay="dialogFullScreen.display = $event"
-                        @setSnack="snackbar = $event"
+                        @setSnack="MAINRESOURCES.snackbar = $event"
                         />
                     </template>
                     <template v-if="save.commerce.display && save.action === 'create'" >
                       <save-commerce 
-                      :pagination="pagination"  
+                      :pagination="MAINRESOURCES.pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="snackbar = $event"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
                       />
                     </template>
                     <template v-if="save.point.display && save.action === 'create'" >
                       <save-point 
-                      :pagination="pagination"  
+                      :pagination="MAINRESOURCES.pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="snackbar = $event"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
                       />
                     </template>
                     <template v-if="save.collector.display && save.action === 'update'" >
                       <update-collector
-                      :pagination="pagination"  
+                      :pagination="MAINRESOURCES.pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="snackbar = $event"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
                       />
                       
                     </template>
                     <template v-if="save.commerce.display && save.action === 'update'" >
                       <update-commerce
-                      :pagination="pagination"  
+                      :pagination="MAINRESOURCES.pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="snackbar = $event"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
                       />
                     </template>
                     <template v-if="save.point.display && save.action === 'update'" >
                       <update-point
-                      :pagination="pagination"  
+                      :pagination="MAINRESOURCES.pagination"  
                       :admin="admin" 
                       :save="save"
                       :dialogFullScreen="dialogFullScreen"
-                      @response="table.dataResponseDB = $event"
-                      @showTable="table.display = $event"
-                      @filtering="filter.filtering = $event"
-                      @setPaginateDisplay="pagination.display = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="snackbar = $event"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
                       />
                     </template>
                   </d-full-screen>
                 </template>
           
               </div> 
+
                 <template v-if="MAINRESOURCES.table.loading" >
                  <loader-line />
                 </template>
@@ -437,7 +445,7 @@
                   <loader-line />
                 </template>
   
-                <template v-if="showTable()">
+                <template v-if="showTable() && MAINRESOURCES.pagination.totalCountResponse>0">
                     <pagination-custom 
                     :pagination="MAINRESOURCES.pagination"
                     :urlTryPagination="MAINRESOURCES.urlTryPagination"
@@ -466,14 +474,38 @@
                     display : false,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
                     title_field : 'Ingrese Recolector',
+                    select : {
+                      display: true,
+                      url : '',
+                      title: '',
+                      class: 'mx-2',
+                      outlined: true,
+                      dense: true
+                    },
                   },
                   commerce : {
                     display : false,
                     url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCommerce',
                     title_field : 'Ingrese comercio',
+                    select : {
+                      display: true,
+                      url : '',
+                      title: '',
+                      class: 'mx-2',
+                      outlined: true,
+                      dense: true
+                    },
                   },
                   point : {
-                    display : false
+                    display : false,
+                    select : {
+                      display: true,
+                      url : '',
+                      title: '',
+                      class: 'mx-2',
+                      outlined: true,
+                      dense: true
+                    },
                   },
                   zone : {
                     postal_codes : [],
@@ -501,10 +533,10 @@
                     title:'Seleccione tipo',
                     chosenOption:'',
                     options: [
-                      {text:'Recolector',value:'collector'},
-                      {text:'Comercio', value: 'commerce'},
-                      {text:'Correo', value:'mail'},
-                      {text:'Terminal', value:'station'},
+                      {text:'Recolector',value:'recolector'},
+                      {text:'Comercio', value: 'comercio'},
+                      {text:'Correo', value:'correo'},
+                      {text:'Terminal', value:'terminal'},
                     ],
                   }
                 },
@@ -623,15 +655,15 @@
                 showZoneByUser : {
                     display : false,
                     url: {
-                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllHistoryCoverage',
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCoverageByUsers',
                     },
                     subheader: {
                       display : false,
                       url :''
                     },
                     filter : {
-                      display: true,
-                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage'
+                      display: false,
+                      url : ''
                     },
                     export : {
                       display : false,
@@ -640,7 +672,7 @@
                     },
                     select : {
                       display: false,
-                      url : API_BASE_CONTROLLER + 'noticeController.php?notice=getAllUserCollectorAndCommerce',
+                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getAllUserCollectorAndCommerce',
                       title: 'Usuario',
                       class: 'mx-4',
                       outlined: false,
@@ -698,10 +730,10 @@
                       { text: 'Provincia'},
                       { text: 'Direccion'},
                       { text: 'Horarios'},
+                      { text: 'HorariosB'},
                       { text: 'Pais'},
                       { text: 'Tipo'},
                       { text: 'Nombre Asignado'},
-                      { text: 'ID_asignado'},
                       { text: 'fecha'},
 
                   ],
@@ -714,7 +746,7 @@
                       { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
                       { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
                       { title: 'Zonas vacias', icon: 'mdi-alert-circle-outline', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom"},
-                      { title: 'Historial', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
+                      { title: 'Historial Inactivo', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
                       { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showZoneByUser', active :  false, color :"bg-blue-custom"},
                   ],
                   error: {
@@ -730,6 +762,7 @@
                   },
 
                 },
+                doom : false
                 
             }
         },
@@ -748,7 +781,7 @@
             this.dialogFullScreen.display = true
 
           
-            if(this.save.type === 'collector'){
+            if(this.save.type === 'recolector'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Recolector' : '';
                 this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Recolector' : '';
                 //show or hide others form
@@ -756,7 +789,7 @@
                 this.save.commerce.display = false
                 this.save.point.display = false
               }
-            if(this.save.type === 'commerce'){
+            if(this.save.type === 'comercio'){
               this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Comercio' : '';
               this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Comercio' : '';
                 //show or hide others form
@@ -764,12 +797,12 @@
                 this.save.collector.display = false
                 this.save.point.display = false
               }
-            if(this.save.type === 'mail' || this.save.type === 'station'){
+            if(this.save.type === 'correo' || this.save.type === 'terminal'){
                 if(this.save.type === 'mail'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Correo' : '';
                 this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Correo' : '';
                 }
-                if(this.save.type === 'station'){
+                if(this.save.type === 'terminal'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Terminal' : '';
                 this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Terminal' : '';
                 }
@@ -826,13 +859,14 @@
               this.showAllEmptyCoverage.display = false
               this.formRangeNumberAndWord.display = true
               this.showAllHistory.display = false
+              this.showZoneByUser.display = false
               
             this.$nextTick(() => {
               this.MAINRESOURCES.itemsButtons[0].active = false //todo
               this.MAINRESOURCES.itemsButtons[1].active = true //rangeNumber
               this.MAINRESOURCES.itemsButtons[2].active = false //empty
               this.MAINRESOURCES.itemsButtons[3].active = false //history
-              this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
+              this.MAINRESOURCES.itemsButtons[4].active = false //user 
               // si no queres mostrar la tabla al llegar aca, solo escondela
             });
           },
@@ -868,7 +902,7 @@
                 this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
                 this.MAINRESOURCES.itemsButtons[2].active = false //empty
                 this.MAINRESOURCES.itemsButtons[3].active = false //history
-                this.MAINRESOURCES.itemsButtons[4].active = true ////user by zone
+                this.MAINRESOURCES.itemsButtons[4].active = true ////user
               });
               
           },
@@ -892,18 +926,24 @@
             })
           },
           showTable(){
-            if(this.MAINRESOURCES.table.display && this.MAINRESOURCES.pagination.totalCountResponse>0){
+            if(this.MAINRESOURCES.table.display){
               return true
             }else {
               return false
             }
           }
-          
-
         },
+        
         created(){
           this.getAdmin()
+          console.log("creado")
         }, 
+        mounted() {
+          this.doom = true
+        },
+        destroyed() {
+          this.doom = false
+        },
         
     })
 </script>

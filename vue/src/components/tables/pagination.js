@@ -9,7 +9,6 @@ Vue.component('pagination-custom', {
                 :length="pagination.totalPage"
                 @input="paginate"
             ></v-pagination>
-           
         </v-container>
       </div>
     `,
@@ -74,6 +73,7 @@ Vue.component('pagination-custom', {
         },
         restauratePagination() {
             const pagination = {
+                display: true,
                 totalPage: 0,
                 rowForPage: 10,
                 pageCurrent: 1,
@@ -83,7 +83,6 @@ Vue.component('pagination-custom', {
             }
             this.$emit("restauratePagination", pagination);
         }
-
     },
     watch: {
         pagination: {

@@ -30,30 +30,20 @@ Vue.component("table-cobertura", {
                                 <td>{{row.provinceInt}}</td>
                                 <td>{{row.province}}</td>
                                 <td>{{row.home_address}}</td>
-                                <td>{{row.customer_service_hours}}</td>
+                                <td>{{row.timeScheduleA}}</td>
+                                <td>{{row.timeScheduleB}}</td>
                                 <td>{{row.name_country}}</td>
                                 <td>{{row.type}}</td>
                                 <td 
                                 v-if="row.name_assigned !== '' && row.name_assigned !== null && row.name_assigned !== '0' && row.name_assigned !== 0 && row.name_assigned"
                                 >
-                                    {{row.name_assigned}}
+                                    {{row.name_assigned}} - {{ row.id_user}}
                                 </td>
                                 <td 
                                 v-else 
                                 >
                                 </td>
-
-                                <td
-                                v-if="row.id_user !== '' && row.id_user !== null && row.id_user !== '0' && row.id_user !== 0 && row.id_user"
-                                >
-                                {{ row.id_user}}
-                                </td>
-
-                                <td
-                                v-else
-                                >
-                                
-                                </td>
+ 
 
                                 <td>{{row.created_at}}</td>
                                 

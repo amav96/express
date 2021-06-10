@@ -10,7 +10,12 @@ Vue.component('update-collector', {
                             <select-auto-complete-simple-id 
                             @exportVal="setUser($event)"
                             :title="save.collector.title_field" 
-                            :url="save.collector.url_users" />
+                            :url="save.collector.url_users"
+                            :outlined="save.collector.select.outlined"
+                            :classCustom="save.collector.select.class"
+                            :dense="save.collector.select.dense"
+
+                             />
                         </v-col>
                     </v-row>
                     
@@ -21,7 +26,10 @@ Vue.component('update-collector', {
                             title="Ingrese País" 
                             :url="save.zone.url_country"
                             @exportVal="setSelectCountry($event)"
-                            
+                            :outlined="save.collector.select.outlined"
+                            :classCustom="save.collector.select.class"
+                            :dense="save.collector.select.dense"
+                            ref="resetCountry"
                             
                                 />
                         </v-col>
@@ -31,7 +39,10 @@ Vue.component('update-collector', {
                             title="Ingrese Provincia" 
                             :url="save.zone.url_province"
                             @exportVal="setSelectProvince($event)"
-                        
+                            :outlined="save.collector.select.outlined"
+                            :classCustom="save.collector.select.class"
+                            :dense="save.collector.select.dense"
+                            ref="resetProvince"
                             />
                         </v-col>
 
@@ -44,7 +55,7 @@ Vue.component('update-collector', {
                                 label="Desde"
                                 v-model="cp_start"
                                 type="number"
-                                class="mx-4"
+                                class="mx-2"
                                 outlined
                                 dense
                                 flat
@@ -56,7 +67,7 @@ Vue.component('update-collector', {
                                 label="Hasta"
                                 v-model="cp_end"
                                 type="number"
-                                class="mx-4"
+                                class="mx-2"
                                 outlined
                                 dense
                                 flat
@@ -164,14 +175,18 @@ Vue.component('update-collector', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'collector') {
+            if (this.save.type === 'recolector') {
                 return "Recolector";
             }
 
         },
         setUser(user) {
-            this.infoUser = user
-            this.id_user = user.id
+            this.resetToChangeUser()
+            this.$nextTick(() => {
+                this.infoUser = user
+                this.id_user = user.id
+            })
+
 
         },
         setSelectCountry(country) {
@@ -187,6 +202,7 @@ Vue.component('update-collector', {
             const url = this.save.zone.url_AllPointInZone
             await axios.get(url, {
                     params: {
+                        type: this.save.type,
                         id_user: this.id_user,
                         country: this.id_country,
                         province: this.id_province,
@@ -195,6 +211,7 @@ Vue.component('update-collector', {
                     }
                 })
                 .then(res => {
+
                     if (res.data.error) {
                         const error = { display: true, text: 'No hay resultados' }
                         this.error = error
@@ -238,6 +255,7 @@ Vue.component('update-collector', {
         async _updateData() {
             this.saveLoading = true
             const url = this.save.url.update
+
             const dataRequest = {
                 value: this.selectZone,
                 id_user: this.id_user,
@@ -245,12 +263,14 @@ Vue.component('update-collector', {
                 admin: this.admin,
                 created_at: this.getDateTime()
             }
+
             await axios.get(url, {
                     params: {
                         dataRequest
                     }
                 })
                 .then(res => {
+
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
                         this.saveLoading = false
@@ -270,8 +290,9 @@ Vue.component('update-collector', {
                 })
         },
         setResponseWhenFinally(res) {
+
             this.$emit('setPaginateDisplay', false)
-            this.$emit('response', res.data)
+            this.$emit('response', res.data.data)
             this.$emit('showTable', true)
         },
         finish() {
@@ -297,7 +318,7 @@ Vue.component('update-collector', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Recolector actualizado correctamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 
@@ -321,6 +342,14 @@ Vue.component('update-collector', {
 
             return created_at
         },
+        resetToChangeUser() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.$refs.resetCountry.reset()
+            this.$refs.resetProvince.reset()
+
+        }
     },
 
     watch: {

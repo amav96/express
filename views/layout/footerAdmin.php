@@ -29,9 +29,10 @@ $(function () {
 </script>
       
 <!-- código JS propìo-->    
-<script src="<?=base_url?>assets/admin/users.js?v=12052021"></script>
+<script src="<?=base_url?>assets/admin/users.js?v=11062021"></script>
 <script src="<?=base_url?>estilos/personal/js/logo.js"> </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 </body>
 
 </html>

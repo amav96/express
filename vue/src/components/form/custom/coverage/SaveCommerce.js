@@ -10,7 +10,11 @@ Vue.component('save-commerce', {
                                 <select-auto-complete-simple-id 
                                 @exportVal="setUser($event)"
                                 :title="save.commerce.title_field" 
-                                :url="save.commerce.url_users" />
+                                :url="save.commerce.url_users" 
+                                :outlined="save.commerce.select.outlined"
+                                :classCustom="save.commerce.select.class"
+                                :dense="save.commerce.select.dense"
+                                />
                             </v-col>
                             <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
                                 <template v-if="infoUser.length !== 0">
@@ -64,6 +68,9 @@ Vue.component('save-commerce', {
                             @setProvinceID="id_province = $event"
                             @setLocateID="id_locate = $event"
                             :save="save"
+                            :outlined="save.commerce.select.outlined"
+                            :classCustom="save.commerce.select.class"
+                            :dense="save.commerce.select.dense"
                             />
                             <v-row class="d-flex justify-between flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -75,7 +82,7 @@ Vue.component('save-commerce', {
                                     required
                                     type="text"
                                     color="black"
-                                    class="info--text mx-4"
+                                    class="info--text mx-2"
                                     >
                                     </v-text-field>
                                 </v-col>
@@ -88,7 +95,7 @@ Vue.component('save-commerce', {
                                     required
                                     type="text"
                                     color="black"
-                                    class="info--text mx-4"
+                                    class="info--text mx-2"
                                     >
                                     </v-text-field>
                                 </v-col>
@@ -108,7 +115,7 @@ Vue.component('save-commerce', {
                                     </v-btn>
                                 </v-col>
                             </v-row>
-                            
+
                             <template v-if="srcMap !== ''" >
                                 <v-row class="d-flex justify-center flex-column align-content-center" >
                                     <v-col  cols="12" xl="8" lg="8" >
@@ -126,29 +133,16 @@ Vue.component('save-commerce', {
                         
                             <h6  class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
                           
-                            <v-row class="d-flex justify-center flex-row" >
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <select-auto-complete-simple-id 
-                                    title="Ingrese País" 
-                                    :url="save.zone.url_country"
-                                    @exportVal="setSelectCountry($event)"
-                                        />
-                                </v-col>
+                            <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <select-auto-complete-search-id 
-                                    :searchID="id_country_by_select"
-                                    title="Ingrese Provincia" 
-                                    :url="save.zone.url_province"
-                                    @exportVal="setSelectProvince($event)" 
-                                    />
-                                </v-col>
-
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <select-auto-complete-search-id 
-                                    :searchID="id_province_by_select"
+                                    :searchID="id_province"
                                     title="Ingrese Localidad" 
                                     :url="save.zone.url_locate"
                                     @exportVal="getZoneByPostalCode($event)"
+                                    :outlined="save.commerce.select.outlined"
+                                    :classCustom="save.commerce.select.class"
+                                    :dense="save.commerce.select.dense"
                                     />
                                 </v-col>
                             
@@ -215,9 +209,7 @@ Vue.component('save-commerce', {
     data() {
         return {
             time: false,
-            id_country_by_select: '',
             id_country: '',
-            id_province_by_select: '',
             id_province: '',
             id_locate: '',
             home_address: '',
@@ -242,7 +234,7 @@ Vue.component('save-commerce', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'commerce') {
+            if (this.save.type === 'comercio') {
                 return "Comercio";
             }
 
@@ -251,19 +243,14 @@ Vue.component('save-commerce', {
             this.infoUser = user
             this.id_user = user.id
         },
-        setSelectCountry(country) {
-            this.id_country_by_select = country.id
-        },
-        setSelectProvince(province) {
-            this.id_province_by_select = province.id
 
-        },
         getZoneByPostalCode(locate) {
+            console.log(locate)
             const url = this.save.zone.url_postalCode
             axios.get(url, {
                     params: {
-                        id_country: this.id_country_by_select,
-                        id_province: this.id_province_by_select,
+                        id_country: this.id_country,
+                        id_province: this.id_province,
                         locate: locate.slug
                     }
                 })
@@ -325,6 +312,7 @@ Vue.component('save-commerce', {
                     }
                 })
                 .then(res => {
+
                     if (res.data[0].error === "exist") {
                         this.exist(res)
                         this.saveLoading = false
@@ -360,9 +348,7 @@ Vue.component('save-commerce', {
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
-                    this.id_country_by_select = ''
                     this.id_country = ''
-                    this.id_province_by_select = ''
                     this.id_province = ''
                     this.id_locate = ''
                     this.id_user = ''
@@ -381,9 +367,9 @@ Vue.component('save-commerce', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Comercio creado exitosamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Comercio creado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
+                        this.saveFlag = false
                     })
                 }, 700);
             }

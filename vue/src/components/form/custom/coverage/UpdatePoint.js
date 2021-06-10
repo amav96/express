@@ -25,6 +25,9 @@ Vue.component('update-point', {
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
+                    :outlined="save.point.select.outlined"
+                    :classCustom="save.point.select.class"
+                    :dense="save.point.select.dense"
                     :save="save"
                     />
                     <v-row class="d-flex justify-between flex-row" >
@@ -37,7 +40,7 @@ Vue.component('update-point', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-4"
+                            class="info--text mx-2"
                             >
                             </v-text-field>
                         </v-col>
@@ -50,7 +53,7 @@ Vue.component('update-point', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-4"
+                            class="info--text mx-2"
                             >
                             </v-text-field>
                         </v-col>
@@ -86,29 +89,6 @@ Vue.component('update-point', {
                         </v-row>
                     </template>
                     
-                    <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                    <v-row class="d-flex justify-start flex-row" >
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            title="Ingrese País" 
-                            :url="save.zone.url_country"
-                            @exportVal="setSelectCountry($event)"
-                            
-                            
-                                />
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <select-auto-complete-search-id 
-                            :searchID="id_country_by_select"
-                            title="Ingrese Provincia" 
-                            :url="save.zone.url_province"
-                            @exportVal="setSelectProvince($event)"
-                        
-                            />
-                        </v-col>
-
-                    </v-row>
-
                         <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -214,9 +194,7 @@ Vue.component('update-point', {
     },
     data() {
         return {
-            id_country_by_select: '',
             id_country: '',
-            id_province_by_select: '',
             id_province: '',
             id_locate: '',
             home_address: '',
@@ -240,25 +218,19 @@ Vue.component('update-point', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'mail') {
+            if (this.save.type === 'correo') {
                 return "Correo";
             }
-            if (this.save.type === 'station') {
+            if (this.save.type === 'terminal') {
                 return "Terminal";
             }
 
-        },
-        setSelectCountry(country) {
-            this.id_country = country.id
-            this.id_country_by_select = country.id
-        },
-        setSelectProvince(province) {
-            this.id_province = province.id
         },
         async _getAllPointInZone() {
             const url = this.save.zone.url_AllPointInZone
             await axios.get(url, {
                     params: {
+                        type: this.save.type,
                         id_user: this.id_user,
                         country: this.id_country,
                         province: this.id_province,
@@ -352,7 +324,7 @@ Vue.component('update-point', {
         },
         setResponseWhenFinally(res) {
             this.$emit('setPaginateDisplay', false)
-            this.$emit('response', res.data)
+            this.$emit('response', res.data.data)
             this.$emit('showTable', true)
         },
         finish() {
@@ -360,9 +332,7 @@ Vue.component('update-point', {
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
-                    this.id_country_by_select = ''
                     this.id_country = ''
-                    this.id_province_by_select = ''
                     this.id_province = ''
                     this.lat = ''
                     this.lng = ''
@@ -380,7 +350,7 @@ Vue.component('update-point', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Actualizado correctamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 

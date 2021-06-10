@@ -8,39 +8,39 @@
 <!-- component  avisos -->
   
 
-<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=11062021"></script>
 
 
 <!-- dialog component -->
 
-<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=11062021"></script>
 
 <!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/tables/excel.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableAvisos.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableAvisos.js?v=11062021"></script>
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/reusable/formSearchByWordAndDate.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formSearchByWordAndDate.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js?v=11062021"></script>
 
 
 <!-- pagination component -->
-<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=11062021"></script>
 
 <!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=12052021"></script>
-<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=12052021"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=11062021"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=11062021"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=12052021"></script>
-<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=12052021"></script>
+<script src="<?=base_url?>vue/src/store/index.js?v=11062021"></script>
+<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=11062021"></script>
 <!-- views -->
 
 <?php require_once 'views/layout/footerAdmin.php'; ?>

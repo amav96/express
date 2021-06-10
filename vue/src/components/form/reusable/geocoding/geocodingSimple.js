@@ -8,6 +8,10 @@ Vue.component('geocoding-simple', {
                     title="Ingrese País" 
                     :url="save.zone.url_country"
                     @exportVal="setCountry($event)"
+                    :outlined="outlined"
+                    :classCustom="classCustom"
+                    :dense="dense"
+                    ref="resetCountry"
                         />
                 </v-col>
                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -16,6 +20,10 @@ Vue.component('geocoding-simple', {
                     title="Ingrese Provincia" 
                     :url="save.zone.url_province"
                     @exportVal="setProvince($event)" 
+                    :outlined="outlined"
+                    :classCustom="classCustom"
+                    :dense="dense"
+                    ref="resetProvince"
                     />
                 </v-col>
                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -24,6 +32,10 @@ Vue.component('geocoding-simple', {
                     title="Ingrese Localidad" 
                     :url="save.zone.url_locate"
                     @exportVal="setLocate($event)"
+                    :outlined="outlined"
+                    :classCustom="classCustom"
+                    :dense="dense"
+                    ref="resetLocate"
                     />
                 </v-col>
             </v-row>
@@ -37,7 +49,7 @@ Vue.component('geocoding-simple', {
                     required
                     type="text"
                     color="black"
-                    class="info--text mx-4 "
+                    class="info--text mx-2 "
                     >
                     </v-text-field>
                 </v-col>
@@ -71,6 +83,15 @@ Vue.component('geocoding-simple', {
     props: {
         save: {
             type: Object
+        },
+        outlined: {
+            type: Boolean
+        },
+        classCustom: {
+            type: String
+        },
+        dense: {
+            type: Boolean
         }
     },
     data() {
@@ -143,6 +164,22 @@ Vue.component('geocoding-simple', {
                     this.loading = false
                     console.log(err)
                 })
+
+        },
+        reset() {
+
+            this.id_country = ''
+            this.text_country = ''
+            this.id_province = ''
+            this.text_province = ''
+            this.id_locate = ''
+            this.text_locate = ''
+            this.home_address = ''
+            this.id_user = ''
+            this.$refs.resetCountry.reset()
+            this.$refs.resetProvince.reset()
+            this.$refs.resetLocate.reset()
+
 
         }
     },

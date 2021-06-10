@@ -1615,6 +1615,31 @@ class usuarioController
          
      }
 
+     public function getAllUserCollectorAndCommerce(){
+          $get = new Usuario();
+          $data = $get->getAllUserCollectorAndCommerce();
+          if($data){
+              foreach ($data as $element){
+                  $object[] = array(
+                      'success' => true,
+                      'id' => $element["id"],
+                      'name_user' => $element["name_user"],
+                      'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.$element["role"],
+                  );
+              }
+              
+          }else {
+              $object = array(
+                  'error' => true,
+              );
+      
+          }
+      
+          $jsonstring = json_encode($object);
+          echo $jsonstring;
+          
+        }
+
      
     
 }

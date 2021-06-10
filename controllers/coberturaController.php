@@ -28,33 +28,6 @@ public function admin(){
     require_once  'vue/src/view/admin/cobertura.php';
 }
 
-//CONTADORES DE COBERTURA PARA PAGINACIONES
-
-
-public function countCoverageByUsers(){
-
-    $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $Request =  json_decode($dataRequest);
-    
-    $id_user = isset($Request->id_user) ? $Request->id_user : false; 
-   
-    $count = new Cobertura();
-    $count->setId_user($id_user);
-    $count = $count->countCoverageByUsers();
-     if($count){
-         foreach($count as $element){
-                     $object=array(
-                         'success' => true,
-                         'count' => $element["count"],
-                     );
-             }
-     }else{$object=array('error' => true,);}
-    
-     $jsonstring = json_encode($object);
-     echo $jsonstring;
-
-}
-
 
 //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 
@@ -179,7 +152,7 @@ public function getCoverageByUsers(){
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $Request =  json_decode($dataRequest);
     
-    $id_user = isset($Request->id_user) ? $Request->id_user : false; 
+    $id_user = isset($Request->word) ? $Request->word : false; 
     $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
     $limit = isset($Request->limit) ? $Request->limit : false;
    
@@ -188,12 +161,19 @@ public function getCoverageByUsers(){
     $get->setFromRow($fromRow);
     $get->setLimit($limit);
 
-    // $get = $get->getCoverageByUsers();
-    // if($get){$this->showCoverage($get);}
-    // else{
-    //     $object=array('error' => true);
-    //     $jsonstring = json_encode($object); echo $jsonstring;
-    // }
+    $count = $get->countCoverageByUsers();
+    if($count){
+        $data = $get->getCoverageByUsers();
+        if($data){
+            $this->showCoverage($count,$data);
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }else{
+        $object=array('error' => true);
+        $jsonstring = json_encode($object); echo $jsonstring;
+    }
 
 }
 
@@ -398,13 +378,13 @@ public function save(){
         $save->setLat($lat);
         $save->setLng($lng);
         $save->setPostal_code($postal_code);
+        $verifyNotExistUser = false;
 
-        if($id_user){
-            // este valida commerce y collector
+        if($type === 'recolector' || $type === 'comercio'){
             $verifyNotExistUser = $save->verifyNotExistUser();
-        }else {
-           
-            $verifyNotExistUser = false;
+        }
+        if($type === 'correo' || $type= 'terminal'){
+            $verifyNotExistUser = $save->verifyNotExistStation();
         }
         
         if($verifyNotExistUser){
@@ -445,8 +425,9 @@ public function save(){
                             'name_country' => $element['name_country'],
                             'type' => $element["type"],
                             'id_user' => $element["id_user"],
-                            'name_assigned' => $element["id_user"],
-                            'customer_service_hours' => $element["customer_service_hours"],
+                            'name_assigned' => $element["name_assigned"],
+                            'timeScheduleA' => $element["timeScheduleA"],
+                            'timeScheduleB' => $element["timeScheduleB"],
                             'lat' => $element["lat"],
                             'lng' => $element["lng"],
                             'created_at' => $dateTimeFormated
@@ -493,17 +474,18 @@ public function delete(){
 public function update(){
 
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-    $request =  json_decode($dataRequest);
+    $Request =  json_decode($dataRequest);
+
     Utils::AuthAdmin();
     
-    $home_address = isset($request->home_address) ? $request->home_address : false ;
-    $lat = isset($request->lat) ? $request->lat : false ;
-    $lng = isset($request->lng) ? $request->lng : false ;
-    $id_user = isset($request->id_user) && !empty($request->id_user)? $request->id_user : false ;
-    $type = isset($request->type) ? $request->type : false ;
-    $admin = isset($request->admin) ? $request->admin : false ;
-    $created_at = isset($request->created_at) ? $request->created_at : false ;
-    $timeSchedule = isset($request->timeSchedule) ? $request->timeSchedule : false ;
+    $home_address = isset($Request->home_address) ? $Request->home_address : false ;
+    $lat = isset($Request->lat) ? $Request->lat : false ;
+    $lng = isset($Request->lng) ? $Request->lng : false ;
+    $id_user = isset($Request->id_user) && !empty($Request->id_user)? $Request->id_user : false ;
+    $type = isset($Request->type) ? $Request->type : false ;
+    $admin = isset($Request->admin) ? $Request->admin : false ;
+    $created_at = isset($Request->created_at) ? $Request->created_at : false ;
+    $timeSchedule = isset($Request->timeSchedule) ? $Request->timeSchedule : false ;
 
     $update = new cobertura();
     $update->setId_user($id_user);
@@ -517,7 +499,7 @@ public function update(){
     $idModified[]='';
     $object= false;
     $process = false;
-    foreach ($request as $element){
+    foreach ($Request as $element){
         if (gettype($element) === 'array'){
             foreach ($element as $childElement){
                 $update->setId($childElement->id);
@@ -542,8 +524,9 @@ public function update(){
     if($process){
         $idFinally = array_filter($idModified);
         $update->setId($idFinally);
-        if($update->getCodesById()){
-           $this->showCoverage($count =0,$update->getCodesById());
+        $get = $update->getCodesById();
+        if($get){
+           $this->showSimpleCoverage($get);
         }
     }
     else {$object=array('error' => 'not_process');}
@@ -649,8 +632,9 @@ public function showCoverage($count,$data){
             'name_country' => $dataResponse['name_country'],
             'type' => $dataResponse["type"],
             'id_user' => $dataResponse["id_user"],
-            'name_assigned' => $dataResponse["id_user"],
-            'customer_service_hours' => $dataResponse["customer_service_hours"],
+            'name_assigned' => $dataResponse["name_assigned"],
+            'timeScheduleA' => $dataResponse["timeScheduleA"],
+            'timeScheduleB' => $dataResponse["timeScheduleB"],
             'lat' => $dataResponse["lat"],
             'lng' => $dataResponse["lng"],
             'created_at' => $this->getDataTime($dataResponse["created_at"])
@@ -665,6 +649,41 @@ public function showCoverage($count,$data){
        $jsonstring = json_encode($object);
        echo $jsonstring;
     }
+}
+
+public function showSimpleCoverage($data){
+
+    if($data){
+       
+        foreach($data as $dataResponse){
+          $arrData[]=array(
+            'success' => true,
+            'id' => $dataResponse["id"],
+            'postal_code' => $dataResponse["postal_code"],
+            'locate' => $dataResponse["locate"],
+            'home_address' => $dataResponse["home_address"], 
+            'provinceInt' => $dataResponse["provinceInt"], 
+            'province' => $dataResponse["province"],
+            'name_country' => $dataResponse['name_country'],
+            'type' => $dataResponse["type"],
+            'id_user' => $dataResponse["id_user"],
+            'name_assigned' => $dataResponse["name_assigned"],
+            'timeScheduleA' => $dataResponse["timeScheduleA"],
+            'timeScheduleB' => $dataResponse["timeScheduleB"],
+            'lat' => $dataResponse["lat"],
+            'lng' => $dataResponse["lng"],
+            'created_at' => $this->getDataTime($dataResponse["created_at"])
+          );
+      }
+
+      $object = array(
+        'data' => $arrData
+      );
+  
+       $jsonstring = json_encode($object);
+       echo $jsonstring;
+    }
+    
 }
 
 // HELPER
@@ -846,17 +865,15 @@ public function getPostalCodeByLocateAndProvinceAndCountry(){
     $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
     $locate = isset($_GET['locate']) ? $_GET['locate'] : false ;
 
-    $getPostalCodeByLocateAndProvinceAndCountry = new Cobertura();
-    $getPostalCodeByLocateAndProvinceAndCountry->setId_country($id_country);
-    $getPostalCodeByLocateAndProvinceAndCountry->setProvince($id_province);
-    $getPostalCodeByLocateAndProvinceAndCountry->setLocate($locate);
-    $getPostalCodeByLocateAndProvinceAndCountry = $getPostalCodeByLocateAndProvinceAndCountry->getPostalCodeByLocateAndProvinceAndCountry();
+    $get = new Cobertura();
+    $get->setId_country($id_country);
+    $get->setProvince($id_province);
+    $get->setLocate($locate);
+    $get = $get->getPostalCodeByLocateAndProvinceAndCountry();
 
-    if($getPostalCodeByLocateAndProvinceAndCountry){
-        foreach ($getPostalCodeByLocateAndProvinceAndCountry as $element){
-                $object[]=array(
-                    'postal_code'    => $element["postal_code"],
-                );
+    if($get){
+        foreach ($get as $element){
+                $object[]=array('postal_code' => $element["postal_code"],);
             }
     }else {
         $object = array(
@@ -870,20 +887,30 @@ public function getPostalCodeByLocateAndProvinceAndCountry(){
 
 public function getAllPointInZone(){
 
+    
+
+    $type = isset($_GET['type']) ? $_GET['type'] : false ;
     $country = isset($_GET['country']) ? $_GET['country'] : false ;
     $cp_start = isset($_GET['cp_start']) ? $_GET['cp_start'] : false ;
     $cp_end = isset($_GET['cp_end']) ? $_GET['cp_end'] : false ;
     $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : false ;
 
-    $getAllPointInZone = new cobertura();
-    $getAllPointInZone->setId_country($country);
-    $getAllPointInZone->setPostal_code($cp_start);
-    $getAllPointInZone->setPostal_code_range($cp_end);
-    $getAllPointInZone->setId_user($id_user);
-    $getAllPointInZone = $getAllPointInZone->getAllPointInZone();
 
-    if($getAllPointInZone){
-        foreach ($getAllPointInZone as $element){
+    $get = new cobertura();
+    $get->setId_country($country);
+    $get->setPostal_code($cp_start);
+    $get->setPostal_code_range($cp_end);
+    $get->setId_user($id_user);
+
+    if($type === 'recolector' || $type= 'comercio'){
+        $get = $get->getPointZoneExceptUserCurrent();
+    }
+    if($type === 'correo' || $type= 'terminal'){
+        $get = $get->getAllPointInZone();
+    }
+    
+    if($get){
+        foreach ($get as $element){
                 $object[]= array(
                     'id' => $element["id"],
                     'postal_code' => $element["postal_code"],

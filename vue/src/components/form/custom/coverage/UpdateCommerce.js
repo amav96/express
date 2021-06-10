@@ -10,7 +10,12 @@ Vue.component('update-commerce', {
                             <select-auto-complete-simple-id 
                             @exportVal="setUser($event)"
                             :title="save.commerce.title_field" 
-                            :url="save.commerce.url_users" />
+                            :url="save.commerce.url_users" 
+                            :outlined="save.collector.select.outlined"
+                            :classCustom="save.collector.select.class"
+                            :dense="save.collector.select.dense"
+                            
+                            />
                         </v-col>
                         <template v-if="infoUser.length !== 0">
                             <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
@@ -66,7 +71,11 @@ Vue.component('update-commerce', {
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
+                    :outlined="save.collector.select.outlined"
+                    :classCustom="save.collector.select.class"
+                    :dense="save.collector.select.dense"
                     :save="save"
+                    ref="resetGeocoding"
                     />
                     <v-row class="d-flex justify-between flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -78,7 +87,7 @@ Vue.component('update-commerce', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-4"
+                            class="info--text mx-2"
                             >
                             </v-text-field>
                         </v-col>
@@ -91,7 +100,7 @@ Vue.component('update-commerce', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-4"
+                            class="info--text mx-2"
                             >
                             </v-text-field>
                         </v-col>
@@ -127,29 +136,6 @@ Vue.component('update-commerce', {
                         </v-row>
                     </template>
                     
-                    <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                    <v-row class="d-flex justify-start flex-row" >
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <select-auto-complete-simple-id 
-                            title="Ingrese País" 
-                            :url="save.zone.url_country"
-                            @exportVal="setSelectCountry($event)"
-                            
-                            
-                                />
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <select-auto-complete-search-id 
-                            :searchID="id_country_by_select"
-                            title="Ingrese Provincia" 
-                            :url="save.zone.url_province"
-                            @exportVal="setSelectProvince($event)"
-                        
-                            />
-                        </v-col>
-
-                    </v-row>
-
                         <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -255,9 +241,7 @@ Vue.component('update-commerce', {
     },
     data() {
         return {
-            id_country_by_select: '',
             id_country: '',
-            id_province_by_select: '',
             id_province: '',
             id_locate: '',
             home_address: '',
@@ -283,27 +267,24 @@ Vue.component('update-commerce', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'commerce') {
+            if (this.save.type === 'comercio') {
                 return "Comercio";
             }
 
         },
         setUser(user) {
-            this.infoUser = user
-            this.id_user = user.id
+            this.resetToChangeUser()
+            this.$nextTick(() => {
+                this.infoUser = user
+                this.id_user = user.id
+            })
 
-        },
-        setSelectCountry(country) {
-            this.id_country = country.id
-            this.id_country_by_select = country.id
-        },
-        setSelectProvince(province) {
-            this.id_province = province.id
         },
         async _getAllPointInZone() {
             const url = this.save.zone.url_AllPointInZone
             await axios.get(url, {
                     params: {
+                        type: this.save.type,
                         id_user: this.id_user,
                         country: this.id_country,
                         province: this.id_province,
@@ -397,7 +378,7 @@ Vue.component('update-commerce', {
         },
         setResponseWhenFinally(res) {
             this.$emit('setPaginateDisplay', false)
-            this.$emit('response', res.data)
+            this.$emit('response', res.data.data)
             this.$emit('showTable', true)
         },
         finish() {
@@ -405,9 +386,7 @@ Vue.component('update-commerce', {
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
-                    this.id_country_by_select = ''
                     this.id_country = ''
-                    this.id_province_by_select = ''
                     this.id_province = ''
                     this.lat = ''
                     this.lng = ''
@@ -427,7 +406,7 @@ Vue.component('update-commerce', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Comercio actualizado correctamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 
@@ -451,6 +430,12 @@ Vue.component('update-commerce', {
 
             return created_at
         },
+        resetToChangeUser() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.$refs.resetGeocoding.reset()
+        }
     },
 
     watch: {

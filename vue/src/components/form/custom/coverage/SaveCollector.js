@@ -11,7 +11,11 @@ Vue.component('save-collector', {
                                     <select-auto-complete-simple-id 
                                     @exportVal="setUser($event)"
                                     :title="save.collector.title_field" 
-                                    :url="save.collector.url_users" />
+                                    :url="save.collector.url_users" 
+                                    :outlined="save.collector.select.outlined"
+                                    :classCustom="save.collector.select.class"
+                                    :dense="save.collector.select.dense"
+                                    />
                                 </v-col>
                             </v-row>
                             
@@ -22,6 +26,9 @@ Vue.component('save-collector', {
                                     title="Ingrese País" 
                                     :url="save.zone.url_country"
                                     @exportVal="setSelectCountry($event)"
+                                    :outlined="save.collector.select.outlined"
+                                    :classCustom="save.collector.select.class"
+                                    :dense="save.collector.select.dense"
                                     
                                     
                                         />
@@ -32,6 +39,9 @@ Vue.component('save-collector', {
                                     title="Ingrese Provincia" 
                                     :url="save.zone.url_province"
                                     @exportVal="setSelectProvince($event)"
+                                    :outlined="save.collector.select.outlined"
+                                    :classCustom="save.collector.select.class"
+                                    :dense="save.collector.select.dense"
                                 
                                     />
                                 </v-col>
@@ -42,7 +52,9 @@ Vue.component('save-collector', {
                                         title="Ingrese Localidad" 
                                         :url="save.zone.url_locate"
                                         @exportVal="getZoneByPostalCode($event)"
-                                    
+                                        :outlined="save.collector.select.outlined"
+                                        :classCustom="save.collector.select.class"
+                                        :dense="save.collector.select.dense"
                                         />
                                     </v-col>
                             
@@ -131,7 +143,7 @@ Vue.component('save-collector', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'collector') {
+            if (this.save.type === 'recolector') {
                 return "Recolector";
             }
 
@@ -266,7 +278,7 @@ Vue.component('save-collector', {
                             // setting flag filtering
                         this.$emit('filtering', false)
 
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Recolector creado exitosamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
                         this.saveFlag = false
 

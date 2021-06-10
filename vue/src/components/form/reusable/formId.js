@@ -12,7 +12,10 @@ Vue.component('form-id', {
                                 <select-auto-complete-simple-id
                                 @exportVal="setData($event)"
                                 :title="resources.select.title" 
-                                :url="resources.select.url"
+                                :url="resources.select.url"  
+                                :outlined="resources.select.outlined"
+                                :classCustom="resources.select.class"
+                                :dense="resources.select.dense"
                                 />
                             </v-col>
                         </v-row>
@@ -31,7 +34,8 @@ Vue.component('form-id', {
     },
     methods: {
         setData(data) {
-            this.word = data
+            this.word = data.id
+            this._getData()
         },
         async _getData() {
             try {
@@ -46,6 +50,7 @@ Vue.component('form-id', {
 
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
+                        console.log(res)
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);

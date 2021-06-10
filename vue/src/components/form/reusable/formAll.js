@@ -33,7 +33,6 @@ Vue.component('form-all', {
 
                         //EXPORT 
                         this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
-                        console.log(res)
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
                         this.$emit('loadingTable', false)

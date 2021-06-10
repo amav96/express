@@ -26,6 +26,9 @@ Vue.component('save-point', {
                                 @setCountryID="id_country = $event"
                                 @setProvinceID="id_province = $event"
                                 @setLocateID="id_locate = $event"
+                                :outlined="save.point.select.outlined"
+                                :classCustom="save.point.select.class"
+                                :dense="save.point.select.dense"
                                 :save="save"
                                 />
                                 <v-row class="d-flex justify-between flex-row" >
@@ -38,7 +41,7 @@ Vue.component('save-point', {
                                         required
                                         type="text"
                                         color="black"
-                                        class="info--text mx-4"
+                                        class="info--text mx-2"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -51,7 +54,7 @@ Vue.component('save-point', {
                                         required
                                         type="text"
                                         color="black"
-                                        class="info--text mx-4"
+                                        class="info--text mx-2"
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -97,33 +100,33 @@ Vue.component('save-point', {
 
 
                             <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                                <v-row class="d-flex justify-center flex-row" >
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <select-auto-complete-simple-id 
-                                        title="Ingrese País" 
-                                        :url="save.zone.url_country"
-                                        @exportVal="setSelectCountry($event)"
-                                            />
-                                    </v-col>
+                                <v-row class="d-flex justify-start flex-row" >
                                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                         <select-auto-complete-search-id 
-                                        :searchID="id_country_by_select"
-                                        title="Ingrese Provincia" 
-                                        :url="save.zone.url_province"
-                                        @exportVal="setSelectProvince($event)" 
-                                        />
-                                    </v-col>
-
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <select-auto-complete-search-id 
-                                        :searchID="id_province_by_select"
+                                        :searchID="id_province"
                                         title="Ingrese Localidad" 
                                         :url="save.zone.url_locate"
                                         @exportVal="getZoneByPostalCode($event)"
+                                        :outlined="save.point.select.outlined"
+                                        :classCustom="save.point.select.class"
+                                        :dense="save.point.select.dense"
                                         />
                                     </v-col>
                                 
                                 </v-row>
+
+
+                            <template v-if="error.display" >
+                                <v-alert
+                                class="ml-4 my-5" 
+                                color="error"
+                                dark
+                                type="error"
+                                elevation="2"
+                                >
+                                {{error.text}}
+                                </v-alert>
+                            </template>
                     
                             <template v-if="save.zone.postal_codes.length > 0" >
                                 <h6 class="ml-4 my-5" > Seleccione codigos postales</h6>
@@ -174,9 +177,7 @@ Vue.component('save-point', {
     },
     data() {
         return {
-            id_country_by_select: '',
             id_country: '',
-            id_province_by_select: '',
             id_province: '',
             id_locate: '',
             home_address: '',
@@ -199,26 +200,20 @@ Vue.component('save-point', {
     },
     methods: {
         returnType() {
-            if (this.save.type === 'mail') {
+            if (this.save.type === 'correo') {
                 return "Correo";
             }
-            if (this.save.type === 'station') {
+            if (this.save.type === 'terminal') {
                 return "Terminal";
             }
         },
-        setSelectCountry(country) {
-            this.id_country_by_select = country.id
-        },
-        setSelectProvince(province) {
-            this.id_province_by_select = province.id
 
-        },
         getZoneByPostalCode(locate) {
             const url = this.save.zone.url_postalCode
             axios.get(url, {
                     params: {
-                        id_country: this.id_country_by_select,
-                        id_province: this.id_province_by_select,
+                        id_country: this.id_country,
+                        id_province: this.id_province,
                         locate: locate.slug
                     }
                 })
@@ -307,9 +302,7 @@ Vue.component('save-point', {
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
-                    this.id_country_by_select = ''
                     this.id_country = ''
-                    this.id_province_by_select = ''
                     this.id_province = ''
                     this.id_locate = ''
                     this.save.zone.postal_codes = []
@@ -327,9 +320,9 @@ Vue.component('save-point', {
                         this.saveSuccess = false
                             // setting flag filtering
                         this.$emit('filtering', false)
-
-                        const snack = { snack: true, timeout: 2000, textSnack: 'Creado exitosamente' }
+                        const snack = { display: true, timeout: 2000, text: 'Creado exitosamente', color: 'success' }
                         this.$emit("setSnack", snack)
+                        this.saveFlag = false
                     })
                 }, 700);
             }

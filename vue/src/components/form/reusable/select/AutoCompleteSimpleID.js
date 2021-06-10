@@ -93,6 +93,10 @@ Vue.component('select-auto-complete-simple-id', {
         returnData(val) {
             this.$emit("exportVal", val)
         },
+        reset() {
+            this.search = null
+            this.select = null
+        }
 
     },
     created() {

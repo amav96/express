@@ -813,13 +813,12 @@ class Equipos
         $word = !empty($this->getWord()) ? $this->getWord() : false ;
         
         $sql ="";
-        $sql.="SELECT COUNT(*) as 'count'
+        $sql.=" SELECT COUNT(*) as 'count'
         FROM gestion g 
         INNER JOIN equipos e ON (g.id_equipo = e.id) 
-        WHERE g.status_gestion = 'transito' 
-        and  g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word' ";
-
-    
+        INNER JOIN users u ON (u.id = g.id_user)
+        LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass)
+        WHERE g.status_gestion = 'transito' and  g.identificacion like '%$word%' OR g.terminal like '%$word%' OR g.serie like '%$word%' ";
 
         $execute = $this->db->query($sql);
         if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -1095,8 +1094,7 @@ class Equipos
         INNER JOIN gestion g ON (g.id_equipo = e.id) 
         INNER JOIN users u ON (u.id = g.id_user) 
         LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) 
-        WHERE  g.status_gestion = 'transito' and g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word' order by created_at limit $fromRow,$limit ";
-
+        WHERE g.status_gestion = 'transito' and  g.identificacion like '%$word%' OR g.terminal like '%$word%' OR g.serie like '%$word%' order by created_at limit $fromRow,$limit ";
 
         $exe = $this->db->query($sql);
         if($exe && $exe->num_rows>0){$result = $exe;}
@@ -1296,14 +1294,15 @@ class Equipos
         $sql.="SELECT e.id as 'id_equipo',g.id,
         e.identificacion,g.id_orden_pass, g.id_orden, g.id_user, g.terminal, g.serie,
         g.serie_base,g.tarjeta,g.chip_alternativo,g.accesorio_uno,g.accesorio_dos,
-        g.accesorio_tres,g.accesorio_cuatro,g.estado,g.motivo,g.created_at,e.empresa,e.nombre_cliente,e.direccion, e.provincia, e.localidad,
+        g.accesorio_tres,g.accesorio_cuatro,g.estado,g.status_gestion,g.motivo,g.created_at,e.empresa,e.nombre_cliente,e.direccion, e.provincia, e.localidad,
         e.codigo_postal ,e.emailcliente,u.name,u.name,g.lat as 'latGestion' ,
         g.lng as 'lngGestion',n.lat as 'latAviso',n.lng as 'lngAviso',n.means,
         n.contacto,n.created_at as 'fecha_aviso_visita' FROM  equipos e 
         INNER JOIN gestion g ON (g.id_equipo = e.id) 
         INNER JOIN users u ON (u.id = g.id_user) 
         LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) 
-        WHERE g.status_gestion = 'transito' and g.identificacion = '$word' OR g.terminal = '$word' OR e.serie = '$word'";
+        WHERE g.status_gestion = 'transito' and g.identificacion like '%$word%' OR g.terminal like '%$word%' OR g.serie like '%$word%'  order by created_at";
+        
 
 
         $exe = $this->db->query($sql);

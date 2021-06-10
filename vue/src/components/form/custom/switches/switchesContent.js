@@ -89,16 +89,16 @@ Vue.component('switches-content', {
             }
         },
         type(type) {
-            if (type === 'collector') {
+            if (type === 'recolector') {
                 return 'Recolector'
             }
-            if (type === 'commerce') {
+            if (type === 'comercio') {
                 return 'Comercio'
             }
-            if (type === 'mail') {
+            if (type === 'correo') {
                 return 'Correo'
             }
-            if (type === 'station') {
+            if (type === 'terminal') {
                 return 'Terminal'
             }
         },
@@ -114,7 +114,7 @@ Vue.component('switches-content', {
             if (type === 'collector') {
                 return 'info'
             }
-            if (type === 'commerce') {
+            if (type === 'comercio') {
                 return 'amber accent-3'
             }
 
