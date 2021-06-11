@@ -3,8 +3,10 @@ Vue.component('d-small-screen', {
         `
         <v-dialog
         v-model="dialogSmallScreen.display"
-        max-width="290"
+        max-width="320"
         hide-overlay
+        persistent
+        
         >
             <v-card>
                <template>

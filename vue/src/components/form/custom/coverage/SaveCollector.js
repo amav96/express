@@ -3,6 +3,16 @@ Vue.component('save-collector', {
         `
             <div>
                 <v-container>
+                    <template>
+                        <d-small-screen :dialogSmallScreen="dialogSmallScreen">
+                        <template>
+                            <d-continue 
+                            :content="continueSave"
+                            @setContinue="$_continue($event)"
+                            />
+                        </template>
+                        </d-small-screen>
+                    </template>
 
                         <template v-if="!saveSuccess">
                             <h6 class="ml-4 my-5"> Recolector </h6>
@@ -29,8 +39,6 @@ Vue.component('save-collector', {
                                     :outlined="save.collector.select.outlined"
                                     :classCustom="save.collector.select.class"
                                     :dense="save.collector.select.dense"
-                                    
-                                    
                                         />
                                 </v-col>
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -80,7 +88,6 @@ Vue.component('save-collector', {
                                             @setOptions="chosenPostalCodes = $event"
                                             />
                             </template>
-
                                 <v-row class="d-flex justify-center my-4 mx-4" >
                                     <template v-if="saveLoading">
                                         <v-progress-linear
@@ -92,7 +99,6 @@ Vue.component('save-collector', {
                                     </template>
                                     <v-btn 
                                     class="success"
-                                    block
                                     :disabled="validateFormComplete()"
                                     @click="saveData()"
                                     >
@@ -101,6 +107,12 @@ Vue.component('save-collector', {
                                 </v-row>
                             </template>
                         </template>
+                        <v-btn color="error" @click="forcedExit" >
+                         Salir 
+                         <v-icon right>
+                         mdi-exit-to-app
+                         </v-icon> 
+                        </v-btn>
                 </v-container>
             </div>
         `,
@@ -116,7 +128,14 @@ Vue.component('save-collector', {
         },
         dialogFullScreen: {
             type: Object
-        }
+        },
+        dialogSmallScreen: {
+            type: Object
+        },
+        continueSave: {
+            type: Object
+        },
+
 
     },
     data() {
@@ -137,7 +156,9 @@ Vue.component('save-collector', {
             cp_start: '',
             cp_end: '',
             saveSuccess: false,
-            saveFlag: false
+            saveFlag: false,
+            savedData: [],
+            clean: false,
 
         }
     },
@@ -211,6 +232,7 @@ Vue.component('save-collector', {
 
         },
         async saveData() {
+
             this.saveLoading = true
             const url = this.save.url.save
             await axios.get(url, {
@@ -226,6 +248,7 @@ Vue.component('save-collector', {
                     }
                 })
                 .then(res => {
+                    console.log(res)
                     if (res.data[0].error === "exist") {
                         this.exist(res)
                         this.saveLoading = false
@@ -238,11 +261,13 @@ Vue.component('save-collector', {
                         return
                     }
 
-                    this.$emit("setDialogDisplay", false)
-                    this.$nextTick(() => {
-                        this.setResponseWhenFinally(res)
-                        this.saveFlag = true
-                    })
+                    this.saveLoading = false
+                    this.error.text = ''
+                    this.error.display = false
+                    const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
+                    this.$emit("setSnack", snack)
+                    this.setResponseWhenFinally(res)
+                    this.$emit("setContinue", true)
 
                 })
                 .catch(err => {
@@ -251,16 +276,17 @@ Vue.component('save-collector', {
                 })
         },
         setResponseWhenFinally(res) {
+            res.data.forEach((val) => {
+                this.savedData.push(val)
+            })
             this.$emit('setPaginateDisplay', false)
-            this.$emit('response', res.data)
+            this.$emit('response', this.savedData)
             this.$emit('showTable', true)
         },
         finish() {
-            if (this.saveFlag) {
-
+            if (this.clean) {
                 setTimeout(() => {
                     this.saveSuccess = true
-                    this.saveLoading = false
                     this.id_country_by_select = ''
                     this.id_country = ''
                     this.id_province_by_select = ''
@@ -272,20 +298,19 @@ Vue.component('save-collector', {
                     this.infoUser = []
                     this.error.display = false
                     this.error.text = ''
-
-                    this.$nextTick(() => {
-                        this.saveSuccess = false
-                            // setting flag filtering
-                        this.$emit('filtering', false)
-
-                        const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
-                        this.$emit("setSnack", snack)
-                        this.saveFlag = false
-
-                    })
-                }, 700);
-
+                }, 300);
             }
+
+        },
+        forcedExit() {
+            this.clean = true
+            this.$emit("setDialogDisplay", false)
+        },
+        $show() {
+            //accedo a el desde la raiz
+            // mientras no se haya guardado nada, permanece en falso, para mostrar lo que se esta haciendo
+            this.saveSuccess = false
+            this.clean = false
         },
         exist(res) {
             var text = res.data[0].name_user + ' ya tiene asignado el codigo '
@@ -316,8 +341,16 @@ Vue.component('save-collector', {
                 this.save.zone.postal_codes = []
             }
         },
-
-
+        $_continue(flag) {
+            this.$emit("setDialogDisplay", flag)
+            this.$emit("setContinue", false)
+            if (!flag) {
+                this.$nextTick(() => {
+                    this.clean = true
+                    this.finish()
+                })
+            }
+        },
 
     },
     destroyed() {
@@ -332,10 +365,8 @@ Vue.component('save-collector', {
             },
             deep: true
         }
-    }
+    },
 
-
-    // agregar dos input para colocar el rango de codigo postal, buscar y mostrar
 
 
 })

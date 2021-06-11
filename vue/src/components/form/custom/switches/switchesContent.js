@@ -28,9 +28,18 @@ Vue.component('switches-content', {
                             <v-card-title class="text-sm-body-2 py-1">
                                 {{item.locate}}
                             </v-card-title>
-                            <v-card-title class="text-sm-body-2 py-1">
-                                <strong> Nombre: </strong> &nbsp; {{item.name}}
-                            </v-card-title>
+
+                            <template v-if="item.type === 'recolector' || item.type === 'comercio'" >
+                                <v-card-title class="text-sm-body-2 py-1">
+                                    <strong> Nombre: </strong> &nbsp; {{item.name}}
+                                </v-card-title>
+                            </template>
+                            <template v-else >
+                                <v-card-title class="text-sm-body-2 py-1">
+                                    {{home_address(item.home_address)}}
+                                </v-card-title>
+                            </template>
+                            
                             <v-card-title class="text-sm-body-2 py-1">
                             
                                 <strong> Tipo: </strong> &nbsp; 
@@ -102,6 +111,11 @@ Vue.component('switches-content', {
                 return 'Terminal'
             }
         },
+        home_address(data) {
+            console.log(data)
+            var home_address = data.substring(0, 23)
+            return home_address + '...'
+        },
         returnValue(item) {
             const value = {
                 id: item.id,
@@ -111,11 +125,17 @@ Vue.component('switches-content', {
         },
         colorByType(type) {
 
-            if (type === 'collector') {
-                return 'info'
+            if (type === 'recolector') {
+                return 'success'
             }
             if (type === 'comercio') {
                 return 'amber accent-3'
+            }
+            if (type === 'correo') {
+                return 'primary'
+            }
+            if (type === 'terminal') {
+                return 'red lighten-1'
             }
 
         }

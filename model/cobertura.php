@@ -325,7 +325,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter'";
+     	      ) or c.postal_code = '$filter' or c.postal_code = '$filter'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -360,7 +360,7 @@ class cobertura{
             OR
             MATCH (co.country) 
             AGAINST ('$filter') 
-            )and c.status = 'active' and c.postal_code >= '$cp_start' 
+            ) or c.type = '$filter' and c.postal_code >= '$cp_start' 
             and c.postal_code <= '$cp_end' and c.id_country = '$id_country'";
 
         
@@ -452,7 +452,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
             LEFT JOIN localities l ON l.postal_code = c.postal_code
@@ -640,7 +640,8 @@ class cobertura{
             MATCH (co.country) 
             AGAINST ('$filter') 
             )
-            and c.status = 'active' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
+            or c.type = '$filter' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
+           
             GROUP BY c.id ORDER BY  c.postal_code ASC limit $fromRow,$limit";
 
             $exe = $this->db->query($sql);
@@ -739,7 +740,7 @@ class cobertura{
                   $stringPostalCode = implode(",",$postal_code);
               }
 
-                  $sql ="SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',pr.province,
+                  $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
                   co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
@@ -747,6 +748,7 @@ class cobertura{
                   LEFT JOIN province pr ON pr.id = c.province
                   left JOIN users u ON c.id_user = u.id
                   LEFT JOIN country co ON c.id_country = co.id
+                  LEFT JOIN localities l ON c.locate = l.id
                   WHERE c.status='active' AND c.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
                   GROUP BY c.id order BY c.postal_code ASC";
 
@@ -766,7 +768,7 @@ class cobertura{
                   $stringId = $id;
               }
 
-                  $sql ="SELECT c.id,c.postal_code,c.locate,c.home_address,p.province AS 'provinceInt',pr.province,
+                  $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
                   co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
@@ -774,6 +776,7 @@ class cobertura{
                   LEFT JOIN province pr ON pr.id = c.province
                   left JOIN users u ON c.id_user = u.id
                   LEFT JOIN country co ON c.id_country = co.id
+                  LEFT JOIN localities l ON c.locate = l.id
                   WHERE c.status='active' AND c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
 
@@ -902,12 +905,10 @@ class cobertura{
    
       public function getCountry(){
             $sql = "SELECT id,country from country";
-            $getCountry = $this->db->query($sql);
-            if($getCountry && $getCountry->num_rows>0){
-                  $result = $getCountry;
-            }else {
-                  $result = false;
-            }
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
             return $result;
             
       }
@@ -915,13 +916,9 @@ class cobertura{
       public function getProvinceById(){
             $id = !empty($this->getId()) ? $this->getId() : false ;
             $sql = "SELECT id,province,id_country FROM province WHERE id_country = $id";
-            $getProvinceById = $this->db->query($sql);
-            if($getProvinceById && $getProvinceById->num_rows > 0){
-                  $result = $getProvinceById;
-            }else {
-                  $result = false;
-            }
-
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
             return $result;
       }
 
@@ -930,15 +927,9 @@ class cobertura{
             $sql = "SELECT id,locate,postal_code,id_province FROM localities 
             WHERE id_province = $id
             GROUP BY locate ORDER BY postal_code";
-            $getLocateById = $this->db->query($sql);
-            if($getLocateById && $getLocateById->num_rows > 0){
-                  $result = $getLocateById;
-            }else {
-                  $result = false;
-            }
-
-        
-
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
             return $result;
       }
 
@@ -1003,7 +994,7 @@ class cobertura{
          
       
 
-            $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.type,c.id_user,u.name,u.name_alternative 
+            $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.home_address,c.type,c.id_user,u.name,u.name_alternative 
             FROM coverage c
             LEFT JOIN users u ON u.id = c.id_user
             LEFT JOIN postal_code po ON po.postal_code = c.postal_code
@@ -1012,6 +1003,7 @@ class cobertura{
             LEFT JOIN country co ON co.id = pro.id_country
             WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end 
             GROUP BY c.id order by c.postal_code";
+           
             // el id_user cuando es comercio o terminal viene en cero.
             // lo dejo asi hasta que se requiere reemplazar comercio o terminal
             // por ahora no se reemplaza comercio o terminal
@@ -1031,7 +1023,7 @@ class cobertura{
              $cp_end  = !empty($this->getPostal_code_range()) ? $this->getPostal_code_range() : false ;
              $id_user  = !empty($this->getId_user()) ? $this->getId_user() : false ;
  
-             $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.type,c.id_user,u.name,u.name_alternative 
+             $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.home_address,c.type,c.id_user,u.name,u.name_alternative 
              FROM coverage c
              LEFT JOIN users u ON u.id = c.id_user
              LEFT JOIN postal_code po ON po.postal_code = c.postal_code
@@ -1041,11 +1033,22 @@ class cobertura{
              WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
              and c.id_user != '$id_user' 
              GROUP BY c.id order by c.postal_code";
+          
            
              $exe = $this->db->query($sql);
              if($exe && $exe->num_rows>0){$result = $exe;}
              else {$result = false;}
              return $result;
+
+      }
+
+      public function getMotivesDown(){
+            $sql="SELECT id, motive FROM motives_down_coverage";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
 
       }
 }

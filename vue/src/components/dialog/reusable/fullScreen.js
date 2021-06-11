@@ -9,6 +9,7 @@ Vue.component('d-full-screen', {
                     fullscreen
                     hide-overlay
                     transition="dialog-left-transition"
+                   
                 >
                     <v-card>
                         <v-toolbar

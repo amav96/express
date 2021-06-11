@@ -14,12 +14,15 @@
 
 <!-- dialog component -->
 <script src="<?=base_url?>vue/src/components/dialog/reusable/fullScreen.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
+<script src="<?=base_url?>vue/src/components/dialog/reusable/continue.js"></script>
 
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableCobertura.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/custom/coverage/tableCobertura.js"></script>
 
 
 <!-- form component -->
@@ -33,6 +36,7 @@
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCollector.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCommerce.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdatePoint.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/Delete.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/Confirm.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
@@ -309,40 +313,53 @@
                         :admin="admin" 
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
+                        ref="rendered"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                         @setDialogDisplay="dialogFullScreen.display = $event"
                         @setSnack="MAINRESOURCES.snackbar = $event"
+                        @setContinue="dialogSmallScreen.display = $event"
+                        :dialogSmallScreen="dialogSmallScreen"
+                        :continueSave="continueAdd"
+                     
                         />
                     </template>
                     <template v-if="save.commerce.display && save.action === 'create'" >
                       <save-commerce 
-                      :pagination="MAINRESOURCES.pagination"  
-                      :admin="admin" 
-                      :save="save"
-                      :dialogFullScreen="dialogFullScreen"
-                      @response="MAINRESOURCES.table.dataResponseDB = $event"
-                      @showTable="MAINRESOURCES.table.display = $event"
-                      @filtering="MAINRESOURCES.filter.filtering = $event"
-                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
-                      @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="MAINRESOURCES.snackbar = $event"
+                        :pagination="MAINRESOURCES.pagination"  
+                        :admin="admin" 
+                        :save="save"
+                        :dialogFullScreen="dialogFullScreen"
+                        ref="rendered"
+                        @response="MAINRESOURCES.table.dataResponseDB = $event"
+                        @showTable="MAINRESOURCES.table.display = $event"
+                        @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
+                        @setDialogDisplay="dialogFullScreen.display = $event"
+                        @setSnack="MAINRESOURCES.snackbar = $event"
+                        @setContinue="dialogSmallScreen.display = $event"
+                        :dialogSmallScreen="dialogSmallScreen"
+                        :continueSave="continueAdd"
                       />
                     </template>
                     <template v-if="save.point.display && save.action === 'create'" >
                       <save-point 
-                      :pagination="MAINRESOURCES.pagination"  
-                      :admin="admin" 
-                      :save="save"
-                      :dialogFullScreen="dialogFullScreen"
-                      @response="MAINRESOURCES.table.dataResponseDB = $event"
-                      @showTable="MAINRESOURCES.table.display = $event"
-                      @filtering="MAINRESOURCES.filter.filtering = $event"
-                      @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
-                      @setDialogDisplay="dialogFullScreen.display = $event"
-                      @setSnack="MAINRESOURCES.snackbar = $event"
+                        :pagination="MAINRESOURCES.pagination"  
+                        :admin="admin" 
+                        :save="save"
+                        :dialogFullScreen="dialogFullScreen"
+                        ref="rendered"
+                        @response="MAINRESOURCES.table.dataResponseDB = $event"
+                        @showTable="MAINRESOURCES.table.display = $event"
+                        @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
+                        @setDialogDisplay="dialogFullScreen.display = $event"
+                        @setSnack="MAINRESOURCES.snackbar = $event"
+                        @setContinue="dialogSmallScreen.display = $event"
+                        :dialogSmallScreen="dialogSmallScreen"
+                        :continueSave="continueAdd"
                       />
                     </template>
                     <template v-if="save.collector.display && save.action === 'update'" >
@@ -391,6 +408,7 @@
                   </d-full-screen>
                 </template>
           
+               
               </div> 
 
                 <template v-if="MAINRESOURCES.table.loading" >
@@ -438,6 +456,9 @@
                       :table="MAINRESOURCES.table"
                       :url_actions="MAINRESOURCES.url_actions"
                       :pagination="MAINRESOURCES.pagination"
+                      @setSnack="MAINRESOURCES.snackbar = $event"
+                      @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                      @subtract="subtractPagination($event)"
                     />
                 </template>
 
@@ -466,6 +487,25 @@
                 dialogFullScreen : {
                   display : false,
                   title : ''
+                },
+                dialogSmallScreen : {
+                  display : false,
+                  title : 'aceptar',
+                 
+                },
+                continueAdd:{
+                  title: '¿Deseas asignar mas zonas?',
+                  accept:{
+                    title: 'Si',
+                    option : false,
+                    color:"success"
+                  },
+                  exit : {
+                    title: 'No, salir',
+                    option : false,
+                    color:"error"
+                  },
+                  class:"d-flex justify-center flex-column"
                 },
                 save : {
                   action : '',
@@ -525,7 +565,7 @@
                     getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes',
 
                   },
-                  confirm : false
+                  
                 },
                 dialogChoose : {
                   chooseNext: {
@@ -735,6 +775,7 @@
                       { text: 'Tipo'},
                       { text: 'Nombre Asignado'},
                       { text: 'fecha'},
+                      { text: 'Acciones'},
 
                   ],
                   table : {
@@ -779,7 +820,7 @@
 
             this.dialogChoose.chooseNext.display = false
             this.dialogFullScreen.display = true
-
+            
           
             if(this.save.type === 'recolector'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Recolector' : '';
@@ -796,6 +837,7 @@
                 this.save.commerce.display = true
                 this.save.collector.display = false
                 this.save.point.display = false
+                
               }
             if(this.save.type === 'correo' || this.save.type === 'terminal'){
                 if(this.save.type === 'mail'){
@@ -810,7 +852,12 @@
                 this.save.point.display = true
                 this.save.collector.display = false
                 this.save.commerce.display = false
+                
               }
+
+              this.$nextTick(() => {
+                  this.$refs.rendered.$show()
+                })
               // this.dialogChoose.chooseNext.chosenOption = ''
           },
           backChoose(){
@@ -931,12 +978,35 @@
             }else {
               return false
             }
+          },
+          getDateTime() {
+            var today = new Date();
+            var getMin = today.getMinutes();
+            var getSeconds = today.getSeconds()
+            var getHours = today.getHours()
+
+            if (getMin < 10) { getMin = '0' + today.getMinutes() }
+            if (getSeconds < 10) { getSeconds = '0' + today.getSeconds() }
+            if (getHours < 10) { getHours = '0' + today.getHours() }
+
+            var created_at = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' +
+                ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
+
+            return created_at
+          },
+          subtractPagination(data){
+            console.log('data-> '+data)
+            this.MAINRESOURCES.pagination.totalCountResponse - data
+            // this.MAINRESOURCES.pagination.totalCountResponse =  total
+            // console.log("total-> "+total)
+            console.log('main ->'+this.MAINRESOURCES.pagination.totalCountResponse)
+            
+            
           }
         },
         
         created(){
           this.getAdmin()
-          console.log("creado")
         }, 
         mounted() {
           this.doom = true
@@ -944,7 +1014,7 @@
         destroyed() {
           this.doom = false
         },
-        
+      
     })
 </script>
 

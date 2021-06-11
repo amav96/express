@@ -437,7 +437,11 @@ class noticeController
         $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/crecablevision.png';
         $asuntoSegundario = 'Canalera';
         break;
-      case 'SUPERCANAL' || 'SUPER CANAL';
+      case 'SUPERCANAL';
+        $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/cresupercanal.png';
+        $asuntoSegundario = 'Decodificador';
+        break;
+      case 'SUPER CANAL';
         $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/cresupercanal.png';
         $asuntoSegundario = 'Decodificador';
         break;

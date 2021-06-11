@@ -3,6 +3,18 @@ Vue.component('save-commerce', {
         `
             <div>
                 <v-container>
+
+                <template>
+                    <d-small-screen :dialogSmallScreen="dialogSmallScreen">
+                        <template>
+                            <d-continue 
+                            :content="continueSave"
+                            @setContinue="$_continue($event)"
+                            />
+                        </template>
+                    </d-small-screen>
+                </template>
+
                     <template v-if="!saveSuccess">
                         <h6 class="ml-4 my-5"> Comercio </h6>
                         <v-row class="d-flex justify-center flex-row" >
@@ -179,7 +191,7 @@ Vue.component('save-commerce', {
                                 </template>
                                 <v-btn 
                                 class="success"
-                                block
+                               
                                 :disabled="validateFormComplete()"
                                 @click="saveData()"
                                 >
@@ -187,7 +199,12 @@ Vue.component('save-commerce', {
                                 </v-btn>
                             </v-row>
                     </template>
-                    
+                    <v-btn color="error" @click="forcedExit" >
+                         Salir  
+                         <v-icon right>
+                         mdi-exit-to-app
+                         </v-icon> 
+                    </v-btn>
                 </v-container>
             </div>
         `,
@@ -203,7 +220,13 @@ Vue.component('save-commerce', {
         },
         dialogFullScreen: {
             type: Object
-        }
+        },
+        dialogSmallScreen: {
+            type: Object
+        },
+        continueSave: {
+            type: Object
+        },
 
     },
     data() {
@@ -229,7 +252,9 @@ Vue.component('save-commerce', {
             cp_start: '',
             cp_end: '',
             saveSuccess: false,
-            saveFlag: false
+            saveFlag: false,
+            savedData: [],
+            clean: false
         }
     },
     methods: {
@@ -245,7 +270,6 @@ Vue.component('save-commerce', {
         },
 
         getZoneByPostalCode(locate) {
-            console.log(locate)
             const url = this.save.zone.url_postalCode
             axios.get(url, {
                     params: {
@@ -325,11 +349,14 @@ Vue.component('save-commerce', {
                         return
                     }
 
-                    this.$emit("setDialogDisplay", false)
-                    this.$nextTick(() => {
-                        this.setResponseWhenFinally(res)
-                        this.saveFlag = true
-                    })
+                    this.saveLoading = false
+                    this.error.text = ''
+                    this.error.display = false
+                    const snack = { display: true, timeout: 2000, text: 'Comercio creado exitosamente', color: 'success' }
+                    this.$emit("setSnack", snack)
+                    this.setResponseWhenFinally(res)
+                    this.$emit("setContinue", true)
+
 
                 })
                 .catch(err => {
@@ -338,13 +365,16 @@ Vue.component('save-commerce', {
                 })
         },
         setResponseWhenFinally(res) {
+            res.data.forEach((val) => {
+                this.savedData.push(val)
+            })
             this.$emit('setPaginateDisplay', false)
-            this.$emit('response', res.data)
+            this.$emit('response', this.savedData)
             this.$emit('showTable', true)
         },
         finish() {
-            if (this.saveFlag) {
-                this.saveFlag = false
+            if (this.clean) {
+
                 setTimeout(() => {
                     this.saveSuccess = true
                     this.saveLoading = false
@@ -361,18 +391,18 @@ Vue.component('save-commerce', {
                     this.srcMap = ''
                     this.error.display = false
                     this.error.text = ''
-
-                    this.$nextTick(() => {
-
-                        this.saveSuccess = false
-                            // setting flag filtering
-                        this.$emit('filtering', false)
-                        const snack = { display: true, timeout: 2000, text: 'Comercio creado exitosamente', color: 'success' }
-                        this.$emit("setSnack", snack)
-                        this.saveFlag = false
-                    })
-                }, 700);
+                }, 300);
             }
+        },
+        forcedExit() {
+            this.clean = true
+            this.$emit("setDialogDisplay", false)
+        },
+        $show() {
+            //accedo a el desde la raiz
+            // mientras no se haya guardado nada, permanece en falso, para mostrar lo que se esta haciendo
+            this.saveSuccess = false
+            this.clean = false
         },
         exist(res) {
 
@@ -402,6 +432,20 @@ Vue.component('save-commerce', {
         cleanDialog() {
             if (this.save.action === 'create') {
                 this.save.zone.postal_codes = []
+            }
+        },
+        $show() {
+            //accedo a el desde la raiz 
+            this.saveSuccess = false
+        },
+        $_continue(flag) {
+            this.$emit("setDialogDisplay", flag)
+            this.$emit("setContinue", false)
+            if (!flag) {
+                this.$nextTick(() => {
+                    this.clean = true
+                    this.finish()
+                })
             }
         },
 

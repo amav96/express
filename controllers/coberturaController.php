@@ -359,12 +359,13 @@ public function save(){
      $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
      $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
      $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
-     $id_user = isset($_GET['id_user']) && !empty($_GET['id_user'])? $_GET['id_user'] : false ;
+     $id_user =isset($_GET['id_user']) ? $_GET['id_user'] : false ;
      $type = isset($_GET['type']) ? $_GET['type'] : false ;
      $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
      $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
      $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
 
+     
         $save = new cobertura();
         $save->setId_country($id_country);
         $save->setLocate($id_locate);
@@ -383,7 +384,7 @@ public function save(){
         if($type === 'recolector' || $type === 'comercio'){
             $verifyNotExistUser = $save->verifyNotExistUser();
         }
-        if($type === 'correo' || $type= 'terminal'){
+        if($type === 'correo' || $type=== 'terminal'){
             $verifyNotExistUser = $save->verifyNotExistStation();
         }
         
@@ -632,7 +633,7 @@ public function showCoverage($count,$data){
             'name_country' => $dataResponse['name_country'],
             'type' => $dataResponse["type"],
             'id_user' => $dataResponse["id_user"],
-            'name_assigned' => $dataResponse["name_assigned"],
+            'name_assigned' => $dataResponse["name_assigned"].' '.$dataResponse["name_alternative"],
             'timeScheduleA' => $dataResponse["timeScheduleA"],
             'timeScheduleB' => $dataResponse["timeScheduleB"],
             'lat' => $dataResponse["lat"],
@@ -648,6 +649,8 @@ public function showCoverage($count,$data){
   
        $jsonstring = json_encode($object);
        echo $jsonstring;
+
+      
     }
 }
 
@@ -901,11 +904,13 @@ public function getAllPointInZone(){
     $get->setPostal_code($cp_start);
     $get->setPostal_code_range($cp_end);
     $get->setId_user($id_user);
-
-    if($type === 'recolector' || $type= 'comercio'){
+   
+    if($type === 'recolector' || $type=== 'comercio'){
+       
         $get = $get->getPointZoneExceptUserCurrent();
     }
-    if($type === 'correo' || $type= 'terminal'){
+    if($type === 'correo' || $type=== 'terminal'){
+      
         $get = $get->getAllPointInZone();
     }
     
@@ -917,6 +922,7 @@ public function getAllPointInZone(){
                     'locate' => $element["locate"],
                     'province' => $element["province"],
                     'country' => $element["country"],
+                    'home_address' => $element["home_address"],
                     'type' => $element["type"],
                     'id_user' => $element["id_user"],
                     'name' => $element["name"].' '.$element["name_alternative"],
@@ -931,6 +937,23 @@ public function getAllPointInZone(){
 
     $jsonstring = json_encode($object);
     echo $jsonstring;
+}
+
+public function getMotivesDown(){
+    $get = new Cobertura();
+    $get = $get->getMotivesDown();
+    if($get){
+        foreach ($get as $element){
+            $object[] = array(
+                'id'    => $element["id"],
+                'slug'  => $element["motive"]
+            );
+        }
+    }
+
+    $jsonstring = json_encode($object);
+    echo $jsonstring;
+
 }
 
 

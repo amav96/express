@@ -379,7 +379,7 @@ class emailController{
         if($pais === 'Uruguay'){
             $footer = '598 97 438238 Lunes a Viernes 8 - 17 hs';
         }
-
+        
         
         switch($empresa){
             case 'LAPOS';
@@ -412,6 +412,14 @@ class emailController{
                break;
             case 'SUPERCANAL';
                $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/cresupercanal.png';
+               $asuntoSegundario = 'Decodificador' ;
+               break;
+            case 'SUPER CANAL';
+               $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/cresupercanal.png';
+               $asuntoSegundario = 'Decodificador' ;
+               break;
+            case 'CLARO';
+               $URL_IMG = 'https://devuelvoya.com/estilos/imagenes/empresas/claro.png';
                $asuntoSegundario = 'Decodificador' ;
                break;
         }
