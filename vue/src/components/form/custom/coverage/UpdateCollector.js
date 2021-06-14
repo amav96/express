@@ -1,4 +1,4 @@
-Vue.component('update-collector', {
+Vue.component('update-only-collector', {
     template: //html 
         `
     <div>

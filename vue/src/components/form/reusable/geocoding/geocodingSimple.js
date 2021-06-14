@@ -2,8 +2,8 @@ Vue.component('geocoding-simple', {
     template: //html 
         `
         <div>
-            <v-row class="d-flex justify-between flex-row" >
-                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+            <v-row class=" d-flex justify-between flex-row flex-wrap" >
+                <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
                     <select-auto-complete-simple-id 
                     title="Ingrese País" 
                     :url="save.zone.url_country"
@@ -14,7 +14,7 @@ Vue.component('geocoding-simple', {
                     ref="resetCountry"
                         />
                 </v-col>
-                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
                     <select-auto-complete-search-id 
                     :searchID="id_country"
                     title="Ingrese Provincia" 
@@ -26,7 +26,7 @@ Vue.component('geocoding-simple', {
                     ref="resetProvince"
                     />
                 </v-col>
-                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                <v-col  cols="12" xl="4" lg="4" md="4" sm="" xs="4"  >
                     <select-auto-complete-search-id 
                     :searchID="id_province"
                     title="Ingrese Localidad" 

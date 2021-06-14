@@ -7,7 +7,7 @@ Vue.component('d-media-screen', {
                 <v-dialog
                     v-model="dialogMediaScreen.display"
                     persistent
-                    max-width="800px"
+                    max-width="880px"
                     hide-overlay
                     transition="dialog-left-transition"
                 >

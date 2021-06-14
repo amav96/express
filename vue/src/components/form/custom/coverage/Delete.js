@@ -39,6 +39,12 @@ Vue.component('delete-coverage', {
                                                 <strong>Dirección :</strong> {{response.data.home_address}}
                                             </v-col>
                                         </template>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>Tipo :</strong> {{response.data.type}}
+                                        </v-col>
+                                        <v-col cols="12" lg="6" class="pa-1 ">
+                                            <strong>CP :</strong> {{response.data.postal_code}}
+                                        </v-col>
 
                                     </v-row>
                                     </v-alert>
@@ -64,9 +70,13 @@ Vue.component('delete-coverage', {
                             :disabled="validateDelete"
                             @click="_delete()"
                             class="mb-2"
+                            width="150"
                             >
                             <template v-if="loading">
-                                cargando...
+                                <v-progress-circular
+                                indeterminate
+                                color="primary"
+                            ></v-progress-circular>
                             </template>
                             <template v-else>
                                      Eliminar
@@ -127,7 +137,11 @@ Vue.component('delete-coverage', {
                     this.$refs.resetDelete.reset()
                     this.motive = ''
                     this.$emit("setDialog", false)
-                    this.$emit("setResponse", this.response.data.id)
+                    const set = {
+                        id: this.response.data.id,
+                        action: 'delete'
+                    }
+                    this.$emit("setResponse", set)
 
 
                 })

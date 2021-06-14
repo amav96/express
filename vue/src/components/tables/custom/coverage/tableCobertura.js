@@ -1,19 +1,81 @@
 Vue.component("table-cobertura", {
     template: /*html*/ `
           <div>
-
                 <template v-if="dialogMediaScreen.display" >
                     <d-media-screen :dialogMediaScreen="dialogMediaScreen">
-                        <delete-coverage 
-                        :dialogMediaScreen="dialogMediaScreen"
-                        :admin="admin"
-                        :response="dataDelete"
-                        @setSnack="$_setMessage($event)"
-                        @setDialog="dialogMediaScreen.display = $event"
-                        @setResponse="$_setResponse($event)"
-                        />
+                    
+                        <template v-if="dataDelete.display">
+                            <delete-coverage 
+                            :dialogMediaScreen="dialogMediaScreen"
+                            :admin="admin"
+                            :response="dataDelete"
+                            @setSnack="$_setMessage($event)"
+                            @setDialog="dialogMediaScreen.display = $event"
+                            @setResponse="$_setResponse($event)"
+                            />
+                        </template>
+                        <template v-if="dataUpdate.display">
+                            
+                            <v-row class="d-flex mx-1 mt-2" >
+                                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
+                                        <h6 class="mb-3 mt-1">Actual {{dataUpdate.data.type}} </h6>
+                                        <alert-info-user
+                                        :info="dataUpdate"
+                                        />
+                                    </v-col>
+                                    <v-col class="my-1" cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                                    <h6 class="mb-6">Nuevo tipo de asignado</h6>    
+                                        <v-select
+                                        v-model="updateOnly.type"
+                                        :items="selectType"
+                                        item-text="text"
+                                        item-value="value"
+                                        outlined
+                                        class="mb-1"
+                                        dense
+                                        label="Seleccione"
+                                        hide-no-data
+                                        hide-details
+                                        >
+                                        </v-select>
+                                    </v-col>
+                            </v-row>
+
+                                <template v-if="updateOnly.type === 'recolector'">
+                                    <update-onlyOne-collector
+                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :admin="admin"
+                                    :response="dataUpdate"
+                                    :pagination="pagination"
+                                    @setSnack="$_setMessage($event)"
+                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setResponse="$_setResponse($event)"
+                                    />
+                                </template>
+                                <template v-if="updateOnly.type === 'comercio'">
+                                    <update-onlyOne-commerce
+                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :admin="admin"
+                                    :response="dataUpdate"
+                                    @setSnack="$_setMessage($event)"
+                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setResponse="$_setResponse($event)"
+                                    />
+                                </template>
+                                <template v-if="updateOnly.type === 'correo' || updateOnly.type === 'terminal'">
+                                    <update-onlyOne-point
+                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :admin="admin"
+                                    :response="dataUpdate"
+                                    @setSnack="$_setMessage($event)"
+                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setResponse="$_setResponse($event)"
+                                    />
+                                </template>
+                        </template>
                     </d-media-screen>
                 </template>
+            
                
                 <template v-if="pagination.display" >
                 
@@ -31,13 +93,13 @@ Vue.component("table-cobertura", {
                           <template v-slot:default>
                           <thead>
                               <tr  class="bg-blue-custom">
-                              <th v-for="column in columns" class="text-left text-white">
-                              {{column.text}}
-                              </th>
+                                <th v-for="column in columns" class="text-left text-white">
+                                {{column.text}}
+                                </th>
                               </tr>
                           </thead>
                           <tbody>
-                              <tr  v-for="row in table.dataResponseDB">
+                              <tr :class="isSameID(row.id)" v-for="row in table.dataResponseDB">
                                 <td>{{row.postal_code}}</td>
                                 <td>{{row.locate}}</td>
                                 <td>{{row.provinceInt}}</td>
@@ -70,8 +132,8 @@ Vue.component("table-cobertura", {
                                     <div  class="my-1 d-flex flex-row">
                                         <v-tooltip top>
                                             <template v-slot:activator="{ on, attrs }">
-                                                <v-btn class="mx-1" @click="deleted(row)" dark elevation="1" fab x-small v-bind="attrs" v-on="on" :hover="false" color="grey lighten-3">
-                                                    <v-icon color="grey lighten-1">
+                                                <v-btn class="mx-1" @click="deleted(row)"  fab x-small v-bind="attrs" v-on="on" :hover="false" color="red">
+                                                    <v-icon color="white">
                                                         mdi-trash-can-outline
                                                     </v-icon>
                                                 </v-btn>
@@ -80,8 +142,8 @@ Vue.component("table-cobertura", {
                                         </v-tooltip>
                                         <v-tooltip top>
                                             <template v-slot:activator="{ on, attrs }">
-                                                <v-btn class="mx-1" @click="edit(row)" dark elevation="1" fab  x-small v-bind="attrs" v-on="on" color="grey lighten-3">
-                                                    <v-icon color="grey lighten-1">
+                                                <v-btn class="mx-1" @click="edit(row)"  fab  x-small v-bind="attrs" v-on="on" color="warning">
+                                                    <v-icon color="white">
                                                         mdi-pencil
                                                     </v-icon>
                                                 </v-btn>
@@ -103,16 +165,40 @@ Vue.component("table-cobertura", {
         return {
             dialogMediaScreen: {
                 display: false,
-                title: 'Eliminar asignado',
+                title: ''
 
             },
+            updateOnly: {
+                type: '',
+                indexUpdate: ''
+            },
             dataDelete: {
+                display: false,
                 data: [],
                 url: {
                     delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete'
                 },
+                indexUpdate: ''
+            },
+            dataUpdate: {
+                display: false,
+                data: [],
+                url: {
+                    delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete'
+                },
+                indexUpdate: ''
+            },
+            rowAltered: {
+                id: '',
+                action: ''
+            },
+            selectType: [
+                { text: 'Recolector', value: 'recolector' },
+                { text: 'Comercio', value: 'comercio' },
+                { text: 'Correo', value: 'correo' },
+                { text: 'terminal', value: 'terminal' },
+            ]
 
-            }
         }
 
     },
@@ -142,22 +228,62 @@ Vue.component("table-cobertura", {
             }
         },
         deleted(data) {
+            this.dialogMediaScreen.title = 'Eliminar asignado'
             this.dialogMediaScreen.display = true
             this.dataDelete.data = data
 
+            //display
+            this.dataUpdate.display = false
+            this.dataDelete.display = true
         },
         edit(data) {
-            console.log(data)
+
+            this.updateOnly.type = data.type
+
+            this.dialogMediaScreen.title = 'Actualizar asignado'
+            this.dialogMediaScreen.display = true
+            this.dataUpdate.data = data
+
+            //display
+            this.dataDelete.display = false
+            this.dataUpdate.display = true
+
+
+
         },
         $_setMessage(message) {
             this.$emit("setSnack", message)
         },
-        $_setResponse(data) {
-            const reduce = this.table.dataResponseDB.filter(item => item.id !== data)
-            this.$emit("setResponse", reduce)
-            this.$emit("subtract", -1)
-        }
+        $_setResponse(id) {
+            this.rowAltered.id = id.id
+            this.rowAltered.action = id.action
 
+        },
+        isSameID(id) {
+            var style = ''
+            if (this.rowAltered.action === 'update' && id === this.rowAltered.id) {
+                style = 'success text-white '
+                setTimeout(() => {
+                    this.rowAltered.id = ''
+                    this.rowAltered.action = ''
+                    style = ''
+                }, 2000);
+                return style
+            }
+            if (this.rowAltered.action === 'delete' && id === this.rowAltered.id) {
+                style = 'error text-white'
+                setTimeout(() => {
+                    const reduce = this.table.dataResponseDB.filter(item => item.id !== this.rowAltered.id)
+                    this.$emit("setResponse", reduce)
+                    this.$emit("subtract", -1)
+                    this.rowAltered.id = ''
+                    this.rowAltered.action = ''
+                    style = ''
+                }, 2000);
+                return style
+            }
+
+        }
 
     },
     computed: {
@@ -165,6 +291,9 @@ Vue.component("table-cobertura", {
             return this.columns;
         },
 
+
     },
+
+
 
 });

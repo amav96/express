@@ -19,6 +19,10 @@
 <script src="<?=base_url?>vue/src/components/dialog/reusable/chooseNext.js"></script>
 <script src="<?=base_url?>vue/src/components/dialog/reusable/continue.js"></script>
 
+<!-- alert -->
+<script src="<?=base_url?>vue/src/components/alert/custom/AlertInfoUser.js"></script>
+
+
 <!-- table component -->
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
@@ -37,6 +41,9 @@
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateCommerce.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdatePoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/Delete.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateOnlyOneCollector.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateOnlyOneCommerce.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateOnlyOnePoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/Confirm.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
@@ -994,17 +1001,13 @@
 
             return created_at
           },
-          subtractPagination(data){
-            console.log('data-> '+data)
-            this.MAINRESOURCES.pagination.totalCountResponse - data
-            // this.MAINRESOURCES.pagination.totalCountResponse =  total
-            // console.log("total-> "+total)
-            console.log('main ->'+this.MAINRESOURCES.pagination.totalCountResponse)
+          subtractPagination(){
+           
+            this.MAINRESOURCES.pagination.totalCountResponse = this.MAINRESOURCES.pagination.totalCountResponse - 1
             
             
           }
         },
-        
         created(){
           this.getAdmin()
         }, 
@@ -1015,12 +1018,14 @@
           this.doom = false
         },
       
+
+      
     })
 </script>
 
 <style>
 
- 
+  
 
     .empujarParaArriba{
       margin-top: -20px;

@@ -542,15 +542,17 @@ public function updateOnlyOne(){
     $Request =  json_decode($dataRequest);
 
     $id = isset($Request->id) ? $Request->id : false ;
+    // postal code es para verificar si existe ya en la zona
     $postal_code = isset($Request->postal_code) ? $Request->postal_code : false ;
     $home_address = isset($Request->home_address) ? $Request->home_address : false ;
     $lat = isset($Request->lat) ? $Request->lat : false ;
     $lng = isset($Request->lng) ? $Request->lng : false ;
-    $id_user = isset($Request->id_user) && !empty($Request->id_user)? $Request->id_user : false ;
+    $id_user = isset($Request->id_user) ? $Request->id_user : false ;
     $type = isset($Request->type) ? $Request->type : false ;
     $admin = isset($Request->admin) ? $Request->admin : false ;
     $created_at = isset($Request->created_at) ? $Request->created_at : false ;
     $timeSchedule = isset($Request->timeSchedule) ? $Request->timeSchedule : false ;
+
 
     $update = new cobertura();
     $update->setId_user($id_user);
@@ -570,22 +572,41 @@ public function updateOnlyOne(){
         if($update->removeToHistory()){
             if($update->update()){
                 $process = true;
-            } else {$object=array('error' => 'not_update');}
-        } else {$object=array('error' => 'not_removeToHistory');}
-    }else  {$object=array('error' => 'exist');}
-   
-    if($process){
-        if($update->getCodesById()){
-           $this->showCoverage($count = 0,$update->getCodesById());
+            } else {
+                $object=array('error' => 'not_update');
+                $jsonstring = json_encode($object);echo $jsonstring;
+                return ;
+            }
+        } else {
+            $object=array('error' => 'not_removeToHistory');
+            return  $jsonstring = json_encode($object);echo $jsonstring;
         }
-    }
-    else {$object=array('error' => 'not_process_or_exist');}
-    if($object && is_array($object)){
+    }else  {
+        $object=array('error' => 'exist');
         $jsonstring = json_encode($object);echo $jsonstring;
+        return;
+
     }
-
-
+  
+    if($process){
+        $get = $update->getCodesById();
+        if($get){
+            $this->showSimpleCoverage($get);
+        }else {
+            $object=array('error' => 'not_result');
+            $jsonstring = json_encode($object);echo $jsonstring;
+            return;
+        }
+    }else {
+        $object=array('error' => 'not_process');
+        $jsonstring = json_encode($object);echo $jsonstring;
+        return;
+    }
+   
 }
+
+
+
 
 public function removeAndDelete(){
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;

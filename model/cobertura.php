@@ -325,7 +325,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter' or c.postal_code = '$filter'";
+     	      ) or c.postal_code = '$filter' or c.postal_code = '$filter' or c.type = '$filter'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -579,7 +579,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
       	FROM coverage c
       	LEFT JOIN  postal_code po ON c.postal_code = po.postal_code
       	left JOIN provinceint p ON p.postal_code = po.postal_code
@@ -599,7 +599,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      )  and c.status='active' or c.postal_code = '$filter' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
+     	      )  and c.status='ACTIVE' or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){$result = $execute;}
@@ -890,7 +890,6 @@ class cobertura{
 
             $sql = "SELECT id,postal_code,id_user FROM coverage WHERE id_user = '$id_user' and postal_code = '$postal_code'";
             
-
             $verifyExist = $this->db->query($sql);
             if($verifyExist && $verifyExist->num_rows > 0){
                   $result = true;
