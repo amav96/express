@@ -168,6 +168,17 @@ Vue.component('time-schedule', {
             }
 
             this.$emit("setTimeSchedule", this.timeSchedule)
+        },
+        $reset() {
+            this.dayOpen = ''
+            this.dayClose = ''
+            this.hoursOpen = ''
+            this.hoursClose = ''
+            this.saturdayHoursOpen = ''
+            this.saturdayHoursClose = ''
+            this.sundayHoursOpen = ''
+            this.sundayHoursClose = ''
+            this.timeSchedule = ''
         }
     },
     watch: {

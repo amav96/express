@@ -52,7 +52,7 @@ Vue.component('save-point', {
                                         required
                                         type="text"
                                         color="black"
-                                        class="info--text mx-2"
+                                        class="info--text "
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -65,7 +65,7 @@ Vue.component('save-point', {
                                         required
                                         type="text"
                                         color="black"
-                                        class="info--text mx-2"
+                                        class="info--text "
                                         >
                                         </v-text-field>
                                     </v-col>
@@ -162,7 +162,7 @@ Vue.component('save-point', {
                                 class="success"
                                
                                 :disabled="validateFormComplete()"
-                                @click="saveData()"
+                                @click="_saveData()"
                                 >
                                 Siguiente
                                 </v-btn>
@@ -272,7 +272,7 @@ Vue.component('save-point', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
-        async saveData() {
+        async _saveData() {
             this.saveLoading = true
             const url = this.save.url.save
             await axios.get(url, {
@@ -344,6 +344,7 @@ Vue.component('save-point', {
                     this.srcMap = ''
                     this.error.display = false
                     this.error.text = ''
+                    this.$emit("setPaginateDisplay", false)
                 }, 300);
             }
         },

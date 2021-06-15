@@ -100,7 +100,7 @@ public function getAllHistoryCoverage(){
     if($count){
         $data = $get->getAllHistoryCoverage();
         if($data){
-            $this->showCoverage($count,$data);
+            $this->showHistoryCoverage($count,$data);
         }else{
             $object=array('error' => true);
             $jsonstring = json_encode($object); echo $jsonstring;
@@ -287,7 +287,7 @@ public function getFilterAllHistoryCoverage(){
     if($count){
         $data = $get->getFilterAllHistoryCoverage();
         if($data){
-            $this->showCoverage($count,$data);
+            $this->showHistoryCoverage($count,$data);
         }else{
             $object=array('error' => true);
             $jsonstring = json_encode($object); echo $jsonstring;
@@ -385,7 +385,7 @@ public function save(){
             $verifyNotExistUser = $save->verifyNotExistUser();
         }
         if($type === 'correo' || $type=== 'terminal'){
-            $verifyNotExistUser = $save->verifyNotExistStation();
+            $verifyNotExistUser = $save->verifyNotExistStationByCP();
         }
         
         if($verifyNotExistUser){
@@ -568,8 +568,52 @@ public function updateOnlyOne(){
     $process = false;
     $object= false;
 
-    if(!$update->verifyExist()){
-        if($update->removeToHistory()){
+    if($type === 'recolector'){
+
+        if(!$update->verifyExist()){
+            if($update->removeToHistory()){
+                if($update->update()){
+                    $process = true;
+                } else {
+                    $object=array('error' => 'not_update');
+                    $jsonstring = json_encode($object);echo $jsonstring;
+                    return ;
+                }
+            } else {
+                $object=array('error' => 'not_removeToHistory');
+                return  $jsonstring = json_encode($object);echo $jsonstring;
+            }
+        }else  {
+            $object=array('error' => 'exist');
+            $jsonstring = json_encode($object);echo $jsonstring;
+            return;
+    
+        }
+    }
+
+    if($type === 'comercio'){
+        if($update->existSameUserToUpdateUbication()){
+            if($update->update()){
+                $process = true;
+            }
+        }else {
+            if($update->removeToHistory()){
+                if($update->update()){
+                    $process = true;
+                } else {
+                    $object=array('error' => 'not_update');
+                    $jsonstring = json_encode($object);echo $jsonstring;
+                    return ;
+                }
+            } else {
+                $object=array('error' => 'not_removeToHistory');
+                return  $jsonstring = json_encode($object);echo $jsonstring;
+            }
+        }
+    }
+
+    if($type === 'correo' || $type === 'terminal'){
+        if(!$update->existSamePoint()){
             if($update->update()){
                 $process = true;
             } else {
@@ -577,17 +621,13 @@ public function updateOnlyOne(){
                 $jsonstring = json_encode($object);echo $jsonstring;
                 return ;
             }
-        } else {
-            $object=array('error' => 'not_removeToHistory');
-            return  $jsonstring = json_encode($object);echo $jsonstring;
+        }else {
+            $object=array('error' => 'exist');
+            $jsonstring = json_encode($object);echo $jsonstring;
+            return;
         }
-    }else  {
-        $object=array('error' => 'exist');
-        $jsonstring = json_encode($object);echo $jsonstring;
-        return;
-
     }
-  
+    
     if($process){
         $get = $update->getCodesById();
         if($get){
@@ -602,7 +642,7 @@ public function updateOnlyOne(){
         $jsonstring = json_encode($object);echo $jsonstring;
         return;
     }
-   
+
 }
 
 
@@ -657,6 +697,49 @@ public function showCoverage($count,$data){
             'name_assigned' => $dataResponse["name_assigned"].' '.$dataResponse["name_alternative"],
             'timeScheduleA' => $dataResponse["timeScheduleA"],
             'timeScheduleB' => $dataResponse["timeScheduleB"],
+            'lat' => $dataResponse["lat"],
+            'lng' => $dataResponse["lng"],
+            'created_at' => $this->getDataTime($dataResponse["created_at"])
+          );
+      }
+
+      $object = array(
+        'count' => $arrCount,
+        'data' => $arrData
+      );
+  
+       $jsonstring = json_encode($object);
+       echo $jsonstring;
+
+      
+    }
+}
+
+public function showHistoryCoverage($count,$data){
+
+    if($count && $data){
+       
+        foreach ($count as $dataCounter){
+          $arrCount = $dataCounter["count"];
+        }
+
+        foreach($data as $dataResponse){
+          $arrData[]=array(
+            'success' => true,
+            'id' => $dataResponse["id"],
+            'postal_code' => $dataResponse["postal_code"],
+            'locate' => $dataResponse["locate"],
+            'home_address' => $dataResponse["home_address"], 
+            'provinceInt' => $dataResponse["provinceInt"], 
+            'province' => $dataResponse["province"],
+            'name_country' => $dataResponse['name_country'],
+            'type' => $dataResponse["type"],
+            'id_user' => $dataResponse["id_user"],
+            'name_assigned' => $dataResponse["name_assigned"].' '.$dataResponse["name_alternative"],
+            'timeScheduleA' => $dataResponse["timeScheduleA"],
+            'timeScheduleB' => $dataResponse["timeScheduleB"],
+            'status_process' => $dataResponse["status_process"],
+            'motive' => $dataResponse["motive"],
             'lat' => $dataResponse["lat"],
             'lng' => $dataResponse["lng"],
             'created_at' => $this->getDataTime($dataResponse["created_at"])
@@ -780,38 +863,6 @@ public function getUsersCollector(){
 
 }
 
-public function getUsersCommerce(){
-
-    Utils::AuthAdmin();
-    $getUsersCommerce = new Usuario();
-    $getUsersCommerce = $getUsersCommerce->getUsersCommerce();
-
-    if($getUsersCommerce){
-        foreach ($getUsersCommerce as $element){
-            $object[] = array(
-                'success' => true,
-                'id' => $element["id"],
-                'name_user' => $element["name_user"],
-                'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.'Prov: '.$element["province"],
-                'country' => $element["country"],
-                'province' => $element["province"],
-                'locate' => $element["location"],
-                'home_address' => $element["home_address"],
-                'customer_service_hours' => $element["customer_service_hours"],
-                
-            );
-        }
-        
-    }else {
-        $object = array(
-            'error' => true,
-        );
-
-    }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-}
 
 public function getCountry(){
     $getCountry = new Cobertura();

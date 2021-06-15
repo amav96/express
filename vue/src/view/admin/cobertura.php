@@ -27,6 +27,8 @@
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/excel.js"></script>
 <script src="<?=base_url?>vue/src/components/tables/custom/coverage/tableCobertura.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/custom/coverage/tableEmptyCoverage.js"></script>
+<script src="<?=base_url?>vue/src/components/tables/custom/coverage/tableHistoryCoverage.js"></script>
 
 
 <!-- form component -->
@@ -457,23 +459,49 @@
                 </template>
               
                 <template v-if="showTable()">
+                  <template v-if="formRangeNumberAndWord.display || showAllCoverage.display || showZoneByUser.display">
                     <table-cobertura
-                      :admin="admin"
-                      :columns="MAINRESOURCES.columns"
-                      :table="MAINRESOURCES.table"
-                      :url_actions="MAINRESOURCES.url_actions"
-                      :pagination="MAINRESOURCES.pagination"
-                      @setSnack="MAINRESOURCES.snackbar = $event"
-                      @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
-                      @subtract="subtractPagination($event)"
+                        :admin="admin"
+                        :columns="MAINRESOURCES.columns"
+                        :table="MAINRESOURCES.table"
+                        :url_actions="MAINRESOURCES.url_actions"
+                        :pagination="MAINRESOURCES.pagination"
+                        @setSnack="MAINRESOURCES.snackbar = $event"
+                        @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                        @subtract="subtractPagination($event)"
+                      />
+                  </template>
+                  <template v-if="showAllEmptyCoverage.display">
+                    <table-empty-coverage
+                    :columns="showAllCoverage.table.columns"
+                    :admin="admin"
+                    :table="MAINRESOURCES.table"
+                    :url_actions="MAINRESOURCES.url_actions"
+                    :pagination="MAINRESOURCES.pagination"
+                    @setSnack="MAINRESOURCES.snackbar = $event"
+                    @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @subtract="subtractPagination($event)"
                     />
+                  </template>
+
+                  <template v-if="showAllHistory.display">
+                    <table-history-coverage
+                    :columns="showAllHistory.table.columns"
+                    :admin="admin"
+                    :table="MAINRESOURCES.table"
+                    :pagination="MAINRESOURCES.pagination"
+                    @setSnack="MAINRESOURCES.snackbar = $event"
+                    @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @subtract="subtractPagination($event)"
+                    />
+                  </template>
                 </template>
 
                 <template v-if="MAINRESOURCES.loaderLine" >
                   <loader-line />
                 </template>
   
-                <template v-if="showTable() && MAINRESOURCES.pagination.totalCountResponse>0">
+                <template v-if="showTable() && MAINRESOURCES.pagination.totalCountResponse>0 && MAINRESOURCES.pagination.display">
                     <pagination-custom 
                     :pagination="MAINRESOURCES.pagination"
                     :urlTryPagination="MAINRESOURCES.urlTryPagination"
@@ -532,13 +560,13 @@
                   },
                   commerce : {
                     display : false,
-                    url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCommerce',
+                    url_users : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCommerce',
                     title_field : 'Ingrese comercio',
                     select : {
                       display: true,
                       url : '',
                       title: '',
-                      class: 'mx-2',
+                      class: '',
                       outlined: true,
                       dense: true
                     },
@@ -641,7 +669,18 @@
                       outlined: false,
                       dense: false
                     },
-                    pagination:true,  
+                    pagination:true,
+                    table: {
+                      columns: [
+                      { text: 'Codigo Postal'},
+                      { text: 'Localidad'},
+                      { text: 'Provincia Int'},
+                      { text: 'Provincia'},
+                      { text: 'Pais'},
+                      { text: 'Acciones'},
+                      ],
+                    }
+                    
                 },
                 showAllEmptyCoverage : {
                     display : false,
@@ -698,6 +737,23 @@
                       dense: false
                     },
                     pagination:true, 
+                    table: {
+                      columns: [
+                      { text: 'Codigo Postal'},
+                      { text: 'Localidad'},
+                      { text: 'Provincia Int'},
+                      { text: 'Provincia'},
+                      { text: 'Direccion'},
+                      { text: 'Horarios'},
+                      { text: 'HorariosB'},
+                      { text: 'Pais'},
+                      { text: 'Tipo'},
+                      { text: 'Nombre Asignado'},
+                      { text: 'fecha'},
+                      { text: 'Motivo'},
+                      { text: 'Estado Usuario'},
+                      ],
+                    }
                 },
                 showZoneByUser : {
                     display : false,

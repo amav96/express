@@ -477,7 +477,7 @@ class cobertura{
               }
 
             $sql = "SELECT c.id,po.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',
-            pr.province,co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',c.lat ,c.lng , c.created_at
+            pr.province,co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',c.lat ,c.lng , c.created_at
             FROM postal_code po
             LEFT JOIN coverage c ON c.postal_code = po.postal_code
             LEFT JOIN localities l ON l.postal_code = po.postal_code
@@ -502,13 +502,14 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',u.status_process,c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng ,m.motive, c.created_at
             FROM history_coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
             LEFT JOIN localities l ON l.postal_code = c.postal_code
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
+            LEFT JOIN motives_down_coverage m ON c.motive = m.id
             GROUP BY c.id order BY c.postal_code ASC limit $fromRow,$limit;";
 
             $execute = $this->db->query($sql);
@@ -527,7 +528,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
            
             $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-            co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+            co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
              c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -553,7 +554,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
             LEFT JOIN localities l ON l.postal_code = c.postal_code
@@ -619,7 +620,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             INNER JOIN provinceint p ON p.postal_code = c.postal_code
             INNER JOIN localities l ON l.postal_code = c.postal_code
@@ -659,7 +660,7 @@ class cobertura{
 
             $sql="SELECT c.id,po.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',
 		co.country as 'name_country',
-      	c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+      	c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
       	FROM postal_code po
       	LEFT JOIN coverage c ON c.postal_code = po.postal_code
       	left JOIN provinceint p ON p.postal_code = po.postal_code
@@ -700,7 +701,7 @@ class cobertura{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',
-            c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',u.status_process,c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng ,m.motive, c.created_at
             FROM history_coverage c
       	LEFT JOIN postal_code po ON c.postal_code = po.postal_code
       	left JOIN provinceint p ON p.postal_code = po.postal_code
@@ -708,6 +709,7 @@ class cobertura{
       	LEFT JOIN province pr ON pr.id = po.id_province
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
+            LEFT JOIN motives_down_coverage m ON c.motive = m.id
       	where(
       	MATCH (pr.province) 
       	AGAINST ('$filter') 
@@ -780,14 +782,10 @@ class cobertura{
                   WHERE c.status='active' AND c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
 
-
-               $getCodesById = $this->db->query($sql);
-               if($getCodesById && $getCodesById->num_rows>0){
-                  $result = $getCodesById;
-               }else {
-                  $result = false;
-               }
-               return $result;
+                  $exe = $this->db->query($sql);
+                  if($exe && $exe->num_rows>0){$result = $exe;}
+                  else {$result = false;}
+                  return $result;
 
       }
 
@@ -872,14 +870,9 @@ class cobertura{
             $sql = "UPDATE coverage set home_address = '$home_address',type = '$type', id_user = '$id_user', user_managent_id = '$user_managent_id', action = 'UPDATED', customer_service_hours = '$timeSchedule', lat = '$lat', lng = '$lng', 
             created_at = '$created_at' where id= '$id'";
 
-
-            $update = $this->db->query($sql);
-            if($update){
-                  $result = true;
-            }else {
-                  $result = false;
-            }
-
+            $exe = $this->db->query($sql);
+            if($exe){$result = true;
+            }else {$result = false;}
             return $result;
       }
 
@@ -890,14 +883,36 @@ class cobertura{
 
             $sql = "SELECT id,postal_code,id_user FROM coverage WHERE id_user = '$id_user' and postal_code = '$postal_code'";
             
-            $verifyExist = $this->db->query($sql);
-            if($verifyExist && $verifyExist->num_rows > 0){
-                  $result = true;
-            }else{
-                  $result = false;
-            }
-
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
             return $result;
+      }
+      
+      public function existSameUserToUpdateUbication(){
+
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            
+            $sql = "SELECT id FROM coverage WHERE id = '$id' AND id_user = '$id_user'";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+      }
+
+      public function existSamePoint(){
+
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $home_address = !empty($this->getHome_address()) ? $this->getHome_address() : false ;
+            
+            $sql = "SELECT id FROM coverage WHERE id = '$id' AND home_address = '$home_address'";
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
       }
 
       // SCOPE
@@ -967,7 +982,7 @@ class cobertura{
             return $result;
       }
 
-      public function verifyNotExistStation(){
+      public function verifyNotExistStationByCP(){
 
             $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
             $home_address = !empty($this->getHome_address()) ? $this->getHome_address() : false ;

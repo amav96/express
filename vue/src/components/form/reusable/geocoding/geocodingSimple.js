@@ -49,7 +49,8 @@ Vue.component('geocoding-simple', {
                     required
                     type="text"
                     color="black"
-                    class="info--text mx-2 "
+                    :classCustom="classCustom"
+                    
                     >
                     </v-text-field>
                 </v-col>
@@ -183,6 +184,11 @@ Vue.component('geocoding-simple', {
 
         }
     },
+    watch: {
+        home_address(val) {
+            this.$emit("setHomeAddress", val)
+        }
+    }
 
 
 })

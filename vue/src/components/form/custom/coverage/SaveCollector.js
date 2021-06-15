@@ -100,7 +100,7 @@ Vue.component('save-collector', {
                                     <v-btn 
                                     class="success"
                                     :disabled="validateFormComplete()"
-                                    @click="saveData()"
+                                    @click="_saveData()"
                                     >
                                     Siguiente
                                     </v-btn>
@@ -231,7 +231,7 @@ Vue.component('save-collector', {
             }
 
         },
-        async saveData() {
+        async _saveData() {
 
             this.saveLoading = true
             const url = this.save.url.save
@@ -298,6 +298,7 @@ Vue.component('save-collector', {
                     this.infoUser = []
                     this.error.display = false
                     this.error.text = ''
+                    this.$emit("setPaginateDisplay", false)
                 }, 300);
             }
 

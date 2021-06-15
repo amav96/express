@@ -2,62 +2,149 @@ Vue.component('update-onlyOne-commerce', {
     template: //html 
         `
         <div>
+       
                 <v-row class=" d-flex justify-start flex-column ma-1 my-0 flex-wrap" >
-                    <template v-if="error.display" >
+                
+                <h6 class="ml-4 my-3">Nuevo Comercio </h6>
+                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
+                        <v-row  class=" d-flex flex-row">
+                            <v-col cols="12" xl="4" lg="4" sm="4" xs="4">
+                                <select-auto-complete-simple-id 
+                                @exportVal="setUser($event)"
+                                :title="update.commerce.select.title" 
+                                :url="update.commerce.select.url"
+                                :outlined="update.commerce.select.outlined"
+                                :classCustom="update.commerce.select.class"
+                                :dense="update.commerce.select.dense"
+                                ref="resetUser"
+                            />
+                            </v-col>
+                            <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
+                                <template class="mx-auto" v-if="infoUser.length !== 0">
+                                <alert-info-user
+                                :info="infoUser"
+                                />         
+                                </template>  
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <template v-if="errorGeocoding !== ''">
+                        <v-row class="d-flex justify-center mx-2" >
+                            <v-col cols="12">
                                 <v-alert
-                                class="mx-auto my-5" 
-                                color="error"
-                                dark
+                                dense
+                                outlined
                                 type="error"
-                                elevation="2"
                                 >
-                                {{error.text}}
+                                    {{errorGeocoding}}
                                 </v-alert>
+                            </v-col>
+                        </v-row>
                     </template>
 
-
-                <h6 class="ml-4 my-3">Nuevo Comercio </h6>
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <select-auto-complete-simple-id 
-                        @exportVal="setUser($event)"
-                        :title="update.commerce.select.title" 
-                        :url="update.commerce.select.url"
-                        :outlined="update.commerce.select.outlined"
-                        :classCustom="update.commerce.select.class"
-                        :dense="update.commerce.select.dense"
+                    <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
+                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
+                        <geocoding-simple
+                        @setErrorGeocoding="errorGeocoding = $event"
+                        @setResultGeocoding="geocoding.result = $event"
+                        @setCountryID="id_country = $event"
+                        @setProvinceID="id_province = $event"
+                        @setLocateID="id_locate = $event"
+                        @setHomeAddress="home_address = $event"
+                        :outlined=true
+                        :classCustom="geocoding.select.class"
+                        :dense="true"
+                        :save="geocoding"
+                        ref="resetGeocoding"
                         />
                     </v-col>
 
-                    
-                    <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
-                    <geocoding-simple
-                    @setErrorGeocoding="errorGeocoding = $event"
-                    @setResultGeocoding="resultGeocoding = $event"
-                    @setCountryID="id_country = $event"
-                    @setProvinceID="id_province = $event"
-                    @setLocateID="id_locate = $event"
-                    :outlined=true
-                    :classCustom="geocoding.select.class"
-                    :dense="true"
-                    :save="geocoding"
-                    ref="resetGeocoding"
-                    />
+                    <v-row class="d-flex justify-between flex-row mx-0" >
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-text-field 
+                            label="latitud"
+                            v-model="lat"
+                            outlined
+                            dense
+                            required
+                            type="text"
+                            color="black"
+                            class="info--text "
+                            >
+                            </v-text-field>
+                        </v-col>
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-text-field 
+                            label="longitud"
+                            v-model="lng"
+                            outlined
+                            dense
+                            required
+                            type="text"
+                            color="black"
+                            class="info--text "
+                            >
+                            </v-text-field>
+                        </v-col>
+
+                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                            <v-btn
+                            class=""
+                            fab
+                            small
+                            color="primary"
+                            :disabled="lng === '' || lat === ''"
+                            @click="reverseGeocodingManualToMap()"
+                            >
+                                <v-icon dark>
+                                mdi-refresh
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+
+                    </v-row>
+                    <template v-if="srcMap !== ''" >
+                        <v-row class="d-flex justify-center flex-column align-content-center" >
+                            <v-col  cols="12" xl="8" lg="8" >
+                                <iframe
+                                width="100%"
+                                height="450"
+                                style="border:0"
+                                loading="lazy"
+                                allowfullscreen
+                                :src="srcImgMap()">
+                                </iframe>
+                            </v-col>
+                        </v-row>
+                    </template>
+
+                    <template v-if="error.display" >
+                        <v-alert
+                        class="mx-auto my-5" 
+                        color="error"
+                        dark
+                        type="error"
+                        elevation="2"
+                        >
+                        {{error.text}}
+                        </v-alert>
+                    </template>
 
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                         <v-btn
                         color="success"
                         :disabled="validateUpdate"
                         @click="_updateOnlyOne()"
-                        width="150"
+                        width="180"
                         >
                         <template v-if="saveLoading">
                             <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="white"
                         ></v-progress-circular>
                         </template>
                         <template v-else>
-                                Actualizar
+                               Guardar cambios
                         </template>
                     
                         </v-btn>
@@ -83,23 +170,28 @@ Vue.component('update-onlyOne-commerce', {
     },
     data() {
         return {
-            infoUser: '',
+            infoUser: [],
             id_user: '',
+            name_user: '',
             id_country: '',
             id_province: '',
             id_locate: '',
+            timeSchedule: '',
+            lat: '',
+            lng: '',
+            home_address: '',
             saveLoading: false,
             error: {
                 display: false,
                 text: ''
             },
-            saveSuccess: false,
+            errorGeocoding: '',
             saveFlag: false,
             update: {
                 commerce: {
                     select: {
                         title: 'Ingrese Comercio',
-                        url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCommerce',
+                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCommerce',
                         outlined: true,
                         class: '',
                         dense: true
@@ -126,70 +218,89 @@ Vue.component('update-onlyOne-commerce', {
                     url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'
                 },
                 select: {
-                    class: 'mx-2'
-                }
+                    class: 'mx-0'
+                },
+                result: []
 
             },
-
+            srcMap: ''
         }
     },
     methods: {
         setUser(user) {
-
-            if (!this.restaurate.cache) {
-                this.restaurate.cache = true
-                this.restaurate.id_user = this.response.data.id_user
-                this.restaurate.name_assigned = this.response.data.name_assigned
-            }
-
+            console.log(user)
+            this.infoUser = user
             this.id_user = user.id
-            this.response.data.id_user = this.id_user
-            this.response.data.name_assigned = user.name_user
+            this.name_user = user.name_user
         },
         async _updateOnlyOne() {
             this.saveLoading = true
-            const url = this.update.collector.url.update
+            const url = this.update.commerce.url.update
             const dataRequest = {
                 id: this.response.data.id,
+                lat: this.lat,
+                lng: this.lng,
+                home_address: this.home_address,
                 postal_code: this.response.data.postal_code,
                 id_user: this.id_user,
-                type: 'recolector',
+                type: 'comercio',
                 admin: this.admin,
                 created_at: this.getDateTime()
             }
-            await axios.get(url, {
-                    params: {
-                        dataRequest
-                    }
-                })
+
+            await axios.get(url, { params: { dataRequest } })
                 .then(res => {
-
                     if (res.data.error === 'exist') {
-                        this.exist()
-                        this.saveLoading = false
-                        return
+                        window.scrollTo(0, 0);
+                        this.exist();
+                        this.saveLoading = false;
+                        return;
                     }
-                    this.saveSuccess = true
-                    this.error.display = false
-                    this.error.text = ''
-
-
-                    this.response.indexUpdate = this.response.data.id
-                    this.$emit("setDialog", false)
-                    const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    const set = {
-                        id: this.response.data.id,
-                        action: 'update'
-                    }
-                    this.$emit("setResponse", set)
-
-
+                    this.$updateAfterFront(res.data.data);
+                    this.$success();
                 })
                 .catch(err => {
                     this.saveLoading = false
                     console.log(err)
                 })
+        },
+        $updateAfterFront(data) {
+            this.response.data.id_user = this.id_user
+            this.response.data.name_assigned = this.name_user
+            this.response.data.home_address = data[0].home_address
+            this.response.data.created_at = data[0].created_at
+            this.response.data.timeScheduleA = data[0].timeScheduleA
+            this.response.data.type = data[0].type
+        },
+        $success() {
+            this.$emit("setDialog", false)
+            setTimeout(() => {
+                const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+                this.$emit("setSnack", snack)
+
+                this.saveLoading = false
+                this.infoUser = []
+                this.id_user = ''
+                this.name_user = ''
+                this.id_country = ''
+                this.id_province = ''
+                this.id_locate = ''
+                this.timeSchedule = ''
+                this.lat = ''
+                this.lng = ''
+                this.home_address = ''
+                this.srcMap = ''
+                this.$refs.resetGeocoding.reset()
+                this.$refs.resetUser.reset()
+
+                this.error.display = false
+                this.error.text = ''
+
+
+                const set = { id: this.response.data.id, action: 'update' }
+                this.$emit("setResponse", set)
+            }, 280);
+
         },
         getDateTime() {
             var today = new Date();
@@ -206,6 +317,12 @@ Vue.component('update-onlyOne-commerce', {
 
             return created_at
         },
+        srcImgMap() {
+            return this.srcMap
+        },
+        reverseGeocodingManualToMap() {
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+        },
         exist() {
             var text = 'Este recolector ya esta asignado a'
             text = text + ' ' + this.response.data.postal_code
@@ -213,35 +330,38 @@ Vue.component('update-onlyOne-commerce', {
             this.error.display = true
             this.error.text = text
         },
-        restaurateChanges() {
-            console.log("execute")
-            if (!this.saveSuccess) {
-                if (this.restaurate.id_user !== '' && this.restaurate.name_assigned !== '') {
-                    console.log("not success")
-                    this.response.data.id_user = this.restaurate.id_user
-                    this.response.data.name_assigned = this.restaurate.name_assigned
-                }
-            } else {
-                console.log("success")
-            }
+        clearError() {
+            this.error.display = false
+            this.error.text = ''
         }
+
+
     },
     computed: {
         validateUpdate() {
-            if (this.id_user = '') {
-                return true
-            } else {
-                return false
-            }
+            if (
+                this.id_user === '' ||
+                this.id_country === '' ||
+                this.id_province === '' ||
+                this.id_locate === '' ||
+                this.lat === '' ||
+                this.lng === '' ||
+                this.home_address === ''
+            ) { return true } else { return false }
         }
     },
-
-    destroyed() {
-        this.restaurateChanges()
+    watch: {
+        geocoding: {
+            handler(val) {
+                this.home_address = val.result.formatted_addess
+                this.lat = val.result.lat
+                this.lng = val.result.lng
+                this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+            },
+            deep: true
+        }
     }
 
-
-    // agregar dos input para colocar el rango de codigo postal, buscar y mostrar
 
 
 })

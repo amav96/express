@@ -30,32 +30,9 @@ Vue.component('save-commerce', {
                             </v-col>
                             <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
                                 <template v-if="infoUser.length !== 0">
-                                    <v-alert
-                                    class="py-5"
-                                    border="right"
-                                    colored-border
-                                    type="info"
-                                    elevation="2"
-                                    icon="mdi-store"
-                                    >
-                                    <v-row class="mx-1 d-flex justify-between ">
-                                        <v-col cols="12" lg="6" class="pa-1 " >
-                                            <strong>Nombre :</strong> {{infoUser.name_user}}
-                                        </v-col>
-                                        <v-col cols="12" lg="6" class="pa-1 ">
-                                            <strong>Pais :</strong> {{infoUser.country}}
-                                        </v-col>
-                                        <v-col cols="12" lg="6" class="pa-1 ">
-                                            <strong>Provincia :</strong> {{infoUser.province}}
-                                        </v-col>
-                                        <v-col cols="12" lg="6" class="pa-1 ">
-                                            <strong>Localidad :</strong> {{infoUser.locate}}
-                                        </v-col>
-                                        <v-col cols="12" lg="6" class="pa-1 ">
-                                            <strong>Dirección :</strong> {{infoUser.home_address}}
-                                        </v-col>
-                                    </v-row>
-                                    </v-alert>
+                                        <alert-info-user
+                                        :info="infoUser"
+                                        />
                                 </template>  
                             </v-col> 
                         </v-row>
@@ -94,7 +71,7 @@ Vue.component('save-commerce', {
                                     required
                                     type="text"
                                     color="black"
-                                    class="info--text mx-2"
+                                    class="info--text "
                                     >
                                     </v-text-field>
                                 </v-col>
@@ -107,7 +84,7 @@ Vue.component('save-commerce', {
                                     required
                                     type="text"
                                     color="black"
-                                    class="info--text mx-2"
+                                    class="info--text "
                                     >
                                     </v-text-field>
                                 </v-col>
@@ -193,7 +170,7 @@ Vue.component('save-commerce', {
                                 class="success"
                                
                                 :disabled="validateFormComplete()"
-                                @click="saveData()"
+                                @click="_saveData()"
                                 >
                                 Siguiente
                                 </v-btn>
@@ -317,7 +294,7 @@ Vue.component('save-commerce', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
-        async saveData() {
+        async _saveData() {
             this.saveLoading = true
             const url = this.save.url.save
             await axios.get(url, {
@@ -391,6 +368,8 @@ Vue.component('save-commerce', {
                     this.srcMap = ''
                     this.error.display = false
                     this.error.text = ''
+                    this.clean = false
+                    this.$emit("setPaginateDisplay", false)
                 }, 300);
             }
         },

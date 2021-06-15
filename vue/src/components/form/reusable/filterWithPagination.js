@@ -50,6 +50,7 @@ Vue.component('filter-with-pagination', {
     data() {
         return {
             data: '',
+            oldData: '',
             objectFilter: [],
             oldParametersToCall: [],
             oldDataResponseDB: [],
@@ -69,51 +70,56 @@ Vue.component('filter-with-pagination', {
             })
         },
         async tryFilter() {
-            // este activate es para detectar cuando realizar una busqueda realmente,
-            // asi al momento de restaurar la data, no restaura a cada rato
-            this.activate = true
-            this.loaderFilter = true
-            const parameters = JSON.parse(JSON.stringify(this.filter.parameters))
-            const buildFilter = { filter: this.data }
-            this.objectFilter = {...parameters, ...buildFilter }
-            const dataRequest = this.objectFilter
+            if (this.oldData !== this.data) {
+                // este activate es para detectar cuando realizar una busqueda realmente,
+                // asi al momento de restaurar la data, no restaura a cada rato
+                this.activate = true
+                this.loaderFilter = true
+                const parameters = JSON.parse(JSON.stringify(this.filter.parameters))
+                const buildFilter = { filter: this.data }
+                this.objectFilter = {...parameters, ...buildFilter }
+                const dataRequest = this.objectFilter
 
-            const url = this.filter.url
-            await axios.get(url, { params: { dataRequest } })
-                .then(res => {
-                    if (res.data.error) {
+                const url = this.filter.url
+                await axios.get(url, { params: { dataRequest } })
+                    .then(res => {
+                        if (res.data.error) {
+                            this.loaderFilter = false
+                            this.alert_flag = true
+                            setTimeout(() => {
+                                this.alert_flag = false
+                            }, 3000);
+                            return
+                        }
+
+                        this.oldParametersToCall = this.parametersDynamicToPaginate
+                        this.oldUrl = this.urlTryPagination
+                            //setting values for pagination before to fetch new count 
+                        this.oldPagination = this.pagination
+                        this.oldDataResponseDB = this.dataResponseDB
+                            // lo que acabo de buscar lo guardo en cache
+                            // para no realizar la misma busqueda si es lo mismo
+                        this.oldData = this.data
+                        this.$emit('setFlagFiltering', false)
+                        const newDataResponse = res.data.data
+                        this.$emit('setAfterDataResponse', newDataResponse)
                         this.loaderFilter = false
-                        this.alert_flag = true
-                        setTimeout(() => {
-                            this.alert_flag = false
-                        }, 3000);
-                        return
-                    }
 
-                    this.oldParametersToCall = this.parametersDynamicToPaginate
-                    this.oldUrl = this.urlTryPagination
-                        //setting values for pagination before to fetch new count 
-                    this.oldPagination = this.pagination
-                    this.oldDataResponseDB = this.dataResponseDB
-                    this.$emit('setFlagFiltering', false)
-                    const newDataResponse = res.data.data
-                    this.$emit('setAfterDataResponse', newDataResponse)
-                    this.loaderFilter = false
-
-                    //PAGINATION
-                    if (this.filter.pagination) {
-                        this.$pagination(res)
-                    }
-                    if (this.filter.export.display) {
-                        this.$exportExcel()
-                    }
+                        //PAGINATION
+                        if (this.filter.pagination) {
+                            this.$pagination(res)
+                        }
+                        if (this.filter.export.display) {
+                            this.$exportExcel()
+                        }
 
 
-                })
-                .catch(err => {
-                    this.loaderFilter = false
-                    console.log(err)
-                })
+                    })
+                    .catch(err => {
+                        this.loaderFilter = false
+                        console.log(err)
+                    })
+            }
         },
         resetFilter() {
 
@@ -154,11 +160,13 @@ Vue.component('filter-with-pagination', {
     watch: {
         data(value) {
             if (value === '') {
+                // si buscó realmente, guardamos  lo anterior en cache
                 if (this.activate) {
                     if (Object.keys(this.oldDataResponseDB).length > 0) {
                         this.$emit('restoreUrlPagination', this.oldUrl)
                         this.$emit('restoreOldPagination', this.oldPagination)
                         this.$emit('restoreOldParametersToCall', this.oldParametersToCall)
+                        this.oldData = ''
                         if (this.filter.export.display) {
                             this.$oldExportExcel()
                         }
@@ -168,6 +176,7 @@ Vue.component('filter-with-pagination', {
                     this.activate = false
                 }
             }
+
         },
     },
 

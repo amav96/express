@@ -1,11 +1,11 @@
 Vue.component('form-id', {
     template: /*html*/ `      
         <div>
-            <v-card>
+            <v-card class="mb-5">
                 <form 
                 id="sendFormID"
                 @submit.prevent="_getData"
-                class="d-flex justify-center flex-row align-center  flex-wrap ">
+                class="d-flex justify-center flex-row align-center">
                     <v-container fluid>
                         <v-row align="center"  class="d-flex justify-center" >
                             <v-col class="d-flex justify-center" cols="12" xl="12"  lg="12" md ="12">

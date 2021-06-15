@@ -88,6 +88,7 @@ Vue.component('form-number-and-word', {
 
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
+
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);

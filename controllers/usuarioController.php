@@ -3,6 +3,7 @@ if (isset($_GET['usuario'])) {
 
      require_once '../model/usuario.php';
      require_once '../config/db.php';
+     require_once '../helpers/utils.php';
 
      session_start();
      $accion = $_GET['usuario'];
@@ -1638,8 +1639,48 @@ class usuarioController
           $jsonstring = json_encode($object);
           echo $jsonstring;
           
-        }
+     }
+
+      // SCOPE
+
+      public function getUsersCommerce(){
+
+          Utils::AuthAdmin();
+          $getUsersCommerce = new Usuario();
+          $getUsersCommerce = $getUsersCommerce->getUsersCommerce();
+      
+          if($getUsersCommerce){
+              foreach ($getUsersCommerce as $element){
+                  $object[] = array(
+                      'success' => true,
+                      'id' => $element["id"],
+                      'name_user' => $element["name_user"],
+                      'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.'Prov: '.$element["province"],
+                      'name_country' => $element["country"],
+                      'province' => $element["province"],
+                      'locate' => $element["location"],
+                      'home_address' => $element["home_address"],
+                      'postal_code' => $element["postal_code"],
+                      'customer_service_hours' => $element["customer_service_hours"],
+                  );
+              }
+              
+          }else {
+              $object = array(
+                  'error' => true,
+              );
+      
+          }
+      
+          $jsonstring = json_encode($object);
+          echo $jsonstring;
+      }
 
      
     
+
+
 }
+
+
+    

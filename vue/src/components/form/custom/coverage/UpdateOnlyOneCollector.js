@@ -25,6 +25,7 @@ Vue.component('update-onlyOne-collector', {
                         :outlined="update.collector.select.outlined"
                         :classCustom="update.collector.select.class"
                         :dense="update.collector.select.dense"
+                        ref="resetUser"
                         />
                     </v-col>
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -32,16 +33,16 @@ Vue.component('update-onlyOne-collector', {
                         color="success"
                         :disabled="validateUpdate"
                         @click="_updateOnlyOne()"
-                        width="150"
+                        width="180"
                         >
                         <template v-if="saveLoading">
                             <v-progress-circular
                             indeterminate
-                            color="primary"
+                            color="white"
                         ></v-progress-circular>
                         </template>
                         <template v-else>
-                                Actualizar
+                               Guardar cambios
                         </template>
                     
                         </v-btn>
@@ -72,6 +73,7 @@ Vue.component('update-onlyOne-collector', {
         return {
             infoUser: '',
             id_user: '',
+            name_user: '',
             saveLoading: false,
             error: {
                 display: false,
@@ -93,25 +95,13 @@ Vue.component('update-onlyOne-collector', {
                     }
                 }
             },
-            restaurate: {
-                cache: false,
-                id_user: '',
-                name_assigned: ''
-            }
+
         }
     },
     methods: {
         setUser(user) {
-
-            if (!this.restaurate.cache) {
-                this.restaurate.cache = true
-                this.restaurate.id_user = this.response.data.id_user
-                this.restaurate.name_assigned = this.response.data.name_assigned
-            }
-
             this.id_user = user.id
-            this.response.data.id_user = this.id_user
-            this.response.data.name_assigned = user.name_user
+            this.name_user = user.name_user
         },
         async _updateOnlyOne() {
             this.saveLoading = true
@@ -136,27 +126,43 @@ Vue.component('update-onlyOne-collector', {
                         this.saveLoading = false
                         return
                     }
-                    this.saveSuccess = true
-                    this.error.display = false
-                    this.error.text = ''
 
-
-                    this.response.indexUpdate = this.response.data.id
-                    this.$emit("setDialog", false)
-                    const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    const set = {
-                        id: this.response.data.id,
-                        action: 'update'
-                    }
-                    this.$emit("setResponse", set)
-
-
+                    this.$updateAfterFront(res.data.data);
+                    this.$success();
                 })
                 .catch(err => {
                     this.saveLoading = false
                     console.log(err)
                 })
+        },
+        $updateAfterFront(data) {
+            this.response.data.id_user = this.id_user
+            this.response.data.name_assigned = this.name_user
+            this.response.data.created_at = data[0].created_at
+            this.response.data.type = data[0].type
+            this.response.data.home_address = ''
+            this.response.data.timeScheduleA = ''
+            this.response.data.timeScheduleB = ''
+        },
+        $success() {
+            this.$emit("setDialog", false)
+            setTimeout(() => {
+                const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+                this.$emit("setSnack", snack)
+
+                this.saveLoading = false
+                this.infoUser = []
+                this.id_user = ''
+                this.name_user = ''
+                this.$refs.resetUser.reset()
+
+                this.error.display = false
+                this.error.text = ''
+
+                const set = { id: this.response.data.id, action: 'update' }
+                this.$emit("setResponse", set)
+            }, 280);
+
         },
         getDateTime() {
             var today = new Date();
@@ -180,22 +186,15 @@ Vue.component('update-onlyOne-collector', {
             this.error.display = true
             this.error.text = text
         },
-        restaurateChanges() {
-            console.log("execute")
-            if (!this.saveSuccess) {
-                if (this.restaurate.id_user !== '' && this.restaurate.name_assigned !== '') {
-                    console.log("not success")
-                    this.response.data.id_user = this.restaurate.id_user
-                    this.response.data.name_assigned = this.restaurate.name_assigned
-                }
-            } else {
-                console.log("success")
-            }
+        clearError() {
+            this.error.display = false
+            this.error.text = ''
         }
+
     },
     computed: {
         validateUpdate() {
-            if (this.id_user = '') {
+            if (this.id_user === '' || this.name_user === '') {
                 return true
             } else {
                 return false
@@ -203,9 +202,8 @@ Vue.component('update-onlyOne-collector', {
         }
     },
 
-    destroyed() {
-        this.restaurateChanges()
-    }
+
+
 
 
     // agregar dos input para colocar el rango de codigo postal, buscar y mostrar

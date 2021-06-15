@@ -1,16 +1,15 @@
 Vue.component("table-cobertura", {
     template: /*html*/ `
           <div>
-                <template v-if="dialogMediaScreen.display" >
-                    <d-media-screen :dialogMediaScreen="dialogMediaScreen">
-                    
+                <template  >
+                    <d-full-screen :dialogFullScreen="dialogFullScreen">
                         <template v-if="dataDelete.display">
                             <delete-coverage 
-                            :dialogMediaScreen="dialogMediaScreen"
+                            :dialogFullScreen="dialogFullScreen"
                             :admin="admin"
                             :response="dataDelete"
                             @setSnack="$_setMessage($event)"
-                            @setDialog="dialogMediaScreen.display = $event"
+                            @setDialog="dialogFullScreen.display = $event"
                             @setResponse="$_setResponse($event)"
                             />
                         </template>
@@ -18,9 +17,9 @@ Vue.component("table-cobertura", {
                             
                             <v-row class="d-flex mx-1 mt-2" >
                                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
-                                        <h6 class="mb-3 mt-1">Actual {{dataUpdate.data.type}} </h6>
+                                        <h6 class="mb-3 mt-1">Zona actual </h6>
                                         <alert-info-user
-                                        :info="dataUpdate"
+                                        :info="dataUpdate.data"
                                         />
                                     </v-col>
                                     <v-col class="my-1" cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -43,43 +42,47 @@ Vue.component("table-cobertura", {
 
                                 <template v-if="updateOnly.type === 'recolector'">
                                     <update-onlyOne-collector
-                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :dialogFullScreen="dialogFullScreen"
                                     :admin="admin"
                                     :response="dataUpdate"
                                     :pagination="pagination"
                                     @setSnack="$_setMessage($event)"
-                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setDialog="dialogFullScreen.display = $event"
                                     @setResponse="$_setResponse($event)"
+                                    ref="clearErrorRecolector"
                                     />
                                 </template>
                                 <template v-if="updateOnly.type === 'comercio'">
                                     <update-onlyOne-commerce
-                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :dialogFullScreen="dialogFullScreen"
                                     :admin="admin"
                                     :response="dataUpdate"
                                     @setSnack="$_setMessage($event)"
-                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setDialog="dialogFullScreen.display = $event"
                                     @setResponse="$_setResponse($event)"
+                                    ref="clearErrorComercio"
                                     />
                                 </template>
                                 <template v-if="updateOnly.type === 'correo' || updateOnly.type === 'terminal'">
                                     <update-onlyOne-point
-                                    :dialogMediaScreen="dialogMediaScreen"
+                                    :dialogFullScreen="dialogFullScreen"
                                     :admin="admin"
                                     :response="dataUpdate"
+                                    :updateOnly="updateOnly"
                                     @setSnack="$_setMessage($event)"
-                                    @setDialog="dialogMediaScreen.display = $event"
+                                    @setDialog="dialogFullScreen.display = $event"
                                     @setResponse="$_setResponse($event)"
+                                    ref="clearErrorPoint"
                                     />
                                 </template>
                         </template>
-                    </d-media-screen>
+                    </d-full-screen>
                 </template>
             
                
                 <template v-if="pagination.display" >
                 
-                        <div class="my-1 d-flex justify-center" >
+                        <div class="my-1 mt-3 d-flex justify-center" >
                             <v-btn
                                 >
                                 Total Registros <strong> &nbsp;{{pagination.totalCountResponse}} </strong>
@@ -163,14 +166,13 @@ Vue.component("table-cobertura", {
     props: ["table", "columns", "url_actions", "admin", "country_admin", "pagination"],
     data() {
         return {
-            dialogMediaScreen: {
+            dialogFullScreen: {
                 display: false,
                 title: ''
 
             },
             updateOnly: {
                 type: '',
-                indexUpdate: ''
             },
             dataDelete: {
                 display: false,
@@ -178,7 +180,7 @@ Vue.component("table-cobertura", {
                 url: {
                     delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete'
                 },
-                indexUpdate: ''
+
             },
             dataUpdate: {
                 display: false,
@@ -186,7 +188,7 @@ Vue.component("table-cobertura", {
                 url: {
                     delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete'
                 },
-                indexUpdate: ''
+
             },
             rowAltered: {
                 id: '',
@@ -228,8 +230,8 @@ Vue.component("table-cobertura", {
             }
         },
         deleted(data) {
-            this.dialogMediaScreen.title = 'Eliminar asignado'
-            this.dialogMediaScreen.display = true
+            this.dialogFullScreen.title = 'Eliminar asignado'
+            this.dialogFullScreen.display = true
             this.dataDelete.data = data
 
             //display
@@ -240,8 +242,8 @@ Vue.component("table-cobertura", {
 
             this.updateOnly.type = data.type
 
-            this.dialogMediaScreen.title = 'Actualizar asignado'
-            this.dialogMediaScreen.display = true
+            this.dialogFullScreen.title = 'Actualizar asignado'
+            this.dialogFullScreen.display = true
             this.dataUpdate.data = data
 
             //display
@@ -257,7 +259,6 @@ Vue.component("table-cobertura", {
         $_setResponse(id) {
             this.rowAltered.id = id.id
             this.rowAltered.action = id.action
-
         },
         isSameID(id) {
             var style = ''
@@ -283,7 +284,27 @@ Vue.component("table-cobertura", {
                 return style
             }
 
+        },
+        returnUpperCaseFirstLetter(cadena) {
+            const primerCaracter = cadena.charAt(0).toUpperCase();
+            const restoDeLaCadena = cadena.substring(1, cadena.length);
+            return primerCaracter.concat(restoDeLaCadena);
+        },
+        $_clearSpace() {
+            this.$nextTick(() => {
+                if (this.updateOnly.type === 'recolector') {
+                    this.$refs.clearErrorRecolector.clearError()
+                }
+                if (this.updateOnly.type === 'comercio') {
+                    this.$refs.clearErrorComercio.clearError()
+                }
+                if (this.updateOnly.type === 'correo' || this.updateOnly.type === 'terminal') {
+                    this.$refs.clearErrorPoint.clearError()
+                }
+
+            })
         }
+
 
     },
     computed: {
@@ -292,6 +313,14 @@ Vue.component("table-cobertura", {
         },
 
 
+    },
+    watch: {
+        dialogFullScreen: {
+            handler(val) {
+                this.$_clearSpace()
+            },
+            deep: true
+        }
     },
 
 
