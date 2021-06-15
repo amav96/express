@@ -4,7 +4,7 @@ Vue.component("table-empty-coverage", {
 
                 <template  >
                     <d-full-screen :dialogFullScreen="dialogFullScreen">
-                    jejejejeje
+                        jejejejeje
                     </d-full-screen>
                 </template>
                 <template v-if="pagination.display" >

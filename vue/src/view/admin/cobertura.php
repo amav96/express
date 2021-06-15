@@ -47,6 +47,9 @@
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateOnlyOneCommerce.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/UpdateOnlyOnePoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/custom/coverage/Confirm.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/EmptyCollector.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/EmptyCommerce.js"></script>
+<script src="<?=base_url?>vue/src/components/form/custom/coverage/EmptyPoint.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/switches/switchesCommon.js"></script>
