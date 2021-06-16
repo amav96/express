@@ -111,8 +111,6 @@ Vue.component('geocoding-simple', {
             loading: false,
             reassignData: {
                 id_country: '',
-                id_province: '',
-                id_locate: '',
                 home_address: '',
             }
         }
