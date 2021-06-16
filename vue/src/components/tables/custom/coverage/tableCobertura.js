@@ -79,20 +79,8 @@ Vue.component("table-cobertura", {
                     </d-full-screen>
                 </template>
             
-               
-                <template v-if="pagination.display" >
-                
-                        <div class="my-1 mt-3 d-flex justify-center" >
-                            <v-btn
-                                >
-                                Total Registros <strong> &nbsp;{{pagination.totalCountResponse}} </strong>
-                            </v-btn>
-                        </div>
-                    
-                </template>
-  
               <template>
-                      <v-simple-table >
+                      <v-simple-table class="mt-6" >
                           <template v-slot:default>
                           <thead>
                               <tr  class="bg-blue-custom">

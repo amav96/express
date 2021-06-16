@@ -59,7 +59,7 @@ public function getAllCoverage(){
 }
 
 public function getAllEmptyCoverage(){
-     Utils::AuthAdmin();
+    //  Utils::AuthAdmin();
     $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
     $request =  json_decode($dataRequest);
     $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
@@ -73,7 +73,7 @@ public function getAllEmptyCoverage(){
     if($count){
         $data = $get->getAllEmptyCoverage();
         if($data){
-            $this->showCoverage($count,$data);
+            $this->showEmptyCoverage($count,$data);
         }else{
             $object=array('error' => true);
             $jsonstring = json_encode($object); echo $jsonstring;
@@ -260,7 +260,7 @@ public function getFilterEmptyCoverage(){
     if($count){
         $data = $get->getFilterEmptyCoverage();
         if($data){
-            $this->showCoverage($count,$data);
+            $this->showEmptyCoverage($count,$data);
         }else{
             $object=array('error' => true);
             $jsonstring = json_encode($object); echo $jsonstring;
@@ -451,6 +451,54 @@ public function save(){
         $jsonstring = json_encode($object);
         echo $jsonstring;
 }
+
+public function saveEmptyCoverage(){
+
+  
+    $id_country = isset($_GET['id_country']) ? $_GET['id_country'] : false ;
+    $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
+    $id_locate = isset($_GET['id_locate']) ? $_GET['id_locate'] : false ;
+    $postal_code = isset($_GET['postal_code']) ? $_GET['postal_code'] : false ;
+    $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
+    $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
+    $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
+    $id_user =isset($_GET['id_user']) ? $_GET['id_user'] : false ;
+    $type = isset($_GET['type']) ? $_GET['type'] : false ;
+    $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
+    $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
+    $timeSchedule = isset($_GET['timeSchedule']) ? $_GET['timeSchedule'] : false ;
+
+       $save = new cobertura();
+       $save->setId_country($id_country);
+       $save->setLocate($id_locate);
+       $save->setProvince($id_province);
+       $save->setHome_address($home_address);
+       $save->setType($type);
+       $save->setId_user($id_user);
+       $save->setUser_managent_id($admin);
+       $save->setCreated_at($created_at);
+       $save->setCustomer_service_hours($timeSchedule);
+       $save->setLat($lat);
+       $save->setLng($lng);
+       $save->setPostal_code($postal_code);
+    
+        if($save->save()){
+               $getRecentCodes = $save->getRecentCodes();
+               if($getRecentCodes){
+                  $this->showSimpleCoverage($getRecentCodes);
+               }else{
+                   $object = array('error' => 'not_result');
+                   $jsonstring = json_encode($object);
+                   echo $jsonstring;
+               }
+        }else{
+            $object = array('error' => 'not_save');
+            $jsonstring = json_encode($object);
+            echo $jsonstring;
+        }
+}
+    
+    
 
 public function delete(){
     $id = isset($_GET['id']) ? $_GET['id'] : false ;
@@ -673,7 +721,8 @@ public function removeAndDelete(){
     }
 }
 
-// HELPER
+//SHOW 
+
 public function showCoverage($count,$data){
 
     if($count && $data){
@@ -759,7 +808,7 @@ public function showHistoryCoverage($count,$data){
 }
 
 public function showSimpleCoverage($data){
-
+    //este se usa para mostrar la inforamcion luego de ser insertada o actualizada
     if($data){
        
         foreach($data as $dataResponse){
@@ -791,6 +840,39 @@ public function showSimpleCoverage($data){
        echo $jsonstring;
     }
     
+}
+
+public function showEmptyCoverage($count,$data){
+    if($count && $data){
+       
+        foreach ($count as $dataCounter){
+          $arrCount = $dataCounter["count"];
+        }
+
+        foreach($data as $dataResponse){
+          $arrData[]=array(
+            'success' => true,
+            'postal_code' => $dataResponse["postal_code"],
+            'locate' => $dataResponse["locate"],
+            'id_locate' => $dataResponse["id_locate"],
+            'provinceInt' => $dataResponse["provinceInt"], 
+            'province' => $dataResponse["province"],
+            'id_province' => $dataResponse["id_province"],
+            'name_country' => $dataResponse['name_country'],
+            'id_country' => $dataResponse['id_country'],
+          );
+      }
+
+      $object = array(
+        'count' => $arrCount,
+        'data' => $arrData
+      );
+  
+       $jsonstring = json_encode($object);
+       echo $jsonstring;
+
+      
+    }  
 }
 
 // HELPER
@@ -834,34 +916,6 @@ public function validateRemoveAndDelete($Request){
 }
 
 // SCOPE
-
-public function getUsersCollector(){
-
-    Utils::AuthAdmin();
-    $getUsersCollector = new Usuario();
-    $getUsersCollector = $getUsersCollector->getUsersCollector();
-
-    if($getUsersCollector){
-        foreach ($getUsersCollector as $element){
-            $object[] = array(
-                'success' => true,
-                'id' => $element["id"],
-                'name_user' => $element["name_user"],
-                'slug' => $element["name_user"].' '.'ID: '.$element["id"],
-            );
-        }
-        
-    }else {
-        $object = array(
-            'error' => true,
-        );
-
-    }
-
-    $jsonstring = json_encode($object);
-    echo $jsonstring;
-
-}
 
 
 public function getCountry(){

@@ -155,6 +155,7 @@
                       </v-btn>
                   </div>
                 </div>
+        
                 <template v-if="showAllCoverage.display">
                     <form-all
                       :resources="showAllCoverage"
@@ -316,7 +317,7 @@
                   @back="backChoose($event)"
                   />
                 </template>
-      
+                
                 <template>
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display && save.action === 'create'">
@@ -426,6 +427,15 @@
                 <template v-if="MAINRESOURCES.table.loading" >
                  <loader-line />
                 </template>
+
+                <template v-if="MAINRESOURCES.pagination.display && MAINRESOURCES.pagination.totalCountResponse>0" >
+                  <div class="my-1 mt-3 d-flex justify-center" >
+                      <v-btn
+                          >
+                          Total Registros <strong> &nbsp;{{MAINRESOURCES.pagination.totalCountResponse}} </strong>
+                      </v-btn>
+                  </div>
+              </template>
               
                 <template v-if="showTable() && MAINRESOURCES.filter.display">
                     <filter-with-pagination
@@ -479,10 +489,10 @@
                     :columns="showAllCoverage.table.columns"
                     :admin="admin"
                     :table="MAINRESOURCES.table"
-                    :url_actions="MAINRESOURCES.url_actions"
                     :pagination="MAINRESOURCES.pagination"
                     @setSnack="MAINRESOURCES.snackbar = $event"
                     @setResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setTypeTable="$_typeTable($event)"
                     @subtract="subtractPagination($event)"
                     />
                   </template>
@@ -550,7 +560,8 @@
                   type:'',
                   collector :{
                     display : false,
-                    url_users : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
+                    url_users : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
+                    
                     title_field : 'Ingrese Recolector',
                     select : {
                       display: true,
@@ -1064,6 +1075,19 @@
            
             this.MAINRESOURCES.pagination.totalCountResponse = this.MAINRESOURCES.pagination.totalCountResponse - 1
             
+            
+          },
+          $_typeTable(type){
+            this.$nextTick(()=> {
+              if(type === 'fromEmptyCoverage'){
+              this.showAllCoverage.display = true
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
+              this.MAINRESOURCES.pagination.display = false
+              this.MAINRESOURCES.filter.display = false
+             
+              }
+            })
             
           }
         },

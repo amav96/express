@@ -248,7 +248,7 @@ Vue.component('save-collector', {
                     }
                 })
                 .then(res => {
-                    console.log(res)
+
                     if (res.data[0].error === "exist") {
                         this.exist(res)
                         this.saveLoading = false

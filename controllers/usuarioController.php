@@ -1643,6 +1643,34 @@ class usuarioController
 
       // SCOPE
 
+      public function getUsersCollector(){
+
+          Utils::AuthAdmin();
+          $getUsersCollector = new Usuario();
+          $getUsersCollector = $getUsersCollector->getUsersCollector();
+      
+          if($getUsersCollector){
+              foreach ($getUsersCollector as $element){
+                  $object[] = array(
+                      'success' => true,
+                      'id' => $element["id"],
+                      'name_user' => $element["name_user"],
+                      'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                  );
+              }
+              
+          }else {
+              $object = array(
+                  'error' => true,
+              );
+      
+          }
+      
+          $jsonstring = json_encode($object);
+          echo $jsonstring;
+      
+      }
+
       public function getUsersCommerce(){
 
           Utils::AuthAdmin();

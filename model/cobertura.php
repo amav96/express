@@ -476,8 +476,8 @@ class cobertura{
                   $fromRow = '0';
               }
 
-            $sql = "SELECT c.id,po.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',
-            pr.province,co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',c.lat ,c.lng , c.created_at
+            $sql = "SELECT po.postal_code,l.locate,l.id AS 'id_locate',p.province AS 'provinceInt',
+            pr.province,pr.id AS 'id_province',co.country as 'name_country',co.id AS 'id_country'
             FROM postal_code po
             LEFT JOIN coverage c ON c.postal_code = po.postal_code
             LEFT JOIN localities l ON l.postal_code = po.postal_code
@@ -658,16 +658,15 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,po.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',
-		co.country as 'name_country',
-      	c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
+            $sql="SELECT po.postal_code,l.locate,l.id AS 'id_locate',p.province AS 'provinceInt',
+            pr.province,pr.id AS 'id_province',co.country as 'name_country',co.id AS 'id_country'
       	FROM postal_code po
       	LEFT JOIN coverage c ON c.postal_code = po.postal_code
-      	left JOIN provinceint p ON p.postal_code = po.postal_code
-      	LEFT JOIN localities l ON l.postal_code = po.postal_code
-      	LEFT JOIN province pr ON pr.id = po.id_province
-      	left JOIN users u ON c.id_user = u.id
-      	LEFT JOIN country co ON po.id_country = co.id
+            LEFT JOIN localities l ON l.postal_code = po.postal_code
+            left JOIN provinceint p ON p.postal_code = po.postal_code
+            LEFT JOIN province pr ON pr.id = po.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON po.id_country = co.id
       	where(
       	MATCH (pr.province) 
       	AGAINST ('$filter') 
@@ -740,6 +739,8 @@ class cobertura{
 
             if( $postal_code && is_array($postal_code) && count($postal_code) > 0){
                   $stringPostalCode = implode(",",$postal_code);
+              }else {
+                  $stringPostalCode = $postal_code;
               }
 
                   $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
@@ -753,7 +754,7 @@ class cobertura{
                   LEFT JOIN localities l ON c.locate = l.id
                   WHERE c.status='active' AND c.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
                   GROUP BY c.id order BY c.postal_code ASC";
-
+                  
                   $exe = $this->db->query($sql);
                   if($exe && $exe->num_rows>0){$result = $exe;}
                   else {$result = false;}
@@ -782,6 +783,8 @@ class cobertura{
                   WHERE c.status='active' AND c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
 
+                 
+
                   $exe = $this->db->query($sql);
                   if($exe && $exe->num_rows>0){$result = $exe;}
                   else {$result = false;}
@@ -808,14 +811,9 @@ class cobertura{
             
             $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
 
-           
             $save = $this->db->query($sql);
-      
-            if($save){
-                  $result = true;
-            }else {
-                  $result = false;
-            }
+            if($save){$result = true;
+            }else {$result = false;}
             return $result;
       }
 

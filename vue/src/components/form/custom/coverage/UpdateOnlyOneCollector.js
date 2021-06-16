@@ -85,7 +85,7 @@ Vue.component('update-onlyOne-collector', {
                 collector: {
                     select: {
                         title: 'Ingrese recolector',
-                        url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getUsersCollector',
+                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
                         outlined: true,
                         class: '',
                         dense: true
