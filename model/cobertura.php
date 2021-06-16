@@ -809,7 +809,8 @@ class cobertura{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
             $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
-            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user',$user_managent_id,'$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
+            $sql = "INSERT INTO coverage (postal_code,locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$locate','$home_address','$province','$id_country','$type','$id_user','$user_managent_id','$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
+
 
             $save = $this->db->query($sql);
             if($save){$result = true;
@@ -1062,6 +1063,16 @@ class cobertura{
             else {$result = false;}
             return $result;
 
+      }
+
+      public function hasAlreadyBeenGeocoded(){
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+
+            $sql ="SELECT LOCATE AS 'id_locate' ,home_address,province AS 'id_province',id_country,id_user,lat,lng FROM coverage where id_user = '$id_user' AND lat != '' AND lng != '' LIMIT 1";
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
       }
 }
 

@@ -228,7 +228,6 @@ Vue.component('update-onlyOne-commerce', {
     },
     methods: {
         setUser(user) {
-            console.log(user)
             this.infoUser = user
             this.id_user = user.id
             this.name_user = user.name_user

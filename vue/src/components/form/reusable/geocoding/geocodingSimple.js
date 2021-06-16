@@ -11,7 +11,8 @@ Vue.component('geocoding-simple', {
                     :outlined="outlined"
                     :classCustom="classCustom"
                     :dense="dense"
-                    ref="resetCountry"
+                    :reassign="reassignData.id_country"
+                    ref="refCountry"
                         />
                 </v-col>
                 <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
@@ -23,7 +24,8 @@ Vue.component('geocoding-simple', {
                     :outlined="outlined"
                     :classCustom="classCustom"
                     :dense="dense"
-                    ref="resetProvince"
+                    :reassign="reassignData.id_province"
+                    ref="refProvince"
                     />
                 </v-col>
                 <v-col  cols="12" xl="4" lg="4" md="4" sm="" xs="4"  >
@@ -35,7 +37,8 @@ Vue.component('geocoding-simple', {
                     :outlined="outlined"
                     :classCustom="classCustom"
                     :dense="dense"
-                    ref="resetLocate"
+                    :reassign="reassignData.id_locate"
+                    ref="refLocate"
                     />
                 </v-col>
             </v-row>
@@ -105,7 +108,13 @@ Vue.component('geocoding-simple', {
             text_locate: '',
             home_address: '',
             id_user: '',
-            loading: false
+            loading: false,
+            reassignData: {
+                id_country: '',
+                id_province: '',
+                id_locate: '',
+                home_address: '',
+            }
         }
     },
     methods: {
@@ -177,11 +186,30 @@ Vue.component('geocoding-simple', {
             this.text_locate = ''
             this.home_address = ''
             this.id_user = ''
-            this.$refs.resetCountry.reset()
-            this.$refs.resetProvince.reset()
-            this.$refs.resetLocate.reset()
+            this.$refs.refCountry.reset()
+            this.$refs.refProvince.reset()
+            this.$refs.refLocate.reset()
 
 
+        },
+        setGeocoded(geocoded) {
+            this.reassignData.id_country = geocoded.id_country
+                // no puedo usar estos porque son los id y locate de la zona como tal
+                // no de la geolocalizacion
+                // this.reassignData.id_province = geocoded.id_province
+                // this.reassignData.id_locate = geocoded.id_locate
+            this.home_address = geocoded.home_address
+            this.$nextTick(() => {
+                this.$refs.refCountry.$reassingData();
+            })
+            const coordenates = {
+                lat: geocoded.lat,
+                lng: geocoded.lng,
+                result: {
+                    formatted_addess: geocoded.home_address
+                }
+            }
+            this.$emit("setResultGeocoding", coordenates)
         }
     },
     watch: {

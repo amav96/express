@@ -39,6 +39,9 @@ Vue.component('select-auto-complete-simple-id', {
         },
         dense: {
             type: Boolean
+        },
+        reassign: {
+            type: String
         }
     },
     data() {
@@ -60,6 +63,7 @@ Vue.component('select-auto-complete-simple-id', {
     },
     methods: {
         getData() {
+
             const url = this.url
             axios.get(url)
                 .then(res => {
@@ -70,6 +74,10 @@ Vue.component('select-auto-complete-simple-id', {
                     const data = res.data
                     this.items = data
                     this.data = data
+
+                    this.reassign !== '' && this.reassign !== undefined && this.reassign > 0 ?
+                        this.$reassingData() :
+                        false;
 
                 })
                 .catch(err => {
@@ -96,6 +104,11 @@ Vue.component('select-auto-complete-simple-id', {
         reset() {
             this.search = null
             this.select = null
+        },
+        $reassingData() {
+            const arr = JSON.parse(JSON.stringify(this.data))
+            const data = arr.filter(item => item.id === this.reassign)
+            this.select = data[0]
         }
 
     },

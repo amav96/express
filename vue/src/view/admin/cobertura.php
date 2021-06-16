@@ -611,7 +611,7 @@
                     save : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=save',
                     delete : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=delete',
                     update : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=update',
-                    getRecentCodes : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getRecentCodes',
+                   
 
                   },
                   

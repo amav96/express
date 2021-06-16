@@ -62,7 +62,6 @@ Vue.component('empty-collector', {
             toRegister: {
                 id_user: '',
             },
-
         }
     },
     methods: {

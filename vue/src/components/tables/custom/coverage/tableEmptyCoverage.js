@@ -6,7 +6,7 @@ Vue.component("table-empty-coverage", {
                     <v-snackbar
                         v-model="snackbarInfo.display"
                         :timeout="snackbarInfo.timeout"
-                        multiline
+                        multi-line
                         top
                         right
                     >
@@ -75,7 +75,9 @@ Vue.component("table-empty-coverage", {
                                 :resource="emptyCoverage"
                                 @setSnack="$_setMessage($event)"
                                 @setDialog="dialogFullScreen.display = $event"
-                                @setResponse="$_setResponse($event)"
+                                @setFront="emptyCoverage.rowAltered.action = $event"
+                                @resetType="emptyCoverage.type = $event"
+                                @setSavedData="savedData($event)"
                                 ref="clearErrorComercio"
                                 />
                             </template>
@@ -83,11 +85,12 @@ Vue.component("table-empty-coverage", {
                                 <empty-point
                                 :dialogFullScreen="dialogFullScreen"
                                 :admin="admin"
-                                :response="emptyCoverage"
-                                :emptyCoverage="emptyCoverage"
+                                :resource="emptyCoverage"
                                 @setSnack="$_setMessage($event)"
                                 @setDialog="dialogFullScreen.display = $event"
-                                @setResponse="$_setResponse($event)"
+                                @setFront="emptyCoverage.rowAltered.action = $event"
+                                @resetType="emptyCoverage.type = $event"
+                                @setSavedData="savedData($event)"
                                 ref="clearErrorPoint"
                                 />
                             </template>
@@ -151,7 +154,8 @@ Vue.component("table-empty-coverage", {
                     action: ''
                 },
                 url: {
-                    save: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=saveEmptyCoverage'
+                    save: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=saveEmptyCoverage',
+                    hasAlreadyBeenGeocoded: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=hasAlreadyBeenGeocoded'
                 },
                 collector: {
                     select: {
@@ -210,7 +214,7 @@ Vue.component("table-empty-coverage", {
                     style = ''
                     this.setFront(index);
                     this.snackbarInfo.display = true
-                }, 2000);
+                }, 2500);
                 return style
             }
         },

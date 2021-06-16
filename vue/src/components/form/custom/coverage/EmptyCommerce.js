@@ -55,7 +55,8 @@ Vue.component('empty-commerce', {
                     :classCustom="geocoding.select.class"
                     :dense="true"
                     :save="geocoding"
-                    ref="resetGeocoding"
+                    ref="refGecoded"
+                   
                     />
                 </v-col>
 
@@ -93,7 +94,7 @@ Vue.component('empty-commerce', {
                         fab
                         small
                         color="primary"
-                        :disabled="lng === '' || lat === ''"
+                        :disabled="lng === '' || lat === '' || id_country === '' || id_province == '' || id_locate === ''"
                         @click="reverseGeocodingManualToMap()"
                         >
                             <v-icon dark>
@@ -152,12 +153,11 @@ Vue.component('empty-commerce', {
             </v-row>
         </div>
     `,
-    props: ['resource'],
+    props: ['resource', 'admin'],
     data() {
         return {
             infoUser: [],
             id_user: '',
-            name_user: '',
             id_country: '',
             id_province: '',
             id_locate: '',
@@ -198,22 +198,131 @@ Vue.component('empty-commerce', {
         }
     },
     methods: {
+        setUser(user) {
+            this.infoUser = user
+            this.id_user = user.id
+            this.hasAlreadyBeenGeocoded()
+        },
         _save() {
-            console.log("hi")
-        }
+            const url = this.resource.url.save
+            axios.get(url, {
+                    params: {
+                        id_user: this.id_user,
+                        id_country: this.resource.data.id_country,
+                        id_province: this.resource.data.id_province,
+                        id_locate: this.resource.data.id_locate,
+                        postal_code: this.resource.data.postal_code,
+                        home_address: this.home_address,
+                        lat: this.lat,
+                        lng: this.lng,
+                        admin: this.admin,
+                        type: this.resource.type,
+                        created_at: this.getDateTime()
+                    }
+                })
+                .then(res => {
+                    if (res.data.error) {
+                        alertNegative("Mensaje CODIGO 45");
+                        this.saveLoading = false
+                        return
+                    }
+
+                    this.$success(res);
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+        },
+        map(val) {
+            this.home_address = val.result.formatted_addess
+            this.lat = val.result.lat
+            this.lng = val.result.lng
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+
+        },
+        srcImgMap() {
+            return this.srcMap
+        },
+        reverseGeocodingManualToMap() {
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+        },
+        hasAlreadyBeenGeocoded() {
+            const url = this.resource.url.hasAlreadyBeenGeocoded
+            axios.get(url, { params: { id_user: this.id_user } })
+                .then(res => {
+                    if (res.data.success) {
+                        this.$_dataAlreadyGeocoded(res.data)
+                    } else {
+                        this.$refs.refGecoded.reset()
+                        this.lat = '';
+                        this.lng = '';
+                        this.srcMap = '';
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        $_dataAlreadyGeocoded(geocoded) {
+            console.log(geocoded)
+            this.$refs.refGecoded.setGeocoded(geocoded)
+        },
+        $success(res) {
+            this.saveLoading = false
+            this.error.text = ''
+            this.error.display = false
+            const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            this.setResponseWhenFinally(res.data)
+            this.$refs.resetUser.reset()
+            setTimeout(() => {
+                this.$emit("resetType", '')
+            }, 350);
+
+        },
+        setResponseWhenFinally(res) {
+
+            res.data.forEach((val) => {
+                this.$emit("setSavedData", val)
+            })
+
+            this.$emit("setDialog", false)
+            this.$emit('setFront', 'save')
+        },
+        getDateTime() {
+            var today = new Date();
+            var getMin = today.getMinutes();
+            var getSeconds = today.getSeconds()
+            var getHours = today.getHours()
+
+            if (getMin < 10) { getMin = '0' + today.getMinutes() }
+            if (getSeconds < 10) { getSeconds = '0' + today.getSeconds() }
+            if (getHours < 10) { getHours = '0' + today.getHours() }
+
+            var created_at = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' +
+                ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
+
+            return created_at
+        },
 
     },
     computed: {
         validateFormComplete() {
             if (
                 this.id_user === '' ||
-                this.id_country === '' ||
-                this.id_province === '' ||
-                this.id_locate === '' ||
                 this.lat === '' ||
                 this.lng === '' ||
                 this.home_address === ''
             ) { return true } else { return false }
+        }
+    },
+    watch: {
+        geocoding: {
+            handler(val) {
+                this.map(val)
+            },
+            deep: true
         }
     }
 })
