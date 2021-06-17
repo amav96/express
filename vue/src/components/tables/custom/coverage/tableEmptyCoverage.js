@@ -1,7 +1,6 @@
 Vue.component("table-empty-coverage", {
     template: /*html*/ `
           <div>
-
                 <template>
                     <v-snackbar
                         v-model="snackbarInfo.display"
@@ -32,9 +31,8 @@ Vue.component("table-empty-coverage", {
                     </v-snackbar>
                 </template>
 
-                <template  >
+                <template v-if="dialogFullScreen.display" >
                     <d-full-screen :dialogFullScreen="dialogFullScreen">
-                        <template>
                             <v-row class="d-flex mx-1 mt-2" >
                                 <v-col class="my-1" cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <h6 class="mb-6 d-flex justify-start align-items-center">Tipo de asignado 
@@ -63,7 +61,6 @@ Vue.component("table-empty-coverage", {
                                 @setSnack="$_setMessage($event)"
                                 @setDialog="dialogFullScreen.display = $event"
                                 @setFront="emptyCoverage.rowAltered.action = $event"
-                                @resetType="emptyCoverage.type = $event"
                                 @setSavedData="savedData($event)"
                                 ref="clearErrorRecolector"
                                 />
@@ -76,7 +73,6 @@ Vue.component("table-empty-coverage", {
                                 @setSnack="$_setMessage($event)"
                                 @setDialog="dialogFullScreen.display = $event"
                                 @setFront="emptyCoverage.rowAltered.action = $event"
-                                @resetType="emptyCoverage.type = $event"
                                 @setSavedData="savedData($event)"
                                 ref="clearErrorComercio"
                                 />
@@ -89,12 +85,10 @@ Vue.component("table-empty-coverage", {
                                 @setSnack="$_setMessage($event)"
                                 @setDialog="dialogFullScreen.display = $event"
                                 @setFront="emptyCoverage.rowAltered.action = $event"
-                                @resetType="emptyCoverage.type = $event"
                                 @setSavedData="savedData($event)"
                                 ref="clearErrorPoint"
                                 />
                             </template>
-                        </template>
                     </d-full-screen>
                 </template>
                 
@@ -155,7 +149,6 @@ Vue.component("table-empty-coverage", {
                 },
                 url: {
                     save: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=saveEmptyCoverage',
-                    hasAlreadyBeenGeocoded: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=hasAlreadyBeenGeocoded'
                 },
                 collector: {
                     select: {
@@ -174,9 +167,14 @@ Vue.component("table-empty-coverage", {
                         class: '',
                         dense: true
                     },
+                    url: {
+                        hasAlreadyBeenGeocoded: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=hasAlreadyCommerceBeenGeocoded'
+                    }
                 },
                 point: {
-
+                    url: {
+                        hasAlreadyBeenGeocoded: ''
+                    }
                 }
             },
             selectType: [

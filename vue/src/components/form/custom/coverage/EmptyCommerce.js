@@ -1,7 +1,17 @@
 Vue.component('empty-commerce', {
     template: //html 
         `<div>
-            </v-row>
+                <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Zona a ocupar
+                    <v-icon class="mx-1">mdi-map-search-outline</v-icon>
+                    </h6>
+                <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
+                    <template class="mx-auto" v-if="resource.data !== 0">
+                    <alert-info-user
+                    :info="resource.data"
+                    />         
+                    </template>  
+                </v-col>
+
                 <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Nuevo Comercio 
                     <v-icon class="mx-1">mdi-store</v-icon>
                 </h6>
@@ -119,18 +129,6 @@ Vue.component('empty-commerce', {
                     </v-row>
                 </template>
 
-                <template v-if="error.display" >
-                    <v-alert
-                    class="mx-auto my-5" 
-                    color="error"
-                    dark
-                    type="error"
-                    elevation="2"
-                    >
-                    {{error.text}}
-                    </v-alert>
-                </template>
-
                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-btn
                     color="success"
@@ -161,7 +159,6 @@ Vue.component('empty-commerce', {
             id_country: '',
             id_province: '',
             id_locate: '',
-            timeSchedule: '',
             lat: '',
             lng: '',
             home_address: '',
@@ -171,12 +168,6 @@ Vue.component('empty-commerce', {
                 text: ''
             },
             errorGeocoding: '',
-            saveFlag: false,
-            restaurate: {
-                cache: false,
-                id_user: '',
-                name_assigned: ''
-            },
             geocoding: {
                 zone: {
                     url_country: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
@@ -248,7 +239,7 @@ Vue.component('empty-commerce', {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
         hasAlreadyBeenGeocoded() {
-            const url = this.resource.url.hasAlreadyBeenGeocoded
+            const url = this.resource.commerce.url.hasAlreadyBeenGeocoded
             axios.get(url, { params: { id_user: this.id_user } })
                 .then(res => {
                     if (res.data.success) {
@@ -269,26 +260,14 @@ Vue.component('empty-commerce', {
             this.$refs.refGecoded.setGeocoded(geocoded)
         },
         $success(res) {
-            this.saveLoading = false
-            this.error.text = ''
-            this.error.display = false
-            const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
+            const snack = { display: true, timeout: 2000, text: 'Comercio creado exitosamente', color: 'success' }
             this.$emit("setSnack", snack)
-            this.setResponseWhenFinally(res.data)
-            this.$refs.resetUser.reset()
-            setTimeout(() => {
-                this.$emit("resetType", '')
-            }, 350);
 
-        },
-        setResponseWhenFinally(res) {
-
-            res.data.forEach((val) => {
+            res.data.data.forEach((val) => {
                 this.$emit("setSavedData", val)
             })
-
-            this.$emit("setDialog", false)
             this.$emit('setFront', 'save')
+            this.$emit("setDialog", false)
         },
         getDateTime() {
             var today = new Date();

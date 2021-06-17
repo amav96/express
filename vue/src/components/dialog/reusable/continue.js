@@ -30,12 +30,10 @@ Vue.component('d-continue', {
     },
     methods: {
         $continue() {
-            console.log("continue")
             this.$emit("setContinue", true)
 
         },
         $exit() {
-            console.log("exit")
             this.$emit("setContinue", false)
 
         }

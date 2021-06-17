@@ -60,7 +60,7 @@ Vue.component('delete-coverage', {
                                 :outlined="deleteCoverage.select.outlined"
                                 :classCustom="deleteCoverage.select.class"
                                 :dense="deleteCoverage.select.dense"
-                                ref="resetDelete"
+                                
                                     />
                             </v-col>
                             
@@ -132,23 +132,22 @@ Vue.component('delete-coverage', {
                         this.$emit("setSnack", snack)
                         return
                     }
-                    const snack = { display: true, timeout: 2000, text: 'Eliminado correctamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    this.$refs.resetDelete.reset()
-                    this.motive = ''
-                    this.$emit("setDialog", false)
-                    const set = {
-                        id: this.response.data.id,
-                        action: 'delete'
-                    }
-                    this.$emit("setResponse", set)
-
-
+                    this.$success();
                 })
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        $success() {
+            const snack = { display: true, timeout: 2000, text: 'Eliminado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            const set = {
+                id: this.response.data.id,
+                action: 'delete'
+            }
 
+            this.$emit("setRowAltered", set)
+            this.$emit("setDialog", false)
         },
         getDateTime() {
             var today = new Date();

@@ -20,6 +20,7 @@ Vue.component('select-auto-complete-simple-id', {
         hide-no-data
         hide-details
         return-object
+        
         > 
     </v-autocomplete>
     </div>

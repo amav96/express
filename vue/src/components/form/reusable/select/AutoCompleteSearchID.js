@@ -14,6 +14,7 @@ Vue.component('select-auto-complete-search-id', {
             cache-items
             :class="classCustom"
             :outlined="outlined"
+            :error="error"
             dense
             :label="title"
             flat
@@ -42,6 +43,9 @@ Vue.component('select-auto-complete-search-id', {
         reassign: {
             type: String
         },
+        error: {
+            type: Boolean
+        }
 
     },
     data() {

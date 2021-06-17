@@ -1,10 +1,13 @@
-Vue.component('update-only-collector', {
+Vue.component('update-collector', {
     template: //html 
         `
     <div>
         <v-container>   
                 <template v-if="!saveSuccess">
-                    <h6 class="ml-4 my-5"> Recolector </h6>
+                    <h6 class="ml-2 my-3 d-flex justify-start align-items-center">Recolector
+                        <v-icon class="mx-1">mdi-motorbike</v-icon>
+                        <v-icon class="mx-1">mdi-car</v-icon>
+                    </h6>
                     <v-row class="d-flex justify-start flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                             <select-auto-complete-simple-id 
@@ -18,8 +21,10 @@ Vue.component('update-only-collector', {
                              />
                         </v-col>
                     </v-row>
-                    
-                    <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+
+                    <h6 class="ml-2 my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el Recolector )
+                     <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>
+                    </h6>
                     <v-row class="d-flex justify-start flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                             <select-auto-complete-simple-id 
@@ -48,7 +53,9 @@ Vue.component('update-only-collector', {
 
                     </v-row>
 
-                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
+                        <h6 class="ml-2 my-3 d-flex justify-start align-items-center"> Ingrese rango de codigo postal &nbsp;  <span class="font-weight-light" > (Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span>
+                         <v-icon class="mx-1">mdi-counter</v-icon>
+                        </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <v-text-field
@@ -121,7 +128,6 @@ Vue.component('update-only-collector', {
                             </template>
                             <v-btn 
                             class="success"
-                            block
                             :disabled="validateFormComplete()"
                             @click="_updateData()"
                             >
@@ -178,16 +184,12 @@ Vue.component('update-only-collector', {
             if (this.save.type === 'recolector') {
                 return "Recolector";
             }
-
         },
         setUser(user) {
-            this.resetToChangeUser()
             this.$nextTick(() => {
                 this.infoUser = user
                 this.id_user = user.id
             })
-
-
         },
         setSelectCountry(country) {
             this.id_country = country.id
@@ -270,62 +272,29 @@ Vue.component('update-only-collector', {
                     }
                 })
                 .then(res => {
-
+                    console.log(res)
+                    this.saveLoading = false
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
                         this.saveLoading = false
                         return
                     }
 
-                    this.$emit("setDialogDisplay", false)
-                    this.$nextTick(() => {
-                        this.setResponseWhenFinally(res)
-                        this.saveFlag = true
-                    })
-
+                    this.$success(res)
                 })
                 .catch(err => {
                     this.saveLoading = false
                     console.log(err)
                 })
         },
-        setResponseWhenFinally(res) {
+        $success(res) {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
 
-            this.$emit('setPaginateDisplay', false)
             this.$emit('response', res.data.data)
             this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.saveFlag) {
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.saveLoading = false
-                    this.id_country_by_select = ''
-                    this.id_country = ''
-                    this.id_province_by_select = ''
-                    this.id_province = ''
-                    this.cp_start = ''
-                    this.cp_end = ''
-                    this.zone = []
-                    this.id_locate = ''
-                    this.id_user = ''
-                    this.selectZone = []
-                    this.infoUser = []
-                    this.error.display = false
-                    this.error.text = ''
-
-                    this.$nextTick(() => {
-                        this.saveSuccess = false
-                            // setting flag filtering
-                        this.$emit('filtering', false)
-                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
-                        this.$emit("setSnack", snack)
-                        this.saveFlag = false
-
-                    })
-                }, 700);
-
-            }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
         },
         getDateTime() {
             var today = new Date();
@@ -342,25 +311,10 @@ Vue.component('update-only-collector', {
 
             return created_at
         },
-        resetToChangeUser() {
-            this.id_country = ''
-            this.id_province = ''
-            this.id_locate = ''
-            this.$refs.resetCountry.reset()
-            this.$refs.resetProvince.reset()
-
-        }
     },
 
     watch: {
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
-        },
+
         id_user(newVal, oldVal) {
             if (newVal !== oldVal) {
                 this.activateSearchEngine();

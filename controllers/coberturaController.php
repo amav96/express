@@ -449,8 +449,6 @@ class coberturaController{
             }
     }
         
-        
-
     public function delete(){
         $id = isset($_GET['id']) ? $_GET['id'] : false ;
         $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
@@ -476,7 +474,7 @@ class coberturaController{
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
 
-        Utils::AuthAdmin();
+        //  Utils::AuthAdmin();
         
         $home_address = isset($Request->home_address) ? $Request->home_address : false ;
         $lat = isset($Request->lat) ? $Request->lat : false ;
@@ -501,21 +499,43 @@ class coberturaController{
         $process = false;
         foreach ($Request as $element){
             if (gettype($element) === 'array'){
+               
                 foreach ($element as $childElement){
                     $update->setId($childElement->id);
                     $update->setPostal_code($childElement->postal_code);
-                        if(!$update->verifyExist()){
-                            if($update->removeToHistory()){
-                                if($update->update()){
-                                    array_push($idModified,$childElement->id);
-                                    $process = true;
-                                } else {$object=array('error' => 'not_update');}
-                            } else {$object=array('error' => 'not_removeToHistory');}
-                        }else {
-                            if($update->removeToHistory()){
-                                if($update->delete()){true;}
-                                else {$object=array('error' => 'not_delete');}
-                            }else {$object=array('error' => 'not_removeToHistory');}
+
+                        if($type === 'recolector' || $type === 'comercio'){
+                            if(!$update->verifyExist()){
+                                if($update->removeToHistory()){
+                                    if($update->update()){
+                                        array_push($idModified,$childElement->id);
+                                        $process = true;
+                                    } else {$object=array('error' => 'not_update');}
+                                } else {$object=array('error' => 'not_removeToHistory');}
+                            }else {
+                                if($update->removeToHistory()){
+                                    if($update->delete()){true;}
+                                    else {$object=array('error' => 'not_delete');}
+                                }else {$object=array('error' => 'not_removeToHistory');}
+                            }
+
+                        }
+                        if($type === 'correo' || $type === 'terminal'){
+
+                            if(!$update->verifyExistStationByIdAndHomeAddress()){
+                                if($update->removeToHistory()){
+                                    if($update->update()){
+                                        array_push($idModified,$childElement->id);
+                                        $process = true;
+                                    } else {$object=array('error' => 'not_update');}
+                                } else {$object=array('error' => 'not_removeToHistory');}
+                            }else {
+                                if($update->removeToHistory()){
+                                    if($update->delete()){
+                                       true;
+                                    }else {$object=array('error' => 'not_delete');}
+                                }else {$object=array('error' => 'not_removeToHistory');}
+                            }
                         }
                 }
             }  
@@ -567,7 +587,7 @@ class coberturaController{
         $process = false;
         $object= false;
 
-        if($type === 'recolector'){
+        if($type === 'recolector' || $type === 'comercio'){
 
             if(!$update->verifyExist()){
                 if($update->removeToHistory()){
@@ -590,26 +610,7 @@ class coberturaController{
             }
         }
 
-        if($type === 'comercio'){
-            if($update->existSameUserToUpdateUbication()){
-                if($update->update()){
-                    $process = true;
-                }
-            }else {
-                if($update->removeToHistory()){
-                    if($update->update()){
-                        $process = true;
-                    } else {
-                        $object=array('error' => 'not_update');
-                        $jsonstring = json_encode($object);echo $jsonstring;
-                        return ;
-                    }
-                } else {
-                    $object=array('error' => 'not_removeToHistory');
-                    return  $jsonstring = json_encode($object);echo $jsonstring;
-                }
-            }
-        }
+      
 
         if($type === 'correo' || $type === 'terminal'){
             if(!$update->existSamePoint()){
@@ -643,8 +644,6 @@ class coberturaController{
         }
 
     }
-
-
 
 
     public function removeAndDelete(){
@@ -967,8 +966,8 @@ class coberturaController{
 
     public function getAllPointInZone(){
 
-        
-
+    
+        $home_address = isset($_GET['home_address']) ? $_GET['home_address'] : false ;
         $type = isset($_GET['type']) ? $_GET['type'] : false ;
         $country = isset($_GET['country']) ? $_GET['country'] : false ;
         $cp_start = isset($_GET['cp_start']) ? $_GET['cp_start'] : false ;
@@ -981,6 +980,7 @@ class coberturaController{
         $get->setPostal_code($cp_start);
         $get->setPostal_code_range($cp_end);
         $get->setId_user($id_user);
+        $get->setHome_address($home_address);
     
         if($type === 'recolector' || $type=== 'comercio'){
         
@@ -988,7 +988,7 @@ class coberturaController{
         }
         if($type === 'correo' || $type=== 'terminal'){
         
-            $get = $get->getAllPointInZone();
+            $get = $get->getAllPointExceptCpAndHomeAdressCurrent();
         }
         
         if($get){
@@ -1033,12 +1033,12 @@ class coberturaController{
 
     }
 
-    public function hasAlreadyBeenGeocoded(){
+    public function hasAlreadyCommerceBeenGeocoded(){
         $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : false ;
 
         $get = new cobertura();
         $get->setId_user($id_user);
-        $get = $get->hasAlreadyBeenGeocoded();
+        $get = $get->hasAlreadyCommerceBeenGeocoded();
         if($get){
             foreach ($get as $element){
                 $object= array(
@@ -1057,6 +1057,10 @@ class coberturaController{
 
         $jsonstring = json_encode($object);
         echo $jsonstring;
+        
+    }
+
+    public function hasAlreadyPointBeenGeocoded(){
         
     }
 

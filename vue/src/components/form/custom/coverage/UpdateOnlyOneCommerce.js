@@ -2,10 +2,12 @@ Vue.component('update-onlyOne-commerce', {
     template: //html 
         `
         <div>
-       
+        
                 <v-row class=" d-flex justify-start flex-column ma-1 my-0 flex-wrap" >
                 
-                <h6 class="ml-4 my-3">Nuevo Comercio </h6>
+                <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Nuevo comercio
+                        <v-icon class="mx-1">mdi-store-outline</v-icon>
+                    </h6>
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <v-row  class=" d-flex flex-row">
                             <v-col cols="12" xl="4" lg="4" sm="4" xs="4">
@@ -42,7 +44,9 @@ Vue.component('update-onlyOne-commerce', {
                         </v-row>
                     </template>
 
-                    <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
+                    <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Dirección del comercio a geocodificar
+                        <v-icon class="mx-1">mdi-store</v-icon>
+                    </h6>
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <geocoding-simple
                         @setErrorGeocoding="errorGeocoding = $event"
@@ -55,7 +59,7 @@ Vue.component('update-onlyOne-commerce', {
                         :classCustom="geocoding.select.class"
                         :dense="true"
                         :save="geocoding"
-                        ref="resetGeocoding"
+                        ref="refGecoded"
                         />
                     </v-col>
 
@@ -165,8 +169,6 @@ Vue.component('update-onlyOne-commerce', {
         dialogMediaScreen: {
             type: Object
         }
-
-
     },
     data() {
         return {
@@ -231,6 +233,7 @@ Vue.component('update-onlyOne-commerce', {
             this.infoUser = user
             this.id_user = user.id
             this.name_user = user.name_user
+            this.hasAlreadyBeenGeocoded()
         },
         async _updateOnlyOne() {
             this.saveLoading = true
@@ -272,34 +275,11 @@ Vue.component('update-onlyOne-commerce', {
             this.response.data.type = data[0].type
         },
         $success() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            const set = { id: this.response.data.id, action: 'update' }
+            this.$emit("setRowAltered", set)
             this.$emit("setDialog", false)
-            setTimeout(() => {
-                const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
-                this.$emit("setSnack", snack)
-
-                this.saveLoading = false
-                this.infoUser = []
-                this.id_user = ''
-                this.name_user = ''
-                this.id_country = ''
-                this.id_province = ''
-                this.id_locate = ''
-                this.timeSchedule = ''
-                this.lat = ''
-                this.lng = ''
-                this.home_address = ''
-                this.srcMap = ''
-                this.$refs.resetGeocoding.reset()
-                this.$refs.resetUser.reset()
-
-                this.error.display = false
-                this.error.text = ''
-
-
-                const set = { id: this.response.data.id, action: 'update' }
-                this.$emit("setResponse", set)
-            }, 280);
-
         },
         getDateTime() {
             var today = new Date();
@@ -322,8 +302,29 @@ Vue.component('update-onlyOne-commerce', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
+        hasAlreadyBeenGeocoded() {
+            const url = this.response.url.hasAlreadyBeenGeocoded
+            axios.get(url, { params: { id_user: this.id_user } })
+                .then(res => {
+                    if (res.data.success) {
+                        this.$_dataAlreadyGeocoded(res.data)
+                    } else {
+                        this.$refs.refGecoded.reset()
+                        this.lat = '';
+                        this.lng = '';
+                        this.srcMap = '';
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        $_dataAlreadyGeocoded(geocoded) {
+            console.log(geocoded)
+            this.$refs.refGecoded.setGeocoded(geocoded)
+        },
         exist() {
-            var text = 'Este recolector ya esta asignado a'
+            var text = 'Este comercio ya esta asignado al codigo postal '
             text = text + ' ' + this.response.data.postal_code
 
             this.error.display = true
@@ -334,15 +335,12 @@ Vue.component('update-onlyOne-commerce', {
             this.error.text = ''
         }
 
-
     },
     computed: {
         validateUpdate() {
             if (
                 this.id_user === '' ||
                 this.id_country === '' ||
-                this.id_province === '' ||
-                this.id_locate === '' ||
                 this.lat === '' ||
                 this.lng === '' ||
                 this.home_address === ''
@@ -359,8 +357,6 @@ Vue.component('update-onlyOne-commerce', {
             },
             deep: true
         }
-    }
-
-
+    },
 
 })

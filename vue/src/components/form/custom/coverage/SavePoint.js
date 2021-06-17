@@ -15,8 +15,10 @@ Vue.component('save-point', {
                         </d-small-screen>
                     </template>
 
-                    <template v-if="!saveSuccess">
-                        <h6 class="ml-4 my-5"> Dirección del {{returnType()}} a geocodificar</h6>
+                    
+                    <h6 class=" my-3 d-flex justify-start align-items-center">Dirección del  {{returnType()}} 
+                        <v-icon class="mx-1">mdi-map-search-outline</v-icon>
+                    </h6>
                             <template v-if="errorGeocoding !== ''">
                                 <v-row class="d-flex justify-center mx-2" >
                                     <v-col cols="12">
@@ -105,12 +107,21 @@ Vue.component('save-point', {
                             </template>
                       
                             <template >
-                                    <h6 class="ml-4" > Horarios de atención al cliente</h6>
-                                    <time-schedule @setTimeSchedule="timeSchedule = $event" />
+                                    <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
+                                     <v-icon class="mx-1">mdi-calendar-clock</v-icon>
+                                    </h6>
+                                    <time-schedule
+                                    @setTimeSchedule="timeSchedule = $event"
+                                    :outlined="save.point.select.outlined"
+                                    :classCustom="save.point.select.class"
+                                    :dense="save.point.select.dense"
+                                     />
                             </template>
 
 
-                            <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+                                <h6 class=" my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el {{returnType()}} )
+                                    <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>
+                                </h6>
                                 <v-row class="d-flex justify-start flex-row" >
                                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                         <select-auto-complete-search-id 
@@ -167,13 +178,6 @@ Vue.component('save-point', {
                                 Siguiente
                                 </v-btn>
                             </v-row>
-                    </template>
-                    <v-btn color="error" @click="forcedExit" >
-                         Salir 
-                        <v-icon right>
-                            mdi-exit-to-app
-                        </v-icon> 
-                    </v-btn>
                 </v-container>
             </div>
             
@@ -217,8 +221,6 @@ Vue.component('save-point', {
                 display: false,
                 text: ''
             },
-            saveSuccess: false,
-            saveFlag: false,
             savedData: [],
             clean: false,
         }
@@ -292,24 +294,19 @@ Vue.component('save-point', {
                     }
                 })
                 .then(res => {
+                    this.saveLoading = false
                     if (res.data[0].error === "exist") {
                         this.exist(res)
-                        this.saveLoading = false
                         return
                     }
 
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
-                        this.saveLoading = false
                         return
                     }
 
-                    this.saveLoading = false
-                    this.error.text = ''
-                    this.error.display = false
-                    const snack = { display: true, timeout: 2000, text: 'Creado exitosamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    this.setResponseWhenFinally(res)
+
+                    this.$success(res)
                     this.$emit("setContinue", true)
 
                 })
@@ -318,39 +315,10 @@ Vue.component('save-point', {
                     console.log(err)
                 })
         },
-        setResponseWhenFinally(res) {
-            res.data.forEach((val) => {
-                this.savedData.push(val)
-            })
-            this.$emit('setPaginateDisplay', false)
-            this.$emit('response', this.savedData)
-            this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.clean) {
 
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.saveLoading = false
-                    this.id_country = ''
-                    this.id_province = ''
-                    this.id_locate = ''
-                    this.save.zone.postal_codes = []
-                    this.chosenPostalCodes = []
-                    this.infoUser = []
-                    this.home_address = ''
-                    this.lat = ''
-                    this.lng = ''
-                    this.srcMap = ''
-                    this.error.display = false
-                    this.error.text = ''
-                    this.$emit("setPaginateDisplay", false)
-                }, 300);
-            }
-        },
         exist(res) {
 
-            var text = res.data[0].name_user + ' ya tiene asignado el codigo '
+            var text = 'Este ' + this.returnType() + ' ya tiene asignado el codigo '
             res.data.forEach((val) => {
                 text = text + ' ' + val.postal_code
             })
@@ -358,26 +326,23 @@ Vue.component('save-point', {
             this.error.display = true
             this.error.text = text
         },
+        $success(res) {
+            this.error.text = ''
+            this.error.display = false
+            res.data.forEach((val) => {
+                this.savedData.push(val)
+            })
+            this.$emit('response', this.savedData)
 
-        forcedExit() {
-            this.clean = true
-            this.$emit("setDialogDisplay", false)
-        },
-        $show() {
-            //accedo a el desde la raiz
-            // mientras no se haya guardado nada, permanece en falso, para mostrar lo que se esta haciendo
-            this.saveSuccess = false
-            this.clean = false
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit("setSnack", snack)
+            this.$emit('showTable', true)
+
         },
         $_continue(flag) {
             this.$emit("setDialogDisplay", flag)
             this.$emit("setContinue", false)
-            if (!flag) {
-                this.$nextTick(() => {
-                    this.clean = true
-                    this.finish()
-                })
-            }
         },
         getDateTime() {
             var today = new Date();
@@ -414,13 +379,5 @@ Vue.component('save-point', {
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
-        }
     },
 })

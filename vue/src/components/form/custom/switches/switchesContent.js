@@ -112,7 +112,6 @@ Vue.component('switches-content', {
             }
         },
         home_address(data) {
-            console.log(data)
             var home_address = data.substring(0, 23)
             return home_address + '...'
         },

@@ -16,7 +16,9 @@ Vue.component('save-commerce', {
                 </template>
 
                     <template v-if="!saveSuccess">
-                        <h6 class="ml-4 my-5"> Comercio </h6>
+                    <h6 class=" my-3 d-flex justify-start align-items-center">Comercio
+                     <v-icon class="mx-1">mdi-store</v-icon>
+                    </h6>
                         <v-row class="d-flex justify-center flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <select-auto-complete-simple-id 
@@ -49,7 +51,9 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-                        <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
+                            <h6 class=" my-3 d-flex justify-start align-items-center">Dirección del  {{returnType()}} 
+                                <v-icon class="mx-1">mdi-map-search-outline</v-icon>
+                            </h6>
                             <geocoding-simple
                             @setErrorGeocoding="errorGeocoding = $event"
                             @setResultGeocoding="resultGeocoding = $event"
@@ -60,6 +64,8 @@ Vue.component('save-commerce', {
                             :outlined="save.commerce.select.outlined"
                             :classCustom="save.commerce.select.class"
                             :dense="save.commerce.select.dense"
+                            :error="errorSelect"
+                            ref="refGecoded"
                             />
                             <v-row class="d-flex justify-between flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -119,9 +125,9 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-                        
-                            <h6  class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
-                          
+                            <h6 class=" my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el {{returnType()}} )
+                                <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>
+                            </h6>
                             <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <select-auto-complete-search-id 
@@ -176,12 +182,6 @@ Vue.component('save-commerce', {
                                 </v-btn>
                             </v-row>
                     </template>
-                    <v-btn color="error" @click="forcedExit" >
-                         Salir  
-                         <v-icon right>
-                         mdi-exit-to-app
-                         </v-icon> 
-                    </v-btn>
                 </v-container>
             </div>
         `,
@@ -231,7 +231,13 @@ Vue.component('save-commerce', {
             saveSuccess: false,
             saveFlag: false,
             savedData: [],
-            clean: false
+            clean: false,
+            errorSelect: {
+                selectSearchID: {
+                    error: false
+                }
+            }
+
         }
     },
     methods: {
@@ -244,8 +250,8 @@ Vue.component('save-commerce', {
         setUser(user) {
             this.infoUser = user
             this.id_user = user.id
+            this.hasAlreadyBeenGeocoded()
         },
-
         getZoneByPostalCode(locate) {
             const url = this.save.zone.url_postalCode
             axios.get(url, {
@@ -294,6 +300,27 @@ Vue.component('save-commerce', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
+        hasAlreadyBeenGeocoded() {
+            const url = this.save.commerce.url.hasAlreadyBeenGeocoded
+            axios.get(url, { params: { id_user: this.id_user } })
+                .then(res => {
+                    if (res.data.success) {
+                        this.$_dataAlreadyGeocoded(res.data)
+                    } else {
+                        this.$refs.refGecoded.reset()
+                        this.lat = '';
+                        this.lng = '';
+                        this.srcMap = '';
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        $_dataAlreadyGeocoded(geocoded) {
+
+            this.$refs.refGecoded.setGeocoded(geocoded)
+        },
         async _saveData() {
             this.saveLoading = true
             const url = this.save.url.save
@@ -313,75 +340,37 @@ Vue.component('save-commerce', {
                     }
                 })
                 .then(res => {
-
+                    this.saveLoading = false
                     if (res.data[0].error === "exist") {
                         this.exist(res)
-                        this.saveLoading = false
                         return
                     }
 
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
-                        this.saveLoading = false
                         return
                     }
 
-                    this.saveLoading = false
-                    this.error.text = ''
-                    this.error.display = false
-                    const snack = { display: true, timeout: 2000, text: 'Comercio creado exitosamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    this.setResponseWhenFinally(res)
+                    this.$success(res)
                     this.$emit("setContinue", true)
-
-
                 })
                 .catch(err => {
                     this.saveLoading = false
                     console.log(err)
                 })
         },
-        setResponseWhenFinally(res) {
+        $success(res) {
+            this.error.text = ''
+            this.error.display = false
             res.data.forEach((val) => {
                 this.savedData.push(val)
             })
-            this.$emit('setPaginateDisplay', false)
             this.$emit('response', this.savedData)
+            const snack = { display: true, timeout: 2000, text: 'Creado correctamente', color: 'success' }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit("setSnack", snack)
             this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.clean) {
 
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.saveLoading = false
-                    this.id_country = ''
-                    this.id_province = ''
-                    this.id_locate = ''
-                    this.id_user = ''
-                    this.save.zone.postal_codes = []
-                    this.chosenPostalCodes = []
-                    this.infoUser = []
-                    this.home_address = ''
-                    this.lat = ''
-                    this.lng = ''
-                    this.srcMap = ''
-                    this.error.display = false
-                    this.error.text = ''
-                    this.clean = false
-                    this.$emit("setPaginateDisplay", false)
-                }, 300);
-            }
-        },
-        forcedExit() {
-            this.clean = true
-            this.$emit("setDialogDisplay", false)
-        },
-        $show() {
-            //accedo a el desde la raiz
-            // mientras no se haya guardado nada, permanece en falso, para mostrar lo que se esta haciendo
-            this.saveSuccess = false
-            this.clean = false
         },
         exist(res) {
 
@@ -408,29 +397,19 @@ Vue.component('save-commerce', {
 
             return created_at
         },
-        cleanDialog() {
-            if (this.save.action === 'create') {
-                this.save.zone.postal_codes = []
-            }
-        },
-        $show() {
-            //accedo a el desde la raiz 
-            this.saveSuccess = false
-        },
         $_continue(flag) {
             this.$emit("setDialogDisplay", flag)
             this.$emit("setContinue", false)
-            if (!flag) {
-                this.$nextTick(() => {
-                    this.clean = true
-                    this.finish()
-                })
-            }
-        },
 
+        },
+        cleanPostalCodes() {
+            if (this.save.action === 'create') {
+                this.save.zone.postal_codes = []
+            }
+        }
     },
     destroyed() {
-        this.cleanDialog()
+        this.cleanPostalCodes()
     },
     watch: {
         resultGeocoding(val) {
@@ -442,14 +421,6 @@ Vue.component('save-commerce', {
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
-        }
     },
 
 })

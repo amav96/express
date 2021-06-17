@@ -318,7 +318,7 @@
                   />
                 </template>
                 
-                <template>
+                <template v-if="dialogFullScreen.display">
                   <d-full-screen :dialogFullScreen="dialogFullScreen"  >
                     <template v-if="save.collector.display && save.action === 'create'">
                         <save-collector 
@@ -326,7 +326,6 @@
                         :admin="admin" 
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
-                        ref="rendered"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
@@ -336,7 +335,6 @@
                         @setContinue="dialogSmallScreen.display = $event"
                         :dialogSmallScreen="dialogSmallScreen"
                         :continueSave="continueAdd"
-                     
                         />
                     </template>
                     <template v-if="save.commerce.display && save.action === 'create'" >
@@ -345,7 +343,6 @@
                         :admin="admin" 
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
-                        ref="rendered"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
@@ -363,7 +360,6 @@
                         :admin="admin" 
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
-                        ref="rendered"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
@@ -584,6 +580,9 @@
                       outlined: true,
                       dense: true
                     },
+                    url:{
+                      hasAlreadyBeenGeocoded: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=hasAlreadyCommerceBeenGeocoded'
+                    }
                   },
                   point : {
                     display : false,
@@ -591,7 +590,7 @@
                       display: true,
                       url : '',
                       title: '',
-                      class: 'mx-2',
+                      class: '',
                       outlined: true,
                       dense: true
                     },
@@ -894,11 +893,10 @@
             var chosenOption = choose.chosenOption
             this.save.type = chosenOption
             // type to form
-
             this.dialogChoose.chooseNext.display = false
             this.dialogFullScreen.display = true
-            
-          
+           
+        
             if(this.save.type === 'recolector'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Recolector' : '';
                 this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Recolector' : '';
@@ -917,9 +915,10 @@
                 
               }
             if(this.save.type === 'correo' || this.save.type === 'terminal'){
-                if(this.save.type === 'mail'){
+                if(this.save.type === 'correo'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Correo' : '';
                 this.save.action === 'update' ? this.dialogFullScreen.title = 'Actualizar zona para Correo' : '';
+        
                 }
                 if(this.save.type === 'terminal'){
                 this.save.action === 'create' ? this.dialogFullScreen.title = 'Crear zona para Terminal' : '';
@@ -929,12 +928,11 @@
                 this.save.point.display = true
                 this.save.collector.display = false
                 this.save.commerce.display = false
-                
               }
 
-              this.$nextTick(() => {
-                  this.$refs.rendered.$show()
-                })
+             
+            
+
               // this.dialogChoose.chooseNext.chosenOption = ''
           },
           backChoose(){

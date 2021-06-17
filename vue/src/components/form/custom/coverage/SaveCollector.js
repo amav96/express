@@ -15,7 +15,10 @@ Vue.component('save-collector', {
                     </template>
 
                         <template v-if="!saveSuccess">
-                            <h6 class="ml-4 my-5"> Recolector </h6>
+                            <h6 class="ml-2 my-3 d-flex justify-start align-items-center">Recolector
+                                <v-icon class="mx-1">mdi-motorbike</v-icon>
+                                <v-icon class="mx-1">mdi-car</v-icon>
+                            </h6>
                             <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <select-auto-complete-simple-id 
@@ -28,8 +31,10 @@ Vue.component('save-collector', {
                                     />
                                 </v-col>
                             </v-row>
-                            
-                            <h6 class="ml-4 my-5"> Zona a cubir  (Es la zona donde operara el {{returnType()}})</h6>
+                            <h6 class="ml-2 my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el Recolector )
+                                <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>
+                            </h6>
+                          
                             <v-row class="d-flex justify-start flex-row" >
                                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <select-auto-complete-simple-id 
@@ -107,12 +112,7 @@ Vue.component('save-collector', {
                                 </v-row>
                             </template>
                         </template>
-                        <v-btn color="error" @click="forcedExit" >
-                         Salir 
-                         <v-icon right>
-                         mdi-exit-to-app
-                         </v-icon> 
-                        </v-btn>
+
                 </v-container>
             </div>
         `,
@@ -248,70 +248,37 @@ Vue.component('save-collector', {
                     }
                 })
                 .then(res => {
-
+                    this.saveLoading = false
                     if (res.data[0].error === "exist") {
                         this.exist(res)
-                        this.saveLoading = false
                         return
                     }
 
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
-                        this.saveLoading = false
                         return
                     }
 
-                    this.saveLoading = false
-                    this.error.text = ''
-                    this.error.display = false
-                    const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
-                    this.$emit("setSnack", snack)
-                    this.setResponseWhenFinally(res)
+                    this.$success(res)
                     this.$emit("setContinue", true)
-
                 })
                 .catch(err => {
                     this.saveLoading = false
                     console.log(err)
                 })
         },
-        setResponseWhenFinally(res) {
+        $success(res) {
+            this.error.text = ''
+            this.error.display = false
             res.data.forEach((val) => {
                 this.savedData.push(val)
             })
-            this.$emit('setPaginateDisplay', false)
             this.$emit('response', this.savedData)
+            const snack = { display: true, timeout: 2000, text: 'Creado correctamente', color: 'success' }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit("setSnack", snack)
             this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.clean) {
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.id_country_by_select = ''
-                    this.id_country = ''
-                    this.id_province_by_select = ''
-                    this.id_province = ''
-                    this.id_locate = ''
-                    this.id_user = ''
-                    this.save.zone.postal_codes = []
-                    this.chosenPostalCodes = []
-                    this.infoUser = []
-                    this.error.display = false
-                    this.error.text = ''
-                    this.$emit("setPaginateDisplay", false)
-                }, 300);
-            }
 
-        },
-        forcedExit() {
-            this.clean = true
-            this.$emit("setDialogDisplay", false)
-        },
-        $show() {
-            //accedo a el desde la raiz
-            // mientras no se haya guardado nada, permanece en falso, para mostrar lo que se esta haciendo
-            this.saveSuccess = false
-            this.clean = false
         },
         exist(res) {
             var text = res.data[0].name_user + ' ya tiene asignado el codigo '
@@ -337,37 +304,18 @@ Vue.component('save-collector', {
 
             return created_at
         },
-        cleanDialog() {
-            if (this.save.action === 'create') {
-                this.save.zone.postal_codes = []
-            }
-        },
         $_continue(flag) {
             this.$emit("setDialogDisplay", flag)
             this.$emit("setContinue", false)
-            if (!flag) {
-                this.$nextTick(() => {
-                    this.clean = true
-                    this.finish()
-                })
-            }
         },
-
-    },
-    destroyed() {
-        this.cleanDialog()
-    },
-    watch: {
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
+        cleanPostalCodes() {
+            if (this.save.action === 'create') {
+                this.save.zone.postal_codes = []
+            }
         }
     },
-
-
+    destroyed() {
+        this.cleanPostalCodes()
+    },
 
 })

@@ -1,7 +1,7 @@
 Vue.component("table-cobertura", {
     template: /*html*/ `
           <div>
-                <template  >
+                <template v-if="dialogFullScreen.display" >
                     <d-full-screen :dialogFullScreen="dialogFullScreen">
                         <template v-if="dataDelete.display">
                             <delete-coverage 
@@ -10,14 +10,14 @@ Vue.component("table-cobertura", {
                             :response="dataDelete"
                             @setSnack="$_setMessage($event)"
                             @setDialog="dialogFullScreen.display = $event"
-                            @setResponse="$_setResponse($event)"
+                            @setRowAltered="$_setRowAltered($event)"
                             />
                         </template>
                         <template v-if="dataUpdate.display">
                             
                             <v-row class="d-flex mx-1 mt-2" >
                                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
-                                        <h6 class="mb-3 mt-1">Zona actual </h6>
+                                        <h6 class="mb-3 mt-1">Zona actual cubierta por </h6>
                                         <alert-info-user
                                         :info="dataUpdate.data"
                                         />
@@ -48,8 +48,8 @@ Vue.component("table-cobertura", {
                                     :pagination="pagination"
                                     @setSnack="$_setMessage($event)"
                                     @setDialog="dialogFullScreen.display = $event"
-                                    @setResponse="$_setResponse($event)"
-                                    ref="clearErrorRecolector"
+                                    @setRowAltered="$_setRowAltered($event)"
+                                    
                                     />
                                 </template>
                                 <template v-if="updateOnly.type === 'comercio'">
@@ -59,8 +59,7 @@ Vue.component("table-cobertura", {
                                     :response="dataUpdate"
                                     @setSnack="$_setMessage($event)"
                                     @setDialog="dialogFullScreen.display = $event"
-                                    @setResponse="$_setResponse($event)"
-                                    ref="clearErrorComercio"
+                                    @setRowAltered="$_setRowAltered($event)"
                                     />
                                 </template>
                                 <template v-if="updateOnly.type === 'correo' || updateOnly.type === 'terminal'">
@@ -71,8 +70,7 @@ Vue.component("table-cobertura", {
                                     :updateOnly="updateOnly"
                                     @setSnack="$_setMessage($event)"
                                     @setDialog="dialogFullScreen.display = $event"
-                                    @setResponse="$_setResponse($event)"
-                                    ref="clearErrorPoint"
+                                    @setRowAltered="$_setRowAltered($event)"
                                     />
                                 </template>
                         </template>
@@ -108,8 +106,9 @@ Vue.component("table-cobertura", {
                                         </v-chip>
                                     </td>
                                 <td 
-                                v-if="row.name_assigned !== ''  && row.name_assigned !== null && row.name_assigned !== ' '"
+                                v-if="row.name_assigned !== ''  && row.name_assigned !== null && row.name_assigned !== ' ' && row.name_assigned.length"
                                 >
+                                
                                     {{row.name_assigned}} - {{ row.id_user}}
                                 </td>
                                 <td 
@@ -174,9 +173,9 @@ Vue.component("table-cobertura", {
                 display: false,
                 data: [],
                 url: {
-                    delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete'
+                    delete: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=removeAndDelete',
+                    hasAlreadyBeenGeocoded: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=hasAlreadyCommerceBeenGeocoded'
                 },
-
             },
             rowAltered: {
                 id: '',
@@ -244,7 +243,8 @@ Vue.component("table-cobertura", {
         $_setMessage(message) {
             this.$emit("setSnack", message)
         },
-        $_setResponse(id) {
+        $_setRowAltered(id) {
+
             this.rowAltered.id = id.id
             this.rowAltered.action = id.action
         },
@@ -278,20 +278,7 @@ Vue.component("table-cobertura", {
             const restoDeLaCadena = cadena.substring(1, cadena.length);
             return primerCaracter.concat(restoDeLaCadena);
         },
-        $_clearSpace() {
-            this.$nextTick(() => {
-                if (this.updateOnly.type === 'recolector') {
-                    this.$refs.clearErrorRecolector.clearError()
-                }
-                if (this.updateOnly.type === 'comercio') {
-                    this.$refs.clearErrorComercio.clearError()
-                }
-                if (this.updateOnly.type === 'correo' || this.updateOnly.type === 'terminal') {
-                    this.$refs.clearErrorPoint.clearError()
-                }
 
-            })
-        }
 
 
     },
@@ -302,14 +289,7 @@ Vue.component("table-cobertura", {
 
 
     },
-    watch: {
-        dialogFullScreen: {
-            handler(val) {
-                this.$_clearSpace()
-            },
-            deep: true
-        }
-    },
+
 
 
 

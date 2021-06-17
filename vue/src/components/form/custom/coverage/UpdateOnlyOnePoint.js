@@ -2,11 +2,7 @@ Vue.component('update-onlyOne-point', {
     template: //html 
         `
         <div>
-        
-       
                 <v-row class=" d-flex justify-start flex-column ma-1 my-0 flex-wrap" >
-                   
-
                     <template v-if="errorGeocoding !== ''">
                         <v-row class="d-flex justify-center mx-2" >
                             <v-col cols="12">
@@ -20,8 +16,10 @@ Vue.component('update-onlyOne-point', {
                             </v-col>
                         </v-row>
                     </template>
-
-                    <h6 class="ml-4 my-5"> Dirección del {{updateOnly.type}} a geocodificar</h6>
+                    
+                    <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Dirección del {{updateOnly.type}} a geocodificar
+                        <v-icon class="mx-1">mdi-store</v-icon>
+                    </h6>
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <geocoding-simple
                         @setErrorGeocoding="errorGeocoding = $event"
@@ -98,9 +96,13 @@ Vue.component('update-onlyOne-point', {
                     </template>
 
                     <template >
-                        <h6 class="ml-4" > Horarios de atención al cliente</h6>
+                        <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
+                        <v-icon class="mx-1">mdi-calendar-clock</v-icon>
+                        </h6>
                         <time-schedule
-                         ref="resetTimeSchedule"
+                        :outlined=true
+                        classCustom="mx-3"
+                        :dense="true"
                          @setTimeSchedule="timeSchedule = $event" />
                     </template>
 
@@ -251,33 +253,11 @@ Vue.component('update-onlyOne-point', {
             this.response.data.type = data[0].type
         },
         $success() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            const set = { id: this.response.data.id, action: 'update' }
+            this.$emit("setRowAltered", set)
             this.$emit("setDialog", false)
-            setTimeout(() => {
-                const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
-                this.$emit("setSnack", snack)
-
-                this.saveLoading = false
-                this.infoUser = []
-                this.name_user = ''
-                this.id_country = ''
-                this.id_province = ''
-                this.id_locate = ''
-                this.timeSchedule = ''
-                this.lat = ''
-                this.lng = ''
-                this.home_address = ''
-                this.srcMap = ''
-                this.$refs.resetGeocoding.reset()
-                this.$refs.resetTimeSchedule.$reset()
-
-                this.error.display = false
-                this.error.text = ''
-
-
-                const set = { id: this.response.data.id, action: 'update' }
-                this.$emit("setResponse", set)
-            }, 280);
-
         },
         getDateTime() {
             var today = new Date();

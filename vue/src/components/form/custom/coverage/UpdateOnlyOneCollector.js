@@ -145,24 +145,11 @@ Vue.component('update-onlyOne-collector', {
             this.response.data.timeScheduleB = ''
         },
         $success() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            const set = { id: this.response.data.id, action: 'update' }
+            this.$emit("setRowAltered", set)
             this.$emit("setDialog", false)
-            setTimeout(() => {
-                const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
-                this.$emit("setSnack", snack)
-
-                this.saveLoading = false
-                this.infoUser = []
-                this.id_user = ''
-                this.name_user = ''
-                this.$refs.resetUser.reset()
-
-                this.error.display = false
-                this.error.text = ''
-
-                const set = { id: this.response.data.id, action: 'update' }
-                this.$emit("setResponse", set)
-            }, 280);
-
         },
         getDateTime() {
             var today = new Date();
@@ -180,7 +167,7 @@ Vue.component('update-onlyOne-collector', {
             return created_at
         },
         exist() {
-            var text = 'Este recolector ya esta asignado a'
+            var text = 'Este recolector ya esta asignado al codigo postal '
             text = text + ' ' + this.response.data.postal_code
 
             this.error.display = true

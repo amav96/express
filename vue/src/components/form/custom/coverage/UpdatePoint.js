@@ -18,7 +18,10 @@ Vue.component('update-point', {
                         </v-row>
                     </template>
 
-                    <h6 class="ml-4 my-5"> Dirección de {{returnType()}} a geocodificar</h6>
+                    <h6 class="my-3 d-flex justify-start align-items-center">
+                        Dirección del {{returnType()}}
+                        <v-icon class="mx-1">mdi-store</v-icon>
+                    </h6>
                     <geocoding-simple
                     @setErrorGeocoding="errorGeocoding = $event"
                     @setResultGeocoding="resultGeocoding = $event"
@@ -40,7 +43,7 @@ Vue.component('update-point', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-2"
+                            class="info--text"
                             >
                             </v-text-field>
                         </v-col>
@@ -53,7 +56,7 @@ Vue.component('update-point', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-2"
+                            class="info--text"
                             >
                             </v-text-field>
                         </v-col>
@@ -88,15 +91,27 @@ Vue.component('update-point', {
                             </v-col>
                         </v-row>
                     </template>
+
+                    <template >
+                            <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
+                            <v-icon class="mx-1">mdi-calendar-clock</v-icon>
+                            </h6>
+                            <time-schedule
+                            :outlined=true
+                            classCustom=""
+                            :dense="true"
+                            @setTimeSchedule="timeSchedule = $event" />
+                    </template>
                     
-                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
+                        <h6 class="ml-2 my-3 d-flex justify-start align-items-center"> Ingrese rango de codigo postal &nbsp;  <span class="font-weight-light" > (Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span>
+                            <v-icon class="mx-1">mdi-counter</v-icon>
+                         </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <v-text-field
                                 label="Desde"
                                 v-model="cp_start"
                                 type="number"
-                                class="mx-4"
                                 outlined
                                 dense
                                 flat
@@ -108,7 +123,6 @@ Vue.component('update-point', {
                                 label="Hasta"
                                 v-model="cp_end"
                                 type="number"
-                                class="mx-4"
                                 outlined
                                 dense
                                 flat
@@ -131,7 +145,7 @@ Vue.component('update-point', {
                             </v-btn>
                             </v-col>
                         </v-row>
-                    
+
                     <template v-if="error.display" >
                         <v-alert
                         class="ml-4 my-5" 
@@ -162,8 +176,7 @@ Vue.component('update-point', {
                             </template>
                             <v-btn 
                             class="success"
-                            block
-                            :disabled="validateFormComplete()"
+                            :disabled="validateFormComplete"
                             @click="_updateData()"
                             >
                             Siguiente
@@ -201,6 +214,7 @@ Vue.component('update-point', {
             lat: '',
             lng: '',
             srcMap: '',
+            timeSchedule: '',
             saveLoading: false,
             zone: [],
             selectZone: [],
@@ -231,9 +245,10 @@ Vue.component('update-point', {
             await axios.get(url, {
                     params: {
                         type: this.save.type,
-                        id_user: this.id_user,
+                        id_user: this.save.type,
                         country: this.id_country,
                         province: this.id_province,
+                        home_address: this.home_address,
                         cp_start: this.cp_start,
                         cp_end: this.cp_end
                     }
@@ -259,17 +274,8 @@ Vue.component('update-point', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
-        validateFormComplete() {
-
-            if (this.id_user === '' || this.selectZone.length === 0) {
-                return true
-            } else {
-                return false
-            }
-
-        },
         validateButtonSearchCPbyRange() {
-            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '' || this.id_user === '') {
+            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '' || this.id_user === '' || this.lat === '' || this.lng === '' || this.home_address === '') {
                 return true
             } else {
                 return false
@@ -289,13 +295,15 @@ Vue.component('update-point', {
             this.saveLoading = true
             const url = this.save.url.update
             const dataRequest = {
+
+                value: this.selectZone,
+                id_user: this.save.type,
+                timeSchedule: this.timeSchedule,
+                type: this.save.type,
+                admin: this.admin,
                 lat: this.lat,
                 lng: this.lng,
                 home_address: this.home_address,
-                value: this.selectZone,
-                id_user: this.save.type,
-                type: this.save.type,
-                admin: this.admin,
                 created_at: this.getDateTime()
             }
             await axios.get(url, {
@@ -304,60 +312,26 @@ Vue.component('update-point', {
                     }
                 })
                 .then(res => {
+                    this.saveLoading = false
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
-                        this.saveLoading = false
                         return
                     }
-
-                    this.$emit("setDialogDisplay", false)
-                    this.$nextTick(() => {
-                        this.setResponseWhenFinally(res)
-                        this.saveFlag = true
-                    })
-
+                    this.$success(res)
                 })
                 .catch(err => {
                     this.saveLoading = false
-                    console.log(err)
+                    const snack = { display: true, timeout: 5000, text: err, color: 'error' }
+                    this.$emit("setSnack", snack)
                 })
         },
-        setResponseWhenFinally(res) {
-            this.$emit('setPaginateDisplay', false)
+        $success(res) {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
             this.$emit('response', res.data.data)
             this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.saveFlag) {
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.saveLoading = false
-                    this.id_country = ''
-                    this.id_province = ''
-                    this.lat = ''
-                    this.lng = ''
-                    this.home_address = ''
-                    this.srcMap = ''
-                    this.cp_start = ''
-                    this.cp_end = ''
-                    this.zone = []
-                    this.id_locate = ''
-                    this.selectZone = []
-                    this.error.display = false
-                    this.error.text = ''
-
-                    this.$nextTick(() => {
-                        this.saveSuccess = false
-                            // setting flag filtering
-                        this.$emit('filtering', false)
-                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
-                        this.$emit("setSnack", snack)
-                        this.saveFlag = false
-
-                    })
-                }, 700);
-
-            }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
         },
         getDateTime() {
             var today = new Date();
@@ -398,6 +372,18 @@ Vue.component('update-point', {
             if (newVal !== oldVal) {
                 this.activateSearchEngine();
             }
+        }
+    },
+    computed: {
+        validateFormComplete() {
+            if (
+                this.lat === '' ||
+                this.lng === '' ||
+                this.home_address === '' ||
+                this.timeSchedule === '' ||
+                this.timeSchedule.length < 26 ||
+                this.selectZone.length === 0
+            ) { return true } else { return false }
         }
     },
 

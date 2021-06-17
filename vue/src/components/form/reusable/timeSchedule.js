@@ -3,20 +3,20 @@ Vue.component('time-schedule', {
         `
         <div>
             <h6 class="ml-4 my-3 "> Dias Hábiles</h6>
-            <v-row class="d-flex flex-row justify-start " >
-                <v-col   cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+            <v-row class="pa-1 d-flex flex-row justify-start " >
+                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-select 
                     v-model="dayOpen"
                     label="Dia Abre"
                     :items="businessDays"
                     item-text="day"
                     item-value="value"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4 "
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-select>
                 </v-col>
@@ -27,12 +27,12 @@ Vue.component('time-schedule', {
                     :items="businessDays"
                     item-text="day"
                     item-value="value"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-select>
                 </v-col>
@@ -42,12 +42,12 @@ Vue.component('time-schedule', {
                     <v-text-field
                     v-model="hoursOpen"  
                     label="Hora Abre"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-text-field>
                 </v-col>
@@ -55,12 +55,12 @@ Vue.component('time-schedule', {
                     <v-text-field 
                     v-model="hoursClose"  
                     label="Hora Cierra"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-text-field>
                 </v-col>
@@ -72,12 +72,12 @@ Vue.component('time-schedule', {
                     <v-text-field 
                     v-model="saturdayHoursOpen"  
                     label="Hora Abre"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-text-field>
                 </v-col>
@@ -85,12 +85,12 @@ Vue.component('time-schedule', {
                     <v-text-field 
                     v-model="saturdayHoursClose"  
                     label="Hora Cierra"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-text-field>
                 </v-col>
@@ -101,12 +101,13 @@ Vue.component('time-schedule', {
                     <v-text-field 
                     v-model="sundayHoursOpen"  
                     label="Hora Abre"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
+                    
                     >
                     </v-text-field>
                 </v-col>
@@ -114,18 +115,19 @@ Vue.component('time-schedule', {
                     <v-text-field 
                     v-model="sundayHoursClose"  
                     label="Hora Cierra"
-                    outlined
-                    dense
                     required
                     type="time"
                     color="black"
-                    class="info--text mx-4"
+                    :outlined="outlined"
+                    :class="classCustom"
+                    :dense="dense"
                     >
                     </v-text-field>
                 </v-col>
             </v-row>
         </div>
     `,
+    props: ['outlined', 'classCustom', 'dense'],
     data() {
         return {
             dayOpen: '',

@@ -1,6 +1,18 @@
 Vue.component('empty-collector', {
     template: //html 
         `<div>
+        
+            <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Zona a ocupar
+                <v-icon class="mx-1">mdi-map-search-outline</v-icon>
+            </h6>
+            <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
+                <template class="mx-auto" v-if="resource.data !== 0">
+                <alert-info-user
+                :info="resource.data"
+                />         
+                </template>  
+            </v-col>
+
             <v-row class=" d-flex justify-start flex-column ma-1 my-0" >
                 <template v-if="error.display" >
                             <v-alert
@@ -112,23 +124,13 @@ Vue.component('empty-collector', {
             return created_at
         },
         $success(res) {
-            this.saveLoading = false
-            this.error.text = ''
-            this.error.display = false
             const snack = { display: true, timeout: 2000, text: 'Recolector creado exitosamente', color: 'success' }
             this.$emit("setSnack", snack)
-            this.setResponseWhenFinally(res.data)
-            this.$refs.resetUser.reset()
-            this.$emit("resetType", '')
-        },
-        setResponseWhenFinally(res) {
-
-            res.data.forEach((val) => {
+            res.data.data.forEach((val) => {
                 this.$emit("setSavedData", val)
             })
-
-            this.$emit("setDialog", false)
             this.$emit('setFront', 'save')
+            this.$emit("setDialog", false)
         },
     },
     computed: {

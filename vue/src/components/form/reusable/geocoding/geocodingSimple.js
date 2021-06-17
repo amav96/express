@@ -13,7 +13,7 @@ Vue.component('geocoding-simple', {
                     :dense="dense"
                     :reassign="reassignData.id_country"
                     ref="refCountry"
-                        />
+                    />
                 </v-col>
                 <v-col  cols="12" xl="4" lg="4" md="4" sm="4" xs="4"  >
                     <select-auto-complete-search-id 
@@ -24,6 +24,7 @@ Vue.component('geocoding-simple', {
                     :outlined="outlined"
                     :classCustom="classCustom"
                     :dense="dense"
+                    :error="id_province === ''"
                     :reassign="reassignData.id_province"
                     ref="refProvince"
                     />
@@ -37,6 +38,7 @@ Vue.component('geocoding-simple', {
                     :outlined="outlined"
                     :classCustom="classCustom"
                     :dense="dense"
+                    :error="id_locate === ''"
                     :reassign="reassignData.id_locate"
                     ref="refLocate"
                     />
@@ -96,6 +98,9 @@ Vue.component('geocoding-simple', {
         },
         dense: {
             type: Boolean
+        },
+        error: {
+            type: Object
         }
     },
     data() {

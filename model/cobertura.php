@@ -829,14 +829,13 @@ class cobertura{
             STATUS,'REMOVETOHISTORY',customer_service_hours,lat,lng,'$motive','$created_at','$id'
             FROM coverage where id = '$id' ";
 
-
             $removeToHistory = $this->db->query($sql);
-            if($removeToHistory){
-                  $result =  true;
-            }else {
-                  $result = false;
-            }
-            return $result;
+            // if($removeToHistory){
+            //       $result =  true;
+            // }else {
+            //       $result = false;
+            // }
+            return true;
             
       }
 
@@ -881,6 +880,7 @@ class cobertura{
             $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ; 
 
             $sql = "SELECT id,postal_code,id_user FROM coverage WHERE id_user = '$id_user' and postal_code = '$postal_code'";
+           
             
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -981,6 +981,26 @@ class cobertura{
             return $result;
       }
 
+      public function verifyExistStationByIdAndHomeAddress(){
+
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $home_address = !empty($this->getHome_address()) ? $this->getHome_address() : false ;
+            $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
+
+            if(is_array($postal_code)){
+                  $postal_code =  implode(',',$postal_code);
+            }
+
+            $sql ="SELECT id FROM coverage WHERE home_address = '$home_address' AND
+             id_user = '$id_user' and postal_code = '$postal_code'";
+           
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+      }
+
       public function verifyNotExistStationByCP(){
 
             $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
@@ -999,14 +1019,15 @@ class cobertura{
 
       }
 
-      public function getAllPointInZone(){
+      public function getAllPointExceptCpAndHomeAdressCurrent(){
             // aca traigo los datos
             $country = !empty($this->getId_country()) ? $this->getId_country() : false ;
             $cp_start  = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
             $cp_end  = !empty($this->getPostal_code_range()) ? $this->getPostal_code_range() : false ;
+            $home_address = !empty($this->getHome_address()) ? $this->getHome_address() : false ;
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
          
       
-
             $sql = "SELECT c.id,c.postal_code,l.locate,pro.province,co.country,c.home_address,c.type,c.id_user,u.name,u.name_alternative 
             FROM coverage c
             LEFT JOIN users u ON u.id = c.id_user
@@ -1015,8 +1036,10 @@ class cobertura{
             LEFT JOIN province pro ON pro.id = po.id_province
             LEFT JOIN country co ON co.id = pro.id_country
             WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end 
+            and c.id_user != '$id_user' and c.home_address != '$home_address'
             GROUP BY c.id order by c.postal_code";
-           
+
+                 
             // el id_user cuando es comercio o terminal viene en cero.
             // lo dejo asi hasta que se requiere reemplazar comercio o terminal
             // por ahora no se reemplaza comercio o terminal
@@ -1065,7 +1088,7 @@ class cobertura{
 
       }
 
-      public function hasAlreadyBeenGeocoded(){
+      public function hasAlreadyCommerceBeenGeocoded(){
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
 
             $sql ="SELECT LOCATE AS 'id_locate' ,home_address,province AS 'id_province',id_country,id_user,lat,lng FROM coverage where id_user = '$id_user' AND lat != '' AND lng != '' LIMIT 1";
@@ -1075,5 +1098,3 @@ class cobertura{
             return $result;
       }
 }
-
-?>

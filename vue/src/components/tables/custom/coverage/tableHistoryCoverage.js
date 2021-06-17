@@ -1,17 +1,6 @@
 Vue.component("table-history-coverage", {
     template: /*html*/ `
           <div>
-                <template v-if="pagination.display" >
-                
-                        <div class="my-1 d-flex justify-center" >
-                            <v-btn
-                                >
-                                Total Registros <strong> &nbsp;{{pagination.totalCountResponse}} </strong>
-                            </v-btn>
-                        </div>
-                    
-                </template>
-  
               <template>
                       <v-simple-table >
                           <template v-slot:default>
@@ -51,13 +40,28 @@ Vue.component("table-history-coverage", {
                                 </td>
 
                                 <td>{{row.created_at}}</td>
+                                <template v-if="row.motive !== '' && row.motive !== null ">
                                     <td>
-                                            {{row.motive}}
+                                    {{row.motive}}
                                     </td>
+                                </template>
+                                <template v-else>
                                     <td>
-                                            {{status(row)}}
+                                        <strong> REEMPLAZADO </strong>
                                     </td>
-                                
+                                </template>
+
+                                <template v-if="status(row) !== '' && status(row) !== undefined">
+                                    <td>
+                                        <v-chip color="error">
+                                        {{status(row)}}
+                                        </v-chip>
+                                    </td>
+                                </template>
+                                <template v-else>
+                                    <td>         
+                                    </td>
+                                </template>
                               </tr>
                           </tbody>
                           </template>
@@ -90,7 +94,7 @@ Vue.component("table-history-coverage", {
             }
         },
         status(data) {
-            if (data.status_process === 'down') {
+            if (data.status_process === 'down' || data.status_process === 'sign_contract' || data.status_process === 'signed_contract' || data.status_process === 'registered') {
                 return 'Inactivo'
             }
         }

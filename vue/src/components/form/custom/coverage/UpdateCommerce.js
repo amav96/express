@@ -4,48 +4,26 @@ Vue.component('update-commerce', {
     <div>
         <v-container>   
                 <template v-if="!saveSuccess">
-                    <h6 class="ml-4 my-5"> Comercio </h6>
+                <h6 class=" my-3 d-flex justify-start align-items-center">Comercio
+                <v-icon class="mx-1">mdi-store</v-icon>
+                </h6>
                     <v-row class="d-flex justify-start flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                             <select-auto-complete-simple-id 
                             @exportVal="setUser($event)"
                             :title="save.commerce.title_field" 
                             :url="save.commerce.url_users" 
-                            :outlined="save.collector.select.outlined"
-                            :classCustom="save.collector.select.class"
-                            :dense="save.collector.select.dense"
+                            :outlined="save.commerce.select.outlined"
+                            :classCustom="save.commerce.select.class"
+                            :dense="save.commerce.select.dense"
                             
                             />
                         </v-col>
                         <template v-if="infoUser.length !== 0">
                             <v-col  cols="12" xl="8" lg="8" md="6" sm="6" xs="8"  >
-                                <v-alert
-                                class="py-5"
-                                border="right"
-                                colored-border
-                                type="info"
-                                elevation="2"
-                                icon="mdi-store"
-                                >
-                                <v-row class="mx-1 d-flex justify-between ">
-                                    <v-col cols="12" lg="6" class="pa-1 " >
-                                        <strong>Nombre :</strong> {{infoUser.name_user}}
-                                    </v-col>
-                                    <v-col cols="12" lg="6" class="pa-1 ">
-                                        <strong>Pais :</strong> {{infoUser.country}}
-                                    </v-col>
-                                    <v-col cols="12" lg="6" class="pa-1 ">
-                                        <strong>Provincia :</strong> {{infoUser.province}}
-                                    </v-col>
-                                    <v-col cols="12" lg="6" class="pa-1 ">
-                                        <strong>Localidad :</strong> {{infoUser.locate}}
-                                    </v-col>
-                                    <v-col cols="12" lg="6" class="pa-1 ">
-                                        <strong>Dirección :</strong> {{infoUser.home_address}}
-                                    </v-col>
-                                    
-                                </v-row>
-                                </v-alert>
+                                <alert-info-user
+                                :info="infoUser"
+                                />         
                             </v-col>
                         </template>
                     </v-row>
@@ -64,18 +42,21 @@ Vue.component('update-commerce', {
                         </v-row>
                     </template>
 
-                    <h6 class="ml-4 my-5"> Dirección del comercio a geocodificar</h6>
+                    <h6 class="my-3 d-flex justify-start align-items-center">
+                        Dirección del comercio 
+                        <v-icon class="mx-1">mdi-store</v-icon>
+                    </h6>
                     <geocoding-simple
                     @setErrorGeocoding="errorGeocoding = $event"
                     @setResultGeocoding="resultGeocoding = $event"
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
-                    :outlined="save.collector.select.outlined"
-                    :classCustom="save.collector.select.class"
-                    :dense="save.collector.select.dense"
+                    :outlined="save.commerce.select.outlined"
+                    :classCustom="save.commerce.select.class"
+                    :dense="save.commerce.select.dense"
                     :save="save"
-                    ref="resetGeocoding"
+                    ref="refGecoded"
                     />
                     <v-row class="d-flex justify-between flex-row" >
                         <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
@@ -87,7 +68,7 @@ Vue.component('update-commerce', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-2"
+                            class="info--text "
                             >
                             </v-text-field>
                         </v-col>
@@ -100,7 +81,7 @@ Vue.component('update-commerce', {
                             required
                             type="text"
                             color="black"
-                            class="info--text mx-2"
+                            class="info--text "
                             >
                             </v-text-field>
                         </v-col>
@@ -136,14 +117,16 @@ Vue.component('update-commerce', {
                         </v-row>
                     </template>
                     
-                        <h6 class="ml-4 my-5">  Ingrese rango de codigo postal <span class="font-weight-light" >(Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span> </h6>
+                        <h6 class="my-3 d-flex justify-start align-items-center"> Ingrese rango de codigo postal &nbsp;  <span class="font-weight-light" > (Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span>
+                        <v-icon class="mx-1">mdi-counter</v-icon>
+                         </h6>
                         <v-row class="d-flex justify-start flex-row" >
                             <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                 <v-text-field
                                 label="Desde"
                                 v-model="cp_start"
                                 type="number"
-                                class="mx-4"
+                                class=""
                                 outlined
                                 dense
                                 flat
@@ -155,7 +138,7 @@ Vue.component('update-commerce', {
                                 label="Hasta"
                                 v-model="cp_end"
                                 type="number"
-                                class="mx-4"
+                                class=""
                                 outlined
                                 dense
                                 flat
@@ -209,8 +192,7 @@ Vue.component('update-commerce', {
                             </template>
                             <v-btn 
                             class="success"
-                            block
-                            :disabled="validateFormComplete()"
+                            :disabled="validateFormComplete"
                             @click="_updateData()"
                             >
                             Siguiente
@@ -273,10 +255,10 @@ Vue.component('update-commerce', {
 
         },
         setUser(user) {
-            this.resetToChangeUser()
             this.$nextTick(() => {
                 this.infoUser = user
                 this.id_user = user.id
+                this.hasAlreadyBeenGeocoded()
             })
 
         },
@@ -313,14 +295,29 @@ Vue.component('update-commerce', {
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
-        validateFormComplete() {
-
-            if (this.id_user === '' || this.selectZone.length === 0) {
-                return true
-            } else {
-                return false
-            }
-
+        hasAlreadyBeenGeocoded() {
+            const url = this.save.commerce.url.hasAlreadyBeenGeocoded
+            axios.get(url, { params: { id_user: this.id_user } })
+                .then(res => {
+                    if (res.data.success) {
+                        this.$_dataAlreadyGeocoded(res.data)
+                    } else {
+                        this.$refs.refGecoded.reset()
+                        this.lat = '';
+                        this.lng = '';
+                        this.id_country = ''
+                        this.id_province = ''
+                        this.id_locate = ''
+                        this.home_address = ''
+                        this.srcMap = ''
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        $_dataAlreadyGeocoded(geocoded) {
+            this.$refs.refGecoded.setGeocoded(geocoded)
         },
         validateButtonSearchCPbyRange() {
             if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '' || this.id_user === '') {
@@ -358,17 +355,13 @@ Vue.component('update-commerce', {
                     }
                 })
                 .then(res => {
+                    this.saveLoading = false
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
-                        this.saveLoading = false
                         return
                     }
 
-                    this.$emit("setDialogDisplay", false)
-                    this.$nextTick(() => {
-                        this.setResponseWhenFinally(res)
-                        this.saveFlag = true
-                    })
+                    this.$success(res)
 
                 })
                 .catch(err => {
@@ -376,44 +369,13 @@ Vue.component('update-commerce', {
                     console.log(err)
                 })
         },
-        setResponseWhenFinally(res) {
-            this.$emit('setPaginateDisplay', false)
+        $success(res) {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
             this.$emit('response', res.data.data)
             this.$emit('showTable', true)
-        },
-        finish() {
-            if (this.saveFlag) {
-                setTimeout(() => {
-                    this.saveSuccess = true
-                    this.saveLoading = false
-                    this.id_country = ''
-                    this.id_province = ''
-                    this.lat = ''
-                    this.lng = ''
-                    this.home_address = ''
-                    this.srcMap = ''
-                    this.cp_start = ''
-                    this.cp_end = ''
-                    this.zone = []
-                    this.id_locate = ''
-                    this.id_user = ''
-                    this.selectZone = []
-                    this.infoUser = []
-                    this.error.display = false
-                    this.error.text = ''
-
-                    this.$nextTick(() => {
-                        this.saveSuccess = false
-                            // setting flag filtering
-                        this.$emit('filtering', false)
-                        const snack = { display: true, timeout: 2000, text: 'Actualizado exitosamente', color: 'success' }
-                        this.$emit("setSnack", snack)
-                        this.saveFlag = false
-
-                    })
-                }, 700);
-
-            }
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
         },
         getDateTime() {
             var today = new Date();
@@ -430,12 +392,7 @@ Vue.component('update-commerce', {
 
             return created_at
         },
-        resetToChangeUser() {
-            this.id_country = ''
-            this.id_province = ''
-            this.id_locate = ''
-            this.$refs.resetGeocoding.reset()
-        }
+
     },
 
     watch: {
@@ -448,20 +405,23 @@ Vue.component('update-commerce', {
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
-        },
         id_user(newVal, oldVal) {
             if (newVal !== oldVal) {
                 this.activateSearchEngine();
             }
         }
     },
+    computed: {
+        validateFormComplete() {
+
+            if (this.id_user === '' || this.selectZone.length === 0 || this.home_address === '' || this.lat === '' || this.lng === '') {
+                return true
+            } else {
+                return false
+            }
+
+        },
+    }
 
 
 
