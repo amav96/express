@@ -16,7 +16,7 @@ Vue.component("table-cobertura", {
                         <template v-if="dataUpdate.display">
                             
                             <v-row class="d-flex mx-1 mt-2" >
-                                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
+                                    <v-col  cols="12" xl="10" lg="10" md="10" sm="10" xs="10"  >
                                         <h6 class="mb-3 mt-1">Zona actual cubierta por </h6>
                                         <alert-info-user
                                         :info="dataUpdate.data"

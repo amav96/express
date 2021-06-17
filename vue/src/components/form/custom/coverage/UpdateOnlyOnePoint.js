@@ -81,7 +81,7 @@ Vue.component('update-onlyOne-point', {
 
                     </v-row>
                     <template v-if="srcMap !== ''" >
-                        <v-row class="d-flex justify-center flex-column align-content-center" >
+                        <v-row class="success d-flex justify-center flex-column align-content-center" >
                             <v-col  cols="12" xl="8" lg="8" >
                                 <iframe
                                 width="100%"
@@ -96,14 +96,18 @@ Vue.component('update-onlyOne-point', {
                     </template>
 
                     <template >
-                        <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
-                        <v-icon class="mx-1">mdi-calendar-clock</v-icon>
-                        </h6>
-                        <time-schedule
-                        :outlined=true
-                        classCustom="mx-3"
-                        :dense="true"
-                         @setTimeSchedule="timeSchedule = $event" />
+                    <v-row class="mx-0" >
+                        <v-col  cols="12" xl="10" lg="10" md="10" sm="10" xs="10"  >
+                            <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
+                                <v-icon class="mx-1">mdi-calendar-clock</v-icon>
+                            </h6>
+                            <time-schedule
+                            :outlined=true
+                            classCustom=""
+                            :dense="true"
+                            @setTimeSchedule="timeSchedule = $event" />
+                            </v-col>
+                    </v-row>
                     </template>
 
                     <template v-if="error.display" >
