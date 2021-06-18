@@ -144,6 +144,9 @@
                           @click="openDialogChoose('create')"
                           >
                           Crear
+                          <v-icon right>
+                          mdi-plus
+                          </v-icon>
                       </v-btn>
                   </div>
                   <div class="mx-1" >
@@ -151,7 +154,10 @@
                           color="orange"
                           @click="openDialogChoose('update')" 
                           >
-                          Actualizar
+                          <span class="text-white">Actualizar por rango</span>
+                          <v-icon color="white" right>
+                          mdi-arrow-up-down-bold-outline
+                          </v-icon>
                       </v-btn>
                   </div>
                 </div>
