@@ -1048,6 +1048,26 @@ class cobertura{
             return $result;
 
       }
+
+      public function exportAllHistoryCoverage(){
+
+            $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',u.status_process,c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng ,m.motive, c.created_at
+            FROM history_coverage c
+            left JOIN provinceint p ON p.postal_code = c.postal_code
+            LEFT JOIN localities l ON l.postal_code = c.postal_code
+            LEFT JOIN province pr ON pr.id = l.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            LEFT JOIN motives_down_coverage m ON c.motive = m.id
+            GROUP BY c.id order BY c.postal_code ASC;";
+
+            $execute = $this->db->query($sql);
+            if($execute && $execute->num_rows>0){ $result = $execute;}
+            else{$result = false;}
+            return $result;
+
+      }
       // EXPORT FILTER
 
       public function exportFilterCoverage(){
@@ -1116,6 +1136,40 @@ class cobertura{
             or c.type = '$filter' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
            
             GROUP BY c.id ORDER BY  c.postal_code ASC";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+      }
+
+      public function exportFilterHistoryCoverage(){
+
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',
+            c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',u.status_process,c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng ,m.motive, c.created_at
+            FROM history_coverage c
+      	LEFT JOIN postal_code po ON c.postal_code = po.postal_code
+      	left JOIN provinceint p ON p.postal_code = po.postal_code
+      	LEFT JOIN localities l ON l.postal_code = po.postal_code
+      	LEFT JOIN province pr ON pr.id = po.id_province
+      	left JOIN users u ON c.id_user = u.id
+      	LEFT JOIN country co ON po.id_country = co.id
+            LEFT JOIN motives_down_coverage m ON c.motive = m.id
+      	where(
+      	MATCH (pr.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (p.province) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (l.locate) 
+      	AGAINST ('$filter') 
+      	OR
+      	MATCH (co.country) 
+      	AGAINST ('$filter') 
+     	      ) or c.postal_code = '$filter' GROUP BY c.id 
+      	ORDER BY  c.postal_code ASC";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}

@@ -213,10 +213,7 @@ class coberturaController{
 
     }
 
-    
 
-
-  
 
     //BUSCADORES FILTRO
 
@@ -909,6 +906,7 @@ class coberturaController{
     //EXPORT 
 
     public function exportAllCoverage(){
+        Utils::AuthAdmin();
         $export = new Cobertura();
 
         $export = $export->exportAllCoverage();
@@ -927,7 +925,7 @@ class coberturaController{
     }
 
     public function exportCoverageByProvinceInt(){
-
+        Utils::AuthAdmin();
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
         
@@ -953,7 +951,7 @@ class coberturaController{
     }
 
     public function exportCoveragePostalCodeRangeAndCountry(){
-
+        Utils::AuthAdmin();
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
 
@@ -985,7 +983,7 @@ class coberturaController{
     }
 
     public function exportCoverageByUser(){
-
+        Utils::AuthAdmin();
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
         
@@ -1010,11 +1008,30 @@ class coberturaController{
 
     }
 
+    public function exportAllHistoryCoverage(){
+        Utils::AuthAdmin();
+        $export = new cobertura();
+        $export = $export->exportAllHistoryCoverage();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
  
     // EXPORT FILTER
 
     public function exportFilterCoverage(){
-
+        Utils::AuthAdmin();
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
     
@@ -1039,7 +1056,7 @@ class coberturaController{
     }
 
     public function exportFilterCoveragePostalCodeRangeAndCountry(){
-
+        Utils::AuthAdmin();
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
         
@@ -1072,6 +1089,29 @@ class coberturaController{
 
     }
 
+    public function exportFilterHistoryCoverage(){
+        Utils::AuthAdmin();
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $filter = isset($Request->filter) ? $Request->filter : false; 
+                
+        $export = new cobertura();
+        $export->setFilter($filter);
+        $export = $export->exportFilterHistoryCoverage();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
 
     //EXPORT BUILD FILE
 

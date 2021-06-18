@@ -823,9 +823,9 @@
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterAllHistoryCoverage'
                     },
                     export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportAllHistoryCoverage',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterHistoryCoverage',
                     },
                     select : {
                       display: false,
@@ -940,6 +940,8 @@
 
                 },
                 doom : false
+                
+
                 
             }
         },
