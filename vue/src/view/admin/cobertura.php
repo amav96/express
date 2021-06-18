@@ -464,6 +464,7 @@
                 <template v-if="showTable() && MAINRESOURCES.filter.display">
                     <filter-with-pagination
                     :pagination = "MAINRESOURCES.pagination"
+                    :exportExcel ="MAINRESOURCES.exportExcel"
                     :filter="MAINRESOURCES.filter"
                     :dataResponseDB="MAINRESOURCES.table.dataResponseDB" 
                     :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
@@ -480,6 +481,7 @@
                     @restoreOldDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                     @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                     @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
+                    @setOldUrlExport="MAINRESOURCES.exportExcel.url = $event"
                     />
                 </template>
 
@@ -487,8 +489,7 @@
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
                       <excel-export
-                      :url_actions="url_actions"
-                      :parametersDynamicToPaginate="parametersDynamicToPaginate"
+                      :exportExcel="MAINRESOURCES.exportExcel"
                       />
                     </v-row>
                   </div>
@@ -670,9 +671,9 @@
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage'
                     },
                     export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportAllCoverage',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoverage',
                     },
                     select : {
                       display: false,
@@ -709,8 +710,8 @@
                       url : ''
                     },
                     export : {
-                      display : false,
-                      url: '',
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoverageByProvinceInt',
                       url_filter: '',
                     },
                     select : {
@@ -738,9 +739,9 @@
                       url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry'
                     },
                     export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoveragePostalCodeRangeAndCountry',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoveragePostalCodeRangeAndCountry',
                     },
                     select : {
                       display: false,
@@ -766,8 +767,8 @@
                       url : ''
                     },
                     export : {
-                      display : false,
-                      url: '',
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoverageByUser',
                       url_filter: '',
                     },
                     select : {
@@ -852,8 +853,7 @@
                       { text: 'Estado Usuario'},
                       ],
                     }
-                },
-                
+                },    
                 admin : '',  
                 MAINRESOURCES : {
                     url_actions : {
@@ -881,7 +881,7 @@
                     parameters : [],
                     url:'',
                     export:{
-                      display: false,
+                      display: true,
                       url: ''
                     },
                     reset: false,
@@ -918,7 +918,7 @@
                         dataResponseDB: []
                     },
                   itemsButtons:[
-                      { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
+                      { title: 'Zonas cubiertas', icon: 'mdi-map-marker-multiple-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
                       { title: 'Provincias', icon: 'mdi-map-check', methods: '$_showCoverageByProvinceInt' , active : false, color :"bg-blue-custom" },
                       { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_showCoverageByPostalCode', active :  false, color :"bg-blue-custom"},
                       { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showCoverageByUser', active :  false, color :"bg-blue-custom"},

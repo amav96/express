@@ -253,7 +253,7 @@ $(document).on('change', '#getProvincia', function() {
     var idProvincia = $("#getProvincia").val()
     getLocate(idProvincia)
         .then(res => {
-
+            console.log(res)
             var template = ''
             template = showLocate(res)
             $("#getLocate").html(template)

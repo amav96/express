@@ -46,7 +46,7 @@ Vue.component('filter-with-pagination', {
             </v-container>
         </div>
     `,
-    props: ['filter', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination'],
+    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination'],
     data() {
         return {
             data: '',
@@ -55,6 +55,7 @@ Vue.component('filter-with-pagination', {
             oldParametersToCall: [],
             oldDataResponseDB: [],
             oldUrl: [],
+            oldUrlExport: [],
             oldPagination: [],
             alert_flag: false,
             loaderFilter: false,
@@ -91,7 +92,6 @@ Vue.component('filter-with-pagination', {
                             }, 3000);
                             return
                         }
-
                         this.oldParametersToCall = this.parametersDynamicToPaginate
                         this.oldUrl = this.urlTryPagination
                             //setting values for pagination before to fetch new count 
@@ -148,12 +148,14 @@ Vue.component('filter-with-pagination', {
             this.$emit('setParametersDynamicToPagination', newParametersDynamic)
         },
         $exportExcel() {
+            this.oldUrlExport = this.exportExcel.url
             this.$emit("setUrlExportByFilter", this.filter.export.url)
             const filter = this.data
             const newParametersDynamic = {...this.parametersDynamicToPaginate, filter }
             this.$emit("setParametersToExportExcel", newParametersDynamic)
         },
         $oldExportExcel() {
+            this.$emit("setOldUrlExport", this.oldUrlExport)
             this.$emit("setParametersToExportExcel", this.oldParametersToCall)
         }
     },

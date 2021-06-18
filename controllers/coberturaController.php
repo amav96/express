@@ -4,6 +4,7 @@ require_once '../model/cobertura.php';
 require_once '../model/usuario.php';
 require_once '../helpers/utils.php';
 require_once '../config/db.php';
+require_once "../vendor/autoload.php";
 
 session_start();
 $accion = $_GET['cobertura'];
@@ -13,7 +14,11 @@ $cobertura->$accion();
 
 require_once 'model/cobertura.php';
 require_once 'model/usuario.php';
+require_once "vendor/autoload.php";
 }
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class coberturaController{
 
@@ -45,6 +50,102 @@ class coberturaController{
         $count = $get->countAllCoverage();
         if($count){
             $data = $get->getAllCoverage();
+            if($data){
+                $this->showCoverage($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
+
+    public function getCoverageByProvinceInt(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $province = isset($Request->word) ? $Request->word : false; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+    
+        $get = new Cobertura();
+        $get->setProvince($province);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countCoverageByProvinceInt();
+        if($count){
+            $data = $get->getCoverageByProvinceInt();
+            if($data){
+                $this->showCoverage($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
+
+    public function getPostalCodeRangeAndCountry(){
+    
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+    
+
+        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+        $id_country = isset($Request->word->id) ? $Request->word->id : false;
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+
+        $get = new Cobertura();
+        $get->setPostal_code($cp_start);
+        $get->setPostal_code_range($cp_end);
+        $get->setId_country($id_country);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countPostalCodeRangeAndCountry();
+        if($count){
+            $data = $get->getPostalCodeRangeAndCountry();
+            if($data){
+                $this->showCoverage($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }
+
+    
+    public function getCoverageByUsers(){
+        
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $id_user = isset($Request->word) ? $Request->word : false; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+    
+        $get = new Cobertura();
+        $get->setId_user($id_user);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countCoverageByUsers();
+        if($count){
+            $data = $get->getCoverageByUsers();
             if($data){
                 $this->showCoverage($count,$data);
             }else{
@@ -112,100 +213,10 @@ class coberturaController{
 
     }
 
-    public function getPostalCodeRangeAndCountry(){
-    
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $Request =  json_decode($dataRequest);
-
     
 
-        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
-        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
-        $id_country = isset($Request->word->id) ? $Request->word->id : false;
-        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-        $limit = isset($Request->limit) ? $Request->limit : false;
 
-        $get = new Cobertura();
-        $get->setPostal_code($cp_start);
-        $get->setPostal_code_range($cp_end);
-        $get->setId_country($id_country);
-        $get->setFromRow($fromRow);
-        $get->setLimit($limit);
-
-        $count = $get->countPostalCodeRangeAndCountry();
-        if($count){
-            $data = $get->getPostalCodeRangeAndCountry();
-            if($data){
-                $this->showCoverage($count,$data);
-            }else{
-                $object=array('error' => true);
-                $jsonstring = json_encode($object); echo $jsonstring;
-            }
-        }else{
-            $object=array('error' => true);
-            $jsonstring = json_encode($object); echo $jsonstring;
-        }
-    }
-
-    public function getCoverageByUsers(){
-        
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $Request =  json_decode($dataRequest);
-        
-        $id_user = isset($Request->word) ? $Request->word : false; 
-        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-        $limit = isset($Request->limit) ? $Request->limit : false;
-    
-        $get = new Cobertura();
-        $get->setId_user($id_user);
-        $get->setFromRow($fromRow);
-        $get->setLimit($limit);
-
-        $count = $get->countCoverageByUsers();
-        if($count){
-            $data = $get->getCoverageByUsers();
-            if($data){
-                $this->showCoverage($count,$data);
-            }else{
-                $object=array('error' => true);
-                $jsonstring = json_encode($object); echo $jsonstring;
-            }
-        }else{
-            $object=array('error' => true);
-            $jsonstring = json_encode($object); echo $jsonstring;
-        }
-
-    }
-
-    public function getCoverageByProvinceInt(){
-
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $Request =  json_decode($dataRequest);
-        
-        $province = isset($Request->word) ? $Request->word : false; 
-        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-        $limit = isset($Request->limit) ? $Request->limit : false;
-    
-        $get = new Cobertura();
-        $get->setProvince($province);
-        $get->setFromRow($fromRow);
-        $get->setLimit($limit);
-
-        $count = $get->countCoverageByProvinceInt();
-        if($count){
-            $data = $get->getCoverageByProvinceInt();
-            if($data){
-                $this->showCoverage($count,$data);
-            }else{
-                $object=array('error' => true);
-                $jsonstring = json_encode($object); echo $jsonstring;
-            }
-        }else{
-            $object=array('error' => true);
-            $jsonstring = json_encode($object); echo $jsonstring;
-        }
-
-    }
+  
 
     //BUSCADORES FILTRO
 
@@ -894,7 +905,303 @@ class coberturaController{
         return true;
     }
 
+
+    //EXPORT 
+
+    public function exportAllCoverage(){
+        $export = new Cobertura();
+
+        $export = $export->exportAllCoverage();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
+
+    public function exportCoverageByProvinceInt(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $province = isset($Request->word) ? $Request->word : false; 
+    
+        $export = new Cobertura();
+        $export->setProvince($province);
+
+        $export = $export->exportCoverageByProvinceInt();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
+    public function exportCoveragePostalCodeRangeAndCountry(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+        $id_country = isset($Request->word->id) ? $Request->word->id : false;
+    
+        $export = new Cobertura();
+        $export->setPostal_code($cp_start);
+        $export->setPostal_code_range($cp_end);
+        $export->setId_country($id_country);
+
+        $export = $export->exportCoveragePostalCodeRangeAndCountry();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+
+
+    }
+
+    public function exportCoverageByUser(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $id_user = isset($Request->word) ? $Request->word : false; 
+      
+        $export = new Cobertura();
+        $export->setId_user($id_user);
+
+        $export = $export->exportCoverageByUser();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
+ 
+    // EXPORT FILTER
+
+    public function exportFilterCoverage(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+    
+        $filter = isset($Request->filter) ? $Request->filter : false; 
+
+        $export = new Cobertura();
+        $export->setFilter($filter);
+        $export = $export->exportFilterCoverage();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
+    public function exportFilterCoveragePostalCodeRangeAndCountry(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+        $id_country = isset($Request->word->id) ? $Request->word->id : false;
+        $filter = isset($Request->filter) ? $Request->filter : false; 
+        
+    
+        $export = new Cobertura();
+        $export->setFilter($filter);
+        $export->setPostal_code($cp_start);
+        $export->setPostal_code_range($cp_end);
+        $export->setId_country($id_country);
+        $export->setFilter($filter);
+
+        $export = $export->exportFilterCoveragePostalCodeRangeAndCountry();
+        if($export){
+           $buildFile = $this->exportFileCoverage($export);
+           if($buildFile){
+                $object = array(
+                'success' => true,
+                'path' => $buildFile
+                );
+            }else{$object = array('error' => 'not_build');}
+        }else{$object = array('error' => 'not_data');}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
+
+    //EXPORT BUILD FILE
+
+    public function exportFileCoverage($data){
+
+            foreach($data as $element){
+                 $arrayRow[] =  array(
+                     'id' => $element["id"],
+                     'postal_code' => $element["postal_code"],
+                     'locate' => $element["locate"],
+                     'home_address' => $element["home_address"], 
+                     'provinceInt' => $element["provinceInt"], 
+                     'province' => $element["province"],
+                     'name_country' => $element['name_country'],
+                     'type' => $element["type"],
+                     'id_user' => $element["id_user"],
+                     'name_assigned' => $element["name_assigned"].' '.$element["name_alternative"],
+                     'timeScheduleA' => $element["timeScheduleA"],
+                     'timeScheduleB' => $element["timeScheduleB"],
+                     'lat' => $element["lat"],
+                     'lng' => $element["lng"],
+                     'created_at' => $this->getDataTime($element["created_at"])
+                 );
+            }
+            
+                $header=array(
+                    'id',
+                    'codigo postal',
+                    'localidad',
+                    'direccion',
+                    'Provincia Interna',
+                    'Provincia',
+                    'Pais',
+                    'Tipo',
+                    'id_usuario',
+                    'Nombre Usuario',
+                    'Horario Comercio',
+                    'Horario Correo/Terminal',
+                    'lat',
+                    'lng',
+                    'fecha creación',
+                );
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->fromArray([$header], NULL, 'A1');
+                    $columnArray = array_chunk($arrayRow, 1);
+                    $rowCount = 1;
+    
+                    foreach($columnArray as $element){
+                        $rowCount++;
+            
+                        $sheet->setCellValue('A'.$rowCount, $element[0]["id"]);
+                        $sheet->setCellValue('B'.$rowCount, $element[0]["postal_code"]);
+                        $sheet->setCellValue('C'.$rowCount, $element[0]["locate"]);
+                        $sheet->setCellValue('D'.$rowCount, $element[0]["home_address"]);
+                        $sheet->setCellValue('E'.$rowCount, $element[0]["provinceInt"]);
+                        $sheet->setCellValue('F'.$rowCount, $element[0]["province"]);
+                        $sheet->setCellValue('G'.$rowCount, $element[0]["name_country"]);
+                        $sheet->setCellValue('H'.$rowCount, $element[0]["type"]);
+                        $sheet->setCellValue('I'.$rowCount, $element[0]["id_user"]);
+                        $sheet->setCellValue('J'.$rowCount, $element[0]["name_assigned"]);
+                        $sheet->setCellValue('K'.$rowCount, $element[0]["timeScheduleA"]);
+                        $sheet->setCellValue('L'.$rowCount, $element[0]["timeScheduleB"]);
+                        $sheet->setCellValue('M'.$rowCount, $element[0]["lat"]);
+                        $sheet->setCellValue('N'.$rowCount, $element[0]["lng"]);
+                        $sheet->setCellValue('O'.$rowCount, $element[0]["created_at"]);
+                    }
+                    
+            $writer = new Xlsx($spreadsheet);
+            # Le pasamos la ruta de guardado
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $momento = date('d-m-Y H-i-s');
+            //Este formato de hora esta asi para poder crear el archivo
+            $path = '../resources/excel/reporteCobertura'.$momento.'.xlsx';
+            // ../ para hacerlo desde ajax Y sin el ../ para hacerlos desde php directo
+            $pathFront = 'reporteCobertura'.$momento.'.xlsx';
+            $writer->save($path);
+    
+            if(file_exists($path)){
+                $result = $pathFront;
+            }else {
+                $result = false;
+            }
+            return $result ;
+    }
+
     // SCOPE
+
+    //NO BORRAR ESTE METODO PORQUE ESTE METODO LO OCUPA EL REGISTRO DE USUARIOS
+    public function getLocate(){
+
+        if($_POST["id_province"] && $_POST["id_country"]){
+    
+            $id_province = $_POST["id_province"];
+            $id_country = $_POST["id_country"];
+        }else{
+            $id_province = isset($_POST['object']['id_province']) ? $_POST['object']['id_province'] : false ;
+            $id_country = isset($_POST['object']['id_country']) ? $_POST['object']['id_country'] : false ;
+        }
+    
+       $get = new cobertura;
+       $get->setProvince($id_province);
+       $get->setId_country($id_country);
+       $get = $get->locate();
+    
+       if(is_object($get)){
+    
+          foreach($get as $locate){
+    
+            $object[] = array(
+                'result' => '1',
+                'locate' => $locate["locate"],
+                'postal_code' => $locate["postal_code"]
+            );
+    
+          }
+    
+       }else{
+    
+        $object[] = array(
+    
+            'result' => '2'
+        );
+    
+       }
+    
+       $jsonstring =  json_encode($object);
+       echo $jsonstring;
+    
+    }
 
 
     public function getCountry(){
