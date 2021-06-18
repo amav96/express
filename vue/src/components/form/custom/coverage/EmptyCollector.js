@@ -1,18 +1,7 @@
 Vue.component('empty-collector', {
     template: //html 
         `<div>
-        
-            <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Zona a ocupar
-                <v-icon class="mx-1">mdi-map-search-outline</v-icon>
-            </h6>
-            <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
-                <template class="mx-auto" v-if="resource.data !== 0">
-                <alert-info-user
-                :info="resource.data"
-                />         
-                </template>  
-            </v-col>
-
+    
             <v-row class=" d-flex justify-start flex-column ma-1 my-0" >
                 <template v-if="error.display" >
                             <v-alert

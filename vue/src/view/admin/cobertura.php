@@ -185,10 +185,39 @@
                     />
                 </template>
 
-                <template v-if="formRangeNumberAndWord.display">
+                <template v-if="showCoverageByProvinceInt.display" >
+                  <form-id
+                      :resources="showCoverageByProvinceInt"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
+                  />
+                </template>
+
+                <template v-if="showCoverageByPostalCode.display">
                     <v-col  class="d-flex justify-center m-2"  cols="12" lg="12"  >
                       <form-number-and-word
-                        :resources="formRangeNumberAndWord"
+                        :resources="showCoverageByPostalCode"
                         :pagination="MAINRESOURCES.pagination"
                         @showPagination="MAINRESOURCES.pagination.display = $event"
                         @resetPagination="MAINRESOURCES.pagination = $event"
@@ -214,6 +243,35 @@
                         @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"         
                       />
                     </v-col>
+                </template>
+
+                <template v-if="showCoverageByUser.display" >
+                  <form-id
+                      :resources="showCoverageByUser"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
+                  />
                 </template>
 
                 <template v-if="showAllEmptyCoverage.display">
@@ -273,36 +331,6 @@
                       @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
                     />
                 </template>
-
-                <template v-if="showZoneByUser.display" >
-                  <form-id
-                      :resources="showZoneByUser"
-                      :pagination="MAINRESOURCES.pagination"
-                      @showPagination="MAINRESOURCES.pagination.display = $event"
-                      @resetPagination="MAINRESOURCES.pagination = $event"
-                      @loadingTable="MAINRESOURCES.table.loading = $event"
-                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
-                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
-                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
-                      @response="MAINRESOURCES.table.dataResponseDB = $event"
-                      @showTable="MAINRESOURCES.table.display = $event"
-                      @setErrorGlobal="MAINRESOURCES.error = $event"
-                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
-                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
-                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
-                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
-                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
-                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
-                      @setShowFilter="MAINRESOURCES.filter.display = $event"
-                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
-                      @filtering="MAINRESOURCES.filter.filtering = $event"
-                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
-                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
-                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
-                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
-                  />
-                </template>
-
 
                 <template>
                       <message-snack
@@ -468,7 +496,7 @@
                 </template>
               
                 <template v-if="showTable()">
-                  <template v-if="formRangeNumberAndWord.display || showAllCoverage.display || showZoneByUser.display">
+                  <template v-if="showCoverageByPostalCode.display || showCoverageByProvinceInt.display  || showAllCoverage.display || showCoverageByUser.display">
                     <table-cobertura
                         :admin="admin"
                         :columns="MAINRESOURCES.columns"
@@ -628,34 +656,6 @@
                     ],
                   }
                 },
-                formRangeNumberAndWord : {
-                    display : true,
-                    url: {
-                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
-                    },
-                    subheader: {
-                      display : false,
-                      url :''
-                    },
-                    filter : {
-                      display: true,
-                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry'
-                    },
-                    export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
-                    },
-                    select : {
-                      display: false,
-                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
-                      title: 'Pais',
-                      class: '',
-                      outlined: false,
-                      dense: false
-                    },
-                    pagination:true, 
-                },
                 showAllCoverage : {
                     display : false,
                     url: {
@@ -694,6 +694,91 @@
                       ],
                     }
                     
+                },
+                showCoverageByProvinceInt : {
+                    display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCoverageByProvinceInt',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : ''
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER +  'coberturaController.php?cobertura=getAllProvinceInt',
+                      title: 'Provincia',
+                      class: 'mx-4',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true,
+                    
+                },
+                showCoverageByPostalCode : {
+                    display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getPostalCodeRangeAndCountry',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterByWordByPostalCodeRangeAndCountry'
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
+                      title: 'Pais',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true, 
+                },
+                showCoverageByUser : {
+                    display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCoverageByUsers',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : ''
+                    },
+                    export : {
+                      display : false,
+                      url: '',
+                      url_filter: '',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getAllUserCollectorAndCommerce',
+                      title: 'Usuario',
+                      class: 'mx-4',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true,
                 },
                 showAllEmptyCoverage : {
                     display : false,
@@ -768,34 +853,7 @@
                       ],
                     }
                 },
-                showZoneByUser : {
-                    display : false,
-                    url: {
-                      getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCoverageByUsers',
-                    },
-                    subheader: {
-                      display : false,
-                      url :''
-                    },
-                    filter : {
-                      display: false,
-                      url : ''
-                    },
-                    export : {
-                      display : false,
-                      url: '',
-                      url_filter: '',
-                    },
-                    select : {
-                      display: false,
-                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getAllUserCollectorAndCommerce',
-                      title: 'Usuario',
-                      class: 'mx-4',
-                      outlined: false,
-                      dense: false
-                    },
-                    pagination:true,
-                },
+                
                 admin : '',  
                 MAINRESOURCES : {
                     url_actions : {
@@ -861,10 +919,12 @@
                     },
                   itemsButtons:[
                       { title: 'Mostrar asignado', icon: 'mdi-map-search-outline', methods: '$_showAllCoverage' , active : false, color :"bg-blue-custom" },
-                      { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_formRangeNumberAndWord', active :  true, color :"bg-blue-custom"},
+                      { title: 'Provincias', icon: 'mdi-map-check', methods: '$_showCoverageByProvinceInt' , active : false, color :"bg-blue-custom" },
+                      { title: 'Codigo postal', icon: 'mdi-flag-triangle', methods: '$_showCoverageByPostalCode', active :  false, color :"bg-blue-custom"},
+                      { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showCoverageByUser', active :  false, color :"bg-blue-custom"},
                       { title: 'Zonas vacias', icon: 'mdi-alert-circle-outline', methods: '$_showAllEmptyCoverage', active :  false, color :"bg-blue-custom"},
                       { title: 'Historial Inactivo', icon: 'mdi-history', methods: '$_showAllHistory', active :  false, color :"bg-blue-custom"},
-                      { title: 'Usuarios asignados', icon: 'mdi-account', methods: '$_showZoneByUser', active :  false, color :"bg-blue-custom"},
+                      
                   ],
                   error: {
                     type: null,
@@ -943,91 +1003,124 @@
           },
           $_showAllCoverage(){
             this.MAINRESOURCES.table.display = false
-            this.formRangeNumberAndWord.display = false
-            this.showAllEmptyCoverage.display = false
             this.showAllCoverage.display = false 
+            this.showCoverageByProvinceInt.display = false
+            this.showCoverageByPostalCode.display = false
+            this.showCoverageByUser.display = false
+            this.showAllEmptyCoverage.display = false
             this.showAllHistory.display = false
-            this.showZoneByUser.display = false
+            
             this.$nextTick(() => {
               this.showAllCoverage.display = true
               this.MAINRESOURCES.itemsButtons[0].active = true //todo
-              this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
-              this.MAINRESOURCES.itemsButtons[2].active = false //empty
-              this.MAINRESOURCES.itemsButtons[3].active = false //history
-              this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
+              this.MAINRESOURCES.itemsButtons[1].active = false //province
+              this.MAINRESOURCES.itemsButtons[2].active = false //postal code
+              this.MAINRESOURCES.itemsButtons[3].active = false //user
+              this.MAINRESOURCES.itemsButtons[4].active = false //empty
+              this.MAINRESOURCES.itemsButtons[5].active = false //history
             })  
+          },
+          $_showCoverageByProvinceInt(){
+            this.MAINRESOURCES.table.display = false
+            this.showAllCoverage.display = false 
+            this.showCoverageByProvinceInt.display = false
+            this.showCoverageByPostalCode.display = false
+            this.showCoverageByUser.display = false
+            this.showAllEmptyCoverage.display = false
+            this.showAllHistory.display = false
+
+            this.$nextTick(() => {
+              this.showCoverageByProvinceInt.display = true
+              this.MAINRESOURCES.itemsButtons[0].active = false //todo
+              this.MAINRESOURCES.itemsButtons[1].active = true //province
+              this.MAINRESOURCES.itemsButtons[2].active = false //postal code
+              this.MAINRESOURCES.itemsButtons[3].active = false //user
+              this.MAINRESOURCES.itemsButtons[4].active = false //empty
+              this.MAINRESOURCES.itemsButtons[5].active = false //history
+            });
+
+          },
+          $_showCoverageByPostalCode(){
+              this.MAINRESOURCES.table.display = false
+              this.showAllCoverage.display = false 
+              this.showCoverageByProvinceInt.display = false
+              this.showCoverageByPostalCode.display = false
+              this.showCoverageByUser.display = false
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
+              
+            this.$nextTick(() => {
+              this.showCoverageByPostalCode.display = true
+              this.MAINRESOURCES.itemsButtons[0].active = false //todo
+              this.MAINRESOURCES.itemsButtons[1].active = false //province
+              this.MAINRESOURCES.itemsButtons[2].active = true //postal code
+              this.MAINRESOURCES.itemsButtons[3].active = false //user
+              this.MAINRESOURCES.itemsButtons[4].active = false //empty
+              this.MAINRESOURCES.itemsButtons[5].active = false //history
+            });
+          },
+          $_showCoverageByUser(){
+              this.MAINRESOURCES.table.display = false
+              this.showAllCoverage.display = false  
+              this.showCoverageByProvinceInt.display = false
+              this.showCoverageByPostalCode.display = false
+              this.showCoverageByUser.display = false
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
+              
+           
+              this.$nextTick(() => {
+                this.showCoverageByUser.display = true
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //province
+                this.MAINRESOURCES.itemsButtons[2].active = false //postal code
+                this.MAINRESOURCES.itemsButtons[3].active = true //user
+                this.MAINRESOURCES.itemsButtons[4].active = false //empty
+                this.MAINRESOURCES.itemsButtons[5].active = false //history
+              });
+              
           },
           $_showAllEmptyCoverage(){
             this.MAINRESOURCES.table.display = false
-            this.formRangeNumberAndWord.display = false
-            this.showAllCoverage.display = false  
-            this.showAllEmptyCoverage.display = false
-            this.showAllHistory.display = false
-            this.showZoneByUser.display = false
+              this.showAllCoverage.display = false  
+              this.showCoverageByProvinceInt.display = false
+              this.showCoverageByPostalCode.display = false
+              this.showCoverageByUser.display = false
+              this.showAllEmptyCoverage.display = false
+              this.showAllHistory.display = false
            
               this.$nextTick(() => {
                 this.showAllEmptyCoverage.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
-                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
-                this.MAINRESOURCES.itemsButtons[2].active = true //empty
-                this.MAINRESOURCES.itemsButtons[3].active = false //history
-                this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
+                this.MAINRESOURCES.itemsButtons[1].active = false //province
+                this.MAINRESOURCES.itemsButtons[2].active = false //postal code
+                this.MAINRESOURCES.itemsButtons[3].active = false //user
+                this.MAINRESOURCES.itemsButtons[4].active = true //empty
+                this.MAINRESOURCES.itemsButtons[5].active = false //history
               });
               
           },
-          $_formRangeNumberAndWord(){
-              this.MAINRESOURCES.table.display = false
-              this.showAllCoverage.display = false
-              this.showAllEmptyCoverage.display = false
-              this.formRangeNumberAndWord.display = true
-              this.showAllHistory.display = false
-              this.showZoneByUser.display = false
-              
-            this.$nextTick(() => {
-              this.MAINRESOURCES.itemsButtons[0].active = false //todo
-              this.MAINRESOURCES.itemsButtons[1].active = true //rangeNumber
-              this.MAINRESOURCES.itemsButtons[2].active = false //empty
-              this.MAINRESOURCES.itemsButtons[3].active = false //history
-              this.MAINRESOURCES.itemsButtons[4].active = false //user 
-              // si no queres mostrar la tabla al llegar aca, solo escondela
-            });
-          },
           $_showAllHistory(){
               this.MAINRESOURCES.table.display = false
-              this.formRangeNumberAndWord.display = false
               this.showAllCoverage.display = false  
+              this.showCoverageByProvinceInt.display = false
+              this.showCoverageByPostalCode.display = false
+              this.showCoverageByUser.display = false
               this.showAllEmptyCoverage.display = false
               this.showAllHistory.display = false
-              this.showZoneByUser.display = false
            
               this.$nextTick(() => {
                 this.showAllHistory.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
-                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
-                this.MAINRESOURCES.itemsButtons[2].active = false //empty
-                this.MAINRESOURCES.itemsButtons[3].active = true //history
-                this.MAINRESOURCES.itemsButtons[4].active = false //user by zone
+                this.MAINRESOURCES.itemsButtons[1].active = false //province
+                this.MAINRESOURCES.itemsButtons[2].active = false //postal code
+                this.MAINRESOURCES.itemsButtons[3].active = false //user
+                this.MAINRESOURCES.itemsButtons[4].active = false //empty
+                this.MAINRESOURCES.itemsButtons[5].active = true //history
               });
               
           },
-          $_showZoneByUser(){
-              this.MAINRESOURCES.table.display = false
-              this.formRangeNumberAndWord.display = false
-              this.showAllCoverage.display = false  
-              this.showAllEmptyCoverage.display = false
-              this.showAllHistory.display = false
-              this.showZoneByUser.display = false
-           
-              this.$nextTick(() => {
-                this.showZoneByUser.display = true
-                this.MAINRESOURCES.itemsButtons[0].active = false //todo
-                this.MAINRESOURCES.itemsButtons[1].active = false //rangeNumber
-                this.MAINRESOURCES.itemsButtons[2].active = false //empty
-                this.MAINRESOURCES.itemsButtons[3].active = false //history
-                this.MAINRESOURCES.itemsButtons[4].active = true ////user
-              });
-              
-          },
+          
           getAdmin(){
 
             if(document.getElementById("id_user_default") === null){
@@ -1094,6 +1187,7 @@
         }, 
         mounted() {
           this.doom = true
+          this.$_showAllCoverage()
         },
         destroyed() {
           this.doom = false

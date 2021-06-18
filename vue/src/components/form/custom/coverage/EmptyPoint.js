@@ -1,17 +1,7 @@
 Vue.component('empty-point', {
     template: //html 
         `<div>
-                    <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Zona a ocupar
-                        <v-icon class="mx-1">mdi-map-search-outline</v-icon>
-                    </h6>
-                    <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
-                        <template class="mx-auto" v-if="resource.data !== 0">
-                        <alert-info-user
-                        :info="resource.data"
-                        />         
-                        </template>  
-                    </v-col>
-
+                
                 <template v-if="errorGeocoding !== ''">
                     <v-row class="d-flex justify-center mx-2" >
                         <v-col cols="12">
@@ -89,27 +79,31 @@ Vue.component('empty-point', {
 
                 </v-row>
                 <template v-if="srcMap !== ''" >
-                    <v-row class="d-flex justify-center flex-column align-content-center" >
-                        <v-col  cols="12" xl="8" lg="8" >
-                            <iframe
-                            width="100%"
-                            height="450"
-                            style="border:0"
-                            loading="lazy"
-                            allowfullscreen
-                            :src="srcImgMap()">
-                            </iframe>
-                        </v-col>
-                    </v-row>
+                    <v-col class="ml-1" cols="12" xl="6" lg="6" >
+                                <iframe
+                                width="100%"
+                                height="450"
+                                style="border:0"
+                                loading="lazy"
+                                allowfullscreen
+                                class="mx-auto"
+                                :src="srcImgMap()">
+                                </iframe>
+                    </v-col>
                 </template>
 
                 <template >
+                    <v-col class="mx-1" cols="12" xl="10" lg="10">
                     <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
                         <v-icon class="mx-1">mdi-calendar-clock</v-icon>
                     </h6>
                     <time-schedule
                     ref="resetTimeSchedule"
+                    :outlined=true
+                    classCustom=""
+                    :dense="true"
                     @setTimeSchedule="timeSchedule = $event" />
+                    </v-col>
                 </template>
 
 

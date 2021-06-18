@@ -81,18 +81,17 @@ Vue.component('update-onlyOne-point', {
 
                     </v-row>
                     <template v-if="srcMap !== ''" >
-                        <v-row class="success d-flex justify-center flex-column align-content-center" >
-                            <v-col  cols="12" xl="8" lg="8" >
-                                <iframe
-                                width="100%"
-                                height="450"
-                                style="border:0"
-                                loading="lazy"
-                                allowfullscreen
-                                :src="srcImgMap()">
-                                </iframe>
-                            </v-col>
-                        </v-row>
+                        <v-col class="ml-1" cols="12" xl="6" lg="6" >
+                                    <iframe
+                                    width="100%"
+                                    height="450"
+                                    style="border:0"
+                                    loading="lazy"
+                                    allowfullscreen
+                                    class="mx-auto"
+                                    :src="srcImgMap()">
+                                    </iframe>
+                        </v-col>
                     </template>
 
                     <template >

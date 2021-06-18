@@ -1189,6 +1189,7 @@
                     $exe =  $this->db->query($sql);
                     if($exe && $exe->num_rows>0){$result = $exe;}
                     else {$result = false;}
-                    return $result;}
+                    return $result;
+                }
 
  }

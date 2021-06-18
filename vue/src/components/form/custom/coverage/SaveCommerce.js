@@ -112,18 +112,17 @@ Vue.component('save-commerce', {
                             </v-row>
 
                             <template v-if="srcMap !== ''" >
-                                <v-row class="d-flex justify-center flex-column align-content-center" >
-                                    <v-col  cols="12" xl="8" lg="8" >
-                                        <iframe
-                                        width="100%"
-                                        height="450"
-                                        style="border:0"
-                                        loading="lazy"
-                                        allowfullscreen
-                                        :src="srcImgMap()">
-                                        </iframe>
-                                    </v-col>
-                                </v-row>
+                                <v-col class="pa-0" cols="12" xl="6" lg="6" >
+                                            <iframe
+                                            width="100%"
+                                            height="450"
+                                            style="border:0"
+                                            loading="lazy"
+                                            allowfullscreen
+                                            class="mx-auto"
+                                            :src="srcImgMap()">
+                                            </iframe>
+                                </v-col>
                             </template>
                             <h6 class=" my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el {{returnType()}} )
                                 <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>

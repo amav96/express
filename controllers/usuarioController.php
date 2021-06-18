@@ -18,6 +18,7 @@ class usuarioController
 
      public function viewLogin()
      {
+          Utils::detectTypeUser();
           $info = $this->detect();
           require_once 'views/login/login.php';
      }
@@ -92,9 +93,9 @@ class usuarioController
      public function login()
      {
 
+    
+
           if ($_POST) {
-
-
                $usernameRecibo = isset($_POST["username"]) ? $_POST["username"] : false;
 
                $password = isset($_POST["password"]) ? $_POST["password"] : false;
@@ -1625,7 +1626,7 @@ class usuarioController
                       'success' => true,
                       'id' => $element["id"],
                       'name_user' => $element["name_user"],
-                      'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.$element["role"],
+                      'slug' => $element["name_user"].' '.$element["name_alternative"].' '.'ID: '.$element["id"].' '.$element["role"],
                   );
               }
               

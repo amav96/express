@@ -33,7 +33,18 @@ Vue.component("table-empty-coverage", {
 
                 <template v-if="dialogFullScreen.display" >
                     <d-full-screen :dialogFullScreen="dialogFullScreen">
-                            <v-row class="d-flex mx-1 mt-2" >
+                            <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Zona a ocupar
+                            <v-icon class="mx-1">mdi-map-search-outline</v-icon>
+                            </h6>
+                            <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
+                                <template class="mx-auto" v-if="emptyCoverage.data !== 0">
+                                <alert-info-user
+                                :info="emptyCoverage.data"
+                                />         
+                                </template>  
+                            </v-col>
+
+                            <v-row class="d-flex mx-0 mt-2" >
                                 <v-col class="my-1" cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                                     <h6 class="mb-6 d-flex justify-start align-items-center">Tipo de asignado 
                                     <v-icon class="mx-1">mdi-map-marker-plus-outline</v-icon>
@@ -120,7 +131,7 @@ Vue.component("table-empty-coverage", {
                                                         </v-icon>
                                                     </v-btn>
                                                 </template>
-                                                <span>Cubrir</span>
+                                                <span>Asignar zona</span>
                                             </v-tooltip>
                                         </div>
                                     </td>

@@ -47,24 +47,22 @@ if(class_exists($nombre_controlador)){
 ?>
 
 <script>
- const base_url = "http://localhost/express/";
- 
+const base_url = "http://localhost/express/";
+// function inactividad() {
+//       localStorage.clear();
+//       window.location.href = base_url+"/usuario/logOut";
+// }
 
+//     var t = null;
 
-function inactividad() {
-      localStorage.clear();
-      window.location.href = base_url+"/usuario/logOut";
-    }
-    var t = null;
-
-    function contadorInactividad() {
-      t = setTimeout("inactividad()", 20000000);
-    }
-    window.onblur = window.onmousemove = function() {
-      if (t) clearTimeout(t);
-      contadorInactividad();
-    }
-
+//     function contadorInactividad() {
+//       t = setTimeout("inactividad()", 20000000);                        
+//     //   t = setTimeout("inactividad()", 5000);
+//     }
+//     window.onblur = window.onmousemove = function() {
+//       if (t) clearTimeout(t);
+//       contadorInactividad();
+//     }
 </script>
 
 

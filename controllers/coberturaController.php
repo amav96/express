@@ -177,6 +177,35 @@ class coberturaController{
 
     }
 
+    public function getCoverageByProvinceInt(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        
+        $province = isset($Request->word) ? $Request->word : false; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+    
+        $get = new Cobertura();
+        $get->setProvince($province);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countCoverageByProvinceInt();
+        if($count){
+            $data = $get->getCoverageByProvinceInt();
+            if($data){
+                $this->showCoverage($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
 
     //BUSCADORES FILTRO
 
@@ -893,11 +922,11 @@ class coberturaController{
         $id = isset($_GET['id']) ? $_GET['id'] : false ;
         if($id){
 
-            $getProvinceById = new Cobertura();
-            $getProvinceById->setId($id);
-            $getProvinceById = $getProvinceById->getProvinceById();
-            if($getProvinceById){
-                foreach ($getProvinceById as $element){
+            $get = new Cobertura();
+            $get->setId($id);
+            $get = $get->getProvinceById();
+            if($get){
+                foreach ($get as $element){
                     $object[]=array(
                         'id'    => $element["id"],
                         'slug'  => $element["province"]
@@ -912,6 +941,31 @@ class coberturaController{
             $jsonstring = json_encode($object);
             echo $jsonstring;
         }
+    }
+
+    public function getAllProvinceInt(){
+
+
+            $get = new Cobertura();
+         
+            $get = $get->getAllProvinceInt();
+            if($get){
+                foreach ($get as $element){
+                    $object[]=array(
+                        'id'    => $element["province"],
+                        'slug'  => $element["province"]
+                    );
+                }
+            }else {
+                $object = array(
+                    'error' => true
+                );
+            }
+        
+            $jsonstring = json_encode($object);
+            echo $jsonstring;
+        
+        
     }
 
     public function getLocateById(){

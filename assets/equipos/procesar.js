@@ -936,7 +936,7 @@ var registrarInactividad = function() {
 
     function reiniciarTiempo() {
         clearTimeout(t);
-        t = setTimeout(tiempoExcedido, 900000)
+        t = setTimeout(tiempoExcedido, 10800000)
             // 1000 milisegundos = 1 segundo
     }
 };

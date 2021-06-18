@@ -17,10 +17,10 @@ class Utils{
     }
 
     public static function AuthCollector(){
+
         if(isset($_SESSION["username"])){
 
          
-
             if($_SESSION["username"]->role === 'call'){
                 header("Location:".base_url);
                 return;
@@ -35,6 +35,7 @@ class Utils{
                 header("Location:".base_url.'usuario/viewLogin');
                 return;
             }
+
         }else{
             header("Location:".base_url.'usuario/viewLogin');
             return;
@@ -71,6 +72,24 @@ class Utils{
             header("Location:".base_url.'usuario/viewLogin');
         }
        
+    }
+
+    public static function detectTypeUser(){
+
+        if(isset($_SESSION) && $_SESSION){
+
+            if($_SESSION["username"]->role === 'admin'){
+                header("Location:".base_url.'usuario/admin');
+           }
+           if($_SESSION["username"]->role === 'recolector'){
+                header("Location:".base_url.'equipo/collector');
+           }
+           if($_SESSION["username"]->role === 'call'){
+            header("Location:".base_url);
+           }
+        }
+
+    
     }
 
     
