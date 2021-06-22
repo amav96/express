@@ -455,7 +455,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter'";
+     	      ) or c.postal_code = '$filter' or c.type = '$filter'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -770,7 +770,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter' GROUP BY c.id 
+     	      ) or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id 
       	ORDER BY  c.postal_code ASC limit $fromRow,$limit ";
 
             $exe = $this->db->query($sql);
@@ -793,7 +793,7 @@ class cobertura{
               }
 
                   $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
                   left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -821,7 +821,7 @@ class cobertura{
               }
 
                   $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
                   left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -1159,7 +1159,7 @@ class cobertura{
       	OR
       	MATCH (co.country) 
       	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter' GROUP BY c.id 
+     	      ) or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id 
       	ORDER BY  c.postal_code ASC";
 
             $exe = $this->db->query($sql);
