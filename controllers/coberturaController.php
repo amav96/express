@@ -535,13 +535,14 @@ class coberturaController{
         $object= false;
         $process = false;
         foreach ($Request as $element){
+           
             if (gettype($element) === 'array'){
-               
                 foreach ($element as $childElement){
                     $update->setId($childElement->id);
                     $update->setPostal_code($childElement->postal_code);
 
                         if($type === 'recolector' || $type === 'comercio'){
+                            
                             if(!$update->verifyExist()){
                                 if($update->removeToHistory()){
                                     if($update->update()){
@@ -550,8 +551,11 @@ class coberturaController{
                                     } else {$object=array('error' => 'not_update');}
                                 } else {$object=array('error' => 'not_removeToHistory');}
                             }else {
+                                // ya existe en el codigo postal, el que estamos tratando de ingresar.
                                 if($update->removeToHistory()){
-                                    if($update->delete()){true;}
+                                    if($update->delete()){
+                                        $process = true;
+                                    }
                                     else {$object=array('error' => 'not_delete');}
                                 }else {$object=array('error' => 'not_removeToHistory');}
                             }
@@ -569,7 +573,7 @@ class coberturaController{
                             }else {
                                 if($update->removeToHistory()){
                                     if($update->delete()){
-                                       true;
+                                        $process = true;
                                     }else {$object=array('error' => 'not_delete');}
                                 }else {$object=array('error' => 'not_removeToHistory');}
                             }
@@ -579,15 +583,22 @@ class coberturaController{
         }
 
         if($process){
+            // cuando solo remueve y elimina porque ya existe el usuario, 
+            //el idFinally sera vacio
             $idFinally = array_filter($idModified);
-            $update->setId($idFinally);
-            $get = $update->getCodesById();
-            if($get){
-            $this->showSimpleCoverage($get);
+            if(count($idFinally) > 0){
+                $update->setId($idFinally);
+                $get = $update->getCodesById();
+                if($get){
+                $this->showSimpleCoverage($get);
+                }
+            }else{
+                $object=array('success' => 'only_one_and_same');
+                $jsonstring = json_encode($object);echo $jsonstring;
             }
-        }
-        else {$object=array('error' => 'not_process');}
-        if(is_array($object)){
+           
+        }else {
+            $object=array('error' => 'not_process');
             $jsonstring = json_encode($object);echo $jsonstring;
         }
     }

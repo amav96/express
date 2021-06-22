@@ -143,7 +143,7 @@
                           color="primary" 
                           @click="openDialogChoose('create')"
                           >
-                          Crear
+                          Crear zona
                           <v-icon right>
                           mdi-plus
                           </v-icon>
@@ -154,7 +154,7 @@
                           color="orange"
                           @click="openDialogChoose('update')" 
                           >
-                          <span class="text-white">Actualizar por rango</span>
+                          <span class="text-white">Actualizar zona por cp</span>
                           <v-icon color="white" right>
                           mdi-arrow-up-down-bold-outline
                           </v-icon>
@@ -363,6 +363,7 @@
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                         @setDialogDisplay="dialogFullScreen.display = $event"
                         @setSnack="MAINRESOURCES.snackbar = $event"
@@ -380,6 +381,7 @@
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                         @setDialogDisplay="dialogFullScreen.display = $event"
                         @setSnack="MAINRESOURCES.snackbar = $event"
@@ -397,6 +399,7 @@
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
                         @showTable="MAINRESOURCES.table.display = $event"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
+                        @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                         @setDialogDisplay="dialogFullScreen.display = $event"
                         @setSnack="MAINRESOURCES.snackbar = $event"
@@ -414,6 +417,7 @@
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                       @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="MAINRESOURCES.snackbar = $event"
@@ -429,6 +433,7 @@
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                       @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="MAINRESOURCES.snackbar = $event"
@@ -443,6 +448,7 @@
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                       @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
                       @setDialogDisplay="dialogFullScreen.display = $event"
                       @setSnack="MAINRESOURCES.snackbar = $event"
@@ -1311,7 +1317,15 @@
     }
 
     /* inputs */
-  
+
+    /* v-tolbar */
+
+    .fixed-bar {
+  position: sticky;
+  position: -webkit-sticky; /* for Safari */
+  top: 0.1px;
+  z-index: 2;
+}  
 
     
 </style>

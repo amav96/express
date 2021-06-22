@@ -280,7 +280,8 @@ Vue.component('update-collector', {
                         return
                     }
 
-                    this.$success(res)
+                    if (res.data.data) this.$success(res)
+                    if (res.data.success === 'only_one_and_same') this.$successEmptyResponse();
                 })
                 .catch(err => {
                     this.saveLoading = false
@@ -294,7 +295,17 @@ Vue.component('update-collector', {
             this.$emit('response', res.data.data)
             this.$emit('showTable', true)
             this.$emit('setPaginateDisplay', false)
+            this.$emit('setExportDisplay', false)
             this.$emit('setDialogDisplay', false)
+        },
+        $successEmptyResponse() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            this.$emit('response', [])
+            this.$emit('showTable', false)
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
+            this.$emit('setExportDisplay', false)
         },
         getDateTime() {
             var today = new Date();

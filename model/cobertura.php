@@ -831,8 +831,7 @@ class cobertura{
                   LEFT JOIN localities l ON c.locate = l.id
                   WHERE c.status='active' AND c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
-
-                 
+               
 
                   $exe = $this->db->query($sql);
                   if($exe && $exe->num_rows>0){$result = $exe;}
@@ -878,14 +877,8 @@ class cobertura{
             STATUS,'REMOVETOHISTORY',customer_service_hours,lat,lng,'$motive','$created_at','$id'
             FROM coverage where id = '$id' ";
 
-            $removeToHistory = $this->db->query($sql);
-            // if($removeToHistory){
-            //       $result =  true;
-            // }else {
-            //       $result = false;
-            // }
+            $this->db->query($sql);
             return true;
-            
       }
 
       public function delete(){
@@ -916,7 +909,7 @@ class cobertura{
             
             $sql = "UPDATE coverage set home_address = '$home_address',type = '$type', id_user = '$id_user', user_managent_id = '$user_managent_id', action = 'UPDATED', customer_service_hours = '$timeSchedule', lat = '$lat', lng = '$lng', 
             created_at = '$created_at' where id= '$id'";
-
+           
             $exe = $this->db->query($sql);
             if($exe){$result = true;
             }else {$result = false;}
@@ -927,11 +920,9 @@ class cobertura{
 
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
             $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ; 
-
             $sql = "SELECT id,postal_code,id_user FROM coverage WHERE id_user = '$id_user' and postal_code = '$postal_code'";
-           
-            
             $exe = $this->db->query($sql);
+            
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
             return $result;
@@ -1332,10 +1323,11 @@ class cobertura{
             and c.id_user != '$id_user' and c.home_address != '$home_address'
             GROUP BY c.id order by c.postal_code";
 
-                 
-            // el id_user cuando es comercio o terminal viene en cero.
             // lo dejo asi hasta que se requiere reemplazar comercio o terminal
-            // por ahora no se reemplaza comercio o terminal
+            // por ahora no se reemplaza comercio por comercio  o terminal por terminal
+            // si quiero reemplazar masivamente correo por correo o terminal por terminal
+            //debo quitar el id_user !== , y solo validar que no sea la misma direccion
+            //lo cual tiene un grado de peligro que se dupliquen registro de correo y terminal 
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}

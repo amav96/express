@@ -39,6 +39,7 @@ Vue.component('save-point', {
                                 @setCountryID="id_country = $event"
                                 @setProvinceID="id_province = $event"
                                 @setLocateID="id_locate = $event"
+                                @setHomeAddress="home_address = $event"
                                 :outlined="save.point.select.outlined"
                                 :classCustom="save.point.select.class"
                                 :dense="save.point.select.dense"
@@ -332,6 +333,7 @@ Vue.component('save-point', {
 
             const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
             this.$emit('setPaginateDisplay', false)
+            this.$emit('setExportDisplay', false)
             this.$emit("setSnack", snack)
             this.$emit('showTable', true)
 
@@ -367,7 +369,7 @@ Vue.component('save-point', {
     },
     watch: {
         resultGeocoding(val) {
-            this.home_address = val.formatted_addess
+            this.home_address = val.result.formatted_addess
             this.lat = val.lat
             this.lng = val.lng
 

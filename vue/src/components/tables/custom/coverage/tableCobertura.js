@@ -106,9 +106,8 @@ Vue.component("table-cobertura", {
                                         </v-chip>
                                     </td>
                                 <td 
-                                v-if="row.name_assigned !== ''  && row.name_assigned !== null && row.name_assigned !== ' ' && row.name_assigned.length"
+                                v-if="row.name_assigned && row.name_assigned !== ''  && row.name_assigned !== null && row.name_assigned !== ' ' && row.name_assigned.length"
                                 >
-                                
                                     {{row.name_assigned}} - {{ row.id_user}}
                                 </td>
                                 <td 

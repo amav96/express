@@ -15,6 +15,7 @@ Vue.component('d-full-screen', {
                         <v-toolbar
                             dark
                             color="primary"
+                            class="fixed-bar"
                         >
                             <v-btn
                             icon

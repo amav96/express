@@ -276,6 +276,7 @@ Vue.component('save-collector', {
             this.$emit('response', this.savedData)
             const snack = { display: true, timeout: 2000, text: 'Creado correctamente', color: 'success' }
             this.$emit('setPaginateDisplay', false)
+            this.$emit('setExportDisplay', false)
             this.$emit("setSnack", snack)
             this.$emit('showTable', true)
 

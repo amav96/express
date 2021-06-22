@@ -171,7 +171,14 @@ Vue.component('geocoding-simple', {
                     }
                     this.$emit("setErrorGeocoding", '')
                     this.home_address = res.data.formatted_addess
-                    this.$emit("setResultGeocoding", res.data)
+                    const result = {
+                        lat: res.data.lat,
+                        lng: res.data.lng,
+                        result: {
+                            formatted_addess: res.data.formatted_addess
+                        }
+                    }
+                    this.$emit("setResultGeocoding", result)
                 })
                 .catch(err => {
                     this.loading = false
@@ -205,14 +212,19 @@ Vue.component('geocoding-simple', {
             this.$nextTick(() => {
                 this.$refs.refCountry.$reassingData();
             })
-            const coordenates = {
+            const result = {
                 lat: geocoded.lat,
                 lng: geocoded.lng,
                 result: {
                     formatted_addess: geocoded.home_address
                 }
             }
-            this.$emit("setResultGeocoding", coordenates)
+            console.log(result)
+            this.$emit("setResultGeocoding", result)
+        },
+        resetProvinceAndLocate() {
+            this.$refs.refProvince.reset()
+            this.$refs.refLocate.reset()
         }
     },
     watch: {

@@ -52,6 +52,7 @@ Vue.component('update-commerce', {
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
+                    @setHomeAddress="home_address = $event"
                     :outlined="save.commerce.select.outlined"
                     :classCustom="save.commerce.select.class"
                     :dense="save.commerce.select.dense"
@@ -300,6 +301,9 @@ Vue.component('update-commerce', {
                 .then(res => {
                     if (res.data.success) {
                         this.$_dataAlreadyGeocoded(res.data)
+                        this.selectZone = []
+                        this.zone = []
+                        this.$refs.refGecoded.resetProvinceAndLocate()
                     } else {
                         this.$refs.refGecoded.reset()
                         this.lat = '';
@@ -309,6 +313,8 @@ Vue.component('update-commerce', {
                         this.id_locate = ''
                         this.home_address = ''
                         this.srcMap = ''
+                        this.selectZone = []
+                        this.zone = []
                     }
                 })
                 .catch(err => {
@@ -354,13 +360,15 @@ Vue.component('update-commerce', {
                     }
                 })
                 .then(res => {
+
                     this.saveLoading = false
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
                         return
                     }
 
-                    this.$success(res)
+                    if (res.data.data) this.$success(res)
+                    if (res.data.success === 'only_one_and_same') this.$successEmptyResponse();
 
                 })
                 .catch(err => {
@@ -375,6 +383,16 @@ Vue.component('update-commerce', {
             this.$emit('showTable', true)
             this.$emit('setPaginateDisplay', false)
             this.$emit('setDialogDisplay', false)
+            this.$emit('setExportDisplay', false)
+        },
+        $successEmptyResponse() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            this.$emit('response', [])
+            this.$emit('showTable', false)
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
+            this.$emit('setExportDisplay', false)
         },
         getDateTime() {
             var today = new Date();
@@ -396,7 +414,7 @@ Vue.component('update-commerce', {
 
     watch: {
         resultGeocoding(val) {
-            this.home_address = val.formatted_addess
+            this.home_address = val.result.formatted_addess
             this.lat = val.lat
             this.lng = val.lng
 
@@ -404,16 +422,12 @@ Vue.component('update-commerce', {
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
-        id_user(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.activateSearchEngine();
-            }
-        }
+
     },
     computed: {
         validateFormComplete() {
 
-            if (this.id_user === '' || this.selectZone.length === 0 || this.home_address === '' || this.lat === '' || this.lng === '') {
+            if (this.id_user === '' || this.selectZone.length === 0 || this.home_address === '' || this.home_address === undefined || this.lat === '' || this.lng === '') {
                 return true
             } else {
                 return false

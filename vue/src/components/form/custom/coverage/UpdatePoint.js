@@ -17,7 +17,6 @@ Vue.component('update-point', {
                             </v-col>
                         </v-row>
                     </template>
-
                     <h6 class="my-3 d-flex justify-start align-items-center">
                         Dirección del {{returnType()}}
                         <v-icon class="mx-1">mdi-store</v-icon>
@@ -28,6 +27,7 @@ Vue.component('update-point', {
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
+                    @setHomeAddress="home_address = $event"
                     :outlined="save.point.select.outlined"
                     :classCustom="save.point.select.class"
                     :dense="save.point.select.dense"
@@ -281,15 +281,6 @@ Vue.component('update-point', {
             }
 
         },
-        activateSearchEngine() {
-            if (this.cp_start !== '' && this.cp_end !== '' && this.id_country !== '' && this.id_province !== '') {
-                this._getAllPointInZone();
-            } else {
-                if (this.selectZone.length > 0) {
-                    this.selectZone = []
-                }
-            }
-        },
         async _updateData() {
             this.saveLoading = true
             const url = this.save.url.update
@@ -316,7 +307,9 @@ Vue.component('update-point', {
                         alertNegative("Mensaje CODIGO 15");
                         return
                     }
-                    this.$success(res)
+
+                    if (res.data.data) this.$success(res)
+                    if (res.data.success === 'only_one_and_same') this.$successEmptyResponse();
                 })
                 .catch(err => {
                     this.saveLoading = false
@@ -329,8 +322,18 @@ Vue.component('update-point', {
             this.$emit("setSnack", snack)
             this.$emit('response', res.data.data)
             this.$emit('showTable', true)
+            this.$emit('setExportDisplay', false)
             this.$emit('setPaginateDisplay', false)
             this.$emit('setDialogDisplay', false)
+        },
+        $successEmptyResponse() {
+            const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
+            this.$emit("setSnack", snack)
+            this.$emit('response', [])
+            this.$emit('showTable', false)
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setDialogDisplay', false)
+            this.$emit('setExportDisplay', false)
         },
         getDateTime() {
             var today = new Date();
@@ -351,27 +354,13 @@ Vue.component('update-point', {
 
     watch: {
         resultGeocoding(val) {
-            this.home_address = val.formatted_addess
+            this.home_address = val.result.formatted_addess
             this.lat = val.lat
             this.lng = val.lng
-
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
             // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
 
         },
-        dialogFullScreen: {
-            handler() {
-                this.$nextTick(() => {
-                    this.finish()
-                })
-            },
-            deep: true
-        },
-        id_user(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.activateSearchEngine();
-            }
-        }
     },
     computed: {
         validateFormComplete() {
@@ -379,6 +368,7 @@ Vue.component('update-point', {
                 this.lat === '' ||
                 this.lng === '' ||
                 this.home_address === '' ||
+                this.home_address === undefined ||
                 this.timeSchedule === '' ||
                 this.timeSchedule.length < 26 ||
                 this.selectZone.length === 0
