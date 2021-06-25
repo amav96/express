@@ -50,11 +50,12 @@ Vue.component('update-onlyOne-commerce', {
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <geocoding-simple
                         @setErrorGeocoding="errorGeocoding = $event"
-                        @setResultGeocoding="geocoding.result = $event"
                         @setCountryID="id_country = $event"
                         @setProvinceID="id_province = $event"
                         @setLocateID="id_locate = $event"
                         @setHomeAddress="home_address = $event"
+                        @setLat="lat = $event"
+                        @setLng="lng = $event"
                         :outlined=true
                         :classCustom="geocoding.select.class"
                         :dense="true"
@@ -62,64 +63,6 @@ Vue.component('update-onlyOne-commerce', {
                         ref="refGecoded"
                         />
                     </v-col>
-
-                    <v-row class="d-flex justify-between flex-row mx-0" >
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="latitud"
-                            v-model="lat"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="longitud"
-                            v-model="lng"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-btn
-                            class=""
-                            fab
-                            small
-                            color="primary"
-                            :disabled="lng === '' || lat === ''"
-                            @click="reverseGeocodingManualToMap()"
-                            >
-                                <v-icon dark>
-                                mdi-refresh
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-
-                    </v-row>
-                    <template v-if="srcMap !== ''" >
-                        <v-col class="ml-1" cols="12" xl="6" lg="6" >
-                                    <iframe
-                                    width="100%"
-                                    height="450"
-                                    style="border:0"
-                                    loading="lazy"
-                                    allowfullscreen
-                                    class="mx-auto"
-                                    :src="srcImgMap()">
-                                    </iframe>
-                        </v-col>
-                    </template>
 
                     <template v-if="error.display" >
                         <v-alert
@@ -177,7 +120,6 @@ Vue.component('update-onlyOne-commerce', {
             id_country: '',
             id_province: '',
             id_locate: '',
-            timeSchedule: '',
             lat: '',
             lng: '',
             home_address: '',
@@ -187,7 +129,6 @@ Vue.component('update-onlyOne-commerce', {
                 text: ''
             },
             errorGeocoding: '',
-            saveFlag: false,
             update: {
                 commerce: {
                     select: {
@@ -201,11 +142,6 @@ Vue.component('update-onlyOne-commerce', {
                         update: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=updateOnlyOne'
                     }
                 }
-            },
-            restaurate: {
-                cache: false,
-                id_user: '',
-                name_assigned: ''
             },
             geocoding: {
                 zone: {
@@ -224,15 +160,18 @@ Vue.component('update-onlyOne-commerce', {
                 result: []
 
             },
-            srcMap: ''
+
         }
     },
     methods: {
         setUser(user) {
-            this.infoUser = user
-            this.id_user = user.id
-            this.name_user = user.name_user
-            this.hasAlreadyBeenGeocoded()
+            this.reset()
+            this.$nextTick(() => {
+                this.infoUser = user
+                this.id_user = user.id
+                this.name_user = user.name_user
+                this.hasAlreadyBeenGeocoded()
+            })
         },
         async _updateOnlyOne() {
             this.saveLoading = true
@@ -266,6 +205,7 @@ Vue.component('update-onlyOne-commerce', {
                 })
         },
         $updateAfterFront(data) {
+            // esto modifica la tabla en vivo luego de actualizar los datos en el back end
             this.response.data.id_user = this.id_user
             this.response.data.name_assigned = this.name_user
             this.response.data.home_address = data[0].home_address
@@ -295,9 +235,6 @@ Vue.component('update-onlyOne-commerce', {
 
             return created_at
         },
-        srcImgMap() {
-            return this.srcMap
-        },
         reverseGeocodingManualToMap() {
             this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
@@ -305,21 +242,11 @@ Vue.component('update-onlyOne-commerce', {
             const url = this.response.url.hasAlreadyBeenGeocoded
             axios.get(url, { params: { id_user: this.id_user } })
                 .then(res => {
-                    if (res.data.success) {
-                        this.$_dataAlreadyGeocoded(res.data)
-                    } else {
-                        this.$refs.refGecoded.reset()
-                        this.lat = '';
-                        this.lng = '';
-                        this.srcMap = '';
-                    }
+                    if (res.data.success) { this.$_dataAlreadyGeocoded(res.data) } else { this.$refs.refGecoded.reset() }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(err => { console.log(err) })
         },
         $_dataAlreadyGeocoded(geocoded) {
-            console.log(geocoded)
             this.$refs.refGecoded.setGeocoded(geocoded)
         },
         exist() {
@@ -329,9 +256,11 @@ Vue.component('update-onlyOne-commerce', {
             this.error.display = true
             this.error.text = text
         },
-        clearError() {
-            this.error.display = false
-            this.error.text = ''
+        reset() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.$refs.refGecoded.reset()
         }
 
     },
@@ -346,17 +275,6 @@ Vue.component('update-onlyOne-commerce', {
             ) { return true } else { return false }
         }
     },
-    watch: {
-        geocoding: {
-            handler(val) {
-                this.home_address = val.result.formatted_addess
-                this.lat = val.result.lat
-                this.lng = val.result.lng
-                this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
 
-            },
-            deep: true
-        }
-    },
 
 })

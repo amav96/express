@@ -111,8 +111,9 @@ function setDataAutorizar(valorBusqueda) {
             },
         }).done(function(response) {
             $("#subspinner").hide()
+            template = "";
             var object = JSON.parse(response)
-            var template = "";
+
 
             if (object[0].result !== false) {
 
@@ -120,6 +121,7 @@ function setDataAutorizar(valorBusqueda) {
 
                 $("#table").show();
                 $("#cuerpo").html(template);
+
 
                 Swal.fire({
                     icon: "success",
@@ -397,9 +399,7 @@ $(document).on("click", "#agregar,#btnAutorizar", function() {
 
 function tableAutorizar(object) {
 
-
     var html = "";
-    html += '<table class="table table-striped table-hover">';
     html += '<thead>';
     html += '<tr>';
     html += '<th></th>';
@@ -425,10 +425,7 @@ function tableAutorizar(object) {
         html += '<tr>';
     })
 
-
-
     html += '</tbody>';
-    html += '</table>';
 
 
     return html;

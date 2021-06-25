@@ -195,7 +195,7 @@ Vue.component('save-collector', {
                     params: {
                         id_country: this.id_country_by_select,
                         id_province: this.id_province_by_select,
-                        locate: locate.slug
+                        id_locate: locate.id
                     }
                 })
                 .then(res => {

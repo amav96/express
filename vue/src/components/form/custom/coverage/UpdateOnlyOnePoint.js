@@ -23,11 +23,12 @@ Vue.component('update-onlyOne-point', {
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <geocoding-simple
                         @setErrorGeocoding="errorGeocoding = $event"
-                        @setResultGeocoding="geocoding.result = $event"
                         @setCountryID="id_country = $event"
                         @setProvinceID="id_province = $event"
                         @setLocateID="id_locate = $event"
                         @setHomeAddress="home_address = $event"
+                        @setLat="lat = $event"
+                        @setLng="lng = $event"
                         :outlined=true
                         :classCustom="geocoding.select.class"
                         :dense="true"
@@ -35,65 +36,6 @@ Vue.component('update-onlyOne-point', {
                         ref="resetGeocoding"
                         />
                     </v-col>
-
-                    <v-row class="d-flex justify-between flex-row mx-0" >
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="latitud"
-                            v-model="lat"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="longitud"
-                            v-model="lng"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-btn
-                            class=""
-                            fab
-                            small
-                            color="primary"
-                            :disabled="lng === '' || lat === ''"
-                            @click="reverseGeocodingManualToMap()"
-                            >
-                                <v-icon dark>
-                                mdi-refresh
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-
-                    </v-row>
-                    <template v-if="srcMap !== ''" >
-                        <v-col class="ml-1" cols="12" xl="6" lg="6" >
-                                    <iframe
-                                    width="100%"
-                                    height="450"
-                                    style="border:0"
-                                    loading="lazy"
-                                    allowfullscreen
-                                    class="mx-auto"
-                                    :src="srcImgMap()">
-                                    </iframe>
-                        </v-col>
-                    </template>
-
                     <template >
                     <v-row class="mx-0" >
                         <v-col  cols="12" xl="10" lg="10" md="10" sm="10" xs="10"  >
@@ -178,7 +120,6 @@ Vue.component('update-onlyOne-point', {
                 text: ''
             },
             errorGeocoding: '',
-            saveFlag: false,
             update: {
                 point: {
                     url: {
@@ -208,7 +149,7 @@ Vue.component('update-onlyOne-point', {
                 result: []
 
             },
-            srcMap: ''
+
         }
     },
     methods: {
@@ -247,6 +188,7 @@ Vue.component('update-onlyOne-point', {
                 })
         },
         $updateAfterFront(data) {
+            // esto modifica la tabla en vivo luego de actualizar los datos en el back end
             this.response.data.id_user = this.id_user
             this.response.data.name_assigned = this.name_user
             this.response.data.home_address = data[0].home_address
@@ -277,23 +219,12 @@ Vue.component('update-onlyOne-point', {
 
             return created_at
         },
-        srcImgMap() {
-            return this.srcMap
-        },
-        reverseGeocodingManualToMap() {
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-        },
         exist() {
             var text = 'Este ' + this.updateOnly.type + ' ya esta asignado al codigo postal'
             text = text + ' ' + this.response.data.postal_code
             this.error.display = true
             this.error.text = text
         },
-        clearError() {
-            this.error.display = false
-            this.error.text = ''
-        }
-
     },
     computed: {
         validateUpdate() {
@@ -309,19 +240,7 @@ Vue.component('update-onlyOne-point', {
             ) { return true } else { return false }
         }
     },
-    watch: {
-        geocoding: {
-            handler(val) {
-                this.home_address = val.result.formatted_addess
-                this.lat = val.result.lat
-                this.lng = val.result.lng
-                this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-                this.error.display = false
-                this.error.text = ''
-            },
-            deep: true
-        }
-    }
+
 
 
 

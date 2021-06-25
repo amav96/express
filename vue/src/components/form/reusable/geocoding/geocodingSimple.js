@@ -61,11 +61,11 @@ Vue.component('geocoding-simple', {
                 </v-col>
                 <v-col   cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-btn 
-                    class="info py-5 mx-3" 
+                    class="info py-5" 
                     :disabled="validateFieldsEmpty()" 
                     @click="geocoding()"
                      >
-                        Geocodificar
+                        Geocodificar dirección
                         <v-icon
                         right
                         dark
@@ -77,15 +77,83 @@ Vue.component('geocoding-simple', {
                 <template v-if="loading" >
                     <v-col  cols="12" xl="2" lg="2" md="2" sm="2" xs="2"  >
                         <v-progress-circular
-                        class="py-5 mx-3" 
+                        class="py-5" 
                         indeterminate
                         color="primary"
                         />
                     </v-col>
                 </template>
             </v-row>
+            <v-row class="d-flex justify-between flex-row" >
+                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                    <v-text-field 
+                    label="latitud"
+                    v-model.trim="lat"
+                    outlined
+                    dense
+                    required
+                    type="text"
+                    color="black"
+                    class="info--text "
+                    >
+                    </v-text-field>
+                </v-col>
+                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                    <v-text-field 
+                    label="longitud"
+                    v-model.trim="lng"
+                    outlined
+                    dense
+                    required
+                    type="text"
+                    color="black"
+                    class="info--text "
+                    >
+                    </v-text-field>
+                </v-col>
+
+                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
+                    <v-btn
+                    class="info py-5" 
+                    color="primary"
+                    :disabled="lng === '' || lat === ''"
+                    @click="geocodingByCoordinates()"
+                    >
+                    Geocodificar coordenadas (Opcional)
+                    <v-icon
+                    right
+                    dark
+                    >
+                        mdi-map-marker-distance
+                    </v-icon>
+                    </v-btn>
+                </v-col>
+               
+            </v-row>
+
+            <template v-if="srcMap !== ''" >
+                <v-col class="pa-0 my-4" cols="12" xl="6" lg="6" >
+                            <iframe
+                            width="100%"
+                            height="450"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            class="mx-auto"
+                            :src="srcMap">
+                            </iframe>
+                </v-col>
+            </template>
         </div>
         `,
+    computed: {
+        handleMap() {
+            if (this.lat !== '' && this.lng !== '') {
+                this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
+                return
+            }
+        }
+    },
     props: {
         save: {
             type: Object
@@ -99,9 +167,6 @@ Vue.component('geocoding-simple', {
         dense: {
             type: Boolean
         },
-        error: {
-            type: Object
-        }
     },
     data() {
         return {
@@ -112,7 +177,9 @@ Vue.component('geocoding-simple', {
             id_locate: '',
             text_locate: '',
             home_address: '',
-            id_user: '',
+            lat: '',
+            lng: '',
+            srcMap: '',
             loading: false,
             reassignData: {
                 id_country: '',
@@ -171,20 +238,52 @@ Vue.component('geocoding-simple', {
                     }
                     this.$emit("setErrorGeocoding", '')
                     this.home_address = res.data.formatted_addess
-                    const result = {
-                        lat: res.data.lat,
-                        lng: res.data.lng,
-                        result: {
-                            formatted_addess: res.data.formatted_addess
-                        }
-                    }
-                    this.$emit("setResultGeocoding", result)
+                    this.lat = res.data.lat
+                    this.lng = res.data.lng
+                    this.showMap()
                 })
                 .catch(err => {
                     this.loading = false
                     console.log(err)
                 })
+        },
+        geocodingByCoordinates() {
+            const url = this.save.geocoding.url_by_coordenates
+            this.loading = true
+            axios.get(url, {
+                    params: {
+                        lat: this.lat.trim(),
+                        lng: this.lng.trim(),
 
+                    }
+                })
+                .then(res => {
+                    this.loading = false
+                    if (res.data.error === 'has_not_provided') {
+                        this.$emit("setErrorGeocoding", 'Google Maps Geocoding no tiene datos disponible para esta zona')
+                        return
+                    }
+                    if (res.data.error === 'not_precise') {
+                        this.$emit("setErrorGeocoding", 'El resultado no es preciso. Asegurate que la direccion solo contenga Domicilio al hacer clic en GEOCODIFICAR')
+                        return
+                    }
+                    if (res.data.error === 'not_result') {
+                        this.$emit("setErrorGeocoding", 'No se ha encontrado la ubicación')
+                        return
+                    }
+                    this.$emit("setErrorGeocoding", '')
+                    this.home_address = res.data.formatted_addess
+                    this.lat = res.data.lat
+                    this.lng = res.data.lng
+                    this.showMap()
+                })
+                .catch(err => {
+                    this.loading = false
+                    console.log(err)
+                })
+        },
+        showMap() {
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
         reset() {
 
@@ -195,32 +294,23 @@ Vue.component('geocoding-simple', {
             this.id_locate = ''
             this.text_locate = ''
             this.home_address = ''
-            this.id_user = ''
+            this.lat = ''
+            this.lng = ''
+            this.srcMap = ''
             this.$refs.refCountry.reset()
             this.$refs.refProvince.reset()
             this.$refs.refLocate.reset()
-
-
         },
         setGeocoded(geocoded) {
             this.reassignData.id_country = geocoded.id_country
-                // no puedo usar estos porque son los id y locate de la zona como tal
-                // no de la geolocalizacion
-                // this.reassignData.id_province = geocoded.id_province
-                // this.reassignData.id_locate = geocoded.id_locate
             this.home_address = geocoded.home_address
+            this.lat = geocoded.lat
+            this.lng = geocoded.lng
+            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
             this.$nextTick(() => {
                 this.$refs.refCountry.$reassingData();
             })
-            const result = {
-                lat: geocoded.lat,
-                lng: geocoded.lng,
-                result: {
-                    formatted_addess: geocoded.home_address
-                }
-            }
-            console.log(result)
-            this.$emit("setResultGeocoding", result)
+
         },
         resetProvinceAndLocate() {
             this.$refs.refProvince.reset()
@@ -230,6 +320,12 @@ Vue.component('geocoding-simple', {
     watch: {
         home_address(val) {
             this.$emit("setHomeAddress", val)
+        },
+        lat(val) {
+            this.$emit("setLat", val)
+        },
+        lng(val) {
+            this.$emit("setLng", val)
         }
     }
 

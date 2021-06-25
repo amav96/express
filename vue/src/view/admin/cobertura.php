@@ -645,7 +645,8 @@
                     url_AllPointInZone:API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllPointInZone',
                   },
                   geocoding :{
-                    url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding'
+                    url: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocoding',
+                    url_by_coordenates: API_BASE_CONTROLLER + 'geocodingController.php?geocoding=geocodingByCoordinates',
                   },
                   url : {
                     save : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=save',

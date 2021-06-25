@@ -27,70 +27,14 @@ Vue.component('empty-point', {
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
                     @setHomeAddress="home_address = $event"
+                    @setLat="lat = $event"
+                    @setLng="lng = $event"
                     :outlined=true
                     :classCustom="geocoding.select.class"
                     :dense="true"
                     :save="geocoding"
                     />
                 </v-col>
-
-                <v-row class="d-flex justify-between flex-row mx-0" >
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-text-field 
-                        label="latitud"
-                        v-model="lat"
-                        outlined
-                        dense
-                        required
-                        type="text"
-                        color="black"
-                        class="info--text "
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-text-field 
-                        label="longitud"
-                        v-model="lng"
-                        outlined
-                        dense
-                        required
-                        type="text"
-                        color="black"
-                        class="info--text "
-                        >
-                        </v-text-field>
-                    </v-col>
-
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-btn
-                        class=""
-                        fab
-                        small
-                        color="primary"
-                        :disabled="lng === '' || lat === '' || id_country === '' || id_province == '' || id_locate === ''"
-                        @click="reverseGeocodingManualToMap()"
-                        >
-                            <v-icon dark>
-                            mdi-refresh
-                            </v-icon>
-                        </v-btn>
-                    </v-col>
-
-                </v-row>
-                <template v-if="srcMap !== ''" >
-                    <v-col class="ml-1" cols="12" xl="6" lg="6" >
-                                <iframe
-                                width="100%"
-                                height="450"
-                                style="border:0"
-                                loading="lazy"
-                                allowfullscreen
-                                class="mx-auto"
-                                :src="srcImgMap()">
-                                </iframe>
-                    </v-col>
-                </template>
 
                 <template >
                     <v-col class="mx-1" cols="12" xl="10" lg="10">
@@ -163,7 +107,7 @@ Vue.component('empty-point', {
                 result: []
 
             },
-            srcMap: ''
+
         }
     },
     methods: {
@@ -198,19 +142,6 @@ Vue.component('empty-point', {
                     console.log(err)
                 })
 
-        },
-        map(val) {
-            this.home_address = val.result.formatted_addess
-            this.lat = val.result.lat
-            this.lng = val.result.lng
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-
-        },
-        srcImgMap() {
-            return this.srcMap
-        },
-        reverseGeocodingManualToMap() {
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
         $success(res) {
             const snack = { display: true, timeout: 2000, text: this.resource.type + ' creado exitosamente', color: 'success' }
@@ -251,12 +182,5 @@ Vue.component('empty-point', {
             ) { return true } else { return false }
         }
     },
-    watch: {
-        geocoding: {
-            handler(val) {
-                this.map(val)
-            },
-            deep: true
-        }
-    }
+
 })

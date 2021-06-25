@@ -477,18 +477,24 @@ class Equipos
     {
         if($_POST){
 
-        $sql = "SELECT e.id , e.identificacion as 'eidentificacion', e.terminal AS 'terminal',
-                e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
-                e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
-                e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
-                e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
-                FROM equipos e
-                LEFT JOIN gestion g ON g.id = e.id
-                WHERE e.identificacion ='{$this->getIdentificacionCliente()}' OR e.serie ='{$this->getIdentificacionCliente()}' OR e.terminal ='{$this->getIdentificacionCliente()}' GROUP BY e.id ;";
+            $sql = "SELECT e.id , e.identificacion as 'eidentificacion', e.terminal AS 'terminal',
+            e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
+            e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
+            e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
+            e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
+            FROM equipos e
+            LEFT JOIN gestion g ON g.id = e.id
+            WHERE e.identificacion ='{$this->getIdentificacionCliente()}' AND (e.estado = '' OR e.estado IS NULL 
+            OR e.estado IN('NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO',
+            'NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
+            'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
+            'ENTREGO-EN-SUCURSAL')
+            ) OR e.terminal = '{$this->getIdentificacionCliente()}' OR e.serie = '{$this->getIdentificacionCliente()}' GROUP BY e.id ;";
 
-            
-        $result = $this->db->query($sql);
-        return $result;
+
+
+            $result = $this->db->query($sql);
+            return $result;
         
         }
     }

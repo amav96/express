@@ -29,6 +29,9 @@
 
 	<link rel="stylesheet" href="<?=base_url?>estilos/personal/css/panel_recolector/panel_recolector.css?v=21042021">
 	<link rel="stylesheet" href="<?=base_url?>estilos/personal/css/panel_recolector/visita.css?v=21042021">
+
+	<link rel="stylesheet" type="text/css" href="<?= base_url ?>estilos/personal/datatables/DataTables-1.10.22/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url ?>estilos/personal/datatables/AutoFill-2.3.5/css/autoFill.dataTables.css" />
 	
 
 	<title>Express | Logistica inversa</title>

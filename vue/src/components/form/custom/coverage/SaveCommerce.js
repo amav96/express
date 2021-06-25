@@ -15,7 +15,7 @@ Vue.component('save-commerce', {
                     </d-small-screen>
                 </template>
 
-                    <template v-if="!saveSuccess">
+                    
                     <h6 class=" my-3 d-flex justify-start align-items-center">Comercio
                      <v-icon class="mx-1">mdi-store</v-icon>
                     </h6>
@@ -51,80 +51,23 @@ Vue.component('save-commerce', {
                                     </v-col>
                                 </v-row>
                             </template>
-                            <h6 class=" my-3 d-flex justify-start align-items-center">Dirección del  {{returnType()}} 
+                            <h6 class="my-3 mt-4 d-flex justify-start align-items-center">Dirección del  {{returnType()}} 
                                 <v-icon class="mx-1">mdi-map-search-outline</v-icon>
                             </h6>
                             <geocoding-simple
                             @setErrorGeocoding="errorGeocoding = $event"
-                            @setResultGeocoding="resultGeocoding = $event"
                             @setCountryID="id_country = $event"
                             @setProvinceID="id_province = $event"
                             @setLocateID="id_locate = $event"
                             @setHomeAddress="home_address = $event"
+                            @setLat="lat = $event"
+                            @setLng="lng = $event"
                             :save="save"
                             :outlined="save.commerce.select.outlined"
                             :classCustom="save.commerce.select.class"
                             :dense="save.commerce.select.dense"
-                            :error="errorSelect"
                             ref="refGecoded"
                             />
-                            <v-row class="d-flex justify-between flex-row" >
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <v-text-field 
-                                    label="latitud"
-                                    v-model="lat"
-                                    outlined
-                                    dense
-                                    required
-                                    type="text"
-                                    color="black"
-                                    class="info--text "
-                                    >
-                                    </v-text-field>
-                                </v-col>
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <v-text-field 
-                                    label="longitud"
-                                    v-model="lng"
-                                    outlined
-                                    dense
-                                    required
-                                    type="text"
-                                    color="black"
-                                    class="info--text "
-                                    >
-                                    </v-text-field>
-                                </v-col>
-
-                                <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                    <v-btn
-                                    class="mx-2"
-                                    fab
-                                    small
-                                    color="primary"
-                                    :disabled="lng === '' || lat === ''"
-                                    @click="reverseGeocodingManualToMap()"
-                                    >
-                                        <v-icon dark>
-                                        mdi-refresh
-                                        </v-icon>
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-
-                            <template v-if="srcMap !== ''" >
-                                <v-col class="pa-0" cols="12" xl="6" lg="6" >
-                                            <iframe
-                                            width="100%"
-                                            height="450"
-                                            style="border:0"
-                                            loading="lazy"
-                                            allowfullscreen
-                                            class="mx-auto"
-                                            :src="srcImgMap()">
-                                            </iframe>
-                                </v-col>
-                            </template>
                             <h6 class=" my-3 d-flex justify-start align-items-center">Zona a cubir  (Es la zona donde operara el {{returnType()}} )
                                 <v-icon class="mx-1">mdi-map-marker-radius-outline</v-icon>
                             </h6>
@@ -138,6 +81,7 @@ Vue.component('save-commerce', {
                                     :outlined="save.commerce.select.outlined"
                                     :classCustom="save.commerce.select.class"
                                     :dense="save.commerce.select.dense"
+                                    ref="refLocate"
                                     />
                                 </v-col>
                             
@@ -181,7 +125,6 @@ Vue.component('save-commerce', {
                                 Siguiente
                                 </v-btn>
                             </v-row>
-                    </template>
                 </v-container>
             </div>
         `,
@@ -208,36 +151,23 @@ Vue.component('save-commerce', {
     },
     data() {
         return {
-            time: false,
             id_country: '',
             id_province: '',
             id_locate: '',
             home_address: '',
             lat: '',
             lng: '',
-            srcMap: '',
             id_user: '',
             chosenPostalCodes: [],
             infoUser: [],
             errorGeocoding: '',
-            resultGeocoding: '',
             saveLoading: false,
             error: {
                 display: false,
                 text: ''
             },
-            cp_start: '',
-            cp_end: '',
-            saveSuccess: false,
             saveFlag: false,
-            savedData: [],
-            clean: false,
-            errorSelect: {
-                selectSearchID: {
-                    error: false
-                }
-            }
-
+            savedData: []
         }
     },
     methods: {
@@ -250,7 +180,13 @@ Vue.component('save-commerce', {
         setUser(user) {
             this.infoUser = user
             this.id_user = user.id
-            this.hasAlreadyBeenGeocoded()
+
+            // cada vez que cambio el usuario reseteo estos parametros
+            this.reset()
+            this.$nextTick(() => {
+                this.hasAlreadyBeenGeocoded()
+            })
+
         },
         getZoneByPostalCode(locate) {
             const url = this.save.zone.url_postalCode
@@ -258,7 +194,7 @@ Vue.component('save-commerce', {
                     params: {
                         id_country: this.id_country,
                         id_province: this.id_province,
-                        locate: locate.slug
+                        id_locate: locate.id
                     }
                 })
                 .then(res => {
@@ -276,10 +212,6 @@ Vue.component('save-commerce', {
                     console.log(err)
                 })
         },
-        srcImgMap() {
-
-            return this.srcMap
-        },
         validateFormComplete() {
 
             if (this.id_country === '' || this.id_province === '' || this.id_locate === '' || this.home_address === '' || this.lat === '' || this.lng === '' || this.id_user === '' || this.chosenPostalCodes.length === 0) {
@@ -289,37 +221,17 @@ Vue.component('save-commerce', {
             }
 
         },
-        validateButtonSearchCPbyRange() {
-            if (this.cp_start === '' || this.cp_start.length < 4 || this.cp_end === '' || this.cp_end.length < 4 || this.id_country === '' || this.id_province === '') {
-                return true
-            } else {
-                return false
-            }
-
-        },
-        reverseGeocodingManualToMap() {
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-        },
         hasAlreadyBeenGeocoded() {
             const url = this.save.commerce.url.hasAlreadyBeenGeocoded
             axios.get(url, { params: { id_user: this.id_user } })
                 .then(res => {
-                    if (res.data.success) {
-                        this.$_dataAlreadyGeocoded(res.data)
-                    } else {
-                        this.$refs.refGecoded.reset()
-                        this.lat = '';
-                        this.lng = '';
-                        this.srcMap = '';
-                    }
+                    if (res.data.success) { this.$_dataAlreadyGeocoded(res.data) } else { this.$refs.refGecoded.reset() }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(err => { console.log(err) })
         },
         $_dataAlreadyGeocoded(geocoded) {
-
             this.$refs.refGecoded.setGeocoded(geocoded)
+
         },
         async _saveData() {
             this.saveLoading = true
@@ -407,21 +319,20 @@ Vue.component('save-commerce', {
             if (this.save.action === 'create') {
                 this.save.zone.postal_codes = []
             }
+        },
+        reset() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.chosenPostalCodes = []
+            this.save.zone.postal_codes = []
+            this.$refs.refLocate.reset()
+            this.$refs.refGecoded.reset()
         }
     },
     destroyed() {
         this.cleanPostalCodes()
     },
-    watch: {
-        resultGeocoding(val) {
-            this.home_address = val.result.formatted_addess
-            this.lat = val.lat
-            this.lng = val.lng
 
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-            // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
-
-        },
-    },
 
 })

@@ -136,6 +136,7 @@ Vue.component('update-onlyOne-collector', {
                 })
         },
         $updateAfterFront(data) {
+            // esto modifica la tabla en vivo luego de actualizar los datos en el back end
             this.response.data.id_user = this.id_user
             this.response.data.name_assigned = this.name_user
             this.response.data.created_at = data[0].created_at

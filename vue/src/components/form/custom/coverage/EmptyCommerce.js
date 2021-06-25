@@ -51,6 +51,8 @@ Vue.component('empty-commerce', {
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
                     @setHomeAddress="home_address = $event"
+                    @setLat="lat = $event"
+                    @setLng="lng = $event"
                     :outlined=true
                     :classCustom="geocoding.select.class"
                     :dense="true"
@@ -59,64 +61,6 @@ Vue.component('empty-commerce', {
                    
                     />
                 </v-col>
-
-                <v-row class="d-flex justify-between flex-row mx-0" >
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-text-field 
-                        label="latitud"
-                        v-model="lat"
-                        outlined
-                        dense
-                        required
-                        type="text"
-                        color="black"
-                        class="info--text "
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-text-field 
-                        label="longitud"
-                        v-model="lng"
-                        outlined
-                        dense
-                        required
-                        type="text"
-                        color="black"
-                        class="info--text "
-                        >
-                        </v-text-field>
-                    </v-col>
-
-                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <v-btn
-                        class=""
-                        fab
-                        small
-                        color="primary"
-                        :disabled="lng === '' || lat === '' || id_country === '' || id_province == '' || id_locate === ''"
-                        @click="reverseGeocodingManualToMap()"
-                        >
-                            <v-icon dark>
-                            mdi-refresh
-                            </v-icon>
-                        </v-btn>
-                    </v-col>
-
-                </v-row>
-                <template v-if="srcMap !== ''" >
-                    <v-col class="ml-1" cols="12" xl="6" lg="6" >
-                                <iframe
-                                width="100%"
-                                height="450"
-                                style="border:0"
-                                loading="lazy"
-                                allowfullscreen
-                                class="mx-auto"
-                                :src="srcImgMap()">
-                                </iframe>
-                    </v-col>
-                </template>
 
                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-btn
@@ -174,14 +118,16 @@ Vue.component('empty-commerce', {
                 result: []
 
             },
-            srcMap: ''
         }
     },
     methods: {
         setUser(user) {
-            this.infoUser = user
-            this.id_user = user.id
-            this.hasAlreadyBeenGeocoded()
+            this.reset()
+            this.$nextTick(() => {
+                this.infoUser = user
+                this.id_user = user.id
+                this.hasAlreadyBeenGeocoded()
+            })
         },
         _save() {
             const url = this.resource.url.save
@@ -214,38 +160,15 @@ Vue.component('empty-commerce', {
                 })
 
         },
-        map(val) {
-            this.home_address = val.result.formatted_addess
-            this.lat = val.result.lat
-            this.lng = val.result.lng
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-
-        },
-        srcImgMap() {
-            return this.srcMap
-        },
-        reverseGeocodingManualToMap() {
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-        },
         hasAlreadyBeenGeocoded() {
             const url = this.resource.commerce.url.hasAlreadyBeenGeocoded
             axios.get(url, { params: { id_user: this.id_user } })
                 .then(res => {
-                    if (res.data.success) {
-                        this.$_dataAlreadyGeocoded(res.data)
-                    } else {
-                        this.$refs.refGecoded.reset()
-                        this.lat = '';
-                        this.lng = '';
-                        this.srcMap = '';
-                    }
+                    if (res.data.success) { this.$_dataAlreadyGeocoded(res.data) } else { this.$refs.refGecoded.reset() }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(err => { console.log(err) })
         },
         $_dataAlreadyGeocoded(geocoded) {
-            console.log(geocoded)
             this.$refs.refGecoded.setGeocoded(geocoded)
         },
         $success(res) {
@@ -273,6 +196,12 @@ Vue.component('empty-commerce', {
 
             return created_at
         },
+        reset() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.$refs.refGecoded.reset()
+        }
 
     },
     computed: {
@@ -285,12 +214,5 @@ Vue.component('empty-commerce', {
             ) { return true } else { return false }
         }
     },
-    watch: {
-        geocoding: {
-            handler(val) {
-                this.map(val)
-            },
-            deep: true
-        }
-    }
+
 })

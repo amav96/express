@@ -40,69 +40,15 @@ Vue.component('save-point', {
                                 @setProvinceID="id_province = $event"
                                 @setLocateID="id_locate = $event"
                                 @setHomeAddress="home_address = $event"
+                                @setLat="lat = $event"
+                                @setLng="lng = $event"
                                 :outlined="save.point.select.outlined"
                                 :classCustom="save.point.select.class"
                                 :dense="save.point.select.dense"
                                 :save="save"
                                 />
-                                <v-row class="d-flex justify-between flex-row" >
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <v-text-field 
-                                        label="latitud"
-                                        v-model="lat"
-                                        outlined
-                                        dense
-                                        required
-                                        type="text"
-                                        color="black"
-                                        class="info--text "
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <v-text-field 
-                                        label="longitud"
-                                        v-model="lng"
-                                        outlined
-                                        dense
-                                        required
-                                        type="text"
-                                        color="black"
-                                        class="info--text "
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-
-                                    <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                                        <v-btn
-                                        class="mx-2"
-                                        fab
-                                        small
-                                        color="primary"
-                                        :disabled="lng === '' || lat === ''"
-                                        @click="reverseGeocodingManualToMap()"
-                                        >
-                                            <v-icon dark>
-                                            mdi-refresh
-                                            </v-icon>
-                                        </v-btn>
-                                    </v-col>
-
-                                </v-row>
                             </template>
-                            <template v-if="srcMap !== ''" >
-                                <v-col class="pa-0" cols="12" xl="6" lg="6" >
-                                            <iframe
-                                            width="100%"
-                                            height="450"
-                                            style="border:0"
-                                            loading="lazy"
-                                            allowfullscreen
-                                            class="mx-auto"
-                                            :src="srcImgMap()">
-                                            </iframe>
-                                </v-col>
-                            </template>
+                            
                             <template >
                                     <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Horarios de atención al cliente
                                      <v-icon class="mx-1">mdi-calendar-clock</v-icon>
@@ -207,7 +153,6 @@ Vue.component('save-point', {
             home_address: '',
             lat: '',
             lng: '',
-            srcMap: '',
             chosenPostalCodes: [],
             infoUser: [],
             errorGeocoding: '',
@@ -219,7 +164,6 @@ Vue.component('save-point', {
                 text: ''
             },
             savedData: [],
-            clean: false,
         }
     },
     methods: {
@@ -231,14 +175,13 @@ Vue.component('save-point', {
                 return "Terminal";
             }
         },
-
         getZoneByPostalCode(locate) {
             const url = this.save.zone.url_postalCode
             axios.get(url, {
                     params: {
                         id_country: this.id_country,
                         id_province: this.id_province,
-                        locate: locate.slug
+                        id_locate: locate.id
                     }
                 })
                 .then(res => {
@@ -256,9 +199,6 @@ Vue.component('save-point', {
                     console.log(err)
                 })
         },
-        srcImgMap() {
-            return this.srcMap
-        },
         validateFormComplete() {
 
             if (this.id_country === '' || this.id_province === '' || this.id_locate === '' || this.home_address === '' || this.lat === '' || this.lng === '' || this.chosenPostalCodes.length === 0 || this.timeSchedule === '' || this.timeSchedule.length < 26) {
@@ -267,9 +207,6 @@ Vue.component('save-point', {
                 return false
             }
 
-        },
-        reverseGeocodingManualToMap() {
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
         },
         async _saveData() {
             this.saveLoading = true
@@ -312,7 +249,6 @@ Vue.component('save-point', {
                     console.log(err)
                 })
         },
-
         exist(res) {
 
             var text = 'Este ' + this.returnType() + ' ya tiene asignado el codigo '
@@ -367,15 +303,5 @@ Vue.component('save-point', {
     destroyed() {
         this.cleanDialog()
     },
-    watch: {
-        resultGeocoding(val) {
-            this.home_address = val.result.formatted_addess
-            this.lat = val.lat
-            this.lng = val.lng
 
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-            // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
-
-        },
-    },
 })

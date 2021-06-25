@@ -1886,6 +1886,7 @@ function saveDataCliente(object) {
 //buscar cliente en base 
 
 function searchCustomerDB(datoIngresadoABuscar) {
+
     $.ajax({
             url: "../controllers/equipoController.php?equipo=ver",
             type: "POST",
@@ -1901,7 +1902,8 @@ function searchCustomerDB(datoIngresadoABuscar) {
 
             if (object[0].result !== false) {
                 template = tableEquiposEnBase(object)
-                    // $("#btnAutorizar").show()
+
+                // $("#btnAutorizar").show()
 
                 $("#table").show();
                 $("#cuerpo").html(template);
@@ -2021,8 +2023,9 @@ function tableEquiposEnBase(object) {
 
 
         html += '</tr>';
-        html += '</tbody>';
+
     })
+    html += '</tbody>';
 
     return html;
 }
@@ -2618,5 +2621,33 @@ function showCredencialPost() {
 
     return html;
 
+
+}
+
+
+function tableJquery() {
+
+    $("#cuerpo").DataTable({
+
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros",
+            zeroRecords: "No se encontraron resultados",
+            info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            infoFiltered: "(filtrado de un total de _MAX_ registros)",
+            sSearch: "Filtro:",
+            oPaginate: {
+                sFirst: "Primero",
+                sLast: "Último",
+                sNext: "Siguiente",
+                sPrevious: "Anterior",
+            },
+            sProcessing: "Procesando...",
+        },
+        "bDestroy": true
+            //para usar los botones
+            // responsive: "true",
+
+    });
 
 }

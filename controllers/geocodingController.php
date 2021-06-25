@@ -63,4 +63,61 @@ class geocodingController
         echo $jsonstring;
     }
 
+    public function geocodingByCoordinates(){
+
+        $lat = isset($_GET['lat']) ? $_GET['lat'] : false ;
+        $lng = isset($_GET['lng']) ? $_GET['lng'] : false ;
+
+        $coordinates = $lat.','.$lng;
+
+        // // url encode the address
+        // $coordinatesFinal = urlencode($coordinates);
+        
+        // google map geocode api url
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=".$coordinates."&key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko";
+
+        // get the json response
+        $resp_json = file_get_contents($url);
+        
+        // decode the json
+        $resp = json_decode($resp_json, true);
+       
+        if($resp["status"] === 'OK'){
+                // if($resp["results"][0]["geometry"]["location_type"] === 'ROOFTOP' ){
+                    // get the important data
+                    $lat = isset($resp['results'][0]['geometry']['location']['lat']) ? $resp['results'][0]['geometry']['location']['lat'] : "";
+                    $long = isset($resp['results'][0]['geometry']['location']['lng']) ? $resp['results'][0]['geometry']['location']['lng'] : "";
+                    $formatted_address = isset($resp['results'][0]['formatted_address']) ? $resp['results'][0]['formatted_address'] : "";
+
+                    if($lat && $long && $formatted_address){
+                        // put the data in the array
+                        $object = array(
+                            'result'            => true,
+                            'lat'               => $lat,
+                            'lng'               => $long,
+                            'formatted_addess'  => $formatted_address
+                        );  
+                    }else {
+                        $object = array(
+                            'error' => 'has_not_provided'
+                        );
+                    }
+            // }else{
+            //     $object = array(
+            //         'error' => 'not_precise'
+            //     );
+            // }
+        }else{
+            $object = array(
+                'error' => 'not_result'
+            );
+        }
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+
+    }
+
+
+    
+
 }

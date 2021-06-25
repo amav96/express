@@ -693,7 +693,6 @@ class coberturaController{
 
     }
 
-
     public function removeAndDelete(){
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
@@ -718,7 +717,6 @@ class coberturaController{
             $jsonstring = json_encode($object);echo $jsonstring;
         }
     }
-
     //SHOW 
 
     public function showCoverage($count,$data){
@@ -1354,12 +1352,12 @@ class coberturaController{
     public function getPostalCodeByLocateAndProvinceAndCountry(){
         $id_country = isset($_GET['id_country']) ? $_GET['id_country'] : false ;
         $id_province = isset($_GET['id_province']) ? $_GET['id_province'] : false ;
-        $locate = isset($_GET['locate']) ? $_GET['locate'] : false ;
+        $id_locate = isset($_GET['id_locate']) ? $_GET['id_locate'] : false ;
 
         $get = new Cobertura();
         $get->setId_country($id_country);
         $get->setProvince($id_province);
-        $get->setLocate($locate);
+        $get->setLocate($id_locate);
         $get = $get->getPostalCodeByLocateAndProvinceAndCountry();
 
         if($get){
@@ -1472,9 +1470,6 @@ class coberturaController{
         
     }
 
-    public function hasAlreadyPointBeenGeocoded(){
-        
-    }
 
 
 }

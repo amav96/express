@@ -48,75 +48,18 @@ Vue.component('update-commerce', {
                     </h6>
                     <geocoding-simple
                     @setErrorGeocoding="errorGeocoding = $event"
-                    @setResultGeocoding="resultGeocoding = $event"
                     @setCountryID="id_country = $event"
                     @setProvinceID="id_province = $event"
                     @setLocateID="id_locate = $event"
                     @setHomeAddress="home_address = $event"
+                    @setLat="lat = $event"
+                    @setLng="lng = $event"
                     :outlined="save.commerce.select.outlined"
                     :classCustom="save.commerce.select.class"
                     :dense="save.commerce.select.dense"
                     :save="save"
                     ref="refGecoded"
                     />
-                    <v-row class="d-flex justify-between flex-row" >
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="latitud"
-                            v-model="lat"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-text-field 
-                            label="longitud"
-                            v-model="lng"
-                            outlined
-                            dense
-                            required
-                            type="text"
-                            color="black"
-                            class="info--text "
-                            >
-                            </v-text-field>
-                        </v-col>
-
-                        <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                            <v-btn
-                            class="mx-2"
-                            fab
-                            small
-                            color="primary"
-                            :disabled="lng === '' || lat === ''"
-                            @click="reverseGeocodingManualToMap()"
-                            >
-                                <v-icon dark>
-                                mdi-refresh
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-
-                    </v-row>
-                    <template v-if="srcMap !== ''" >
-                        <v-col class="pa-0" cols="12" xl="6" lg="6" >
-                                <iframe
-                                width="100%"
-                                height="450"
-                                style="border:0"
-                                loading="lazy"
-                                allowfullscreen
-                                
-                                :src="srcImgMap()">
-                                </iframe>
-                        </v-col>
-                    </template>
-                    
                         <h6 class="my-3 d-flex justify-start align-items-center"> Ingrese rango de codigo postal &nbsp;  <span class="font-weight-light" > (Esto buscará los codigos postales asignados en el rango y podras seleccionar)</span>
                         <v-icon class="mx-1">mdi-counter</v-icon>
                          </h6>
@@ -229,14 +172,12 @@ Vue.component('update-commerce', {
             home_address: '',
             lat: '',
             lng: '',
-            srcMap: '',
             id_user: '',
             infoUser: [],
             saveLoading: false,
             zone: [],
             selectZone: [],
             errorGeocoding: '',
-            resultGeocoding: '',
             error: {
                 display: false,
                 text: ''
@@ -244,7 +185,6 @@ Vue.component('update-commerce', {
             cp_start: '',
             cp_end: '',
             saveSuccess: false,
-            saveFlag: false,
         }
     },
     methods: {
@@ -255,12 +195,12 @@ Vue.component('update-commerce', {
 
         },
         setUser(user) {
+            this.reset()
             this.$nextTick(() => {
                 this.infoUser = user
                 this.id_user = user.id
                 this.hasAlreadyBeenGeocoded()
             })
-
         },
         async _getAllPointInZone() {
             const url = this.save.zone.url_AllPointInZone
@@ -299,27 +239,9 @@ Vue.component('update-commerce', {
             const url = this.save.commerce.url.hasAlreadyBeenGeocoded
             axios.get(url, { params: { id_user: this.id_user } })
                 .then(res => {
-                    if (res.data.success) {
-                        this.$_dataAlreadyGeocoded(res.data)
-                        this.selectZone = []
-                        this.zone = []
-                        this.$refs.refGecoded.resetProvinceAndLocate()
-                    } else {
-                        this.$refs.refGecoded.reset()
-                        this.lat = '';
-                        this.lng = '';
-                        this.id_country = ''
-                        this.id_province = ''
-                        this.id_locate = ''
-                        this.home_address = ''
-                        this.srcMap = ''
-                        this.selectZone = []
-                        this.zone = []
-                    }
+                    if (res.data.success) { this.$_dataAlreadyGeocoded(res.data) } else { this.$refs.refGecoded.reset() }
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(err => { console.log(err) })
         },
         $_dataAlreadyGeocoded(geocoded) {
             this.$refs.refGecoded.setGeocoded(geocoded)
@@ -409,21 +331,18 @@ Vue.component('update-commerce', {
 
             return created_at
         },
+        reset() {
+            this.id_country = ''
+            this.id_province = ''
+            this.id_locate = ''
+            this.selectZone = []
+            this.zone = []
+            this.$refs.refGecoded.reset()
+        }
 
     },
 
-    watch: {
-        resultGeocoding(val) {
-            this.home_address = val.result.formatted_addess
-            this.lat = val.lat
-            this.lng = val.lng
 
-            this.srcMap = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + this.lat + ',' + this.lng;
-            // this.srcMap = 'https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&center=' + this.lat + ',' + this.lng + '&zoom=16&size=360x230&maptype=roadmap&markers=color:red%7C' + this.lat + ',' + this.lng;
-
-        },
-
-    },
     computed: {
         validateFormComplete() {
 
