@@ -1323,11 +1323,13 @@
     /* v-tolbar */
 
     .fixed-bar {
-  position: sticky;
-  position: -webkit-sticky; /* for Safari */
-  top: 0.1px;
-  z-index: 2;
-}  
+    position: sticky;
+    position: -webkit-sticky; /* for Safari */
+    top: 0.1px;
+    z-index: 2;
+  }  
+
+  
 
     
 </style>

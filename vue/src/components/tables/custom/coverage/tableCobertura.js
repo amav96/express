@@ -76,6 +76,33 @@ Vue.component("table-cobertura", {
                         </template>
                     </d-full-screen>
                 </template>
+
+                <template v-if="showPositionInMap.display">
+                    <d-media-screen :dialogMediaScreen="showPositionInMap">
+
+                    <template v-if="showPositionInMap.loading">     
+                        <v-overlay :absolute="showPositionInMap.absolute" 
+                            opacity="2" color="white" >
+                            <v-progress-circular
+                                indeterminate
+                                size="64"
+                                color="info"
+                            ></v-progress-circular>
+                        </v-overlay>
+                    </template>
+                       
+                            <iframe
+                            width="100%"
+                            height="450"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            class="mx-auto"
+                            :src="srcMap">
+                            </iframe>
+                        
+                    </d-media-screen>
+                </template>
             
               <template>
                       <v-simple-table class="mt-6" >
@@ -144,7 +171,7 @@ Vue.component("table-cobertura", {
                                 <template v-if="isItLocatable(row)">
                                     <td>
                                         <template v-if="IsItGeolocated(row)">
-                                            <v-btn class="mx-1" color="primary" fab x-small  >
+                                            <v-btn @click="goGoogleMaps(row)" class="mx-1" color="primary" fab x-small  >
                                                 <v-icon>
                                                 mdi-map-marker-multiple
                                                 </v-icon>
@@ -153,7 +180,6 @@ Vue.component("table-cobertura", {
                                         <template v-else>
                                            <strong>Falta Geocodificar</strong>
                                         </template>
-                                        
                                     </td>
                                 </template>
                                 <template v-else >
@@ -205,7 +231,15 @@ Vue.component("table-cobertura", {
                 { text: 'Comercio', value: 'comercio' },
                 { text: 'Correo', value: 'correo' },
                 { text: 'terminal', value: 'terminal' },
-            ]
+            ],
+            showPositionInMap: {
+                display: false,
+                title: '',
+                src: '',
+                loading: false,
+                absolute: true
+            },
+
 
         }
 
@@ -310,15 +344,28 @@ Vue.component("table-cobertura", {
             } else {
                 return false
             }
-        }
+        },
+        goGoogleMaps(data) {
+            this.showPositionInMap.loading = true
+            this.showPositionInMap.src = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyDasdhwGs_A9SbZUezcx9VhSSGkxl46bko&q=' + data.lat + ',' + data.lng;
 
+            this.$nextTick(() => {
+                this.showPositionInMap.display = true
+                setTimeout(() => {
+                    this.showPositionInMap.loading = false
+                }, 1100);
+            })
 
+        },
 
     },
     computed: {
         headers() {
             return this.columns;
         },
+        srcMap() {
+            return this.showPositionInMap.src
+        }
 
 
 
