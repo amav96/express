@@ -67,6 +67,7 @@ Vue.component('select-auto-complete-search-id', {
             val && this.returnData(val)
         },
         searchID(NewVal, oldVal) {
+
             if (oldVal !== '' && NewVal !== oldVal) {
                 this.clearCachedItems();
             }
@@ -80,6 +81,7 @@ Vue.component('select-auto-complete-search-id', {
     methods: {
         getDataByID() {
             const url = this.url
+            console.log(url)
             axios.get(url, {
                     params: {
                         id: this.id_search
@@ -133,5 +135,12 @@ Vue.component('select-auto-complete-search-id', {
         }
 
     },
+    created() {
+        if (this.searchID !== '' && this.searchID !== undefined) {
+            this.id_search = this.searchID
+            this.getDataByID();
+        }
+
+    }
 
 })

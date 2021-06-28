@@ -222,7 +222,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active'";
+            ";
             $execute = $this->db->query($sql);
 
             if($execute && $execute->fetch_object()->count > 0){
@@ -242,7 +242,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND p.province = '$province'";
+            WHERE  p.province = '$province'";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){
@@ -258,7 +258,7 @@ class cobertura{
 
             $sql ="SELECT COUNT(DISTINCT(c.id)) AS 'count'
             FROM coverage c
-            WHERE c.status='active' AND c.postal_code >= '$cp_start' AND c.postal_code <= '$cp_end'
+            WHERE  c.postal_code >= '$cp_start' AND c.postal_code <= '$cp_end'
             AND c.id_country = '$id_country'";
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){
@@ -321,7 +321,6 @@ class cobertura{
       }
 
      
-
       //CONTADORES FILTRO
       public function countFilterCoverage(){
 
@@ -335,19 +334,9 @@ class cobertura{
       	LEFT JOIN province pr ON pr.id = po.id_province
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
-      	where(
-      	MATCH (pr.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (p.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (l.locate) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (co.country) 
-      	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter' or c.postal_code = '$filter' or c.type = '$filter'";
+      	where c.postal_code = '$filter' or c.postal_code = '$filter' or c.type = '$filter' OR pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%'
+      	OR co.country LIKE '%$filter%'";
+
 
             $execute = $this->db->query($sql);
             if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
@@ -370,22 +359,8 @@ class cobertura{
             LEFT  JOIN users u ON c.id_user = u.id
             LEFT  JOIN postal_code po on po.postal_code = c.postal_code
             INNER JOIN country co ON c.id_country = co.id
-            where(
-            MATCH (pr.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (p.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (l.locate) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (co.country) 
-            AGAINST ('$filter') 
-            ) or c.type = '$filter' and c.postal_code >= '$cp_start' 
-            and c.postal_code <= '$cp_end' and c.id_country = '$id_country'";
+            where (pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%' OR co.country LIKE '%$filter%' or c.type = '$filter') and (c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country')";
 
-        
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){
                   $result = $exe;
@@ -465,7 +440,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            $sql = "SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -473,8 +448,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' GROUP BY c.id order BY cast(c.postal_code as SIGNED) limit $fromRow,$limit  ;";
-
+             GROUP BY c.id order BY cast(c.postal_code as SIGNED) limit $fromRow,$limit  ;";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){ $result = $execute;}
@@ -489,7 +463,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -497,7 +471,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND p.province = '$province'
+            WHERE  p.province = '$province'
              GROUP BY c.id order BY cast(c.postal_code as signed) ASC limit $fromRow,$limit";
 
             $exe = $this->db->query($sql);
@@ -515,8 +489,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
            
-            $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-            co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+            $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
              c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -524,7 +497,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
+            WHERE  c.postal_code >= $cp_start AND c.postal_code <= $cp_end
             AND c.id_country = '$id_country' GROUP BY c.id ORDER BY  c.postal_code ASC limit $fromRow,$limit;";
 
             $exe = $this->db->query($sql);
@@ -542,7 +515,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             left JOIN provinceint p ON p.postal_code = c.postal_code
@@ -619,7 +592,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
       	FROM coverage c
       	LEFT JOIN  postal_code po ON c.postal_code = po.postal_code
@@ -628,19 +601,8 @@ class cobertura{
       	LEFT JOIN province pr ON pr.id = po.id_province
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
-      	where(
-      	MATCH (pr.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (p.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (l.locate) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (co.country) 
-      	AGAINST ('$filter') 
-     	      )  and c.status='ACTIVE' or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id order BY cast(c.postal_code as signed) ASC limit $fromRow,$limit;";
+      	where c.postal_code = '$filter' or c.type = '$filter' OR pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%'
+      	OR co.country LIKE '%$filter%' GROUP BY c.id order BY cast(c.postal_code as signed) ASC limit $fromRow,$limit;";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){$result = $execute;}
@@ -659,7 +621,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             INNER JOIN provinceint p ON p.postal_code = c.postal_code
@@ -668,21 +630,13 @@ class cobertura{
             LEFT  JOIN users u ON c.id_user = u.id
             LEFT  JOIN postal_code po on po.postal_code = c.postal_code
             INNER JOIN country co ON c.id_country = co.id
-            where(
-            MATCH (pr.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (p.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (l.locate) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (co.country) 
-            AGAINST ('$filter') 
-            )
-            or c.type = '$filter' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
+            where (pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%'
+      	OR co.country LIKE '%$filter%' or c.type = '$filter') and (c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country')
             GROUP BY c.id ORDER BY  c.postal_code ASC limit $fromRow,$limit";
+
+
+
+
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -729,7 +683,7 @@ class cobertura{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,pr.province,p.province AS 'provinceInt',co.country as 'name_country',co.id as 'id_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',u.status_process,c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng ,m.motive, c.created_at
             FROM history_coverage c
       	LEFT JOIN postal_code po ON c.postal_code = po.postal_code
@@ -774,17 +728,17 @@ class cobertura{
               }
 
                   $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+                  co.country as 'name_country',co.id as 'id_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
                   left JOIN provinceint p ON p.postal_code = c.postal_code
-                  LEFT JOIN province pr ON pr.id = c.province
+                  LEFT JOIN province pr ON pr.id = c.id_province
                   left JOIN users u ON c.id_user = u.id
                   LEFT JOIN country co ON c.id_country = co.id
                   LEFT JOIN localities l ON c.id_locate = l.id
-                  WHERE c.status='active' AND c.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
+                  WHERE  c.postal_code IN($stringPostalCode) AND c.created_at = '$created_at'
                   GROUP BY c.id order BY c.postal_code ASC";
-                  
+
                   $exe = $this->db->query($sql);
                   if($exe && $exe->num_rows>0){$result = $exe;}
                   else {$result = false;}
@@ -802,15 +756,15 @@ class cobertura{
               }
 
                   $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,
-                  co.country as 'name_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+                  co.country as 'name_country',co.id as 'id_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
                   c.lat ,c.lng,  c.created_at
                   FROM coverage c
                   left JOIN provinceint p ON p.postal_code = c.postal_code
-                  LEFT JOIN province pr ON pr.id = c.province
+                  LEFT JOIN province pr ON pr.id = c.id_province
                   left JOIN users u ON c.id_user = u.id
                   LEFT JOIN country co ON c.id_country = co.id
                   LEFT JOIN localities l ON c.id_locate = l.id
-                  WHERE c.status='active' AND c.id IN($stringId)
+                  WHERE c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
                
 
@@ -838,7 +792,7 @@ class cobertura{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at(): false ;
             $timeSchedule = !empty($this->getCustomer_service_hours()) ? $this->getCustomer_service_hours(): false ;  
             
-            $sql = "INSERT INTO coverage (postal_code,id_locate,home_address,province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$id_locate','$home_address','$province','$id_country','$type','$id_user','$user_managent_id','$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
+            $sql = "INSERT INTO coverage (postal_code,id_locate,home_address,id_province,id_country,type,id_user,user_managent_id,customer_service_hours,lat,lng,created_at,status,action) values ($postal_code,'$id_locate','$home_address','$province','$id_country','$type','$id_user','$user_managent_id','$timeSchedule','$lat','$lng','$created_at','ACTIVE','CREATED')";
 
 
             $save = $this->db->query($sql);
@@ -853,8 +807,8 @@ class cobertura{
             $created_at= !empty($this->getCreated_at()) ? $this->getCreated_at() : false;
             $motive= !empty($this->getMotive()) ? $this->getMotive() : false;
       
-            $sql = "INSERT INTO history_coverage (id,postal_code,id_locate,home_address,province,id_country,type,id_user,user_managent_id,status,action,customer_service_hours,lat,lng,motive,created_at,id_coverage) 
-            SELECT null,postal_code,id_locate,home_address,province,id_country,type,id_user,'$user_managent_id',
+            $sql = "INSERT INTO history_coverage (id,postal_code,id_locate,home_address,id_province,id_country,type,id_user,user_managent_id,status,action,customer_service_hours,lat,lng,motive,created_at,id_coverage) 
+            SELECT null,postal_code,id_locate,home_address,id_province,id_country,type,id_user,'$user_managent_id',
             STATUS,'REMOVETOHISTORY',customer_service_hours,lat,lng,'$motive','$created_at','$id'
             FROM coverage where id = '$id' ";
 
@@ -938,7 +892,7 @@ class cobertura{
       // EXPORT
 
       public function exportAllCoverage(){
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.id_province,co.country as 'name_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             LEFT JOIN  postal_code po ON c.postal_code = po.postal_code
@@ -947,7 +901,7 @@ class cobertura{
       	LEFT JOIN province pr ON pr.id = po.id_province
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
-            WHERE c.status='active' GROUP BY c.id order BY cast(c.postal_code as signed) ASC";
+             GROUP BY c.id order BY cast(c.postal_code as signed) ASC";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -967,7 +921,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND p.province = '$province'
+            WHERE p.province = '$province'
             GROUP BY c.id order BY cast(c.postal_code as signed) ASC ";
 
             $exe = $this->db->query($sql);
@@ -991,7 +945,7 @@ class cobertura{
             LEFT JOIN province pr ON pr.id = l.id_province
             left JOIN users u ON c.id_user = u.id
             LEFT JOIN country co ON c.id_country = co.id
-            WHERE c.status='active' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
+            WHERE  c.postal_code >= $cp_start AND c.postal_code <= $cp_end
             AND c.id_country = '$id_country' GROUP BY c.id ORDER BY  c.postal_code ASC ";
 
             $exe = $this->db->query($sql);
@@ -1056,19 +1010,8 @@ class cobertura{
       	LEFT JOIN province pr ON pr.id = po.id_province
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
-      	where(
-      	MATCH (pr.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (p.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (l.locate) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (co.country) 
-      	AGAINST ('$filter') 
-     	      )  and c.status='ACTIVE' or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id order BY cast(c.postal_code as signed) ";
+      	where c.postal_code = '$filter' or c.type = '$filter' OR pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%'
+      	OR co.country LIKE '%$filter%' GROUP BY c.id order BY cast(c.postal_code as signed) ";
 
             $execute = $this->db->query($sql);
             if($execute && $execute->num_rows>0){$result = $execute;}
@@ -1093,21 +1036,7 @@ class cobertura{
             LEFT  JOIN users u ON c.id_user = u.id
             LEFT  JOIN postal_code po on po.postal_code = c.postal_code
             INNER JOIN country co ON c.id_country = co.id
-            where(
-            MATCH (pr.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (p.province) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (l.locate) 
-            AGAINST ('$filter') 
-            OR
-            MATCH (co.country) 
-            AGAINST ('$filter') 
-            )
-            or c.type = '$filter' and c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country'
-           
+            where (pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%' OR co.country LIKE '%$filter%' or c.type = '$filter') and (c.postal_code >= $cp_start and c.postal_code <= $cp_end and c.id_country = '$id_country')
             GROUP BY c.id ORDER BY  c.postal_code ASC";
 
             $exe = $this->db->query($sql);
@@ -1129,19 +1058,8 @@ class cobertura{
       	left JOIN users u ON c.id_user = u.id
       	LEFT JOIN country co ON po.id_country = co.id
             LEFT JOIN motives_down_coverage m ON c.motive = m.id
-      	where(
-      	MATCH (pr.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (p.province) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (l.locate) 
-      	AGAINST ('$filter') 
-      	OR
-      	MATCH (co.country) 
-      	AGAINST ('$filter') 
-     	      ) or c.postal_code = '$filter' or c.type = '$filter' GROUP BY c.id 
+      	where c.postal_code = '$filter' or c.type = '$filter' OR pr.province LIKE '%$filter%' OR p.province LIKE '%$filter%' OR l.locate LIKE '%$filter%'
+      	OR co.country LIKE '%$filter%' GROUP BY c.id 
       	ORDER BY  c.postal_code ASC";
 
             $exe = $this->db->query($sql);
@@ -1362,7 +1280,7 @@ class cobertura{
       public function hasAlreadyCommerceBeenGeocoded(){
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
 
-            $sql ="SELECT id_locate,home_address,province AS 'id_province',id_country,id_user,lat,lng FROM coverage where id_user = '$id_user' AND lat != '' AND lng != '' LIMIT 1";
+            $sql ="SELECT id_locate,home_address,id_province,id_country,id_user,lat,lng FROM coverage where id_user = '$id_user' AND lat != '' AND lng != '' LIMIT 1";
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}

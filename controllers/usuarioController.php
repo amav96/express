@@ -1672,6 +1672,39 @@ class usuarioController
       
       }
 
+      public function getUsersCollectorByCountry(){
+
+          $id_country = isset($_GET['id']) ? $_GET['id'] : false ;
+          if($id_country === '1' ){
+               $country = 'Argentina';
+          }
+          if($id_country === '2' ){
+               $country = 'Uruguay';
+          }
+          $get = new Usuario();
+          $get->setId_country($country);
+          $get = $get->getUsersCollectorByCountry();
+          if($get){
+               foreach ($get as $element){
+                   $object[] = array(
+                       'success' => true,
+                       'id' => $element["id"],
+                       'name_user' => $element["name_user"],
+                       'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                   );
+               }
+               
+           }else {
+               $object = array(
+                   'error' => true,
+               );
+       
+           }
+       
+           $jsonstring = json_encode($object);
+           echo $jsonstring;
+      }
+
       public function getUsersCommerce(){
 
           Utils::AuthAdmin();
@@ -1703,6 +1736,46 @@ class usuarioController
       
           $jsonstring = json_encode($object);
           echo $jsonstring;
+      }
+
+      public function getUsersCommerceByCountry(){
+
+          $id_country = isset($_GET['id']) ? $_GET['id'] : false ;
+          if($id_country === '1' ){
+               $country = 'Argentina';
+          }
+          if($id_country === '2' ){
+               $country = 'Uruguay';
+          }
+          $get = new Usuario();
+          $get->setId_country($country);
+          $get = $get->getUsersCommerceByCountry();
+          if($get){
+               foreach ($get as $element){
+                   $object[] = array(
+                    'success' => true,
+                    'id' => $element["id"],
+                    'name_user' => $element["name_user"],
+                    'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.'Prov: '.$element["province"],
+                    'name_country' => $element["country"],
+                    'province' => $element["province"],
+                    'locate' => $element["location"],
+                    'home_address' => $element["home_address"],
+                    'postal_code' => $element["postal_code"],
+                    'customer_service_hours' => $element["customer_service_hours"],
+                   );
+               }
+               
+           }else {
+               $object = array(
+                   'error' => true,
+               );
+       
+           }
+       
+           $jsonstring = json_encode($object);
+           echo $jsonstring;
+
       }
 
      

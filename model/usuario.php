@@ -1171,6 +1171,18 @@
 
                 }
 
+                public function getUsersCollectorByCountry(){
+                    $country = !empty($this->getId_country()) ? $this-> getId_country() : false ;
+
+                    $sql = "SELECT id,name as 'name_user' ,country,province,location,home_address,customer_service_hours, postal_code FROM users WHERE role = 'recolector' AND status_process = 'active' and country = '$country' order by name asc";
+
+                    $exe =  $this->db->query($sql);
+                    if ($exe && $exe->num_rows>0){$result = $exe;
+                    }else {$result = false;}
+                    return $result;
+
+                }
+
                 public function getUsersCommerce(){
                     $sql = "SELECT id,name_alternative as 'name_user',country,province,location,home_address,customer_service_hours, postal_code FROM users WHERE role = 'comercio' AND status_process = 'active' order by name_alternative asc";
 
@@ -1183,8 +1195,19 @@
                     return $result;
                 }
 
+                public function getUsersCommerceByCountry(){
+                    $country = !empty($this->getId_country()) ? $this-> getId_country() : false ;
+                    $sql = "SELECT id,name_alternative as 'name_user',country,province,location,home_address,customer_service_hours, postal_code FROM users WHERE role = 'comercio' AND status_process = 'active' and country = '$country' order by name_alternative asc";
+
+                    $exe =  $this->db->query($sql);
+                    if($exe && $exe->num_rows>0){$result =$exe;}
+                    else {$result = false;}
+                    return $result;
+
+                }
+
                 public function getAllUserCollectorAndCommerce(){
-                    $sql = "SELECT id,name as 'name_user', name_alternative,role FROM users WHERE role in('recolector','comercio') AND status_process = 'active' order by name asc";
+                    $sql = "SELECT id,name as 'name_user', name_alternative,role FROM users WHERE role in('recolector','comercio','admin') AND status_process = 'active' order by name asc";
 
                     $exe =  $this->db->query($sql);
                     if($exe && $exe->num_rows>0){$result = $exe;}

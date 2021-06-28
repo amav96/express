@@ -11,15 +11,16 @@ Vue.component('update-onlyOne-commerce', {
                     <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
                         <v-row  class=" d-flex flex-row">
                             <v-col cols="12" xl="4" lg="4" sm="4" xs="4">
-                                <select-auto-complete-simple-id 
-                                @exportVal="setUser($event)"
+                                <select-auto-complete-search-id 
+                                :searchID="response.data.id_country"
                                 :title="update.commerce.select.title" 
                                 :url="update.commerce.select.url"
+                                @exportVal="setUser($event)"
                                 :outlined="update.commerce.select.outlined"
                                 :classCustom="update.commerce.select.class"
                                 :dense="update.commerce.select.dense"
                                 ref="resetUser"
-                            />
+                                />
                             </v-col>
                             <v-col cols="12" xl="6" lg="6" sm="6" xs="6">
                                 <template class="mx-auto" v-if="infoUser.length !== 0">
@@ -133,7 +134,7 @@ Vue.component('update-onlyOne-commerce', {
                 commerce: {
                     select: {
                         title: 'Ingrese Comercio',
-                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCommerce',
+                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCommerceByCountry',
                         outlined: true,
                         class: '',
                         dense: true

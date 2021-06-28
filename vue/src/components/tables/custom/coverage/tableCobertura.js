@@ -137,10 +137,30 @@ Vue.component("table-cobertura", {
                                                     </v-icon>
                                                 </v-btn>
                                             </template>
-                                            <span>Editar</span>
+                                            <span>Actualizar</span>
                                         </v-tooltip>
                                     </div>
                                 </td>
+                                <template v-if="isItLocatable(row)">
+                                    <td>
+                                        <template v-if="IsItGeolocated(row)">
+                                            <v-btn class="mx-1" color="primary" fab x-small  >
+                                                <v-icon>
+                                                mdi-map-marker-multiple
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <template v-else>
+                                           <strong>Falta Geocodificar</strong>
+                                        </template>
+                                        
+                                    </td>
+                                </template>
+                                <template v-else >
+                                    <td>
+                                    </td>
+                                </template>
+                                
                                 
                               </tr>
                           </tbody>
@@ -277,6 +297,20 @@ Vue.component("table-cobertura", {
             const restoDeLaCadena = cadena.substring(1, cadena.length);
             return primerCaracter.concat(restoDeLaCadena);
         },
+        isItLocatable(data) {
+            if (data.type === 'comercio' || data.type === 'correo' || data.type === 'terminal') {
+                return true
+            } else {
+                return false
+            }
+        },
+        IsItGeolocated(data) {
+            if (data.lat !== '' && data.lat !== undefined && data.lng !== '' && data.lng !== undefined) {
+                return true
+            } else {
+                return false
+            }
+        }
 
 
 
@@ -285,6 +319,7 @@ Vue.component("table-cobertura", {
         headers() {
             return this.columns;
         },
+
 
 
     },

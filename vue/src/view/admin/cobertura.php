@@ -923,6 +923,7 @@
                       { text: 'Nombre Asignado'},
                       { text: 'fecha'},
                       { text: 'Acciones'},
+                      { text: 'Ubicacion'},
 
                   ],
                   table : {

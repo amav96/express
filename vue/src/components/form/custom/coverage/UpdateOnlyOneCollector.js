@@ -18,10 +18,11 @@ Vue.component('update-onlyOne-collector', {
 
                 <h6 class="ml-4 my-3">Nuevo Recolector </h6>
                     <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
-                        <select-auto-complete-simple-id 
-                        @exportVal="setUser($event)"
+                        <select-auto-complete-search-id 
+                        :searchID="response.data.id_country"
                         :title="update.collector.select.title" 
                         :url="update.collector.select.url"
+                        @exportVal="setUser($event)"
                         :outlined="update.collector.select.outlined"
                         :classCustom="update.collector.select.class"
                         :dense="update.collector.select.dense"
@@ -85,7 +86,7 @@ Vue.component('update-onlyOne-collector', {
                 collector: {
                     select: {
                         title: 'Ingrese recolector',
-                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
+                        url: API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollectorByCountry',
                         outlined: true,
                         class: '',
                         dense: true
@@ -189,6 +190,9 @@ Vue.component('update-onlyOne-collector', {
             }
         }
     },
+    created() {
+        console.log(this.response.data)
+    }
 
 
 
