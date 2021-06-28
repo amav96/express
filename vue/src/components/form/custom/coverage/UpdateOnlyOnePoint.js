@@ -188,7 +188,8 @@ Vue.component('update-onlyOne-point', {
                 })
         },
         $updateAfterFront(data) {
-            // esto modifica la tabla en vivo luego de actualizar los datos en el back end
+            console.log(data)
+                // esto modifica la tabla en vivo luego de actualizar los datos en el back end
             this.response.data.id_user = this.id_user
             this.response.data.name_assigned = this.name_user
             this.response.data.home_address = data[0].home_address
@@ -196,6 +197,9 @@ Vue.component('update-onlyOne-point', {
             this.response.data.timeScheduleA = ''
             this.response.data.timeScheduleB = data[0].timeScheduleB
             this.response.data.type = data[0].type
+            this.response.data.lat = data[0].lat
+            this.response.data.lng = data[0].lng
+
         },
         $success() {
             const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }

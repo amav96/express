@@ -145,6 +145,8 @@ Vue.component('update-onlyOne-collector', {
             this.response.data.home_address = ''
             this.response.data.timeScheduleA = ''
             this.response.data.timeScheduleB = ''
+            this.response.data.lat = ''
+            this.response.data.lng = ''
         },
         $success() {
             const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }

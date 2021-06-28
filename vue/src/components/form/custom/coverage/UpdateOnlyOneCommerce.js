@@ -213,6 +213,8 @@ Vue.component('update-onlyOne-commerce', {
             this.response.data.created_at = data[0].created_at
             this.response.data.timeScheduleA = data[0].timeScheduleA
             this.response.data.type = data[0].type
+            this.response.data.lat = data[0].lat
+            this.response.data.lng = data[0].lng
         },
         $success() {
             const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }

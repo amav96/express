@@ -133,6 +133,18 @@ Vue.component('geocoding-simple', {
 
             <template v-if="srcMap !== ''" >
                 <v-col class="pa-0 my-4" cols="12" xl="6" lg="6" >
+
+                    <template v-if="frame.loading">     
+                        <v-overlay :absolute="frame.absolute" 
+                            opacity="2" color="white" >
+                            <v-progress-circular
+                                indeterminate
+                                size="64"
+                                color="info"
+                            ></v-progress-circular>
+                        </v-overlay>
+                    </template>
+
                             <iframe
                             width="100%"
                             height="450"
@@ -184,6 +196,10 @@ Vue.component('geocoding-simple', {
             reassignData: {
                 id_country: '',
                 home_address: '',
+            },
+            frame: {
+                loading: false,
+                absolute: true
             }
         }
     },
@@ -241,6 +257,10 @@ Vue.component('geocoding-simple', {
                     this.lat = res.data.lat
                     this.lng = res.data.lng
                     this.showMap()
+                    this.frame.loading = true
+                    setTimeout(() => {
+                        this.frame.loading = false
+                    }, 1100);
                 })
                 .catch(err => {
                     this.loading = false
@@ -252,8 +272,8 @@ Vue.component('geocoding-simple', {
             this.loading = true
             axios.get(url, {
                     params: {
-                        lat: this.lat.trim(),
-                        lng: this.lng.trim(),
+                        lat: this.lat,
+                        lng: this.lng,
 
                     }
                 })
@@ -276,6 +296,10 @@ Vue.component('geocoding-simple', {
                     this.lat = res.data.lat
                     this.lng = res.data.lng
                     this.showMap()
+                    this.frame.loading = true
+                    setTimeout(() => {
+                        this.frame.loading = false
+                    }, 1100);
                 })
                 .catch(err => {
                     this.loading = false

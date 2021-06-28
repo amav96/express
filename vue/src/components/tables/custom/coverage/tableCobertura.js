@@ -90,7 +90,6 @@ Vue.component("table-cobertura", {
                             ></v-progress-circular>
                         </v-overlay>
                     </template>
-                       
                             <iframe
                             width="100%"
                             height="450"
@@ -100,7 +99,6 @@ Vue.component("table-cobertura", {
                             class="mx-auto"
                             :src="srcMap">
                             </iframe>
-                        
                     </d-media-screen>
                 </template>
             
@@ -186,8 +184,6 @@ Vue.component("table-cobertura", {
                                     <td>
                                     </td>
                                 </template>
-                                
-                                
                               </tr>
                           </tbody>
                           </template>
@@ -239,10 +235,7 @@ Vue.component("table-cobertura", {
                 loading: false,
                 absolute: true
             },
-
-
         }
-
     },
     methods: {
         showDialog(item) {

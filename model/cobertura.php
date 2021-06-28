@@ -892,7 +892,7 @@ class cobertura{
       // EXPORT
 
       public function exportAllCoverage(){
-            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.id_province,co.country as 'name_country',
+            $sql="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',
             c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB', c.lat ,c.lng , c.created_at
             FROM coverage c
             LEFT JOIN  postal_code po ON c.postal_code = po.postal_code
