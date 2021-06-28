@@ -195,11 +195,6 @@ Vue.component('update-onlyOne-collector', {
     created() {
         console.log(this.response.data)
     }
-
-
-
-
-
     // agregar dos input para colocar el rango de codigo postal, buscar y mostrar
 
 

@@ -248,6 +248,7 @@
                 <template v-if="showTable() && filter.display">
                     <filter-with-pagination
                     :pagination = "pagination"
+                    :exportExcel ="exportExcel"
                     :filter="filter"
                     :dataResponseDB="table.dataResponseDB" 
                     :parametersDynamicToPaginate="parametersDynamicToPaginate"

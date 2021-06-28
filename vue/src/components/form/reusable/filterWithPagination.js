@@ -59,7 +59,8 @@ Vue.component('filter-with-pagination', {
             oldPagination: [],
             alert_flag: false,
             loaderFilter: false,
-            activate: false
+            activate: false,
+            awaitingSearch: false
         }
     },
     methods: {
@@ -105,6 +106,7 @@ Vue.component('filter-with-pagination', {
                         this.$emit('setAfterDataResponse', newDataResponse)
                         this.loaderFilter = false
 
+
                         //PAGINATION
                         if (this.filter.pagination) {
                             this.$pagination(res)
@@ -112,8 +114,6 @@ Vue.component('filter-with-pagination', {
                         if (this.filter.export.display) {
                             this.$exportExcel()
                         }
-
-
                     })
                     .catch(err => {
                         this.loaderFilter = false
@@ -122,7 +122,6 @@ Vue.component('filter-with-pagination', {
             }
         },
         resetFilter() {
-
             this.oldDataResponseDB = []
         },
         $pagination(res) {
@@ -157,7 +156,8 @@ Vue.component('filter-with-pagination', {
         $oldExportExcel() {
             this.$emit("setOldUrlExport", this.oldUrlExport)
             this.$emit("setParametersToExportExcel", this.oldParametersToCall)
-        }
+        },
+
     },
     watch: {
         data(value) {
@@ -177,11 +177,18 @@ Vue.component('filter-with-pagination', {
                     }
                     this.activate = false
                 }
-            }
+            } else {
 
+                if (!this.awaitingSearch) {
+                    setTimeout(() => {
+                        this.tryFilter();
+                        this.awaitingSearch = false;
+                    }, 1000); // 1 sec delay
+                }
+                this.awaitingSearch = true;
+            }
         },
     },
-
     destroyed() {
         this.resetFilter()
     }

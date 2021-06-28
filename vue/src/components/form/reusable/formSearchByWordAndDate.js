@@ -210,6 +210,7 @@ Vue.component('form-search-by-word-and-range-date', {
                 this.$emit('setExportByFilterDisplay', true)
             }
 
+
         },
         $_setSelect(data) {
             this.word = data.id

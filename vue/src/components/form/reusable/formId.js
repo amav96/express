@@ -50,7 +50,6 @@ Vue.component('form-id', {
 
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
-                        console.log(res)
                         if (res.data.error) {
                             const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
