@@ -45,6 +45,7 @@ Vue.component('excel-export', {
     methods: {
         async exportDocument() {
             this.flagLoader = true
+            this.download = false
             const dataRequest = this.exportExcel.parameters
 
             const url = this.exportExcel.url

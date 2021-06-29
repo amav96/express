@@ -115,14 +115,7 @@
 
             </div> 
 
-            <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/index">
-                    <div class="item">
-                    <i class="fas fa-globe-americas"></i>
-                    </div>
-                </a>
-
-            </div> 
+         
 
             <div class="mini-box-panel" id="cerrar">
                 <div class="item">

@@ -265,9 +265,10 @@
                     @restoreOldDataResponse="table.dataResponseDB = $event"
                     @restoreBeforeDataResponse="table.dataResponseDB = $event"
                     @setUrlExportByFilter="exportExcel.url = $event"
+                    @setOldUrlExport="exportExcel.url = $event"
                     />
                 </template>
-
+              
                 <template v-if="showTable() && exportExcel.display">
                   <div>
                     <v-row class="justify-center align-items-center align-content-center">
@@ -486,7 +487,7 @@
                 pagination : true
               },
               exportExcel : {
-                display : false,
+                display : true,
                 parameters:[],
                 url : '',
                 download_excel : API_BASE_EXCEL,
@@ -637,8 +638,6 @@
               this.itemsButtons[2].active = false
               this.itemsButtons[3].active = false
               
-  
-
           },
           $_formId(){
                 this.table.display= false
@@ -709,7 +708,7 @@
             
           },
           showTable(){
-            if(this.table.display && this.pagination.totalCountResponse>0){
+            if(this.table.display){
               return true
             }else {
               return false

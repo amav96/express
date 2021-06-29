@@ -22,17 +22,11 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class coberturaController{
 
-    public function index(){
-
-        Utils::AuthAdmin();
-        require_once  'views/admin/cobertura.php';
-    }
-
+   
     public function admin(){
         Utils::AuthAdmin();
         require_once  'vue/src/view/admin/cobertura.php';
     }
-
 
     //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS
 

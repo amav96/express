@@ -12,19 +12,6 @@ Vue.component('filter-with-pagination', {
                         >
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12"md="3">
-                        <v-btn
-                        color="primary"
-                        fab
-                        small
-                        primary
-                        form="form-search"
-                        type="submit"
-                        :disabled="data === ''"
-                        >
-                            <v-icon>mdi-magnify</v-icon>
-                        </v-btn>
-                    </v-col>
                     <transition name="slide-fade">
                         <v-col cols="12"md="4">
                         <v-alert 
@@ -60,7 +47,8 @@ Vue.component('filter-with-pagination', {
             alert_flag: false,
             loaderFilter: false,
             activate: false,
-            awaitingSearch: false
+            awaitingSearch: false,
+            cache: true,
         }
     },
     methods: {
@@ -72,16 +60,12 @@ Vue.component('filter-with-pagination', {
             })
         },
         async tryFilter() {
-            if (this.oldData !== this.data) {
-                // este activate es para detectar cuando realizar una busqueda realmente,
-                // asi al momento de restaurar la data, no restaura a cada rato
-                this.activate = true
+            if (this.data !== '') {
                 this.loaderFilter = true
                 const parameters = JSON.parse(JSON.stringify(this.filter.parameters))
                 const buildFilter = { filter: this.data }
                 this.objectFilter = {...parameters, ...buildFilter }
                 const dataRequest = this.objectFilter
-
                 const url = this.filter.url
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
@@ -93,21 +77,12 @@ Vue.component('filter-with-pagination', {
                             }, 3000);
                             return
                         }
-                        this.oldParametersToCall = this.parametersDynamicToPaginate
-                        this.oldUrl = this.urlTryPagination
-                            //setting values for pagination before to fetch new count 
-                        this.oldPagination = this.pagination
-                        this.oldDataResponseDB = this.dataResponseDB
-                            // lo que acabo de buscar lo guardo en cache
-                            // para no realizar la misma busqueda si es lo mismo
-                        this.oldData = this.data
+
                         this.$emit('setFlagFiltering', false)
                         const newDataResponse = res.data.data
                         this.$emit('setAfterDataResponse', newDataResponse)
                         this.loaderFilter = false
-
-
-                        //PAGINATION
+                            //PAGINATION
                         if (this.filter.pagination) {
                             this.$pagination(res)
                         }
@@ -119,12 +94,14 @@ Vue.component('filter-with-pagination', {
                         this.loaderFilter = false
                         console.log(err)
                     })
+
             }
         },
         resetFilter() {
             this.oldDataResponseDB = []
         },
         $pagination(res) {
+
             // settings values for pagination after to fetch count
             const totalCountResponse = parseInt(res.data.count)
             const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
@@ -143,10 +120,23 @@ Vue.component('filter-with-pagination', {
                 //seteo los parametros de la paginacion
             const filter = { filter: this.data }
             const newParametersDynamic = {...this.parametersDynamicToPaginate, ...filter }
-
             this.$emit('setParametersDynamicToPagination', newParametersDynamic)
         },
+        $restorePagination() {
+            const pagination = {
+                display: true,
+                fromRow: 0,
+                limit: 10,
+                pageCurrent: 1,
+                rowForPage: 10,
+                totalCountResponse: this.oldPagination.totalCountResponse,
+                totalPage: this.oldPagination.totalPage,
+            }
+            this.$emit('restoreOldPagination', pagination)
+            this.$emit('restoreUrlPagination', this.oldUrl)
+        },
         $exportExcel() {
+
             this.oldUrlExport = this.exportExcel.url
             this.$emit("setUrlExportByFilter", this.filter.export.url)
             const filter = this.data
@@ -154,28 +144,28 @@ Vue.component('filter-with-pagination', {
             this.$emit("setParametersToExportExcel", newParametersDynamic)
         },
         $oldExportExcel() {
+
+            console.log(this.oldParametersToCall)
             this.$emit("setOldUrlExport", this.oldUrlExport)
             this.$emit("setParametersToExportExcel", this.oldParametersToCall)
         },
-
+        $cache() {
+            this.oldPagination = this.pagination
+            this.oldDataResponseDB = this.dataResponseDB
+            this.oldUrl = this.urlTryPagination
+            this.oldParametersToCall = this.parametersDynamicToPaginate
+        }
     },
     watch: {
         data(value) {
             if (value === '') {
-                // si buscó realmente, guardamos  lo anterior en cache
-                if (this.activate) {
-                    if (Object.keys(this.oldDataResponseDB).length > 0) {
-                        this.$emit('restoreUrlPagination', this.oldUrl)
-                        this.$emit('restoreOldPagination', this.oldPagination)
-                        this.$emit('restoreOldParametersToCall', this.oldParametersToCall)
-                        this.oldData = ''
-                        if (this.filter.export.display) {
-                            this.$oldExportExcel()
-                        }
-                        this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
-                        this.$emit('setFlagFiltering', true)
+                if (Object.keys(this.oldDataResponseDB).length > 0) {
+                    this.$restorePagination();
+                    this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
+                    if (this.filter.export.display) {
+                        this.$oldExportExcel()
                     }
-                    this.activate = false
+                    // this.$emit('setFlagFiltering', true)
                 }
             } else {
 
@@ -191,5 +181,13 @@ Vue.component('filter-with-pagination', {
     },
     destroyed() {
         this.resetFilter()
-    }
+
+    },
+    created() {
+        this.$cache()
+    },
+
+
+
+
 })

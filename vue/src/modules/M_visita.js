@@ -422,6 +422,38 @@
                          commit('setLoadingSendNotice', false)
                      }
 
+                     var metodo;
+                     let notice_send = new FormData();
+                     notice_send.append('aviso', notice.aviso)
+                     notice_send.append('country', notice.country)
+                     notice_send.append('created_at', notice.created_at)
+                     notice_send.append('order', notice.order)
+                     notice_send.append('id_user', notice.id_user)
+                     notice_send.append('identificacion', notice.identificacion)
+                     notice_send.append('lat', notice.lat)
+                     notice_send.append('lng', notice.lng)
+                     notice_send.append('medio', 'telefono')
+                     notice_send.append('contacto', notice.contacto)
+
+                     if (notice.metodo === 'setNotice') {
+                         metodo = 'setNotice'
+                     }
+                     if (notice.metodo === 'setNoticeManagement') {
+                         metodo = 'setNoticeManagement'
+                     }
+
+                     axios.post(API_BASE_URL + 'controllers/noticeController.php?notice=' + metodo, notice_send)
+                         .then(res => {
+                             if (!res.data[0].result) {
+                                 alertNegative("Mensaje CODIGO 588")
+                             }
+
+                         })
+                         .catch(err => {
+                             console.log(err)
+                         })
+
+
 
                      var numero = notice.contacto
                      var url = 'https://api.whatsapp.com/send?phone='

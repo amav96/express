@@ -134,12 +134,16 @@
             </div>
 
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/index">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>rendicion/equipos">
                     <div class="item">
-                    <i class="fas fa-truck"></i>
+                        <i class="fas fa-laptop-medical"></i>
                     </div>
                 </a>
             </div>
+
+            
+
+           
 
             <div class="mini-box-panel" id="cerrar">
                 <div class="item">

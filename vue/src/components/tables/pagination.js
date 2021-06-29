@@ -42,13 +42,8 @@ Vue.component('pagination-custom', {
 
         },
         tryFetch(dataRequest) {
-
             const url = this.urlTryPagination
-            axios.get(url, {
-                    params: {
-                        dataRequest
-                    }
-                })
+            axios.get(url, { params: { dataRequest } })
                 .then(res => {
                     if (res.data.error) {
                         alertNegative("Ocurrio un error al paginar");
@@ -95,7 +90,8 @@ Vue.component('pagination-custom', {
     },
     beforeDestroy() {
         this.restauratePagination()
-    }
+    },
+
 
 
 })

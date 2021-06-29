@@ -16,8 +16,8 @@ class pdf extends FPDF
     {
         $remito = new Equipos();
         $remito ->setOrden($_GET["cd"]);
-         $cliente = $remito->obtainCustomerDataToIssueInvoice();
-         $getCliente= $cliente->fetch_object();
+        $cliente = $remito->obtainCustomerDataToIssueInvoice();
+        $getCliente= $cliente->fetch_object();
 
         
         //abajo de los datos----------------
@@ -210,7 +210,7 @@ $fpdf->Cell(36.5,9,utf8_decode('DIRECCION:'),1,0,'C',1);
 $fpdf->SetX(40);
 
 $fpdf->SetFont('Arial','B',7);
-$fpdf->Cell(100.5,9,$getCliente->direccion,1,0,'C',1);
+$fpdf->Cell(100.5,9,utf8_decode($getCliente->direccion),1,0,'C',1);
 $fpdf->SetFont('Arial','B',9);
 $fpdf->Cell(30,9,'RETIRO:',1,0,'C',1);
 // fecha entrega
