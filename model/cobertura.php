@@ -531,6 +531,19 @@ class cobertura{
             return $result;
 
       }
+      public function getCoverageByUserSimple(){
+
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+           
+            $sql ="SELECT id_user from coverage where id_user = '$id_user'";
+           
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
+      }
 
       public function getAllEmptyCoverage(){
 
@@ -816,6 +829,23 @@ class cobertura{
             return true;
       }
 
+      public function removeToHistoryByUser(){
+
+            $id = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $user_managent_id= !empty($this->getUser_managent_id()) ? $this->getUser_managent_id() : false ;
+            $created_at= !empty($this->getCreated_at()) ? $this->getCreated_at() : false;
+            $motive= !empty($this->getMotive()) ? $this->getMotive() : false;
+      
+            $sql = "INSERT INTO history_coverage (id,postal_code,id_locate,home_address,id_province,id_country,type,id_user,user_managent_id,status,action,customer_service_hours,lat,lng,motive,created_at,id_coverage) 
+            SELECT null,postal_code,id_locate,home_address,id_province,id_country,type,id_user,'$user_managent_id',
+            STATUS,'REMOVETOHISTORY',customer_service_hours,lat,lng,'$motive','$created_at','$id'
+            FROM coverage where id_user = '$id' ";
+
+            $this->db->query($sql);
+            return true;
+
+      }
+
       public function delete(){
             $id = !empty($this->getId()) ? $this->getId() : false ;
             $sql = "DELETE from coverage where id = '$id'";
@@ -827,6 +857,17 @@ class cobertura{
             }
 
             return $result;
+      }
+
+      public function deleteByUser(){
+
+            $id = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $sql = "DELETE from coverage where id_user = '$id'";
+            $exe = $this->db->query($sql);
+            if($exe){$result = true;
+            }else {$result = false;}
+            return $result;
+
       }
 
       public function update (){

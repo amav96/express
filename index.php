@@ -17,6 +17,7 @@ if(isset($_GET["controller"])){
     $nombre_controlador = $_GET['controller'].'Controller';
 }else if(!isset($_GET["controller"]) && !isset($_GET["action"])){
     $nombre_controlador = controller_default;
+       
 } 
 
 else {
@@ -31,6 +32,7 @@ if(class_exists($nombre_controlador)){
 
         $action = $_GET["action"];
         $controlador->$action();
+        
     
     }
     else if(!isset($_GET["controller"]) && !isset($_GET["action"])){

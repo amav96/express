@@ -212,14 +212,16 @@ $(document).on('click', '#alta', function() {
 $(document).on('click', '#baja', function() {
 
     var tdAlta = this.parentElement;
+
     var idnumber = $(tdAlta).attr("id_number");
     var mail = $(tdAlta).attr("mail");
+    var id = $(tdAlta).attr("id_user");
     var id_managent = $("#id_user_default").val()
-
 
     $("#id_usuario_baja").val(idnumber);
     $("#id_usuario_managent_baja").val(id_managent);
     $("#mail_usuario_baja").val(mail);
+    $("#id_user").val(id)
 
     $("#modalBaja").modal("show")
 
@@ -234,9 +236,13 @@ $(document).on('click', '#down_user', function() {
         var motivo_baja = $("#motivo_baja_usuario").val();
         var descripcion = $("#descripcion_baja").val();
         var mail = $("#mail_usuario_baja").val();
+        var id_user = $("#id_user").val();
+
+
 
 
         const objectBaja = {
+            id_user,
             idnumber: id_usuario_baja,
             id_managent: id_managent_baja,
             motivo: motivo_baja,
@@ -608,6 +614,43 @@ function setSatusUser(object) {
     });
 }
 
+function getDateTime() {
+
+    var today = new Date();
+    var getMin = today.getMinutes();
+    var getSeconds = today.getSeconds()
+    var getHours = today.getHours()
+
+    if (getMin < 10) { getMin = '0' + today.getMinutes() }
+    if (getSeconds < 10) { getSeconds = '0' + today.getSeconds() }
+    if (getHours < 10) { getHours = '0' + today.getHours() }
+
+    var created_at = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' +
+        ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
+
+    return created_at
+}
+
+function removeUserTheCoverage(id, admin) {
+
+    var created_at = getDateTime()
+    axios.get(base_url + '/controllers/coberturaController.php?cobertura=removeZoneByUser', {
+            params: {
+                id,
+                admin,
+                created_at
+            }
+        })
+        .then(res => {
+            if (res.data.error) {
+                alertNegative(res.data.error)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 // ver contrato
 
 function showUsers(object) {
@@ -706,7 +749,7 @@ function showUsers(object) {
                 '" id_user="' + val.id + '" nombre="' + val.nombre + '"  "><button class="btn btn-success" id="alta" >Dar Alta</button></td>';
         } else if (val.estado === "active") {
 
-            html += '<td idmail="' +
+            html += '<td id_user="' + val.id + '" idmail="' +
                 val.mailh +
                 '" id_number="' +
                 val.nroDoc +
@@ -885,6 +928,7 @@ function showAll() {
 function confirm(object) {
 
 
+
     Swal.fire({
         title: object.tittle,
         text: object.text,
@@ -910,6 +954,8 @@ function confirm(object) {
                 sendEmail(object);
             } else if (object.stat === 'down') {
                 setSatusUser(object)
+                removeUserTheCoverage(object.id_user, object.id_managent);
+
             }
         }
     })
@@ -1013,23 +1059,7 @@ function tableUser() {
         ],
     });
 
-    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    // $('#example thead tr').clone(true).appendTo( '#example thead' );
 
-    // $('#example thead tr:eq(1) th').each( function (i) {
-    //     var title = $(this).text(); //es el nombre de la columna+
-    //    title !== '' ? $(this).html( '<input type="text" class="input-dinamic" placeholder="Buscar '+title+'" />' ) : true;
-
-
-    //     $( 'input', this ).on( 'keyup change', function () {
-    //         if ( table.column(i).search() !== this.value ) {
-    //             table
-    //                 .column(i)
-    //                 .search( this.value )
-    //                 .draw();
-    //         }
-    //     } );
-    // } );
 
 }
 

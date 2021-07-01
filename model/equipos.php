@@ -473,30 +473,59 @@ class Equipos
             }
     }
 
-    public function getAllEquipos()
-    {
-        if($_POST){
+    public function existCustomer (){
+        $identificacion = !empty($this->getIdentificacionCliente()) ? $this->getIdentificacionCliente() : false ;
+        $sql = "select identificacion from equipos where identificacion = '$identificacion' 
+        or serie = '$identificacion' or terminal = '$identificacion'";
+       
+        $exe = $this->db->query($sql);
+        if($exe && $exe->num_rows>0){$result = true;}
+        else{$result = false;}
+        return $result;
+    }
 
-            $sql = "SELECT e.id , e.identificacion as 'eidentificacion', e.terminal AS 'terminal',
+    public function availableEquipment()
+    {
+       
+            $sql = "SELECT e.id , e.identificacion as 'eidentificacion',e.equipo, e.terminal AS 'terminal',
             e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
             e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
             e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
             e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
             FROM equipos e
             LEFT JOIN gestion g ON g.id = e.id
-            WHERE e.identificacion ='{$this->getIdentificacionCliente()}' AND (e.estado = '' OR e.estado IS NULL 
-            OR e.estado IN('NO-TUVO-EQUIPO','NO-COINCIDE-SERIE','RECHAZADA','EN-USO','N/TEL-EQUIVOCADO',
-            'NO-EXISTE-NUMERO','NO-RESPONDE','TIEMPO-ESPERA','SE-MUDO','YA-RETIRADO','ZONA-PELIGROSA',
-            'DESCONOCIDO-TIT','DESHABITADO','EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-            'ENTREGO-EN-SUCURSAL')
-            ) OR e.terminal = '{$this->getIdentificacionCliente()}' OR e.serie = '{$this->getIdentificacionCliente()}' GROUP BY e.id ;";
+            WHERE (e.identificacion ='{$this->getIdentificacionCliente()}' 
+            OR e.terminal = '{$this->getIdentificacionCliente()}' 
+            OR e.serie = '{$this->getIdentificacionCliente()}')
+            AND (e.estado != 'RECUPERADO' or e.estado IS null) GROUP BY e.id ;";
 
-
-
-            $result = $this->db->query($sql);
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else{$result = false;}
             return $result;
         
-        }
+    }
+
+    public function notAvailableEquipment()
+    {
+       
+            $sql = "SELECT e.id , e.identificacion as 'eidentificacion',e.equipo, e.terminal AS 'terminal',
+            e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
+            e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
+            e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
+            e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
+            FROM equipos e
+            LEFT JOIN gestion g ON g.id = e.id
+            WHERE e.identificacion ='{$this->getIdentificacionCliente()}' 
+            OR e.terminal = '{$this->getIdentificacionCliente()}' 
+            OR e.serie = '{$this->getIdentificacionCliente()}'
+            GROUP BY e.id ;";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else{$result = false;}
+            return $result;
+        
     }
 
     private function getOneTransaccion($string){

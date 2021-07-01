@@ -12,7 +12,7 @@
 
 
                 <div class="form-group"> 
-                    <label for="">Documento Usuario</label>
+                    <label for="">Usuario</label>
 
                     <input type="text" id="id_usuario_baja" class="form-control" readonly>
                    
@@ -47,6 +47,8 @@
                 </div>
                 
             </div>
+            <!-- info -->
+            <input type="hidden" id="id_user" >
 
          
             <div class="modal-footer" >

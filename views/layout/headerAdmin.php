@@ -28,11 +28,12 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.min.js" ></script>
+
     
 
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/fontawesome/css/all.css">
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/admin/recursos_panel.css?v=05042022">
+    <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/admin/recursos_panel.css?v=01072021">
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/sidebarper.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url ?>estilos/personal/datatables/DataTables-1.10.22/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="<?= base_url ?>estilos/personal/datatables/AutoFill-2.3.5/css/autoFill.dataTables.css" />
@@ -125,13 +126,13 @@
                 </a>
             </div>  -->
 
-            <div class="mini-box-panel">
+             <div class="mini-box-panel">
                 <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/admin">
                     <div class="item">
                     <i class="fas fa-globe-americas"></i>
                     </div>
                 </a>
-            </div>
+            </div> 
 
             <div class="mini-box-panel">
                 <a style="text-decoration:none;color:black;" href="<?= base_url ?>rendicion/equipos">
@@ -140,10 +141,6 @@
                     </div>
                 </a>
             </div>
-
-            
-
-           
 
             <div class="mini-box-panel" id="cerrar">
                 <div class="item">
@@ -177,9 +174,9 @@
                 <a href="<?= base_url ?>asignado/index"><i class="fas fa-globe-americas"></i>Asignado CP</a>
             </li> -->
 
-            <li>
+            <!-- <li>
                 <a href="<?= base_url ?>normalizacion/baseGeneral"><i class="fas fa-database"></i>Normalizacion</a>
-            </li>
+            </li> -->
         
             <li>
                 <a href="<?= base_url ?>usuario/logOut"><i class="fas fa-sign-out-alt"></i>Salir</a>

@@ -3,6 +3,8 @@
 class pdf extends FPDF
 {
 
+    
+
 }
 
 
@@ -151,7 +153,7 @@ class pdf extends FPDF
              $fpdf->SetFont('Arial','B',5.5);
         
              ($element["estado"] === 'RECUPERADO')
-             ?$fpdf->Cell(52.5,6,utf8_encode($element["equipo"]),'B',0,'C',1)
+             ?$fpdf->Cell(52.5,6,utf8_encode(substr($element["equipo"],0,40)),'B',0,'C',1)
              :$fpdf->Cell(52.5,6,'A VERIFICAR','B',0,'C',1);
             
              $fpdf->SetFont('Arial','B',7);
@@ -190,29 +192,108 @@ class pdf extends FPDF
                  $fpdf->Cell(196,8,'Observacion: '.' '.utf8_decode($element["accesorios"]),'B',0,'C',0);
                  $fpdf->Ln();
              }
-             $fpdf->SetTextColor(255,255,255);
-             $fpdf->SetFillColor(80,80,80);
-             $fpdf->Cell(196,1,'',0,0,'C',1);
-             $fpdf->Ln();
 
-             $fpdf->SetTextColor(0,0,0);
-             $fpdf->SetFillColor(255,255,255);
-             $fpdf->SetDrawColor(80,80,80);
             
-             $fpdf->Ln(20);
-
+             
              $path = '../resources/firmas/'.$element["fecha_firma"].$element["id_orden_pass"].'.png';
-                if(file_exists($path)){
-                    
-                echo '<pre>';
-                print_r($path);
-                echo '</pre>';
-                }
+             $aclaracion = substr($element["aclaracion"],0,25);
+             $nombre = substr($element["nombre_cliente"],0,25);
+             if(file_exists($path)){
+                 $fpdf->Image($path,50,155,40,32);
+                 $fpdf->SetDrawColor(255,255,255);
+                 $fpdf->SetFont('Arial','B',7);
+                 $fpdf->SetY(180);
+                 $fpdf->SetX(90);
+                 $fpdf->Cell(58,9,utf8_decode($nombre),1,0,'C',1);
+                 $fpdf->Cell(38,9,utf8_decode($element["identificacion"]),1,0,'C',1);
+ 
+                 $fpdf->SetY(190);
+ 
+                 $fpdf->SetLineWidth(0.5);
+                 $fpdf->SetTextColor(40,40,40);
+                 $fpdf->SetFillColor(255,255,255);
+                 $fpdf->SetDrawColor(80,80,80);
+                 $fpdf->SetFont('Arial','B',7);
+                 $fpdf->SetX(50);
+                 $fpdf->Cell(46,7,'Firma',1,0,'C',1);
+                 $fpdf->Cell(46,7,'Aclaracion',1,0,'C',1);
+                 $fpdf->Cell(46,7,'Dni',1,0,'C',1);
+              }else{
+ 
+                 $fpdf->SetDrawColor(255,255,255);
+                 $fpdf->SetFont('Arial','B',7);
+                 $fpdf->SetY(180);
+                 $fpdf->SetX(90);
+                 $fpdf->Cell(58,9,utf8_decode($nombre),1,0,'C',1);
+                 $fpdf->Cell(38,9,utf8_decode($element["identificacion"]),1,0,'C',1);
+ 
+                 $fpdf->SetY(190);
+ 
+                 $fpdf->SetLineWidth(0.5);
+                 $fpdf->SetTextColor(40,40,40);
+                 $fpdf->SetFillColor(255,255,255);
+                 $fpdf->SetDrawColor(80,80,80);
+                 $fpdf->SetFont('Arial','B',7);
+                 $fpdf->SetX(50);
+                 $fpdf->Cell(46,7,'Firma',1,0,'C',1);
+                 $fpdf->Cell(46,7,'Aclaracion',1,0,'C',1);
+                 $fpdf->Cell(46,7,'Dni',1,0,'C',1);
+ 
+              }
+                
+           
             
-             $fpdf->SetAutoPageBreak(10,120);
+            $fpdf->SetY(200);
+
+            $fpdf->Cell(196,5,'Entregamos a Posnet S.R.L y esta recibe el equipamiento cuyos datos figuran en el presente informe, a revisar y sin prestar conformidad  respecto de su estado y fun-',0,0,'C',1);
+            $fpdf->Ln();
+            $fpdf->Cell(196,5,'cionamiento. Si Posnet S.R.L   determinara la existencia de componentes danados y/o faltantes nos obligamos a continuar abonando el servicio hasta su devolucion   ',0,0,'C',1);
+            $fpdf->Ln();
+            $fpdf->Cell(196,5,'y/o reparacion o bien hasta el efectivo pago de los cargos correspondientes. Dejamos constancia asimismo de la inexistencia de operaciones cargadas en el equipa-  ',0,0,'C',1);
+            $fpdf->Ln();
+            $fpdf->Cell(196,5,'pendientes de cierre de lote.                                                                                                                                                                                                                                             ',0,0,'C',1);
+
+            $fpdf->SetTextColor(255,255,255);
+            $fpdf->SetFillColor(79,199,255);
+            $fpdf->SetFont('Arial','B',10);
+            $fpdf->SetY(216);
+            $fpdf->SetX(10);
+            $fpdf->SetTextColor(255,255,255);
+            $fpdf->SetFillColor(79,199,255);
+            $fpdf->Cell(196,5,'RECOLECTOR                                                                         ENTREGA Nro '.$element["orden"],0,0,'C',1);
+            $fpdf->SetX(40);
+            $fpdf->SetLineWidth(0.2);
+            $fpdf->SetFillColor(240,240,240);
+            $fpdf->SetTextColor(40,40,40);
+            $fpdf->SetDrawColor(255,255,255);
+            $fpdf->SetY(222);
+            $fpdf->SetX(10);
+            $fpdf->Cell(31,9,'Retira:',1,0,'C',1);
+            $fpdf->SetX(37);
+            $fpdf->Cell(69.5,9,utf8_decode($element["id_user"]),1,0,'C',1);
+            $fpdf->SetX(106.5);
+            $fpdf->Cell(30,9,'Fecha Emision:',1,0,'C',1);
+            $fpdf->SetX(137);
+            $fpdf->Cell(70,9,date('d/m/Y'),1,0,'C',1);
+
+            $fpdf->SetY(220);
+            $fpdf->SetFillColor(18,64,97);
+            $fpdf->Rect(0,255,220,25,'F');
+            
+            $fpdf->SetY(244);
+            // $fpdf->SetTextColor(255,255,255);
+            $fpdf->SetTextColor(40,40,40);
+            $fpdf->SetX(71);
+            $codigo = $element["id_orden_pass"].'.'.$element["id_user"];
+            $codigoSubStr = substr($codigo,0,100);
+            $fpdf->Write(15,$codigoSubStr);
+           
+
         }
-       
-         $fpdf->Output('I','../resources/pdf/rendicion.pdf');
-        //  $fpdf->Output('F','../resources/pdf/rendicion.pdf');
+        // $fpdf->SetAutoPageBreak(10,120);
+              
+        //$fpdf->Output('I','../resources/pdf/rendicion'.$FileName.'.pdf');
+             $fpdf->Output('F','../resources/pdf/rendicion'.$FileName.'.pdf');
+
 
         

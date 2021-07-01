@@ -245,6 +245,7 @@ async function leerDatosEquipos() {
                 }
                 insertarEquipos(infoEquipo)
                 ContarEquiposEnLS()
+                verifyStatusRow()
                 return true
             }
         } else if (localStorage.getItem('en') === 's') {
@@ -289,6 +290,7 @@ async function leerDatosEquipos() {
 
             insertarEquipos(infoEquipo)
             ContarEquiposEnLS()
+            verifyStatusRow()
             return true
         }
 
@@ -447,6 +449,7 @@ function eliminarEquipo() {
 
             eliminarEquiposLocalStorage(equipoID)
             ContarEquiposEnLS()
+
         }
 
     })
@@ -509,6 +512,7 @@ function vaciarCaja() {
         $("#abrir-caja-equipos").hide()
         vaciarEquiposLocalStorage();
         ContarEquiposEnLS()
+
         return false;
 
     })
@@ -521,6 +525,7 @@ function guardarEquiposLocalStorage(infoEquipo) {
     equipos = this.obtenerEquiposLocalStorage();
     equipos.push(infoEquipo);
     localStorage.setItem('transito', JSON.stringify(equipos));
+    verifyStatusRow()
 }
 
 function obtenerEquiposLocalStorage() {
@@ -632,6 +637,7 @@ function eliminarEquiposLocalStorage(equipoID) {
     }
 
     ContarEquiposEnLS()
+    verifyStatusRow()
 }
 
 function leerLocalStorageAlRecargarPagina() {
@@ -737,6 +743,7 @@ function leerLocalStorageAlRecargarPagina() {
 function vaciarEquiposLocalStorage() {
     localStorage.removeItem("transito");
     ContarEquiposEnLS()
+    verifyStatusRow()
 
 }
 

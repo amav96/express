@@ -1,4 +1,6 @@
-<?php if (isset($_GET['cobertura'])) {
+<?php
+
+if (isset($_GET['cobertura'])) {
 
 require_once '../model/cobertura.php';
 require_once '../model/usuario.php';
@@ -10,6 +12,7 @@ session_start();
 $accion = $_GET['cobertura'];
 $cobertura = new coberturaController();
 $cobertura->$accion();
+
 } else {
 
 require_once 'model/cobertura.php';
@@ -22,7 +25,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class coberturaController{
 
-   
     public function admin(){
         Utils::AuthAdmin();
         require_once  'vue/src/view/admin/cobertura.php';
@@ -497,6 +499,29 @@ class coberturaController{
         }
         else {$object= array('error' => 'not_removeToHistory',);}
     
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
+
+    public function removeZoneByUser(){
+
+        $id = isset($_GET['id']) ? $_GET['id'] : false ;
+        $admin = isset($_GET['admin']) ? $_GET['admin'] : false ;
+        $created_at = isset($_GET['created_at']) ? $_GET['created_at'] : false ;
+
+        $execute = new Cobertura();
+        $execute->setId_user($id);
+        if($execute->getCoverageByUserSimple()){
+            $execute->setUser_managent_id($admin);
+            $execute->setCreated_at($created_at);
+            if($execute->removeToHistoryByUser()){
+                if($execute->deleteByUser()){$object= array('success' => true,);}
+                else {$object= array('error' => 'not_delete',);}
+            }
+            else {$object= array('error' => 'not_removeToHistory',);}
+        }else{
+            $object= array('success' => 'dont_have_zone');
+        }
         $jsonstring = json_encode($object);
         echo $jsonstring;
     }

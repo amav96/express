@@ -70,78 +70,83 @@ class equipoController
         }
     }
 
-    public function ver()
+    public function getEquipment()
     {
-        if ($_POST) {
+        if ($_GET) {
+            if (!empty($_GET["identificacion"])) {
 
-            if (!empty($_POST["datoIngresadoABuscar"])) {
-
-                if (!preg_match("/^[-a-zA-Z0-9.]+$/", $_POST["datoIngresadoABuscar"])) {
+                if (!preg_match("/^[-a-zA-Z0-9.]+$/", $_GET["identificacion"])) {
                     $objeto[] = array(
                         'result' => false,
                     );
                 } else {
 
-                    $dataSearch = $_POST["datoIngresadoABuscar"];
+                    $identificacion = $_GET["identificacion"];
 
-                    $ver = new Equipos();
-                    $ver->setIdentificacionCliente($dataSearch);
+        
+                    $get = new Equipos();
+                    $get->setIdentificacionCliente($identificacion);        
+                    if($get->existCustomer()){
 
-                    $ver = $ver->getAllEquipos();
-
-                    if (is_object($ver)) {
-
-                        if ($ver->num_rows > 0) {
-
-                            while ($equipos = $ver->fetch_object()) {
-
-                            
-                                $objeto[] = array(
-                                    'result' => true,
-                                    'id' => $equipos->id,
-                                    'identificacion' => $equipos->eidentificacion,
-                                    'terminal' => $equipos->terminal,
-                                    'tarjeta' => $equipos->etarjeta,
-                                    'serie' => $equipos->eserie,
-                                    'seriebase' => $equipos->serie_base,
-                                    'idd' => $equipos->idd,
-                                    'nombreCli' => $equipos->enombre,
-                                    'direccion' => $equipos->edireccion,
-                                    'localidad' => $equipos->elocalidad,
-                                    'provincia' => $equipos->eprovincia,
-                                    'cp' => $equipos->ecodigo_postal,
-                                    'estadoEquipo' => $equipos->estado,
-                                    'telefono' => $equipos->telefono,
-                                    'empresa' => $equipos->empresa,
-                                    'telefono_cel4' => $this->clean($equipos->telefono_cel4),
-                                    'telefono_cel5' =>  $this->clean($equipos->telefono_cel5),
-                                    'telefono_cel6' =>  $this->clean($equipos->telefono_cel6),
-                                    'emailcliente' => $equipos->emailcliente
-                                    
-                                );
-                            }
-                        } else {
-
-                            $objeto[] = array(
-                                'result' => false,
-                            );
+                        $data = $get->availableEquipment();
+                        if($data){$this->showDataCustomer($data,true);}
+                        else{
+                            $dataNotAvalaible = $get->notAvailableEquipment();
+                            $this->showDataCustomer($dataNotAvalaible,false);
                         }
-
-                        $jsonstring = json_encode($objeto);
-                        echo $jsonstring;
-                    } else {
-
-                        $objeto[] = array(
-                            'result' => false,
-                        );
-                        $jsonstring = json_encode($objeto);
-                        echo $jsonstring;
+                        
+                    }else{
+                        $object= array('error' => 'No se encontraron resultados');
+                        $jsonString = json_encode($object);echo $jsonString;
                     }
+
                 }
             }
         }else{
-            echo "Error POST 516(?#4F´{F,GFÑHDFS´LKMM";
+            $object= array('error' => 'Debes ingresar identificacion');
+            $jsonString = json_encode($object);echo $jsonString;
         }
+         
+    }
+    public function showDataCustomer($object,$available){
+
+        if($object){
+
+            foreach ($object as $element){
+
+                $dataResponse[] = array(
+                    'success' => true,
+                    'available' => $available, 
+                    'id' => $element["id"],
+                    'identificacion' => $element["eidentificacion"],
+                    'equipo' => $element["equipo"],
+                    'terminal' => $element["terminal"],
+                    'tarjeta' => $element["etarjeta"],
+                    'serie' => $element["eserie"],
+                    'seriebase' => $element["serie_base"],
+                    'idd' => $element["idd"],
+                    'nombreCli' => $element["enombre"],
+                    'direccion' => $element["edireccion"],
+                    'localidad' => $element["elocalidad"],
+                    'provincia' => $element["eprovincia"],
+                    'cp' => $element["ecodigo_postal"],
+                    'estadoEquipo' => $element["estado"],
+                    'telefono' => $element["telefono"],
+                    'empresa' => $element["empresa"],
+                    'telefono_cel4' => $this->clean($element["telefono_cel4"]),
+                    'telefono_cel5' =>  $this->clean($element["telefono_cel5"]),
+                    'telefono_cel6' =>  $this->clean($element["telefono_cel6"]),
+                    'emailcliente' => $element["emailcliente"]
+                    
+                );
+    
+            }
+
+        }else{
+            $dataResponse= array('error' => 'No se encontraron resultados E4');
+        }
+
+        $jsonString = json_encode($dataResponse);echo $jsonString;
     }
 
     public function clean($str)
@@ -184,6 +189,7 @@ class equipoController
                     $accesorioCuatroLS =  $data[$i]["accesorioCuatroLS"];
                     $accesorios =  $data[$i]["accesorios"];
                     $id =  $data[$i]["id"];
+                    
                     $terminal =  $data[$i]["terminal"];
                     $identificacion =  strtoupper($data[$i]["identificacion"]);
                     $serie =  $data[$i]["serie"];

@@ -1884,47 +1884,68 @@ function saveDataCliente(object) {
 }
 
 //buscar cliente en base 
+var objectGlobalResponse = []
 
 function searchCustomerDB(datoIngresadoABuscar) {
-
-    $.ajax({
-            url: "../controllers/equipoController.php?equipo=ver",
-            type: "POST",
-            data: { datoIngresadoABuscar },
-            beforeSend: function(objeto) {
-                $("#subspinner").show()
-            },
+    objectGlobalResponse = []
+    axios.get(base_url + "/controllers/equipoController.php?equipo=getEquipment", {
+            params: { identificacion: datoIngresadoABuscar }
         })
-        .done(function(response) {
-            $("#subspinner").hide()
-            var template = '';
-            var object = JSON.parse(response);
-
-            if (object[0].result !== false) {
-                template = tableEquiposEnBase(object)
-
-                // $("#btnAutorizar").show()
-
-                $("#table").show();
-                $("#cuerpo").html(template);
-
-                $('html, body').animate({
-                    scrollTop: $('#table').offset().top
-                }, 500);
-
+        .then(res => {
+            if (res.data.error) {
+                alertNegative(res.data.error);
+                return
             }
-            if (object[0].result === false) {
-                alertNegative('Identificacion no encontrada')
-                $("#textTable").text('')
-                $("#table").hide();
-
-                return false;
-            }
+            console.log(res)
         })
+        .catch(err => {
+            console.log(err)
+        })
+
+    // $.ajax({
+    //         url: "../controllers/equipoController.php?equipo=ver",
+    //         type: "POST",
+    //         data: { datoIngresadoABuscar },
+    //         beforeSend: function(objeto) {
+    //             $("#subspinner").show()
+    //         },
+    //     })
+    //     .done(function(response) {
+    //         $("#subspinner").hide()
+    //         var template = '';
+    //         var object = JSON.parse(response);
+
+    //         if (object[0].result !== false) {
+    //             objectGlobalResponse = object
+    //             template = tableEquiposEnBase(object)
+
+    //             // $("#btnAutorizar").show()
+
+    //             $("#table").show();
+    //             $("#cuerpo").html(template);
+
+    //             $('html, body').animate({
+    //                 scrollTop: $('#table').offset().top
+    //             }, 500);
+
+    //         }
+    //         if (object[0].result === false) {
+    //             alertNegative('Identificacion no encontrada')
+    //             $("#textTable").text('')
+    //             $("#table").hide();
+
+    //             return false;
+    //         }
+    //     })
 
 }
 
 function tableEquiposEnBase(object) {
+    var equipmentLocalStorage;
+    if (localStorage.getItem('transito') !== undefined && localStorage.getItem('transito') !== null && localStorage.getItem('transito') !== '') {
+        equipmentLocalStorage = JSON.parse(localStorage.getItem('transito'))
+    }
+
     $("#textTable").text('Seleccione equipos')
     var html = "";
     html += '<thead>';
@@ -1932,6 +1953,7 @@ function tableEquiposEnBase(object) {
     html += '<th ></th>';
     html += '<th>Terminal </th>';
     html += '<th>Serie </th>';
+    html += '<th>Equipo</th>';
     html += '<th class="text-center">Tarjeta</th>';
     html += '<th>Nombre</th>';
     html += '<th>Identificación </th>';
@@ -1947,7 +1969,20 @@ function tableEquiposEnBase(object) {
 
     object.forEach((val) => {
 
-        html += '<tr colspan="6" class="bg-white" >';
+        if (equipmentLocalStorage && equipmentLocalStorage.length > 0) {
+            equipmentLocalStorage.forEach((valFront) => {
+                if (val.idd === valFront.idd) {
+                    if (valFront.estado === 'RECUPERADO') {
+                        html += '<tr colspan="6" class="bg-success text-white" >';
+                    } else {
+                        html += '<tr colspan="6" class="bg-info text-white" >';
+                    }
+                }
+            })
+        } else {
+            html += '<tr colspan="6" class="bg-white" >';
+        }
+
         html += '<td  id="abrirEquipo" class="open-modal bg-indigo-static d-flex align-content-center align-item-center align-self-center" data-target="#editProductModal"  data-toggle="modal" data-id_equipo="' + val.id + '" data-terminal="' + val.terminal + '" data-identificacion="' + val.identificacion + '" data-nombre="' + val.nombreCli + '" data-tarjeta="' + val.tarjeta + '" data-serie="' + val.serie + '" data-seriebase="' + val.seriebase + '" data-idd="' + val.idd + '" >';
 
         html += '<i style="color:#fff;" class="far fa-hand-point-up icon-recu"></i>';
@@ -1974,7 +2009,6 @@ function tableEquiposEnBase(object) {
                 html += '<td item="' + val.id + '">' + val.terminal + '</td>';
             }
 
-
         }
 
 
@@ -1998,14 +2032,20 @@ function tableEquiposEnBase(object) {
 
         }
 
+        // equipo
 
+        if (val.equipo !== '' && val.equipo !== undefined && val.equipo !== null) {
+            html += '<td>' + val.equipo + '</td>';
+        } else { html += '<td></td>'; }
 
+        // tarjeta
 
         if (val.tarjeta !== '' && val.tarjeta !== null) {
             html += '<td>' + val.tarjeta + '</td>';
         } else {
             html += '<td></td>';
         }
+
 
         html += '<td>' + val.nombreCli + '</td>';
         html += '<td>' + val.identificacion + '</td>';
@@ -2021,13 +2061,20 @@ function tableEquiposEnBase(object) {
             html += '<td></td>';
         }
 
-
         html += '</tr>';
 
     })
     html += '</tbody>';
 
     return html;
+}
+
+function verifyStatusRow() {
+
+    $("#cuerpo").html('');
+    var templateFrontEquipos = ''
+    templateFrontEquipos = tableEquiposEnBase(objectGlobalResponse)
+    $("#cuerpo").html(templateFrontEquipos);
 }
 
 //MENSAJES
