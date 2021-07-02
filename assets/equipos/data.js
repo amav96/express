@@ -1258,7 +1258,7 @@ $("#equisSalirEnvioRemito, #closeEnvioRemito").click(function() {
 
     const enviado = localStorage.getItem('rem')
 
-    console.log(enviado)
+
 
     var titulo = ''
     var icon = ''
@@ -1886,58 +1886,51 @@ function saveDataCliente(object) {
 //buscar cliente en base 
 var objectGlobalResponse = []
 
-function searchCustomerDB(datoIngresadoABuscar) {
+async function searchCustomerDB(datoIngresadoABuscar) {
     objectGlobalResponse = []
-    axios.get(base_url + "/controllers/equipoController.php?equipo=getEquipment", {
+    $("#subspinner").show()
+    $("#tableAut").hide();
+    await axios.get(base_url + "/controllers/equipoController.php?equipo=getEquipment", {
             params: { identificacion: datoIngresadoABuscar }
         })
         .then(res => {
+            $("#subspinner").hide()
+            $("#btnAutorizar").hide()
+
             if (res.data.error) {
                 alertNegative(res.data.error);
+                $("#textTable").text('')
+                $("#table").hide();
                 return
             }
-            console.log(res)
+
+            if (res.data[0].available) {
+                var template = '';
+                $("#btnAutorizar").show()
+                objectGlobalResponse = res.data
+                template = tableEquiposEnBase(objectGlobalResponse)
+                $("#table").show();
+                $("#cuerpo").html(template);
+                $('html, body').animate({
+                    scrollTop: $('#table').offset().top
+                }, 500);
+                verifyStatusRow()
+                tableJquery()
+                return
+            }
+
+            if (!res.data[0].available) {
+                alertPositive('Cliente disponible unicamente para Equipos Autorizar');
+                $("#textTable").text('')
+                $("#table").hide();
+                $("#btnAutorizar").show()
+                objectGlobalResponse = res.data
+                return
+            }
         })
         .catch(err => {
             console.log(err)
         })
-
-    // $.ajax({
-    //         url: "../controllers/equipoController.php?equipo=ver",
-    //         type: "POST",
-    //         data: { datoIngresadoABuscar },
-    //         beforeSend: function(objeto) {
-    //             $("#subspinner").show()
-    //         },
-    //     })
-    //     .done(function(response) {
-    //         $("#subspinner").hide()
-    //         var template = '';
-    //         var object = JSON.parse(response);
-
-    //         if (object[0].result !== false) {
-    //             objectGlobalResponse = object
-    //             template = tableEquiposEnBase(object)
-
-    //             // $("#btnAutorizar").show()
-
-    //             $("#table").show();
-    //             $("#cuerpo").html(template);
-
-    //             $('html, body').animate({
-    //                 scrollTop: $('#table').offset().top
-    //             }, 500);
-
-    //         }
-    //         if (object[0].result === false) {
-    //             alertNegative('Identificacion no encontrada')
-    //             $("#textTable").text('')
-    //             $("#table").hide();
-
-    //             return false;
-    //         }
-    //     })
-
 }
 
 function tableEquiposEnBase(object) {

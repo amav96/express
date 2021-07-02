@@ -527,6 +527,48 @@ class Equipos
             return $result;
         
     }
+    // NO BORRAR PORQUE ESTE BRINDA LA INFORMACION PARA LOS AVISOS DE VISITA
+    // METODO VIEJO
+    public function getAllEquipos()
+    {
+        if($_POST){
+
+            $sql = "SELECT e.id , e.identificacion as 'eidentificacion',e.equipo, e.terminal AS 'terminal',
+            e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
+            e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
+            e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
+            e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
+            FROM equipos e
+            LEFT JOIN gestion g ON g.id = e.id
+            WHERE e.identificacion ='{$this->getIdentificacionCliente()}' OR e.terminal = '{$this->getIdentificacionCliente()}' OR e.serie = '{$this->getIdentificacionCliente()}' GROUP BY e.id ;";
+
+
+            $result = $this->db->query($sql);
+            return $result;
+        
+        }
+    }
+
+    public function getDataAutorizar(){
+
+        $sql = "SELECT e.id , e.identificacion as 'eidentificacion',e.equipo, e.terminal AS 'terminal',
+            e.tarjeta AS 'etarjeta',e.serie as 'eserie', e.idd as 'idd',
+            e.serie_base as 'serie_base', e.nombre_cliente AS 'enombre',e.direccion AS 'edireccion',
+            e.localidad AS 'elocalidad', e.provincia AS 'eprovincia', e.codigo_postal AS 'ecodigo_postal' ,
+            e.telefono_cel4, e.telefono_cel5, e.telefono_cel6, e.emailcliente, e.estado AS 'estado',e.telefono1 as 'telefono', e.empresa 
+            FROM equipos e
+            LEFT JOIN gestion g ON g.id = e.id
+            WHERE e.identificacion ='{$this->getIdentificacionCliente()}' 
+            OR e.terminal = '{$this->getIdentificacionCliente()}' 
+            OR e.serie = '{$this->getIdentificacionCliente()}'
+            GROUP BY e.direccion ;";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else{$result = false;}
+            return $result;
+
+    }
 
     private function getOneTransaccion($string){
         $sql = "SELECT id,created_at,id_user from ordenes where id_user='$string' ORDER BY id DESC LIMIT 1";

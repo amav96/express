@@ -151,6 +151,13 @@
 
   </div>
 
+  <div class="table-responsive" id="tableAut">
+    <table class="table table-striped table-hover" id="cuerpoAut">
+
+    </table>
+
+  </div>
+
  
 
   <div class='clearfix'></div>

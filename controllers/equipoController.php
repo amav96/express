@@ -70,6 +70,83 @@ class equipoController
         }
     }
 
+    // NO BORRAR PORQUE ESTE BRINDA LA INFORMACION PARA LOS AVISOS DE VISITA
+    // METODO VIEJO
+    public function ver()
+    {
+        if ($_POST) {
+
+            if (!empty($_POST["datoIngresadoABuscar"])) {
+
+                if (!preg_match("/^[-a-zA-Z0-9.]+$/", $_POST["datoIngresadoABuscar"])) {
+                    $objeto[] = array(
+                        'result' => false,
+                    );
+                } else {
+
+                    $dataSearch = $_POST["datoIngresadoABuscar"];
+
+                    $ver = new Equipos();
+                    $ver->setIdentificacionCliente($dataSearch);
+
+                    $ver = $ver->getAllEquipos();
+
+                    if (is_object($ver)) {
+
+                        if ($ver->num_rows > 0) {
+
+                            while ($equipos = $ver->fetch_object()) {
+
+                            
+                                $objeto[] = array(
+                                    'result' => true,
+                                    'id' => $equipos->id,
+                                    'identificacion' => $equipos->eidentificacion,
+                                    'equipo' => $equipos->equipo,
+                                    'terminal' => $equipos->terminal,
+                                    'tarjeta' => $equipos->etarjeta,
+                                    'serie' => $equipos->eserie,
+                                    'seriebase' => $equipos->serie_base,
+                                    'idd' => $equipos->idd,
+                                    'nombreCli' => $equipos->enombre,
+                                    'direccion' => $equipos->edireccion,
+                                    'localidad' => $equipos->elocalidad,
+                                    'provincia' => $equipos->eprovincia,
+                                    'cp' => $equipos->ecodigo_postal,
+                                    'estadoEquipo' => $equipos->estado,
+                                    'telefono' => $equipos->telefono,
+                                    'empresa' => $equipos->empresa,
+                                    'telefono_cel4' => $this->clean($equipos->telefono_cel4),
+                                    'telefono_cel5' =>  $this->clean($equipos->telefono_cel5),
+                                    'telefono_cel6' =>  $this->clean($equipos->telefono_cel6),
+                                    'emailcliente' => $equipos->emailcliente
+                                    
+                                );
+                            }
+                        } else {
+
+                            $objeto[] = array(
+                                'result' => false,
+                            );
+                        }
+
+                        $jsonstring = json_encode($objeto);
+                        echo $jsonstring;
+                    } else {
+
+                        $objeto[] = array(
+                            'result' => false,
+                        );
+                        $jsonstring = json_encode($objeto);
+                        echo $jsonstring;
+                    }
+                }
+            }
+        }else{
+            echo "Error POST 516(?#4F´{F,GFÑHDFS´LKMM";
+        }
+    }
+
     public function getEquipment()
     {
         if ($_GET) {
@@ -108,6 +185,37 @@ class equipoController
         }
          
     }
+    public function getEquipmentAutorizar(){
+
+        if ($_GET) {
+            if (!empty($_GET["identificacion"])) {
+
+                if (!preg_match("/^[-a-zA-Z0-9.]+$/", $_GET["identificacion"])) {
+                    $objeto[] = array(
+                        'result' => false,
+                    );
+                } else {
+                    $identificacion = $_GET["identificacion"];
+                    $get = new Equipos();
+                    $get->setIdentificacionCliente($identificacion);        
+                    if($get->existCustomer()){
+
+                        $data = $get->getDataAutorizar();
+                        if($data){$this->showDataCustomer($data,false);}
+                        else{
+                            $object= array('error' => 'No se encontraron resultados');
+                            $jsonString = json_encode($object);echo $jsonString;
+                        }
+                    }
+                }
+            }else{
+                $object= array('error' => 'Debes ingresar identificacion');
+                $jsonString = json_encode($object);echo $jsonString;
+            }
+        }
+    }
+
+    
     public function showDataCustomer($object,$available){
 
         if($object){

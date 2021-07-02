@@ -557,6 +557,7 @@ function finalizarTransaccion() {
     $("#abrir-caja-equipos").hide()
     $("#cajaBuscador").hide()
     $("#table").hide()
+    $("#tableAut").hide();
     $("#finalizar").hide()
 
     $("#btnAutorizar").hide()

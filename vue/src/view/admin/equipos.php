@@ -7,43 +7,43 @@
 
 <!-- component  avisos -->
   
-<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=10062021"></script>
+<script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderDialog.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/helpers/loaderLine.js?v=030720212"></script>
 
 <!-- dialog component -->
-<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposUpdate.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposDelete.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=10062021"></script>
+<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposUpdate.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/dialog/admin/equipos/equiposDelete.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/dialog/sendInvoice.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/dialog/detailNotice.js?v=030720212"></script>
 
 <!-- table component -->
-<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/tables/excel.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js?v=10062021"></script>
+<script src="<?=base_url?>vue/src/components/tables/pagination.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/tables/excel.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/components/tables/tableEquipos.js?v=030720212"></script>
 
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/reusable/formSearchByWordAndDate.js?v=10062021"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formSearchByWordAndDate.js?v=030720212"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchDate.js?v=12062021"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/formSearchWord.js?v=12062021"></script>
-<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=10062021"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js?v=030720212"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js?v=1306221"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSearchID.js?v=1306221"></script>
 
 <!-- headers component -->
-<script  src="<?=base_url?>vue/src/components/headers/sub-headers.js?v=10062021"></script>
+<script  src="<?=base_url?>vue/src/components/headers/sub-headers.js?v=030720212"></script>
 
 <!-- pagination component -->
-<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=10062021"></script>
+<script  src="<?=base_url?>vue/src/components/tables/pagination.js?v=030720212"></script>
 
 <!-- helpers component -->
-<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=10062021"></script>
-<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=10062021"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageAlert.js?v=030720212"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js?v=030720212"></script>
 
 <!-- Store -->
-<script src="<?=base_url?>vue/src/store/index.js?v=10062021"></script>
-<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=10062021"></script>
+<script src="<?=base_url?>vue/src/store/index.js?v=030720212"></script>
+<script src="<?=base_url?>vue/src/modules/M_adminAvisos.js?v=030720212"></script>
 <!-- views -->
 
 <?php require_once 'views/layout/footerAdmin.php'; ?>

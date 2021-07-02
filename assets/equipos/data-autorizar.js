@@ -84,7 +84,7 @@ $("#btnAutorizar").click(function() {
     if (transito === null || transito.length === 0) {
 
         valorBusqueda = $("#q").val().trim();
-        setDataAutorizar(valorBusqueda)
+        getCustomerAutorizar(valorBusqueda)
     } else {
 
         var getGuia = transito[0].id
@@ -97,55 +97,84 @@ $("#btnAutorizar").click(function() {
 })
 
 
-function setDataAutorizar(valorBusqueda) {
-
-    var datoIngresadoABuscar = valorBusqueda.toUpperCase();
-    if (datoIngresadoABuscar !== '') {
-
-        $.ajax({
-            url: "../controllers/equipoController.php?equipo=ver",
-            type: "POST",
-            data: { datoIngresadoABuscar },
-            beforeSend: function() {
-                $("#subspinner").show()
-            },
-        }).done(function(response) {
-            $("#subspinner").hide()
-            template = "";
-            var object = JSON.parse(response)
-
-
-            if (object[0].result !== false) {
-
-                template = tableAutorizar(object);
-
-                $("#table").show();
-                $("#cuerpo").html(template);
-
-
-                Swal.fire({
-                    icon: "success",
-                    title: 'Escoge la posible ubicación del equipo',
-                    timer: 2100,
-                    showConfirmButton: false,
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    }
-                })
-
-            } else {
-
-                alertNegative('Identificacion no encontrada')
-                $("#textTable").text('')
-                $("#table").hide();
-                return false;
-
-            }
+async function getCustomerAutorizar(valorBusqueda) {
+    $("#subspinner").show()
+    $("#table").hide();
+    await axios.get(base_url + "/controllers/equipoController.php?equipo=getEquipmentAutorizar", {
+            params: { identificacion: valorBusqueda }
         })
-    }
+        .then(res => {
+            $("#subspinner").hide()
+                // $("#table").hide();
+                // $("#cuerpo").html('');
+            if (res.data.error) {
+                alertNegative(res.data.error);
+                $("#textTable").text('')
+                $("#tableAut").hide();
+                // $("#cuerpo").html('');
+                $("#btnAutorizar").hide()
+                return
+            }
+
+
+            $("#btnAutorizar").show()
+            var templateAut = '';
+
+            // templateAut = tableEquiposEnBase(res.data);
+            templateAut = tableAutorizar(res.data);
+            $("#tableAut").show();
+            $("#cuerpoAut").html(templateAut);
+            tableJqueryAut()
+
+            Swal.fire({
+                icon: "success",
+                title: 'Escoge la posible ubicación del equipo',
+                timer: 2100,
+                showConfirmButton: false,
+            })
+
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+}
+
+
+function tableAutorizar(object) {
+    $("#textTable").text('Seleccione Ubicación')
+    var html = "";
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th></th>';
+    html += '<th>Provincia</th>';
+    html += '<th>Localidad</th>';
+    html += '<th>Posible direccion</th>';
+    html += '<th>Nombre Cliente</th>';
+    html += '<th>Identificacion</th>';
+    html += '</tr>';
+    html += '</thead>';
+    html += '<tbody>';
+
+    object.forEach((val) => {
+
+        html += '<tr>';
+        html += '<td elemento=' + val.id + '>';
+        html += '<button id="agregar" class="btn btn-warning" >Escoger</button>';
+        html += '</td>';
+        html += '<td>' + val.provincia + '</td>';
+        html += '<td>' + val.localidad + '</td>';
+        html += '<td>' + val.direccion + '</td>';
+        html += '<td>' + val.nombreCli + '</td>';
+        html += '<td>' + val.identificacion + '</td>';
+        html += '</tr>';
+    })
+
+    html += '</tbody>';
+
+
+    return html;
+
 
 
 }
@@ -397,42 +426,7 @@ $(document).on("click", "#agregar,#btnAutorizar", function() {
 })
 
 
-function tableAutorizar(object) {
 
-    var html = "";
-    html += '<thead>';
-    html += '<tr>';
-    html += '<th></th>';
-    html += '<th>Provincia</th>';
-    html += '<th>Localidad</th>';
-    html += '<th>Nombre Cliente</th>';
-    html += '<th>Identificacion</th>';
-    html += '</tr>';
-    html += '</thead>';
-    html += '<tbody>';
-
-    object.forEach((val) => {
-
-        html += '<tr>';
-        html += '<td elemento=' + val.id + '>';
-        html += '<button id="agregar" class="btn btn-warning" >Escoger</button>';
-        html += '</td>';
-        html += '<td>' + val.provincia + '</td>';
-        html += '<td>' + val.localidad + '</td>';
-        html += '<td>' + val.nombreCli + '</td>';
-        html += '<td>' + val.identificacion + '</td>';
-
-        html += '<tr>';
-    })
-
-    html += '</tbody>';
-
-
-    return html;
-
-
-
-}
 
 
 function setearDomForm() {
@@ -717,4 +711,31 @@ function ifYouDeliverAccessoryNumberFourFromAnotherOfCompanyAut() {
     contSerieBaseAut.show();
     serieBaseAutINPUT.show();
     serieBaseAutINPUT.val("");
+}
+
+function tableJqueryAut() {
+
+    $("#cuerpoAut").DataTable({
+
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros",
+            zeroRecords: "No se encontraron resultados",
+            info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            infoFiltered: "(filtrado de un total de _MAX_ registros)",
+            sSearch: "Filtro:",
+            oPaginate: {
+                sFirst: "Primero",
+                sLast: "Último",
+                sNext: "Siguiente",
+                sPrevious: "Anterior",
+            },
+            sProcessing: "Procesando...",
+        },
+        "bDestroy": true
+            //para usar los botones
+            // responsive: "true",
+
+    });
+
 }
