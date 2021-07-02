@@ -23,14 +23,7 @@ class usuarioController
           require_once 'views/login/login.php';
      }
 
-     public function admin()
-     {
-
-          //ingresar a la vista admin
-          Utils::AuthAdmin();
-          require_once 'vue/src/view/admin/equipos.php';
-     }
-
+   
      public function Register()
      {
           $info = $this->detect();

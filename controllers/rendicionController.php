@@ -20,7 +20,7 @@ class rendicionController
     public function equipos(){
      
         Utils::AuthAdmin();
-        require_once  'vue/src/view/admin/rendicion.php';
+        require_once  'vue/src/view/admin/readEquipment.php';
     }
 
     public function clean($str)

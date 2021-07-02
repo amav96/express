@@ -471,7 +471,7 @@
                           Total Registros <strong> &nbsp;{{MAINRESOURCES.pagination.totalCountResponse}} </strong>
                       </v-btn>
                   </div>
-              </template>
+                </template>
               
                 <template v-if="showTable() && MAINRESOURCES.filter.display">
                     <filter-with-pagination
@@ -1214,116 +1214,4 @@
     })
 </script>
 
-<style>
-    .empujarParaArriba{
-      margin-top: -20px;
-    }
-   
-     .sacarOutline{
-        outline: none !important;
-        border: none !important;
-    }
-    .centrado-total-column{
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        flex-direction: column;
-        margin: 0 1rem;
-    }
-    .centrado-total-row{
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        flex-direction: row;
-        margin: 0 1rem;
-    }
 
-    /* botones */
-    .btn-base{
-      display:flex;
-      justify-content: center;
-      align-items: center ; 
-      padding:5px 10px;
-      border-radius:15px;
-      transition: 0.5s;
-      outline: none !important;
-      border: none !important;
-    }
-    .btn-base:hover{
-      transform: scale(1.05);
-      outline:none !important ;
-      border: none !important;
-    }
-
-    /* letra */
-
-    .noUpperCase {
-      text-transform: none !important;
-    }
-
-    /* color */
-    .color-blue-custom {
-      color:#0093f5 !important ;
-    }
-
-    .color-white-custom {
-      color: white !important ;
-    }
-    /* background */
-    .bg-blue-custom {
-      background:#0093f5;
-    }
-
-    .bg-black-custom {
-      background: black;
-    }
-
-    .active-link{
-      background:red;
-    }
-
-    /* tamaños input */
-
-    .field-medium{
-      width: 11rem;
-    }
-
-    /* contenedores */
-
-    .altura {
-      height:5rem !important;
-    }
-
-   
-    /* animaciones */
-
-    .slide-fade-enter-active {
-  transition: all .3s ease;
-    }
-    .slide-fade-leave-active {
-      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-    }
-    .slide-fade-enter, .slide-fade-leave-to
-    /* .slide-fade-leave-active below version 2.1.8 */ {
-      transform: translateX(10px);
-      opacity: 0;
-    }
-
-    /* dialog */
-
-    .v-dialog__content{
-      z-index: 600 !important;
-    }
-
-    /* inputs */
-
-    /* v-tolbar */
-
-    .fixed-bar {
-    position: sticky;
-    position: -webkit-sticky; /* for Safari */
-    top: 0.1px;
-    z-index: 2;
-  }  
-
-</style>

@@ -47,7 +47,7 @@ class noticeController
 
     Utils::AuthAdmin();
     $info = $this->detect();
-    require_once 'vue/src/view/admin/avisos.php';
+    require_once 'vue/src/view/admin/notice.php';
   }
 
   public function setNotice()

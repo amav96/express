@@ -108,7 +108,7 @@
         <?php  }else if($_SESSION["username"]->role==='admin' && $_SESSION["username"]->status_process==='active'){ ?>
 
             <li>
-                <a href="<?= base_url ?>usuario/admin">
+                <a href="<?= base_url ?>equipo/gestion">
 
                     <div class="fondocirculodelicono adm">
                         <i class="iconoadentrodelcirculo fas fa-rocket"></i>
@@ -161,7 +161,7 @@
         <?php  if($_SESSION["username"]->role==='admin' && $_SESSION["username"]->status_process==='active'){ ?>
 
             <li>
-                <a href="<?=base_url?>usuario/admin"><i class="fas fa-rocket"></i>Panel</a>
+                <a href="<?=base_url?>equipo/gestion"><i class="fas fa-rocket"></i>Panel</a>
             </li>
 
 <?php   } }?>

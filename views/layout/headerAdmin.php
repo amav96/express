@@ -30,7 +30,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.min.js" ></script>
 
     
-
+    <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/admin/vue/main.css">
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/fontawesome/css/all.css">
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="<?= base_url ?>estilos/personal/css/admin/recursos_panel.css?v=01072021">
@@ -75,10 +75,13 @@
 
 
             </div>
-            <div class="mini-box-panel" id="mostrarpanel">
-                <div class="item">
+          
+            <div class="mini-box-panel">
+                <a style="text-decoration:none;color:black;"  href="<?= base_url ?>equipo/gestion">
+                    <div class="item">
                     <i class="fas fa-search"></i>
-                </div>
+                    </div>
+                </a>
 
             </div>
 
@@ -141,6 +144,16 @@
                     </div>
                 </a>
             </div>
+
+            <div class="mini-box-panel">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>asignacion/bases">
+                    <div class="item">
+                    <i class="fas fa-database"></i>
+                    </div>
+                </a>
+            </div>
+
+            
 
             <div class="mini-box-panel" id="cerrar">
                 <div class="item">

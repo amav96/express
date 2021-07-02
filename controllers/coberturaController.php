@@ -27,7 +27,7 @@ class coberturaController{
 
     public function admin(){
         Utils::AuthAdmin();
-        require_once  'vue/src/view/admin/cobertura.php';
+        require_once  'vue/src/view/admin/coverage.php';
     }
 
     //BUSCADORES DIRECTOS DE COBERTURA PARA TABLAS

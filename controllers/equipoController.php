@@ -22,6 +22,14 @@ class equipoController
 {
 
 
+    public function gestion()
+    {
+
+         //ingresar a la vista admin
+         Utils::AuthAdmin();
+         require_once 'vue/src/view/admin/manageEquipments.php';
+    }
+
     public function collector()
     {
         

@@ -78,15 +78,19 @@ class Utils{
 
         if(isset($_SESSION) && $_SESSION){
 
-            if($_SESSION["username"]->role === 'admin'){
-                header("Location:".base_url.'usuario/admin');
-           }
-           if($_SESSION["username"]->role === 'recolector'){
-                header("Location:".base_url.'equipo/collector');
-           }
-           if($_SESSION["username"]->role === 'call'){
-            header("Location:".base_url);
-           }
+            if(isset($_SESSION["username"])){
+                if($_SESSION["username"]->role === 'admin'){
+                    header("Location:".base_url.'usuario/admin');
+               }
+               if($_SESSION["username"]->role === 'recolector'){
+                    header("Location:".base_url.'equipo/collector');
+               }
+               if($_SESSION["username"]->role === 'call'){
+                header("Location:".base_url);
+               }
+            }
+
+            
         }
 
     
