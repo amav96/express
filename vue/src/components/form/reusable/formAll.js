@@ -16,7 +16,7 @@ Vue.component('form-all', {
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
                         if (res.data.error) {
-                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
+                            const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
                             return;
                         }
@@ -35,7 +35,10 @@ Vue.component('form-all', {
                         this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
-                        this.$emit('loadingTable', false)
+                        this.$nextTick(() => {
+                            this.$emit('loadingTable', false)
+                        })
+
 
                     })
 
@@ -51,6 +54,10 @@ Vue.component('form-all', {
             }
         },
         error(error) {
+            if (this.resources.pagination) {
+                this.$emit("showPagination", false)
+            }
+
             this.$emit('setErrorGlobal', error)
             this.$emit('loadingTable', false)
             this.$emit('showTable', false)

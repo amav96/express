@@ -193,6 +193,7 @@ class equipoController
         }
          
     }
+    
     public function getEquipmentAutorizar(){
 
         if ($_GET) {

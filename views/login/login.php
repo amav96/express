@@ -51,7 +51,7 @@
      </form>
  </div>
 
- <script src="<?=base_url?>assets/login/loginUs.js?v=05042021"></script>
+ <script src="<?=base_url?>assets/login/loginUs.js?v=05072021"></script>
 
 
  <?php require_once 'views/layout/footer.php'; ?>

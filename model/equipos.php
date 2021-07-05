@@ -256,6 +256,8 @@ class Equipos
     public function setIdentificacionCliente($identificacionCliente)
     {
         $this->identificacionCliente = $this->db->real_escape_string($identificacionCliente);
+
+        
     }
     public function setIdd($idd)
     {
@@ -390,11 +392,11 @@ class Equipos
     }
     public function setWord($word)
     {
-        $this->word = $word;
+        $this->word = $this->db->real_escape_string($word);
     }
     public function setFilter($filter)
     {
-        $this->filter = $filter;
+        $this->filter = $this->db->real_escape_string($filter);
     }
    
 
