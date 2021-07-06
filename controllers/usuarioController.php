@@ -1632,7 +1632,6 @@ class usuarioController
       
           $jsonstring = json_encode($object);
           echo $jsonstring;
-          
      }
 
       // SCOPE
@@ -1649,7 +1648,7 @@ class usuarioController
                       'success' => true,
                       'id' => $element["id"],
                       'name_user' => $element["name_user"],
-                      'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                      'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.$element["location"].' - '.$element["province"],
                   );
               }
               

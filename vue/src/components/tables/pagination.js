@@ -34,12 +34,7 @@ Vue.component('pagination-custom', {
     },
     methods: {
         paginate() {
-
             this.setLoader(true)
-            if (this.resources && this.resources.chekbox) {
-                console.log("hehe")
-
-            }
             this.$emit('setPageCurrent', this.page)
 
             this.pageCurrentLocal = this.pageCurrentLocal
@@ -90,7 +85,7 @@ Vue.component('pagination-custom', {
             const pagination = {
                 display: false,
                 totalPage: 0,
-                rowForPage: 10,
+                rowForPage: this.pagination.rowForPage,
                 pageCurrent: 1,
                 totalCountResponse: 0,
                 fromRow: 0,

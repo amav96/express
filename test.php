@@ -4,6 +4,8 @@ const codigo_postal_2001 = [
     {id:'7'},
     {id:'10'},
     {id:'1000'},
+    {id:'1200'},
+    {id:'1047'},
 ]
 
 
@@ -14,10 +16,8 @@ var zonaDividida = Math.ceil(totalZona/cantidad)
 var recolectores_disponibles = []
 var construir;
 var zonaActual;
-var zonaInicio;
 var ini = 0;
 var iniSiguiente;
-var finSiguiente;
 var fin;
 var count = 1
 var countAux = 0
@@ -25,6 +25,8 @@ const generarRecolectores = codigo_postal_2001.map((val,index)=> {
   
     zonaActual = (zonaDividida *count)
     iniSiguiente = (zonaDividida *countAux)
+  
+    console.log(iniSiguiente)
     
     if(index<1){
     ini

@@ -8,6 +8,7 @@
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 
+
 <!-- table -->
 <script  src="<?=base_url?>vue/src/components/tables/custom/assignment/tableAssignment"></script>
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -81,7 +82,7 @@
                  <loader-line />
                 </template>
 
-                <template v-if="showTableAssignment && MAINRESOURCES.pagination.display" >
+                <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
                   <div class="my-1 mt-3 d-flex justify-center" >
                       <v-btn
                           >
@@ -89,7 +90,6 @@
                       </v-btn>
                   </div>
                 </template>
-{{MAINRESOURCES.select.selected}}
 
                 <template v-if="showTableAssignment">
                   <template v-if="MAINRESOURCES.table.type = 'allEquipments'">
@@ -106,22 +106,21 @@
                  <loader-line />
                 </template>
 
-                 <template v-if="MAINRESOURCES.pagination.display">
+                <template v-if="MAINRESOURCES.pagination.display">
                   <pagination-custom 
-                      :pagination="MAINRESOURCES.pagination"
-                      :select ="MAINRESOURCES.select"
-                      @cleanSelected="$_cleanSelected($event)"
-                      :urlTryPagination="MAINRESOURCES.urlTryPagination"
-                      @setPageCurrent= "MAINRESOURCES.pagination.pageCurrent = $event"
-                      @setFromRow="MAINRESOURCES.pagination.fromRow = $event"
-                      @updateDataResponseDB="MAINRESOURCES.table.dataResponseDB = $event"
-                      @showLoaderLine="MAINRESOURCES.loadingPaginate.display =  $event"
-                      :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
-                      @updateDynamicParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
-                      @restauratePagination="MAINRESOURCES.pagination = $event"
-                      />
-                 </template>
-                   
+                    :pagination="MAINRESOURCES.pagination"
+                    :select ="MAINRESOURCES.select"
+                    @cleanSelected="$_cleanSelected($event)"
+                    :urlTryPagination="MAINRESOURCES.urlTryPagination"
+                    @setPageCurrent= "MAINRESOURCES.pagination.pageCurrent = $event"
+                    @setFromRow="MAINRESOURCES.pagination.fromRow = $event"
+                    @updateDataResponseDB="MAINRESOURCES.table.dataResponseDB = $event"
+                    @showLoaderLine="MAINRESOURCES.loadingPaginate.display =  $event"
+                    :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
+                    @updateDynamicParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                    @restauratePagination="MAINRESOURCES.pagination = $event"
+                  />
+                </template>
         </v-app>
         `,
         computed:{
@@ -137,6 +136,7 @@
                     display : true,
                     url: {
                       getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getAllEquipos',
+                     
                     },
                     subheader: {
                       display : false,
@@ -166,27 +166,29 @@
                         { text: 'Codigo postsal'},
                         { text: 'Localidad'},
                         { text: 'Provincia'},
+                        { text: 'Pais'},
                         { text: 'Direccion'},
                         { text: 'Identificacion'},
                         { text: 'Pertenece a'},
                         { text: 'Asignado'},
                         { text: 'Nombre C.'},
                         { text: 'Empresa'},
+                        { text: 'Cartera'},
                       ],
                    
-                    },
-                   
+                    }, 
                 },
                 MAINRESOURCES : {
                   url_actions : {
                       download_excel : API_BASE_EXCEL,
                       delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
+                      automaticallyAssign:API_BASE_CONTROLLER + 'asignacionController.php?asignacion=automaticallyAssign',
                   },
                   urlTryPagination:'',
                   pagination : {
                       display: true,
                       totalPage : 0, 
-                      rowForPage:10,
+                      rowForPage:15,
                       pageCurrent: 1,
                       totalCountResponse:0,
                       fromRow:0,
@@ -260,10 +262,11 @@
                   select:{
                     selected :[],
                     display: true
-                  }
+                  },
+                  admin:''
 
                 },
-              
+                
             }
         },
         methods:{
@@ -286,10 +289,21 @@
                   this.$refs.assignment.cleanSelected()
                 })
                 
-            }
-         
+            },
+            getAdmin(){
+              if(document.getElementById("id_user_default") === null){
+                alertNegative("Mensage Codigo 52")
+                return
+              }else {
+                let admin =  document.getElementById("id_user_default").value
+                let country = document.getElementById("id_admin").value
+                this.MAINRESOURCES.admin = admin
+              }
+            },
         },
-       
-        
+        created(){
+          this.getAdmin();
+        }
+
     })
 </script>

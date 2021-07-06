@@ -63,6 +63,9 @@ class asignacionController{
 
     public function showEquipments($count,$data){
 
+       
+    
+
         if($count && $data){
         
             foreach ($count as $dataCounter){
@@ -86,13 +89,16 @@ class asignacionController{
                     'direccion' => $dataResponse["direccion"],
                     'provincia' => $dataResponse["provincia"],
                     'localidad' => $dataResponse["localidad"],
+                    'cartera' => $dataResponse["cartera"],
+                    'pais' => $dataResponse["pais"],
                     'codigo_postal' => $dataResponse["codigo_postal"],
                     'digito' => $dataResponse["digito"],
                     'name_assigned' => $dataResponse["name"],
                     'name_alternative' => $dataResponse["name_alternative"],
-                    'belongs' => $this->getUserByZone($dataResponse["codigo_postal"],$dataResponse["digito"]),
-                
+                    'belongs' => $this->getZoneByUserAndDigit($dataResponse["codigo_postal"],$dataResponse["digito"],$dataResponse["pais"])
+                   
             );
+           
         }
 
         $object = array(
@@ -100,8 +106,8 @@ class asignacionController{
             'data' => $arrData
         );
     
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
+         $jsonstring = json_encode($object);
+         echo $jsonstring;
         }
     }
 
@@ -117,17 +123,108 @@ class asignacionController{
         }
     }
 
-    public function getUserByZone($zone,$identification){
-        echo '<pre>';
-        print_r('zona-> '.$zone);
-        echo '</pre>';
-        echo '<pre>';
-        print_r('digito-> '.$identification);
-        echo '</pre>';
-    }
-
-   
+    public function getZoneByUserAndDigit($zone,$digit,$pais){
 
     
+        $get = new Asignacion();
+        $get->setPostal_code($zone);
+        $get->setId_country($pais);
+        $get = $get->getZoneByUserAndDigit();
+        $usersAvailables=[];
+        $belongsToTheUser='';
+        $objectUserInRange = [];
+        $totalZone = 99;
+        $start=0;
+        $finish='';
+        $count = 1;
+        $countAux = 0;
+       
+         if($get){
+             foreach ($get as $element){
+                 $usersAvailables[] = array(
+                     'id_user'       => $element["id_user"],
+                     'name'     => $element["name"]
+                 );  
+             }
+         }else{
+            $belongsToTheUser = false;
+         }
 
+         if($usersAvailables && count($usersAvailables) >0){
+            $countUsersAvailables = count($usersAvailables);
+            $dividingZone = ceil($totalZone/$countUsersAvailables);
+            
+            foreach($usersAvailables as $key => $element){
+                $zoneCurrent = ($dividingZone*$count);
+                $startNext =  ($dividingZone*$countAux);
+                if($key<1){
+                    $finish = $dividingZone;
+                    $startNext =  ($dividingZone*$count);
+                    $objectUserInRange[]= array(
+                        'id_user'   => $element["id_user"],
+                        'name'      => $element["name"],
+                        'start'     => $start,
+                        'finish'    => $finish
+                    );
+                }else{
+                    $start = $startNext+1;
+                        if($zoneCurrent >= 100){
+                            $finish = $zoneCurrent-1;
+                        }else{
+                            $finish = $zoneCurrent;
+                        }
+                    $objectUserInRange[]= array(
+                        'id_user'   => $element["id_user"],
+                        'name'      => $element["name"],
+                        'start'     => $start,
+                        'finish'    => $finish
+                    );
+                }
+                $count++;
+                $countAux++;
+            }
+         }
+
+         foreach ($objectUserInRange as $element){
+            if($digit>=$element["start"] && $digit <= $element["finish"]){
+              
+                $belongsToTheUser = array(
+                    'id_user'   => $element["id_user"],
+                    'name'      => $element["name"]
+                );
+            }
+         }
+         return $belongsToTheUser;
+         
+    }
+
+    // ACTION
+
+    public function automaticallyAssign(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $update = false;
+        $action = new Asignacion();
+       
+        foreach ($Request->value as $singleElement){
+        
+    
+            $action->setId($singleElement->id);
+            $action->setId_user($singleElement->id_user);
+            $action->setCreated_at($Request->created_at);
+            $action->setId_admin($Request->admin);
+            $action = $action->automaticallyAssign();
+            if($action){$update= true;}
+            else{$update = false;}
+           
+        }
+        
+       
+        if($update){$object = array('success' => true);}
+        else{$object = array('error' => true);}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
 }
