@@ -104,8 +104,8 @@ class Asignacion{
       // COUNT
 
       public function countAllEquipos(){
-
-            $sql = "SELECT count(*) as 'count' from equipos";
+            Utils::AuthAdmin();
+            $sql = "SELECT count(*) as 'count' from equipos where (cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR')) and provincia like '%mendoza%' ";
      
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -117,7 +117,7 @@ class Asignacion{
 
       public function getAllEquipos(){
 
-          
+            Utils::AuthAdmin();
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
@@ -125,7 +125,8 @@ class Asignacion{
             $sql = "SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative
             from equipos e 
             left join users u on u.id = e.id_user_assigned
-            group by e.codigo_postal order by cast(e.codigo_postal as SIGNED)   asc limit $fromRow,$limit ";
+            where (e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR')) and e.provincia like '%mendoza%' 
+            order by cast(e.codigo_postal as SIGNED)   asc limit $fromRow,$limit ";
 
             // where localidad like '%MENDOZA%' 
             $exe = $this->db->query($sql);
@@ -171,5 +172,18 @@ class Asignacion{
             $exe = $this->db->query($sql);
             if($exe){return true;}
             else{return false;}
+      }
+
+      public function removeAssign(){
+
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
+            $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
+
+            $sql="UPDATE equipos set id_user_assigned = null ,id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' where id = '$id' ";
+            $exe = $this->db->query($sql);
+            if($exe){return true;}
+            else{return false;}
+
       }
 }

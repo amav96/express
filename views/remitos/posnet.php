@@ -283,9 +283,18 @@ $total= 0;
                  $fpdf->Cell(22,6,'Dispositivo','B',0,'C',1);
                  $fpdf->Cell(36,6,utf8_decode($detail["serie"]),'B',0,'C',1);
                  $fpdf->SetFont('Arial','B',7);
-                 $fpdf->Cell(18.5,6,$detail["accesorio_uno"],'B',0,'C',1);
-                 $fpdf->Cell(19.5,6,$detail["accesorio_tres"],'B',0,'C',1);
-                 $fpdf->Cell(17,6,$detail["accesorio_cuatro"],'B',0,'C',1);
+            
+                 if($detail["accesorio_uno"] === 'no entrego'){
+                    $fpdf->Cell(18.5,6,'no','B',0,'C',1);
+                }else{$fpdf->Cell(18.5,6,'si','B',0,'C',1);}
+
+                if($detail["accesorio_tres"] === 'no entrego'){
+                    $fpdf->Cell(19.5,6,'no','B',0,'C',1);
+                }else{$fpdf->Cell(19.5,6,'si','B',0,'C',1);}
+
+                if($detail["accesorio_cuatro"] === 'no entrego'){
+                    $fpdf->Cell(17,6,'no','B',0,'C',1);
+                }else{$fpdf->Cell(17,6,'si','B',0,'C',1);}
                  
                  $fpdf->Ln(6.5);
                  

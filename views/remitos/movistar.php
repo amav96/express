@@ -200,11 +200,24 @@ class pdf extends FPDF
                                         ($detail["estado"] === 'RECUPERADO')
                                         ? $fpdf->Cell(36,10, utf8_decode($detail["equipo"]),'B',0,'C',1)
                                         : $fpdf->Cell(36,10, 'A VERIFICAR','B',0,'C',1);
-                                        
-                                        $fpdf->Cell(18,10,$detail["accesorio_uno"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_dos"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_tres"],'B',0,'C',1);
-                                        $fpdf->Cell(18,10,$detail["accesorio_cuatro"],'B',0,'C',1);
+
+                                        if($detail["accesorio_uno"] === 'no entrego'){
+                                            $fpdf->Cell(18,10,'no','B',0,'C',1);
+                                        }else{$fpdf->Cell(18,10,'si','B',0,'C',1);}
+
+                                        if($detail["accesorio_dos"] === 'no entrego'){
+                                            $fpdf->Cell(18,10,'no','B',0,'C',1);
+                                        }else{$fpdf->Cell(18,10,'si','B',0,'C',1);}
+
+                                        if($detail["accesorio_tres"] === 'no entrego'){
+                                            $fpdf->Cell(18,10,'no','B',0,'C',1);
+                                        }else{$fpdf->Cell(18,10,'si','B',0,'C',1);}
+
+                                        if($detail["accesorio_cuatro"] === 'no entrego'){
+                                            $fpdf->Cell(18,10,'no','B',0,'C',1);
+                                        }else{$fpdf->Cell(18,10,'si','B',0,'C',1);}
+
+
                                         ($detail["estado"] === 'RECUPERADO')
                                         ? $fpdf->Cell(16.9,10,'B','B',0,'C',1)
                                         : $fpdf->Cell(16.9,10,'A','B',0,'C',1);

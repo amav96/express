@@ -138,17 +138,17 @@
             </div> 
 
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>rendicion/equipos">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>asignacion/bases">
                     <div class="item">
-                        <i class="fas fa-laptop-medical"></i>
+                    <i class="fas fa-database"></i>
                     </div>
                 </a>
             </div>
 
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>asignacion/bases">
+                <a style="text-decoration:none;color:black;" href="<?= base_url ?>rendicion/equipos">
                     <div class="item">
-                    <i class="fas fa-database"></i>
+                        <i class="fas fa-laptop-medical"></i>
                     </div>
                 </a>
             </div>

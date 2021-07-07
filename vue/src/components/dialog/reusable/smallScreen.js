@@ -6,7 +6,6 @@ Vue.component('d-small-screen', {
         max-width="320"
         hide-overlay
         persistent
-        
         >
             <v-card>
                <template>

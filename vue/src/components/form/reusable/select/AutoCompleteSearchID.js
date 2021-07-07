@@ -81,7 +81,6 @@ Vue.component('select-auto-complete-search-id', {
     methods: {
         getDataByID() {
             const url = this.url
-            console.log(url)
             axios.get(url, {
                     params: {
                         id: this.id_search

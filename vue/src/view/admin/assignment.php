@@ -7,14 +7,18 @@
 <!-- helpers -->
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
+<script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
-
+<!-- dialog -->
+<script  src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
 <!-- table -->
 <script  src="<?=base_url?>vue/src/components/tables/custom/assignment/tableAssignment"></script>
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/custom/assignment/manualAssignment.js"></script>
 <script src="<?=base_url?>vue/src/store/index.js?"></script>
 
     <!-- headers component -->
@@ -48,6 +52,7 @@
                         @showPagination="MAINRESOURCES.pagination.display = $event"
                         @resetPagination="MAINRESOURCES.pagination = $event"
                         @loadingTable="MAINRESOURCES.table.loading = $event"
+                        @showLoaderLine="MAINRESOURCES.loadingPaginate.display =  $event"
                         @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
                         @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
                         @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
@@ -78,8 +83,12 @@
               </template>
 
                 
+                
+
                 <template v-if="MAINRESOURCES.table.loading" >
-                 <loader-line />
+                <v-skeleton-loader
+                  type="date-picker"
+                ></v-skeleton-loader>
                 </template>
 
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
@@ -90,24 +99,9 @@
                       </v-btn>
                   </div>
                 </template>
-
-                <template v-if="showTableAssignment">
-                  <template v-if="MAINRESOURCES.table.type = 'allEquipments'">
-                    <table-assignment 
-                    :resources="MAINRESOURCES" 
-                    :columns="allDataBase.table.columns"
-                    @setSelected="MAINRESOURCES.select.selected = $event"
-                    ref="assignment"
-                    />
-                  </template>
-                </template>
-             
-                <template v-if="MAINRESOURCES.loadingPaginate.display" >
-                 <loader-line />
-                </template>
-
                 <template v-if="MAINRESOURCES.pagination.display">
                   <pagination-custom 
+                    :reload="MAINRESOURCES.reload"
                     :pagination="MAINRESOURCES.pagination"
                     :select ="MAINRESOURCES.select"
                     @cleanSelected="$_cleanSelected($event)"
@@ -119,8 +113,36 @@
                     :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
                     @updateDynamicParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
                     @restauratePagination="MAINRESOURCES.pagination = $event"
+                    ref="pagination"
                   />
                 </template>
+              
+                <template v-if="MAINRESOURCES.loadingPaginate.display" >
+                 <loader-line />
+                </template>
+            
+                <template v-if="showTableAssignment">
+                  <template v-if="MAINRESOURCES.table.type = 'allEquipments'">
+                    <table-assignment 
+                    :resources="MAINRESOURCES" 
+                    :columns="allDataBase.table.columns"
+                    :manualAssignment="manualAssignment"
+                    @setLoader="MAINRESOURCES.loadingPaginate.display"
+                    @setSelected="MAINRESOURCES.select.selected = $event"
+                    @realoadCurrentPage="$_realoadCurrentPage($event)"
+                    @reaload="MAINRESOURCES.reload = $event"
+                    @setSnack="MAINRESOURCES.snackbar = $event"
+                    ref="assignment"
+                    />
+                  </template>
+                </template>
+
+                <template>
+                      <message-snack
+                      :snackbar="MAINRESOURCES.snackbar"
+                      />
+                </template>
+         
         </v-app>
         `,
         computed:{
@@ -166,33 +188,85 @@
                         { text: 'Codigo postsal'},
                         { text: 'Localidad'},
                         { text: 'Provincia'},
-                        { text: 'Pais'},
                         { text: 'Direccion'},
                         { text: 'Identificacion'},
                         { text: 'Pertenece a'},
                         { text: 'Asignado'},
-                        { text: 'Nombre C.'},
-                        { text: 'Empresa'},
                         { text: 'Cartera'},
+                        { text: 'Estado'},
+                        { text: 'Nombre C.'},
+                        { text: 'Empresa'},   
                       ],
                    
                     }, 
+                },
+                manualAssignment:{
+                  display: false,
+                  title:'Asignar manualmente',
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getAllEquipos',
+                     
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage'
+                    },
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportAllCoverage',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoverage',
+                    },
+                    select : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
+                      title: 'Recolector',
+                      class: '',
+                      outlined: false,
+                      dense: true
+                    },
+                    pagination:true,
+                    table: {
+                      columns: [
+                        { text: '',icon : 'mdi-select-multiple',alt_icon:'mdi-selection-off' , method: '$_selectAll'},
+                        { text: 'Codigo postsal'},
+                        { text: 'Localidad'},
+                        { text: 'Provincia'},
+                        { text: 'Direccion'},
+                        { text: 'Identificacion'},
+                        { text: 'Pertenece a'},
+                        { text: 'Asignado'},
+                        { text: 'Cartera'},
+                        { text: 'Estado'},
+                        { text: 'Nombre C.'},
+                        { text: 'Empresa'},
+                       
+                        
+                      ],
+                   
+                    },
+                   
                 },
                 MAINRESOURCES : {
                   url_actions : {
                       download_excel : API_BASE_EXCEL,
                       delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
-                      automaticallyAssign:API_BASE_CONTROLLER + 'asignacionController.php?asignacion=automaticallyAssign',
+                      toAssign:API_BASE_CONTROLLER + 'asignacionController.php?asignacion=toAssign',
+                      removeAssign: API_BASE_CONTROLLER + 'asignacionController.php?asignacion=removeAssign',
+                     
                   },
                   urlTryPagination:'',
                   pagination : {
                       display: true,
                       totalPage : 0, 
-                      rowForPage:15,
+                      rowForPage:20,
                       pageCurrent: 1,
                       totalCountResponse:0,
                       fromRow:0,
-                      limit:15
+                      limit:20
                   },
                   loadingPaginate:{
                     display: false,
@@ -263,7 +337,8 @@
                     selected :[],
                     display: true
                   },
-                  admin:''
+                  admin:'',
+                  reload: false
 
                 },
                 
@@ -300,6 +375,9 @@
                 this.MAINRESOURCES.admin = admin
               }
             },
+            $_realoadCurrentPage(){
+              this.$refs.pagination.paginate()
+            }
         },
         created(){
           this.getAdmin();

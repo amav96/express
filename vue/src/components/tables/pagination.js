@@ -7,7 +7,7 @@ Vue.component('pagination-custom', {
                 v-model="page"
                 class="my-4"
                 :length="pagination.totalPage"
-                @input="paginate"
+                @input="paginate()"
                 :disabled="checkbox"
             ></v-pagination>
         </v-container>
@@ -108,7 +108,6 @@ Vue.component('pagination-custom', {
     },
     beforeDestroy() {
         this.restauratePagination()
-        console.log("destroy")
     },
 
 

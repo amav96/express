@@ -200,16 +200,15 @@ class asignacionController{
 
     // ACTION
 
-    public function automaticallyAssign(){
+    public function toAssign(){
 
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
         $update = false;
-        $action = new Asignacion();
-       
-        foreach ($Request->value as $singleElement){
         
-    
+        foreach ($Request->value as $singleElement){
+
+            $action = new Asignacion();
             $action->setId($singleElement->id);
             $action->setId_user($singleElement->id_user);
             $action->setCreated_at($Request->created_at);
@@ -217,14 +216,38 @@ class asignacionController{
             $action = $action->automaticallyAssign();
             if($action){$update= true;}
             else{$update = false;}
-           
+         
         }
         
-       
-        if($update){$object = array('success' => true);}
-        else{$object = array('error' => true);}
+         if($update){$object = array('success' => true);}
+         else{$object = array('error' => true);}
 
-        $jsonstring = json_encode($object);
-        echo $jsonstring;
+         $jsonstring = json_encode($object);
+         echo $jsonstring;
     }
+
+    public function removeAssign(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $remove = false;
+        foreach ($Request->value as $singleElement){
+
+             $action = new Asignacion();
+             $action->setId($singleElement->id);
+             $action->setCreated_at($Request->created_at);
+             $action->setId_admin($Request->admin);
+             $action = $action->removeAssign();
+             if($action){$remove= true;}
+             else{$remove = false;}
+        }
+        
+          if($remove){$object = array('success' => true);}
+          else{$object = array('error' => true);}
+
+          $jsonstring = json_encode($object);
+          echo $jsonstring;
+    }
+
+
 }

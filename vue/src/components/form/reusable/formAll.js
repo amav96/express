@@ -20,7 +20,6 @@ Vue.component('form-all', {
                             this.error(error);
                             return;
                         }
-                        console.log(res)
 
                         //PAGINATION
                         this.resources.pagination ? this.$pagination(res) : false;
@@ -80,6 +79,7 @@ Vue.component('form-all', {
             this.$emit("resetPagination", pagination)
         },
         $pagination(res) {
+
             // settings values for pagination after to fetch count
             const totalCountResponse = parseInt(res.data.count)
             const totalPage = Math.ceil(totalCountResponse / this.pagination.rowForPage)
@@ -94,7 +94,8 @@ Vue.component('form-all', {
             }
 
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
-            setTimeout(() => { this.$emit('showPagination', true) }, 200);
+            this.$emit('showPagination', true);
+
         },
         $filter() {
 

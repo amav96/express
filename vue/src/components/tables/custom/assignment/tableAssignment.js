@@ -3,34 +3,51 @@ Vue.component('table-assignment', {
         `
     <div>
     <v-container>
-       <template v-if="select.selected.length>0">
+        <template v-if="manualAssignment.display && select.selected.length > 0">
+            <d-small-screen
+             :dialogSmallScreen="manualAssignment"
+            >
+                <v-container>
+                  <manual-assignment
+                  :manualAssignment="manualAssignment"
+                  :select="select"
+                  @setUser="id_user = $event"
+                  @manualAssigned="_manualAssigned($event)"
+                  />
+                </v-container>
+            </d-small-screen>
+        </template>
 
+       
         <v-row class="d-flex justify-start flex-row flex-wrap my-2">
                 <div class="ma-2">
-                    <v-btn color="info" @click="automaticallyAssign()">
+                    <v-btn :disabled="select.selected.length<1" color="info" @click="_automaticAssigned()">
                         Asignar automáticamente
                     </v-btn>
                 </div>
-                
                 <div class="ma-2">
-                    <v-btn color="warning">
-                    Asignar manualmente
+                    <v-btn :disabled="select.selected.length<1" @click="manualAssignment.display = true" color="warning">
+                        Asignar manualmente
                     </v-btn>
                 </div>
-                
                 <div class="ma-2">
-                    <v-chip >
-                    Seleccionados {{select.selected.length}}
-                    </v-chip>
+                    <v-btn :disabled="select.selected.length<1" color="error" @click=_removeAssigned()>
+                        Quitar asignado
+                    </v-btn>
                 </div>
+                <template v-if="select.selected.length>0">
+                    <div class="ma-2">
+                        <v-chip >
+                        Seleccionados {{select.selected.length}}
+                        </v-chip>
+                    </div>
+                </template>
             </v-row>
-
-       </template>
+      
             
             
         
     </v-container>
-         
 
         <v-simple-table class="mt-6" >
             <thead>
@@ -57,18 +74,17 @@ Vue.component('table-assignment', {
             <tbody>
                 <tr v-for="row in resources.table.dataResponseDB">
                     <td>
-                    <template v-if="row.belongs">
-                        <v-checkbox
-                        v-model="select.selected"
-                        :value="returnValueSelected(row.id,row.belongs.id_user)"
-                        ></v-checkbox>
+                   
+                    <template v-if="row.id_user_assigned && row.id_user_assigned !== '' && row.id_user_assigned !== null">
+                        <input type="checkbox" ref="check" v-model="select.selected" :value="returnValueSelected(row.id,row.belongs.id_user)" :disabled="!row.belongs" >
                     </template>
-                    
+                    <template v-else>
+                        <input type="checkbox" ref="check" v-model="select.selected" :value="returnValueSelectedEmpty(row.id,row.belongs.id_user)" :disabled="!row.belongs" >
+                    </template>
                     </td>
                     <td><strong>{{row.codigo_postal}}</strong></td>
                     <td>{{row.localidad}}</td>
                     <td>{{row.provincia}}</td>
-                    <td>{{row.pais}}</td>
                     <td>{{row.direccion}}</td>
                     <td>{{row.identificacion}}</td>
                     
@@ -103,24 +119,23 @@ Vue.component('table-assignment', {
                            </v-chip>
                           </td>
                         </template>
+                        <td>{{row.cartera}}</td>
+                        <td>{{row.estado}}</td>
                     <td>{{row.nombre_cliente}}</td>
                     <td>{{row.empresa}}</td>
-                    <td>{{row.cartera}}</td>
-                    
                 </tr>
             </tbody>
         </v-simple-table>
     </div>
     `,
-    props: ['resources', 'columns', 'data'],
-    computed: {
+    props: ['resources', 'columns', 'data', 'manualAssignment'],
 
-    },
     data() {
         return {
             select: {
                 selected: [],
-            }
+            },
+            id_user: '',
         }
     },
     methods: {
@@ -129,11 +144,20 @@ Vue.component('table-assignment', {
         },
         $_selectAll() {
             if (this.select.selected && this.select.selected.length < 1) {
-                this.resources.table.dataResponseDB.forEach((val) => {
-                    this.select.selected.push(val.id)
+                this.resources.table.dataResponseDB.forEach((val, index) => {
+                    if (val.belongs) {
+                        this.$refs.check[index].checked = true
+                        const value = { id: val.id, id_user: val.belongs.id_user }
+                        this.select.selected.push(value)
+                    }
+
+
                 })
             } else {
                 this.select.selected = []
+                this.$refs.check.forEach((val) => {
+                    if (val.checked) val.checked = false
+                })
             }
 
         },
@@ -148,12 +172,22 @@ Vue.component('table-assignment', {
         returnValueSelected(id, belongs) {
             const value = {
                 id,
-                id_user: belongs
+                id_user: belongs,
+                empty: false
             }
             return value
         },
-        automaticallyAssign() {
-            const url = this.resources.url_actions.automaticallyAssign
+        returnValueSelectedEmpty(id, belongs) {
+            const value = {
+                id,
+                id_user: belongs,
+                empty: true
+            }
+            return value
+        },
+        _automaticAssigned() {
+            this.$emit("setLoader", true)
+            const url = this.resources.url_actions.toAssign
             const dataRequest = {
                 value: this.select.selected,
                 created_at: this.getDateTime(),
@@ -161,11 +195,99 @@ Vue.component('table-assignment', {
             }
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    console.log(res)
+                    this.$emit("setLoader", false)
+                    if (res.data.error) {
+                        this.$message('Se ha producido una excepción', 'error');
+                        return
+                    }
+                    this.$emit("realoadCurrentPage")
+
+                    this.$nextTick(() => {
+                        this.$message('Realizado correctamente', 'success');
+                        this.resetCheckbox()
+
+                    })
+
                 })
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        _manualAssigned() {
+            this.$emit("setLoader", true)
+            const url = this.resources.url_actions.toAssign
+            var value = []
+            this.select.selected.forEach((val) => {
+                value.push({ id: val.id, id_user: this.id_user })
+            })
+            const dataRequest = {
+                value: value,
+                created_at: this.getDateTime(),
+                admin: this.resources.admin
+            }
+            axios.get(url, { params: { dataRequest } })
+                .then(res => {
+                    this.$emit("setLoader", false)
+                    if (res.data.error) {
+                        this.$message('Se ha producido una excepción', 'error');
+                        return
+                    }
+                    this.$emit("realoadCurrentPage")
+                    this.manualAssignment.display = false
+                    this.$nextTick(() => {
+                        this.$message('Realizado correctamente', 'success');
+                        this.resetCheckbox()
+                    })
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        _removeAssigned() {
+            this.$emit("setLoader", true)
+            const value = this.select.selected.filter(item => !item.empty)
+            if (value.length < 1) {
+                this.$message('Los registros seleccionados no estan asignados', 'error');
+                this.$emit("setLoader", false)
+                return
+            }
+            const url = this.resources.url_actions.removeAssign
+            const dataRequest = {
+                value: value,
+                created_at: this.getDateTime(),
+                admin: this.resources.admin
+            }
+            axios.get(url, { params: { dataRequest } })
+                .then(res => {
+                    this.$emit("setLoader", false)
+                    if (res.data.error) {
+                        this.$message('Se ha producido una excepción', 'error');
+                        return
+                    }
+                    this.$emit("realoadCurrentPage")
+                    this.manualAssignment.display = false
+                    this.$nextTick(() => {
+                        this.$message('Realizado correctamente', 'success');
+                        this.resetCheckbox()
+                    })
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+
+        },
+        $message(msg, color) {
+            const snack = { display: true, timeout: 2500, text: msg, color: color }
+            this.$emit("setSnack", snack)
+        },
+        resetCheckbox() {
+            this.select.selected = []
+            this.$refs.check.forEach((val) => {
+                if (val.checked) { val.checked = false }
+            })
         },
         getDateTime() {
             var today = new Date();
@@ -182,13 +304,30 @@ Vue.component('table-assignment', {
 
             return created_at
         },
+        update() {
+            if (this.select.selected.length < 1) {
+                this.$emit("reaload", true)
+                this.$nextTick(() => {
+                    this.$emit("realoadCurrentPage")
+                })
 
+            }
+        },
+        isSelected() {
+            setInterval(() => {
+                this.update()
+            }, 30000)
+        },
 
+    },
+    created() {
+        this.isSelected();
     },
     watch: {
         select: {
             handler(val) {
                 this.$emit("setSelected", val.selected)
+
             },
             deep: true
         }
