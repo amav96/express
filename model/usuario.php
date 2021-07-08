@@ -1207,7 +1207,7 @@
                 }
 
                 public function getAllUserCollectorAndCommerce(){
-                    $sql = "SELECT id,name as 'name_user', name_alternative,role FROM users WHERE role in('recolector','comercio','admin') AND status_process = 'active' order by name asc";
+                    $sql = "SELECT id,name as 'name_user', name_alternative,role,location,province FROM users WHERE role in('recolector','comercio','admin') AND status_process = 'active' order by name asc";
 
                     $exe =  $this->db->query($sql);
                     if($exe && $exe->num_rows>0){$result = $exe;}

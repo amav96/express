@@ -5,7 +5,7 @@ Vue.component('empty-collector', {
             <v-row class=" d-flex justify-start flex-column ma-1 my-0" >
                 <template v-if="error.display" >
                             <v-alert
-                            class="mx-auto my-5" 
+                            class="mx-2 my-5" 
                             color="error"
                             dark
                             type="error"
@@ -84,6 +84,10 @@ Vue.component('empty-collector', {
                     }
                 })
                 .then(res => {
+                    if (res.data.error && res.data.error === "exist") {
+                        this.exist(res)
+                        return
+                    }
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
                         this.saveLoading = false
@@ -120,6 +124,13 @@ Vue.component('empty-collector', {
             })
             this.$emit('setFront', 'save')
             this.$emit("setDialog", false)
+        },
+        exist(res) {
+            var text = res.data.name_user + ' ya tiene asignado el codigo '
+            text = text + ' ' + res.data.postal_code
+
+            this.error.display = true
+            this.error.text = text
         },
     },
     computed: {

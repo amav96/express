@@ -29,6 +29,7 @@ class asignacionController{
         require_once  'vue/src/view/admin/assignment.php';
     }
 
+    // DATA
     public function getAllEquipos(){
         // Utils::AuthAdmin();
 
@@ -58,6 +59,37 @@ class asignacionController{
             $jsonstring = json_encode($object); echo $jsonstring;
         }
     }
+
+    public function getFilterEquipos(){
+
+        $Request = json_decode($_GET['dataRequest']);
+        
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
+
+        $get = new Asignacion();
+        $get->setFilter($filter);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countFilterEquipos();
+            if($count){
+                $data = $get->getFilterEquipos();
+                if($data){
+                    $this->showEquipments($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+
+    }
+
+
 
     // HELPERS
 

@@ -1,6 +1,8 @@
 Vue.component('empty-commerce', {
     template: //html 
         `<div>
+
+              
                 
                 <h6 class="ml-4 my-3 d-flex justify-start align-items-center">Nuevo Comercio 
                     <v-icon class="mx-1">mdi-store</v-icon>
@@ -61,6 +63,20 @@ Vue.component('empty-commerce', {
                    
                     />
                 </v-col>
+
+                <template v-if="error.display" >
+                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >    
+                            <v-alert
+                            class="mx-2 my-5" 
+                            color="error"
+                            dark
+                            type="error"
+                            elevation="2"
+                            >
+                            {{error.text}}
+                            </v-alert>
+                    </v-col>
+                </template>
 
                 <v-col  cols="12" xl="4" lg="4" md="6" sm="6" xs="4"  >
                     <v-btn
@@ -147,13 +163,19 @@ Vue.component('empty-commerce', {
                     }
                 })
                 .then(res => {
+
+                    if (res.data.error && res.data.error === "exist") {
+                        this.exist(res)
+                        return
+                    }
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
                         this.saveLoading = false
                         return
                     }
-
                     this.$success(res);
+
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -201,7 +223,14 @@ Vue.component('empty-commerce', {
             this.id_province = ''
             this.id_locate = ''
             this.$refs.refGecoded.reset()
-        }
+        },
+        exist(res) {
+            var text = res.data.name_user + ' ya tiene asignado el codigo '
+            text = text + ' ' + res.data.postal_code
+
+            this.error.display = true
+            this.error.text = text
+        },
 
     },
     computed: {

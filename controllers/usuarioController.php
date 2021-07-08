@@ -1619,7 +1619,7 @@ class usuarioController
                       'success' => true,
                       'id' => $element["id"],
                       'name_user' => $element["name_user"],
-                      'slug' => $element["name_user"].' '.$element["name_alternative"].' '.'ID: '.$element["id"].' '.$element["role"],
+                      'slug' => $element["name_user"].' '.$element["name_alternative"].' '.'ID: '.$element["id"].' '.$element["role"].' - '.$element["location"].' - '.$element["province"],
                   );
               }
               
@@ -1682,7 +1682,7 @@ class usuarioController
                        'success' => true,
                        'id' => $element["id"],
                        'name_user' => $element["name_user"],
-                       'slug' => $element["name_user"].' '.'ID: '.$element["id"],
+                       'slug' => $element["name_user"].' '.'ID: '.$element["id"].' '.$element["location"].' - '.$element["province"],
                    );
                }
                

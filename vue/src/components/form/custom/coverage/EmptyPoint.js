@@ -1,7 +1,7 @@
 Vue.component('empty-point', {
     template: //html 
         `<div>
-                
+               
                 <template v-if="errorGeocoding !== ''">
                     <v-row class="d-flex justify-center mx-2" >
                         <v-col cols="12">
@@ -47,6 +47,20 @@ Vue.component('empty-point', {
                     classCustom=""
                     :dense="true"
                     @setTimeSchedule="timeSchedule = $event" />
+                    </v-col>
+                </template>
+
+                <template v-if="error.display" >
+                    <v-col  cols="12" xl="12" lg="12" md="12" sm="12" xs="12"  >
+                        <v-alert
+                        class="mx-2 my-5" 
+                        color="error"
+                        dark
+                        type="error"
+                        elevation="2"
+                        >
+                        {{error.text}}
+                        </v-alert>
                     </v-col>
                 </template>
 
@@ -130,6 +144,10 @@ Vue.component('empty-point', {
                     }
                 })
                 .then(res => {
+                    if (res.data.error && res.data.error === "exist") {
+                        this.exist(res)
+                        return
+                    }
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 45");
                         this.saveLoading = false
@@ -167,6 +185,12 @@ Vue.component('empty-point', {
                 ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
 
             return created_at
+        },
+        exist(res) {
+            var text = this.resource.type + ' ya tiene asignado el codigo '
+            text = text + ' ' + res.data.postal_code
+            this.error.display = true
+            this.error.text = text
         },
 
     },

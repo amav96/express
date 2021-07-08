@@ -272,7 +272,6 @@ Vue.component('update-collector', {
                     }
                 })
                 .then(res => {
-                    console.log(res)
                     this.saveLoading = false
                     if (res.data.error) {
                         alertNegative("Mensaje CODIGO 15");
@@ -281,7 +280,6 @@ Vue.component('update-collector', {
                     }
 
                     if (res.data.data) this.$success(res)
-                    if (res.data.success === 'only_one_and_same') this.$successEmptyResponse();
                 })
                 .catch(err => {
                     this.saveLoading = false
@@ -291,8 +289,8 @@ Vue.component('update-collector', {
         $success(res) {
             const snack = { display: true, timeout: 2000, text: 'Actualizado correctamente', color: 'success' }
             this.$emit("setSnack", snack)
-
             this.$emit('response', res.data.data)
+
             this.$emit('showTable', true)
             this.$emit('setPaginateDisplay', false)
             this.$emit('setExportDisplay', false)

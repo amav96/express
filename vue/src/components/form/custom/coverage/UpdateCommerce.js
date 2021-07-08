@@ -290,8 +290,6 @@ Vue.component('update-commerce', {
                     }
 
                     if (res.data.data) this.$success(res)
-                    if (res.data.success === 'only_one_and_same') this.$successEmptyResponse();
-
                 })
                 .catch(err => {
                     this.saveLoading = false

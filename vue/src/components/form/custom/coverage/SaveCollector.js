@@ -273,13 +273,9 @@ Vue.component('save-collector', {
             res.data.forEach((val) => {
                 this.savedData.push(val)
             })
-            this.$emit('response', this.savedData)
+            this.$emit('setTypeTable', 'showAllCoverage')
             const snack = { display: true, timeout: 2000, text: 'Creado correctamente', color: 'success' }
-            this.$emit('setPaginateDisplay', false)
-            this.$emit('setExportDisplay', false)
             this.$emit("setSnack", snack)
-            this.$emit('showTable', true)
-
         },
         exist(res) {
             var text = res.data[0].name_user + ' ya tiene asignado el codigo '
@@ -308,6 +304,9 @@ Vue.component('save-collector', {
         $_continue(flag) {
             this.$emit("setDialogDisplay", flag)
             this.$emit("setContinue", false)
+            this.$emit('response', this.savedData)
+            this.$emit('setPaginateDisplay', false)
+            this.$emit('setExportDisplay', false)
         },
         cleanPostalCodes() {
             if (this.save.action === 'create') {

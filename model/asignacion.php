@@ -104,9 +104,28 @@ class Asignacion{
       // COUNT
 
       public function countAllEquipos(){
-            Utils::AuthAdmin();
-            $sql = "SELECT count(*) as 'count' from equipos where (cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR')) and provincia like '%mendoza%' ";
+            $sql = "SELECT count(*) as 'count' from equipos where (cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR'))";
      
+            $exe = $this->db->query($sql);
+            if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+      }
+
+      public function countFilterEquipos(){
+
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+            $sql="SELECT count(*) as 'count'
+            from equipos e 
+            left join users u on u.id = e.id_user_assigned
+            WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,e.direccion,e.localidad,
+            e.codigo_postal,e.provincia,
+            emailcliente) AGAINST('$filter')
+            OR e.cartera LIKE '%$filter%' 
+                  AND (e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
+            'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR'))";
+
+
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
             else {$result = false;}
@@ -117,7 +136,7 @@ class Asignacion{
 
       public function getAllEquipos(){
 
-            Utils::AuthAdmin();
+            
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
@@ -125,7 +144,7 @@ class Asignacion{
             $sql = "SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative
             from equipos e 
             left join users u on u.id = e.id_user_assigned
-            where (e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR')) and e.provincia like '%mendoza%' 
+            where (e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL','PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR')) 
             order by cast(e.codigo_postal as SIGNED)   asc limit $fromRow,$limit ";
 
             // where localidad like '%MENDOZA%' 
@@ -134,6 +153,38 @@ class Asignacion{
             else {$result = false;}
             return $result;
 
+      }
+
+      public function getFilterEquipos(){
+
+            $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
+            $limit = ($this->getLimit())?$this->getLimit() : false ;
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+            if(gettype($fromRow) !==  'string'){$fromRow = '0';}
+
+            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
+            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,
+            e.codigo_postal,e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative,
+             MATCH (e.empresa,e.terminal,e.serie,e.identificacion,e.direccion,e.localidad,
+            e.codigo_postal,e.provincia,e.emailcliente) 
+            AGAINST('$filter') AS relevance,
+            MATCH (e.empresa) 
+            AGAINST('$filter') AS relevanceEmpresa
+            from equipos e 
+            left join users u on u.id = e.id_user_assigned
+            WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,e.direccion,e.localidad,
+            e.codigo_postal,e.provincia,
+            emailcliente) AGAINST('$filter')
+            OR e.cartera LIKE '%$filter%' 
+                  AND (e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
+            'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR'))
+            ORDER BY relevanceEmpresa desc, relevance  DESC, e.cartera  limit $fromRow,$limit ";
+
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
       }
 
       // GET

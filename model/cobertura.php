@@ -779,12 +779,31 @@ class cobertura{
                   LEFT JOIN localities l ON c.id_locate = l.id
                   WHERE c.id IN($stringId)
                   GROUP BY c.id order BY c.postal_code ASC";
-               
 
                   $exe = $this->db->query($sql);
                   if($exe && $exe->num_rows>0){$result = $exe;}
                   else {$result = false;}
                   return $result;
+
+      }
+
+      public function getCodesByCPAndUser(){
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
+           
+            $sql ="SELECT c.id,c.postal_code,l.locate,c.home_address,p.province AS 'provinceInt',pr.province,co.country as 'name_country',co.id as 'id_country',c.type,c.id_user,u.name AS 'name_assigned',u.name_alternative,u.customer_service_hours as 'timeScheduleA',c.customer_service_hours as 'timeScheduleB',
+             c.lat ,c.lng , c.created_at
+            FROM coverage c
+            left JOIN provinceint p ON p.postal_code = c.postal_code
+            LEFT JOIN localities l ON l.id = c.id_locate
+            LEFT JOIN province pr ON pr.id = l.id_province
+            left JOIN users u ON c.id_user = u.id
+            LEFT JOIN country co ON c.id_country = co.id
+            WHERE  c.postal_code  = '$postal_code' AND c.id_user ='$id_user'";
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
 
       }
 
@@ -1151,7 +1170,9 @@ class cobertura{
 
       public function getAllProvinceInt(){
 
-            $sql ="SELECT province FROM provinceInt group by province";
+            $sql ="SELECT p.province,c.country FROM provinceInt p 
+            inner join country c on c.id = p.id_country
+            group by p.province";
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
@@ -1297,7 +1318,7 @@ class cobertura{
              LEFT JOIN province pro ON pro.id = po.id_province
              LEFT JOIN country co ON co.id = pro.id_country
              WHERE co.id = '$country' AND c.postal_code >= $cp_start AND c.postal_code <= $cp_end
-             and c.id_user != '$id_user' 
+             and c.id_user != '$id_user' and c.type in('recolector','comercio')
              GROUP BY c.id order by c.postal_code";
           
            

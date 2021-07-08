@@ -162,7 +162,7 @@
                   </div>
                 </div>
         
-                <template v-if="showAllCoverage.display">
+                <template v-if="showAllCoverage.display && showAllCoverage.touch">
                     <form-all
                       :resources="showAllCoverage"
                       :pagination="MAINRESOURCES.pagination"
@@ -361,7 +361,7 @@
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
-                        @showTable="MAINRESOURCES.table.display = $event"
+                        @setTypeTable="$_typeTable($event)"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
                         @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
@@ -379,7 +379,7 @@
                         :save="save"
                         :dialogFullScreen="dialogFullScreen"
                         @response="MAINRESOURCES.table.dataResponseDB = $event"
-                        @showTable="MAINRESOURCES.table.display = $event"
+                        @setTypeTable="$_typeTable($event)"
                         @filtering="MAINRESOURCES.filter.filtering = $event"
                         @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
                         @setPaginateDisplay="MAINRESOURCES.pagination.display = $event"
@@ -598,7 +598,6 @@
                   collector :{
                     display : false,
                     url_users : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
-                    
                     title_field : 'Ingrese Recolector',
                     select : {
                       display: true,
@@ -671,7 +670,8 @@
                   }
                 },
                 showAllCoverage : {
-                    display : false,
+                    display : true,
+                    touch: true,
                     url: {
                       getData : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getAllCoverage',
                     },
@@ -954,9 +954,6 @@
 
                 },
                 doom : false
-                
-
-                
             }
         },
         methods:{
@@ -1019,7 +1016,8 @@
           },
           $_showAllCoverage(){
             this.MAINRESOURCES.table.display = false
-            this.showAllCoverage.display = false 
+            this.showAllCoverage.display = false
+           
             this.showCoverageByProvinceInt.display = false
             this.showCoverageByPostalCode.display = false
             this.showCoverageByUser.display = false
@@ -1028,6 +1026,7 @@
             
             this.$nextTick(() => {
               this.showAllCoverage.display = true
+              this.showAllCoverage.touch = true  
               this.MAINRESOURCES.itemsButtons[0].active = true //todo
               this.MAINRESOURCES.itemsButtons[1].active = false //province
               this.MAINRESOURCES.itemsButtons[2].active = false //postal code
@@ -1039,6 +1038,7 @@
           $_showCoverageByProvinceInt(){
             this.MAINRESOURCES.table.display = false
             this.showAllCoverage.display = false 
+            this.showAllCoverage.touch = false  
             this.showCoverageByProvinceInt.display = false
             this.showCoverageByPostalCode.display = false
             this.showCoverageByUser.display = false
@@ -1059,6 +1059,7 @@
           $_showCoverageByPostalCode(){
               this.MAINRESOURCES.table.display = false
               this.showAllCoverage.display = false 
+              this.showAllCoverage.touch = false  
               this.showCoverageByProvinceInt.display = false
               this.showCoverageByPostalCode.display = false
               this.showCoverageByUser.display = false
@@ -1078,6 +1079,7 @@
           $_showCoverageByUser(){
               this.MAINRESOURCES.table.display = false
               this.showAllCoverage.display = false  
+              this.showAllCoverage.touch = false  
               this.showCoverageByProvinceInt.display = false
               this.showCoverageByPostalCode.display = false
               this.showCoverageByUser.display = false
@@ -1099,6 +1101,7 @@
           $_showAllEmptyCoverage(){
             this.MAINRESOURCES.table.display = false
               this.showAllCoverage.display = false  
+              this.showAllCoverage.touch = false  
               this.showCoverageByProvinceInt.display = false
               this.showCoverageByPostalCode.display = false
               this.showCoverageByUser.display = false
@@ -1119,6 +1122,7 @@
           $_showAllHistory(){
               this.MAINRESOURCES.table.display = false
               this.showAllCoverage.display = false  
+              this.showAllCoverage.touch = false  
               this.showCoverageByProvinceInt.display = false
               this.showCoverageByPostalCode.display = false
               this.showCoverageByUser.display = false
@@ -1136,7 +1140,6 @@
               });
               
           },
-          
           getAdmin(){
 
             if(document.getElementById("id_user_default") === null){
@@ -1186,14 +1189,12 @@
           },
           $_typeTable(type){
             this.$nextTick(()=> {
-              if(type === 'fromEmptyCoverage'){
-              this.showAllCoverage.display = true
+              this[type].display = true
               this.showAllEmptyCoverage.display = false
               this.showAllHistory.display = false
               this.MAINRESOURCES.pagination.display = false
               this.MAINRESOURCES.filter.display = false
-             
-              }
+              this.MAINRESOURCES.exportExcel.display = false
             })
             
           }

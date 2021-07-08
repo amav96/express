@@ -466,7 +466,26 @@ class coberturaController{
         $save->setLat($lat);
         $save->setLng($lng);
         $save->setPostal_code($postal_code);
+
+        if($type === 'recolector' || $type === 'comercio'){
+            $verifyNotExistUser = $save->verifyNotExistUser();
+        }
+        if($type === 'correo' || $type=== 'terminal'){
+            $verifyNotExistUser = $save->verifyNotExistStationByCP();
+        }
         
+        if($verifyNotExistUser){
+            foreach($verifyNotExistUser as $element){
+                    $object = array(
+                        'error'         => 'exist',
+                        'name_user'     => $element["name"].' '.$element["name_alternative"],
+                        'postal_code'   => $element["postal_code"]
+                    );
+                    $jsonstring = json_encode($object);
+                    echo $jsonstring;
+            }
+        }else{
+
             if($save->save()){
                 $getRecentCodes = $save->getRecentCodes();
                 if($getRecentCodes){
@@ -481,6 +500,10 @@ class coberturaController{
                 $jsonstring = json_encode($object);
                 echo $jsonstring;
             }
+
+        }
+        
+           
     }
         
     public function delete(){
@@ -558,11 +581,11 @@ class coberturaController{
            
             if (gettype($element) === 'array'){
                 foreach ($element as $childElement){
+          
                     $update->setId($childElement->id);
                     $update->setPostal_code($childElement->postal_code);
 
                         if($type === 'recolector' || $type === 'comercio'){
-                            
                             if(!$update->verifyExist()){
                                 if($update->removeToHistory()){
                                     if($update->update()){
@@ -613,8 +636,13 @@ class coberturaController{
                 $this->showSimpleCoverage($get);
                 }
             }else{
-                $object=array('success' => 'only_one_and_same');
-                $jsonstring = json_encode($object);echo $jsonstring;
+                $get = $update->getCodesByCPAndUser();
+                if($get){
+                    $this->showSimpleCoverage($get);
+                }else{
+                    $object=array('error' => 'not_possible_only_data');
+                    $jsonstring = json_encode($object);echo $jsonstring;
+                }
             }
            
         }else {
@@ -1331,7 +1359,7 @@ class coberturaController{
                 foreach ($get as $element){
                     $object[]=array(
                         'id'    => $element["province"],
-                        'slug'  => $element["province"]
+                        'slug'  => $element["province"].' - '.$element["country"]
                     );
                 }
             }else {

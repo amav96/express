@@ -87,6 +87,7 @@ Vue.component('table-assignment', {
                     <td>{{row.provincia}}</td>
                     <td>{{row.direccion}}</td>
                     <td>{{row.identificacion}}</td>
+                    <td>{{row.serie}}</td>
                     
                     <template v-if="row.belongs" >
                         <td>

@@ -19,7 +19,9 @@
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/custom/assignment/manualAssignment.js"></script>
+<script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 <script src="<?=base_url?>vue/src/store/index.js?"></script>
+
 
     <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/reusable/headerAdmin.js"></script>
@@ -37,6 +39,20 @@
         template : //html 
         `
         <v-app class="empujarParaArriba elevation" >
+
+          <v-btn
+            v-scroll="onScroll"
+            v-show="fab"
+            fab
+            dark
+            fixed
+            bottom
+            right
+            color="info"
+            @click="toTop"
+          >
+            <v-icon>mdi-chevron-up</v-icon>
+          </v-btn>
 
            <header-admin 
            title="Asignación de bases" 
@@ -93,10 +109,12 @@
 
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
                   <div class="my-1 mt-3 d-flex justify-center" >
-                      <v-btn
-                          >
-                          Total Registros <strong> &nbsp;{{MAINRESOURCES.pagination.totalCountResponse}} </strong>
-                      </v-btn>
+                      
+                          Cerca de <strong> &nbsp;{{new Intl.NumberFormat("de-ES").format(MAINRESOURCES.pagination.totalCountResponse)}} </strong>&nbsp; resultados 
+
+                          
+                         
+                     
                   </div>
                 </template>
                 <template v-if="MAINRESOURCES.pagination.display">
@@ -119,6 +137,30 @@
               
                 <template v-if="MAINRESOURCES.loadingPaginate.display" >
                  <loader-line />
+                </template>
+
+                <template v-if="showTableAssignment && MAINRESOURCES.filter.display">
+                    <filter-with-pagination
+                    :pagination = "MAINRESOURCES.pagination"
+                    :exportExcel ="MAINRESOURCES.exportExcel"
+                    :filter="MAINRESOURCES.filter"
+                    :dataResponseDB="MAINRESOURCES.table.dataResponseDB" 
+                    :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
+                    :urlTryPagination="MAINRESOURCES.urlTryPagination"
+                    @setFlagFiltering ="MAINRESOURCES.filter.filtering = $event"
+                    @setAfterDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setPagination="MAINRESOURCES.pagination = $event"
+                    @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                    @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
+                    @setParametersToExportExcel="MAINRESOURCES.exportExcel.parameters = $event"
+                    @restoreUrlPagination="MAINRESOURCES.urlTryPagination = $event"
+                    @restoreOldPagination="MAINRESOURCES.pagination = $event"
+                    @restoreOldParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                    @restoreOldDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
+                    @setOldUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                    />
                 </template>
             
                 <template v-if="showTableAssignment">
@@ -166,7 +208,7 @@
                     },
                     filter : {
                       display: true,
-                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getFilterCoverage'
+                      url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getFilterEquipos'
                     },
                     export : {
                       display : true,
@@ -190,6 +232,7 @@
                         { text: 'Provincia'},
                         { text: 'Direccion'},
                         { text: 'Identificacion'},
+                        { text: 'Serie'},
                         { text: 'Pertenece a'},
                         { text: 'Asignado'},
                         { text: 'Cartera'},
@@ -341,6 +384,7 @@
                   reload: false
 
                 },
+                fab: false
                 
             }
         },
@@ -377,6 +421,15 @@
             },
             $_realoadCurrentPage(){
               this.$refs.pagination.paginate()
+            },
+            onScroll (e) {
+              if (typeof window === 'undefined') return
+              const top = window.pageYOffset ||   e.target.scrollTop || 0
+              this.fab = top > 20
+             
+            },
+            toTop () {
+              this.$vuetify.goTo(0)
             }
         },
         created(){

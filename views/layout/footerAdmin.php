@@ -26,6 +26,7 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+
 </script>
       
 <!-- código JS propìo-->    

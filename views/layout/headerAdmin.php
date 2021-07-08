@@ -10,7 +10,10 @@
 
    
     <script src="<?= base_url ?>estilos/personal/js/jquery.min.js"></script>
+    <script src="<?= base_url ?>estilos/personal/js/popper.js"></script>
+    <script src="<?= base_url ?>estilos/personal/js/popper.min.js"></script>
     <script src="<?= base_url ?>estilos/personal/js/bootstrap.min.js"></script>
+   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link rel="" href="https://cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.dataTables.min.css">
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
@@ -45,6 +48,8 @@
 
 <body>
 
+ 
+
     <div class="fondoimagen" id="fondoimagen">
         <img class="logo-main" id="logodos" src="<?= base_url ?>estilos/imagenes/logo2.png" alt="">
 
@@ -64,11 +69,12 @@
         </div>
     </div>
 
+   
     <div class="container-barra-panel">
         <div class="tamano-espacio-items">
 
 
-            <div class="mini-box-panel" id="inicio">
+            <div class="mini-box-panel" data-toggle="tooltip" data-placement="top" title="Inicio" id="inicio">
                 <div class="item">
                     <i class="fas fa-home"></i>
                 </div>
@@ -77,7 +83,7 @@
             </div>
           
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;"  href="<?= base_url ?>equipo/gestion">
+                <a style="text-decoration:none;color:black;" data-toggle="tooltip" data-placement="top" title="Gestión de equipos"  href="<?= base_url ?>equipo/gestion">
                     <div class="item">
                     <i class="fas fa-search"></i>
                     </div>
@@ -100,7 +106,7 @@
                 </div>
             </div>
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>usuario/managentUs">
+                <a style="text-decoration:none;color:black;" data-toggle="tooltip" data-placement="top" title="Usuarios" href="<?= base_url ?>usuario/managentUs">
                     <div class="item">
                         <i class="fas fa-users">
 
@@ -111,7 +117,7 @@
             </div>
 
              <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>notice/admin">
+                <a style="text-decoration:none;color:black;" data-toggle="tooltip" data-placement="top" title="Avisos de visitas" href="<?= base_url ?>notice/admin">
                     <div class="item">
                     <i class="fas fa-mail-bulk"></i>
                     </div>
@@ -130,23 +136,25 @@
             </div>  -->
 
              <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>cobertura/admin">
+                <a style="text-decoration:none;color:black;" data-toggle="tooltip" data-placement="top" title="Asignacion de zonas" href="<?= base_url ?>cobertura/admin">
                     <div class="item">
                     <i class="fas fa-globe-americas"></i>
                     </div>
                 </a>
-            </div> 
+            </div>  
 
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>asignacion/bases">
+                <a style="text-decoration:none;color:black;"  data-toggle="tooltip" data-placement="top" title="Asignacion de bases" href="<?= base_url ?>asignacion/bases">
                     <div class="item">
                     <i class="fas fa-database"></i>
                     </div>
                 </a>
-            </div>
+            </div> 
+
+            
 
             <div class="mini-box-panel">
-                <a style="text-decoration:none;color:black;" href="<?= base_url ?>rendicion/equipos">
+                <a style="text-decoration:none;color:black;" data-toggle="tooltip" data-placement="top" title="Rendicion de equipos" href="<?= base_url ?>rendicion/equipos">
                     <div class="item">
                         <i class="fas fa-laptop-medical"></i>
                     </div>
@@ -155,12 +163,14 @@
 
             
 
-            <div class="mini-box-panel" id="cerrar">
+            <div class="mini-box-panel" data-toggle="tooltip" data-placement="top" title="Cerrar sesión" id="cerrar">
                 <div class="item">
                     <i class="fas fa-sign-out-alt"></i>
                 </div>
             </div>
         </div>
+
+       
     </div>
 
     <input class="input-form" type="checkbox" id="cuadraditocheck">

@@ -228,8 +228,8 @@ Vue.component("table-empty-coverage", {
             }
         },
         $_setResponse() {
+            this.$emit('setTypeTable', 'showAllCoverage')
             this.$emit("setResponse", this.emptyCoverage.savedData)
-            this.$emit("setTypeTable", 'fromEmptyCoverage')
         },
         setFront(indexTable) {
             const dataCache = this.table.dataResponseDB
@@ -245,12 +245,5 @@ Vue.component("table-empty-coverage", {
         savedData(data) {
             this.emptyCoverage.savedData.push(data)
         }
-
-
     },
-
-
-
-
-
 });
