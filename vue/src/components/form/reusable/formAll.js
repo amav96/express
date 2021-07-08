@@ -39,7 +39,6 @@ Vue.component('form-all', {
                             this.$emit('loadingTable', false)
                         })
 
-
                     })
 
 
@@ -48,7 +47,7 @@ Vue.component('form-all', {
                 })
 
             } catch (err) {
-                const error = { type: 'no-exist', text: err, time: 4000 }
+                const error = { display: true, type: 'no-exist', text: err, time: 4000 }
                 this.error(error);
                 return;
             }

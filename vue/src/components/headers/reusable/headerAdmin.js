@@ -25,6 +25,7 @@ Vue.component('header-admin', {
                             @click="handle_function_call(item.methods)"
                             class="bg-blue-custom mx-3 my-1 noUpperCase"
                             color="transparent"
+                            :disabled="loading"
                             :class="[item.active? 'secondary' :  item.color]"
                             >
                             <span class="color-white-custom" >{{ item.title }}</span>
@@ -39,7 +40,7 @@ Vue.component('header-admin', {
         </div>
         
         `,
-    props: ['MAINRESOURCES', 'title'],
+    props: ['MAINRESOURCES', 'title', 'loading'],
     methods: {
         handle_function_call(function_name) {
             this.$emit("handle_function_call", function_name)

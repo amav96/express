@@ -17,6 +17,7 @@
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/custom/assignment/manualAssignment.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
@@ -55,12 +56,13 @@
           </v-btn>
 
            <header-admin 
-           title="Asignación de bases" 
+           title="Asignación de bases"
+           :loading="MAINRESOURCES.table.loading || MAINRESOURCES.loadingPaginate.display"
            :MAINRESOURCES="MAINRESOURCES"
            @handle_function_call="handle_function_call($event)"
             />
            
-            <div class="d-flex justify-center align-center align-self-center flex-column" >
+            <div class="d-flex justify-center align-center align-self-center flex-row my-2" >
               <template v-if="allDataBase.display">
                       <form-all
                         :resources="allDataBase"
@@ -90,34 +92,58 @@
                         @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
                       />
               </template>
+
+              <template v-if="dataBaseByPostalCode.display">
+                  <form-number-and-word
+                    :resources="dataBaseByPostalCode"
+                    :pagination="MAINRESOURCES.pagination"
+                    @showPagination="MAINRESOURCES.pagination.display = $event"
+                    @resetPagination="MAINRESOURCES.pagination = $event"
+                    @loadingTable="MAINRESOURCES.table.loading = $event"
+                    @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                    @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                    @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                    @response="MAINRESOURCES.table.dataResponseDB = $event"
+                    @showTable="MAINRESOURCES.table.display = $event"
+                    @setErrorGlobal="MAINRESOURCES.error = $event"
+                    @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                    @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                    @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                    @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                    @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                    @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                    @setShowFilter="MAINRESOURCES.filter.display = $event"
+                    @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                    @filtering="MAINRESOURCES.filter.filtering = $event"
+                    @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                    @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                    @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                    @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"         
+                  />
+              </template>
             </div>
-              
-              <template v-if="MAINRESOURCES.error.display">
+
+              <template v-if="MAINRESOURCES.error.display && !MAINRESOURCES.table.display">
                 <v-alert class="ma-4 my-6" dense outlined type="error">
                     {{MAINRESOURCES.error.text}}
                 </v-alert>
               </template>
 
-                
-                
-
-                <template v-if="MAINRESOURCES.table.loading" >
-                <v-skeleton-loader
-                  type="date-picker"
-                ></v-skeleton-loader>
+                <template v-if="MAINRESOURCES.table.loading && allDataBase.display" >
+                  <v-skeleton-loader
+                    type="date-picker"
+                  ></v-skeleton-loader>
+                </template>
+                <template v-if="MAINRESOURCES.table.loading && !allDataBase.display">
+                  <loader-line />
                 </template>
 
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
                   <div class="my-1 mt-3 d-flex justify-center" >
-                      
                           Cerca de <strong> &nbsp;{{new Intl.NumberFormat("de-ES").format(MAINRESOURCES.pagination.totalCountResponse)}} </strong>&nbsp; resultados 
-
-                          
-                         
-                     
                   </div>
                 </template>
-                <template v-if="MAINRESOURCES.pagination.display">
+                <template v-if="showTableAssignment && MAINRESOURCES.pagination.display">
                   <pagination-custom 
                     :reload="MAINRESOURCES.reload"
                     :pagination="MAINRESOURCES.pagination"
@@ -243,6 +269,34 @@
                    
                     }, 
                 },
+                dataBaseByPostalCode : {
+                    display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getEquiposByPostalCodeRangeAndCountry',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getFilterEquiposByPostalCodeRangeAndCountry'
+                    },
+                    export : {
+                      display : false,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoveragePostalCodeRangeAndCountry',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoveragePostalCodeRangeAndCountry',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'coberturaController.php?cobertura=getCountry',
+                      title: 'Pais',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true, 
+                },
                 manualAssignment:{
                   display: false,
                   title:'Asignar manualmente',
@@ -363,7 +417,8 @@
                         dataResponseDB: []
                     },
                   itemsButtons:[
-                      { title: 'Base original', icon: 'mdi-database-edit', methods: '$_allDataBase' , active : true, color :"bg-blue-custom" },
+                      { title: 'Base completa', icon: 'mdi-database-edit', methods: '$_allDataBase' , active : true, color :"bg-blue-custom" },
+                      { title: 'Codigo Postal', icon: 'mdi-flag-triangle', methods: '$_dataBaseByPostalCode' , active : false, color :"bg-blue-custom" },
                   ],
                   error: {
                     type: null,
@@ -393,8 +448,25 @@
                 this[function_name]()
             },
             $_allDataBase(){
-                // this.MAINRESOURCES.table.type = 'allEquipments'
+              this.MAINRESOURCES.table.display = false
+              this.dataBaseByPostalCode.display = false
+              this.$nextTick(() => {
                 this.allDataBase.display = true
+                this.MAINRESOURCES.itemsButtons[0].active = true //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
+              })
+                
+                
+            },
+            $_dataBaseByPostalCode(){
+              this.allDataBase.display = false
+              this.MAINRESOURCES.table.display = false
+              this.$nextTick(() => {
+                this.dataBaseByPostalCode.display = true
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = true //postalcode
+              })
+              
             },
             readMethodCurrent(){
              if(this.allDataBase.display){

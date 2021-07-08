@@ -74,9 +74,9 @@ Vue.component('form-number-and-word', {
         },
         async _getData() {
             try {
-                this.resources.pagination ? this.$resetPagination() : false;
-
+                if (this.resources.pagination) { this.$resetPagination() }
                 this.$emit('loadingTable', true)
+
                 const dataRequest = {
                     numberStart: this.numberStart,
                     numberEnd: this.numberEnd,
@@ -90,7 +90,7 @@ Vue.component('form-number-and-word', {
                     .then(res => {
 
                         if (res.data.error) {
-                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
+                            const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
                             return;
                         }
@@ -106,24 +106,29 @@ Vue.component('form-number-and-word', {
                         //FILTER
                         this.resources.filter.display ? this.$filter() : this.$emit('setShowFilter', false);
                         //EXPORT 
+                        //EXPORT 
                         this.resources.export.display ? this.$exportExcel() : this.$emit('setExportDisplay', false);
-
-
                         this.$emit('response', res.data.data)
                         this.$emit('showTable', true)
-                        this.$emit('loadingTable', false)
+                        this.$nextTick(() => {
+                            this.$emit('loadingTable', false)
+                        })
                     })
                     .catch(err => {
                         console.log(err);
                     })
 
             } catch (err) {
-                const error = { type: 'no-exist', text: err, time: 4000 }
+                const error = { display: true, type: 'no-exist', text: err, time: 4000 }
                 this.error(error);
                 return;
             }
         },
         error(error) {
+            if (this.resources.pagination) {
+                this.$emit("showPagination", false)
+            }
+
             this.$emit('setErrorGlobal', error)
             this.$emit('loadingTable', false)
             this.$emit('showTable', false)
@@ -133,14 +138,15 @@ Vue.component('form-number-and-word', {
         },
         $resetPagination() {
             const pagination = {
-                display: true,
+                display: false,
                 totalPage: 1,
-                rowForPage: 10,
+                rowForPage: this.pagination.rowForPage,
                 pageCurrent: 1,
                 totalCountResponse: 0,
                 fromRow: 0,
-                limit: 10
+                limit: this.pagination.limit
             }
+
             this.$emit("resetPagination", pagination)
         },
         $pagination(res) {
@@ -160,6 +166,7 @@ Vue.component('form-number-and-word', {
                 limit: this.pagination.limit
             }
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+            this.$emit('showPagination', true);
 
         },
         $filter() {

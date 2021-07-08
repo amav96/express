@@ -108,7 +108,7 @@ Vue.component('filter-with-pagination', {
             const pagination = {
                 display: true,
                 totalPage,
-                rowForPage: 10,
+                rowForPage: this.pagination.rowForPage,
                 pageCurrent: 1,
                 totalCountResponse,
                 fromRow: this.pagination.fromRow,
@@ -126,9 +126,9 @@ Vue.component('filter-with-pagination', {
             const pagination = {
                 display: true,
                 fromRow: 0,
-                limit: 10,
+                limit: this.pagination.limit,
                 pageCurrent: 1,
-                rowForPage: 10,
+                rowForPage: this.pagination.rowForPage,
                 totalCountResponse: this.oldPagination.totalCountResponse,
                 totalPage: this.oldPagination.totalPage,
             }
@@ -144,8 +144,6 @@ Vue.component('filter-with-pagination', {
             this.$emit("setParametersToExportExcel", newParametersDynamic)
         },
         $oldExportExcel() {
-
-            console.log(this.oldParametersToCall)
             this.$emit("setOldUrlExport", this.oldUrlExport)
             this.$emit("setParametersToExportExcel", this.oldParametersToCall)
         },

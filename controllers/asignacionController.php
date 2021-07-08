@@ -60,6 +60,40 @@ class asignacionController{
         }
     }
 
+    public function getEquiposByPostalCodeRangeAndCountry(){
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
+        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
+        $id_country = isset($Request->word->id) ? $Request->word->id : false;
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+
+        $get = new Asignacion();
+        $get->setPostal_code_start($cp_start);
+        $get->setPostal_code_end($cp_end);
+        $get->setId_country($id_country);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countEquiposByPostalCodeRangeAndCountry();
+        if($count){
+            $data = $get->getEquiposByPostalCodeRangeAndCountry();
+            if($data){
+                $this->showEquipments($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+    }
+
+    // DATA FILTER
+
     public function getFilterEquipos(){
 
         $Request = json_decode($_GET['dataRequest']);
@@ -88,7 +122,6 @@ class asignacionController{
             }
 
     }
-
 
 
     // HELPERS

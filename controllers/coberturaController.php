@@ -93,9 +93,7 @@ class coberturaController{
     
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
-
-    
-
+        
         $cp_start = isset($Request->numberStart) ? $Request->numberStart : false; 
         $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false; 
         $id_country = isset($Request->word->id) ? $Request->word->id : false;
