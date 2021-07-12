@@ -21,21 +21,21 @@ Vue.component('table-assignment', {
        
         <v-row class="d-flex justify-start flex-row flex-wrap my-2">
                 <div class="ma-2">
-                    <v-btn :disabled="select.selected.length<1" color="info" @click="_automaticAssigned()">
+                    <v-btn :disabled="select.selected.length<1 || btnDisabled" color="info" @click="_automaticAssigned">
                         Asignar automáticamente
                     </v-btn>
                 </div>
                 <div class="ma-2">
-                    <v-btn :disabled="select.selected.length<1" @click="manualAssignment.display = true" color="warning">
+                    <v-btn :disabled="select.selected.length<1 || btnDisabled" @click="manualAssignment.display = true" color="warning">
                         Asignar manualmente
                     </v-btn>
                 </div>
                 <div class="ma-2">
-                    <v-btn :disabled="select.selected.length<1" color="error" @click=_removeAssigned()>
+                    <v-btn :disabled="select.selected.length<1 || btnDisabled" color="error" @click=_removeAssigned>
                         Quitar asignado
                     </v-btn>
                 </div>
-                <template v-if="select.selected.length>0">
+                <template v-if="select.selected.length>0 || btnDisabled">
                     <div class="ma-2">
                         <v-chip >
                         Seleccionados {{select.selected.length}}
@@ -44,9 +44,7 @@ Vue.component('table-assignment', {
                 </template>
             </v-row>
       
-            
-            
-        
+
     </v-container>
 
         <v-simple-table class="mt-6" >
@@ -137,6 +135,7 @@ Vue.component('table-assignment', {
                 selected: [],
             },
             id_user: '',
+            btnDisabled: false
         }
     },
     methods: {
@@ -187,7 +186,7 @@ Vue.component('table-assignment', {
             return value
         },
         _automaticAssigned() {
-            this.$emit("setLoader", true)
+            this.btnDisabled = true
             const url = this.resources.url_actions.toAssign
             const dataRequest = {
                 value: this.select.selected,
@@ -196,7 +195,7 @@ Vue.component('table-assignment', {
             }
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    this.$emit("setLoader", false)
+                    this.btnDisabled = false
                     if (res.data.error) {
                         this.$message('Se ha producido una excepción', 'error');
                         return
@@ -215,7 +214,7 @@ Vue.component('table-assignment', {
                 })
         },
         _manualAssigned() {
-            this.$emit("setLoader", true)
+            this.btnDisabled = true
             const url = this.resources.url_actions.toAssign
             var value = []
             this.select.selected.forEach((val) => {
@@ -228,7 +227,7 @@ Vue.component('table-assignment', {
             }
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    this.$emit("setLoader", false)
+                    this.btnDisabled = false
                     if (res.data.error) {
                         this.$message('Se ha producido una excepción', 'error');
                         return
@@ -246,13 +245,15 @@ Vue.component('table-assignment', {
                 })
         },
         _removeAssigned() {
-            this.$emit("setLoader", true)
+            this.btnDisabled = true
             const value = this.select.selected.filter(item => !item.empty)
+
             if (value.length < 1) {
                 this.$message('Los registros seleccionados no estan asignados', 'error');
-                this.$emit("setLoader", false)
+                this.btnDisabled = false
                 return
             }
+
             const url = this.resources.url_actions.removeAssign
             const dataRequest = {
                 value: value,
@@ -261,7 +262,7 @@ Vue.component('table-assignment', {
             }
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    this.$emit("setLoader", false)
+                    this.btnDisabled = false
                     if (res.data.error) {
                         this.$message('Se ha producido una excepción', 'error');
                         return
@@ -305,8 +306,8 @@ Vue.component('table-assignment', {
 
             return created_at
         },
-        update() {
-            if (this.select.selected.length < 1) {
+        updatePagination() {
+            if (this.select.selected.length < 1 && !this.resources.loadingPaginate.display) {
                 this.$emit("reaload", true)
                 this.$nextTick(() => {
                     this.$emit("realoadCurrentPage")
@@ -316,13 +317,13 @@ Vue.component('table-assignment', {
         },
         isSelected() {
             setInterval(() => {
-                this.update()
+                this.updatePagination()
             }, 30000)
         },
 
     },
     created() {
-        this.isSelected();
+        // this.isSelected();
     },
     watch: {
         select: {

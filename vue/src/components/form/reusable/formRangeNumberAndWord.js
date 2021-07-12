@@ -75,6 +75,11 @@ Vue.component('form-number-and-word', {
         async _getData() {
             try {
                 if (this.resources.pagination) { this.$resetPagination() }
+
+                if (this.resources.filter.display) {
+                    this.$emit("cleanFilter")
+                }
+
                 this.$emit('loadingTable', true)
 
                 const dataRequest = {

@@ -994,19 +994,14 @@ class Equipos
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
-        $sql.=" (MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-        e.direccion,e.codigo_postal,e.emailcliente) ";
-        $sql.="AGAINST ";
-        $sql.="('$filter*' IN BOOLEAN MODE) ";
-        $sql.="OR  ";
-        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filter*' IN BOOLEAN MODE ) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
         BETWEEN('$dateStart') AND ('$dateEnd 23:59:59')";
 
+      
        
-
         $execute = $this->db->query($sql);
         if($execute && $execute->fetch_object()->count > 0){$result = $execute;}
         else {$result = false;}
@@ -1026,12 +1021,7 @@ class Equipos
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="WHERE ";
-        $sql.="(  MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-        e.direccion,e.codigo_postal,e.emailcliente) ";
-        $sql.="AGAINST ";
-        $sql.="('$filter*' IN BOOLEAN MODE) ";
-        $sql.="OR  ";
-        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user = $id_recolector and g.created_at
@@ -1300,12 +1290,7 @@ class Equipos
             $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
             $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
             $sql.="WHERE ";
-            $sql.="(";
-            $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-            e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-            $sql.="('$filter*' IN BOOLEAN MODE) ";
-            $sql.="OR  ";
-            $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+            $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
             $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
             $sql.="OR "; 
             $sql.="u.name LIKE '%$filter%') and g.created_at
@@ -1342,12 +1327,7 @@ class Equipos
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="WHERE ";
-        $sql.="(";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-        e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter*' IN BOOLEAN MODE) ";
-        $sql.="OR  ";
-        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion ='transito' and g.id_user = $id_recolector  and g.created_at
@@ -1423,12 +1403,7 @@ class Equipos
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="WHERE ";
-        $sql.="(";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-        e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter*' IN BOOLEAN MODE)" ;
-        $sql.="OR  ";
-        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filter*' IN BOOLEAN MODE)" ;
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.created_at
@@ -1479,12 +1454,7 @@ class Equipos
         $sql.="INNER JOIN users u ON (u.id = g.id_user) ";
         $sql.="LEFT JOIN notice n ON (n.id_orden = g.id_orden_pass) ";
         $sql.="WHERE ";
-        $sql.="(";
-        $sql.="MATCH (e.empresa,e.identificacion,e.terminal,e.serie,e.provincia,e.localidad,
-        e.direccion,e.codigo_postal,e.emailcliente) AGAINST ";
-        $sql.="('$filter*' IN BOOLEAN MODE) ";
-        $sql.="OR  ";
-        $sql.="MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
+        $sql.="(MATCH (g.id_orden_pass,g.identificacion,g.terminal,g.serie,g.tarjeta,g.estado) ";
         $sql.="AGAINST ('$filter*' IN BOOLEAN MODE) ";
         $sql.="OR "; 
         $sql.="u.name LIKE '%$filter%') and g.status_gestion = 'transito' and g.id_user= $word and g.created_at

@@ -35,7 +35,7 @@ class asignacionController{
 
         
         $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-      
+
         $request =  json_decode($Request);
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;
@@ -92,20 +92,88 @@ class asignacionController{
         }
     }
 
+    public function getEquiposByPurse(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+        $cartera = isset($Request->word) ? $Request->word: false;
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+
+        $get = new Asignacion();
+       
+        $get->setCartera($cartera);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countEquiposByPurse();
+        if($count){
+            $data = $get->getEquiposByPurse();
+            if($data){
+                $this->showEquipments($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
+
+    public function getEquiposByUserAssigned(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $id_user_assigned = isset($Request->word) ? $Request->word: false;
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+
+        $get = new Asignacion();
+       
+        $get->setId_user($id_user_assigned);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countEquiposByUserAssigned();
+        if($count){
+            $data = $get->getEquiposByUserAssigned();
+            if($data){
+                $this->showEquipments($count,$data);
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
+
     // DATA FILTER
 
     public function getFilterEquipos(){
 
         $Request = json_decode($_GET['dataRequest']);
-        
+
+    
+       
         $filter = isset($Request->filter) ? $Request->filter : false ; 
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
         $limit = isset($Request->limit) ? $Request->limit : false ;
+        $condition = isset($Request->condition) ? $Request->condition : null ;
 
+    
         $get = new Asignacion();
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countFilterEquipos();
             if($count){
@@ -123,6 +191,154 @@ class asignacionController{
 
     }
 
+    public function getFilterEquiposByPostalCodeRangeAndCountry(){
+
+        $Request = json_decode($_GET['dataRequest']);
+
+    
+        $id_country = isset($Request->word->id) ? $Request->word->id : false ; 
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
+        $cp_start = isset($Request->numberStart) ? $Request->numberStart : false ;
+        $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false ;
+
+        $get = new Asignacion();
+        $get->setPostal_code_start($cp_start);
+        $get->setPostal_code_end($cp_end);
+        $get->setId_country($id_country);
+        $get->setFilter($filter);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countFilterEquiposByPostalCodeRangeAndCountry();
+            if($count){
+                $data = $get->getFilterEquiposByPostalCodeRangeAndCountry();
+                if($data){
+                    $this->showEquipments($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+    }
+
+    public function getFilterEquiposByPurse(){
+
+        $Request = json_decode($_GET['dataRequest']);
+
+        $cartera = isset($Request->word) ? $Request->word: false;
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
+        
+        $get = new Asignacion();
+        $get->setCartera($cartera);
+        $get->setFilter($filter);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+
+        $count = $get->countFilterEquiposByPurse();
+            if($count){
+                $data = $get->getFilterEquiposByPurse();
+                if($data){
+                    $this->showEquipments($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+
+    }
+
+    public function getFilterEquiposByUserAssigned(){
+
+        $Request = json_decode($_GET['dataRequest']);
+
+     
+        $filter = isset($Request->filter) ? $Request->filter : false ; 
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
+        $limit = isset($Request->limit) ? $Request->limit : false ;
+        $id_user_assigned = isset($Request->word) ? $Request->word: false;
+        
+        $get = new Asignacion();
+        $get->setFilter($filter);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+        $get->setId_user($id_user_assigned);
+
+        $count = $get->countFilterEquiposByUserAssigned();
+            if($count){
+                $data = $get->getFilterEquiposByUserAssigned();
+                if($data){
+                    $this->showEquipments($count,$data);
+                }else{
+                    $object=array('error' => true);
+                    $jsonstring = json_encode($object); echo $jsonstring;
+                }
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+
+    }
+
+    // ACTION
+
+    public function toAssign(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $update = false;
+        
+        foreach ($Request->value as $singleElement){
+
+            $action = new Asignacion();
+            $action->setId($singleElement->id);
+            $action->setId_user($singleElement->id_user);
+            $action->setCreated_at($Request->created_at);
+            $action->setId_admin($Request->admin);
+            $action = $action->automaticallyAssign();
+            if($action){$update= true;}
+            else{$update = false;}
+         
+        }
+        
+         if($update){$object = array('success' => true);}
+         else{$object = array('error' => true);}
+
+         $jsonstring = json_encode($object);
+         echo $jsonstring;
+    }
+
+    public function removeAssign(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+        $remove = false;
+        foreach ($Request->value as $singleElement){
+
+             $action = new Asignacion();
+             $action->setId($singleElement->id);
+             $action->setCreated_at($Request->created_at);
+             $action->setId_admin($Request->admin);
+             $action = $action->removeAssign();
+             if($action){$remove= true;}
+             else{$remove = false;}
+        }
+        
+          if($remove){$object = array('success' => true);}
+          else{$object = array('error' => true);}
+
+          $jsonstring = json_encode($object);
+          echo $jsonstring;
+    }
 
     // HELPERS
 
@@ -263,55 +479,29 @@ class asignacionController{
          
     }
 
-    // ACTION
+    public function  getAllWallets(){
 
-    public function toAssign(){
+        $get = new Asignacion();
+        $get = $get->getAllWallets();
 
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $Request =  json_decode($dataRequest);
-        $update = false;
-        
-        foreach ($Request->value as $singleElement){
-
-            $action = new Asignacion();
-            $action->setId($singleElement->id);
-            $action->setId_user($singleElement->id_user);
-            $action->setCreated_at($Request->created_at);
-            $action->setId_admin($Request->admin);
-            $action = $action->automaticallyAssign();
-            if($action){$update= true;}
-            else{$update = false;}
-         
+        if($get){
+            foreach ($get as $element){
+                $object[]=array(
+                    'id'    => $element["cartera"],
+                    'slug'  => $element["cartera"]
+                );
+            }
+        }else {
+            $object = array(
+                'error' => true
+            );
         }
-        
-         if($update){$object = array('success' => true);}
-         else{$object = array('error' => true);}
+    
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
 
-         $jsonstring = json_encode($object);
-         echo $jsonstring;
-    }
 
-    public function removeAssign(){
 
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-        $Request =  json_decode($dataRequest);
-        $remove = false;
-        foreach ($Request->value as $singleElement){
-
-             $action = new Asignacion();
-             $action->setId($singleElement->id);
-             $action->setCreated_at($Request->created_at);
-             $action->setId_admin($Request->admin);
-             $action = $action->removeAssign();
-             if($action){$remove= true;}
-             else{$remove = false;}
-        }
-        
-          if($remove){$object = array('success' => true);}
-          else{$object = array('error' => true);}
-
-          $jsonstring = json_encode($object);
-          echo $jsonstring;
     }
 
 

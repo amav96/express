@@ -34,6 +34,9 @@ Vue.component('form-id', {
     },
     methods: {
         setData(data) {
+            if (this.resources.filter.display) {
+                this.$emit("cleanFilter")
+            }
             this.word = data.id
             this._getData()
         },
@@ -51,7 +54,7 @@ Vue.component('form-id', {
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
                         if (res.data.error) {
-                            const error = { type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
+                            const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
                             return;
                         }
@@ -79,7 +82,7 @@ Vue.component('form-id', {
                     })
 
             } catch (err) {
-                const error = { type: 'no-exist', text: err, time: 4000 }
+                const error = { display: true, type: 'no-exist', text: err, time: 4000 }
                 this.error(error);
                 return;
             }
@@ -94,13 +97,13 @@ Vue.component('form-id', {
         },
         $resetPagination() {
             const pagination = {
-                display: true,
+                display: false,
                 totalPage: 1,
-                rowForPage: 10,
+                rowForPage: this.pagination.rowForPage,
                 pageCurrent: 1,
                 totalCountResponse: 0,
                 fromRow: 0,
-                limit: 10
+                limit: this.pagination.limit
             }
             this.$emit("resetPagination", pagination)
         },
@@ -119,6 +122,7 @@ Vue.component('form-id', {
                 limit: this.pagination.limit
             }
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
+            this.$emit('showPagination', true);
 
         },
         $filter() {
@@ -147,7 +151,6 @@ Vue.component('form-id', {
         $exportExcel() {
             this.$emit('setExportDisplay', true)
             let parameters = {
-
                 word: this.word,
             }
             this.$emit('setParametersToExport', parameters)

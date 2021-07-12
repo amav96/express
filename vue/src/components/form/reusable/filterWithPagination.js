@@ -7,8 +7,9 @@ Vue.component('filter-with-pagination', {
                 <v-row>
                     <v-col cols="12"md="4">
                         <v-text-field
-                        v-model="data"
+                        v-model.trim="data"
                         label="Buscar"
+                        :disabled="checkbox"
                         >
                         </v-text-field>
                     </v-col>
@@ -33,7 +34,16 @@ Vue.component('filter-with-pagination', {
             </v-container>
         </div>
     `,
-    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination'],
+    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select'],
+    computed: {
+        checkbox() {
+            if (this.select && this.select.selected.length > 0) {
+                return true
+            } else {
+                return false
+            }
+        }
+    },
     data() {
         return {
             data: '',
@@ -99,6 +109,9 @@ Vue.component('filter-with-pagination', {
         },
         resetFilter() {
             this.oldDataResponseDB = []
+        },
+        cleanFilter() {
+            this.data = ''
         },
         $pagination(res) {
 
@@ -179,7 +192,6 @@ Vue.component('filter-with-pagination', {
     },
     destroyed() {
         this.resetFilter()
-
     },
     created() {
         this.$cache()

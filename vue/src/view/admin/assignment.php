@@ -16,6 +16,8 @@
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 
 <!-- form component -->
+<script  src="<?=base_url?>vue/src/components/form/reusable/condition.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/formId.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
@@ -89,7 +91,7 @@
                         @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
                         @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
                         @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
-                        @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
+                        @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
                       />
               </template>
 
@@ -118,9 +120,71 @@
                     @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
                     @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
                     @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
-                    @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"         
+                    @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
+                    @cleanFilter="$_cleanFilter($event)"        
                   />
               </template>
+
+              <template v-if="dataBaseByPurse.display" >
+                  <form-id
+                      :resources="dataBaseByPurse"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
+                      @cleanFilter="$_cleanFilter($event)"
+                  />
+              </template>
+
+              <template v-if="dataBaseByUserAssigned.display" >
+                  <form-id
+                      :resources="dataBaseByUserAssigned"
+                      :pagination="MAINRESOURCES.pagination"
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @resetPagination="MAINRESOURCES.pagination = $event"
+                      @loadingTable="MAINRESOURCES.table.loading = $event"
+                      @totalCountResponse = "MAINRESOURCES.pagination.totalCountResponse = $event"
+                      @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
+                      @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
+                      @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @showTable="MAINRESOURCES.table.display = $event"
+                      @setErrorGlobal="MAINRESOURCES.error = $event"
+                      @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
+                      @setExportByFilterDisplay="MAINRESOURCES.filter.export.display = $event"
+                      @setParametersToExport="MAINRESOURCES.exportExcel.parameters = $event"
+                      @setUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                      @setUrlFilterExportExcel="MAINRESOURCES.filter.export.url = $event"
+                      @setParametersToFilter="MAINRESOURCES.filter.parameters = $event"
+                      @setShowFilter="MAINRESOURCES.filter.display = $event"
+                      @setUrlFilter="MAINRESOURCES.filter.url = $event"
+                      @filtering="MAINRESOURCES.filter.filtering = $event"
+                      @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
+                      @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
+                      @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
+                      @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
+                      @cleanFilter="$_cleanFilter($event)"
+                  />
+              </template>
+
             </div>
 
               <template v-if="MAINRESOURCES.error.display && !MAINRESOURCES.table.display">
@@ -138,11 +202,22 @@
                   <loader-line />
                 </template>
 
+              <template>
+                <condition 
+                :resources="MAINRESOURCES"
+                @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                @setPagination="MAINRESOURCES.pagination = $event"
+                @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
+                @showPagination="MAINRESOURCES.pagination.display = $event"
+                />
+              </template>
+
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
                   <div class="my-1 mt-3 d-flex justify-center" >
                           Cerca de <strong> &nbsp;{{new Intl.NumberFormat("de-ES").format(MAINRESOURCES.pagination.totalCountResponse)}} </strong>&nbsp; resultados 
                   </div>
                 </template>
+
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.display">
                   <pagination-custom 
                     :reload="MAINRESOURCES.reload"
@@ -170,6 +245,7 @@
                     :pagination = "MAINRESOURCES.pagination"
                     :exportExcel ="MAINRESOURCES.exportExcel"
                     :filter="MAINRESOURCES.filter"
+                    :select ="MAINRESOURCES.select"
                     :dataResponseDB="MAINRESOURCES.table.dataResponseDB" 
                     :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
                     :urlTryPagination="MAINRESOURCES.urlTryPagination"
@@ -186,6 +262,7 @@
                     @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                     @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
                     @setOldUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                    ref="setFilter"
                     />
                 </template>
             
@@ -268,6 +345,7 @@
                       ],
                    
                     }, 
+                   
                 },
                 dataBaseByPostalCode : {
                     display : false,
@@ -279,7 +357,7 @@
                       url :''
                     },
                     filter : {
-                      display: false,
+                      display: true,
                       url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getFilterEquiposByPostalCodeRangeAndCountry'
                     },
                     export : {
@@ -296,6 +374,64 @@
                       dense: false
                     },
                     pagination:true, 
+                },
+                dataBaseByPurse : {
+                    display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getEquiposByPurse',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getFilterEquiposByPurse'
+                    },
+                    export : {
+                      display : false,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoveragePostalCodeRangeAndCountry',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoveragePostalCodeRangeAndCountry',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getAllWallets',
+                      title: 'Cartera',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true, 
+                },
+                dataBaseByUserAssigned: {
+
+                  display : false,
+                    url: {
+                      getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getEquiposByUserAssigned',
+                    },
+                    subheader: {
+                      display : false,
+                      url :''
+                    },
+                    filter : {
+                      display: true,
+                      url : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getFilterEquiposByUserAssigned'
+                    },
+                    export : {
+                      display : false,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportCoveragePostalCodeRangeAndCountry',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoveragePostalCodeRangeAndCountry',
+                    },
+                    select : {
+                      display: false,
+                      url : API_BASE_CONTROLLER + 'usuarioController.php?usuario=getUsersCollector',
+                      title: 'Recolectores',
+                      class: '',
+                      outlined: false,
+                      dense: false
+                    },
+                    pagination:true, 
+
                 },
                 manualAssignment:{
                   display: false,
@@ -419,6 +555,8 @@
                   itemsButtons:[
                       { title: 'Base completa', icon: 'mdi-database-edit', methods: '$_allDataBase' , active : true, color :"bg-blue-custom" },
                       { title: 'Codigo Postal', icon: 'mdi-flag-triangle', methods: '$_dataBaseByPostalCode' , active : false, color :"bg-blue-custom" },
+                      { title: 'Carteras', icon: 'mdi-purse-outline', methods: '$_dataBaseByPurse' , active : false, color :"bg-blue-custom" },
+                      { title: 'Recolectores', icon: 'mdi-truck-fast-outline', methods: '$_dataBaseByUserAssigned' , active : false, color :"bg-blue-custom" },
                   ],
                   error: {
                     type: null,
@@ -435,12 +573,22 @@
                     selected :[],
                     display: true
                   },
+                  condition:{
+                    display: true,
+                    parameters:[],
+                    url: '',
+                    color1:'success',
+                    color2:'error',
+                    text1:'Ver asignados',
+                    text2:'No asignados',
+                    class:'mx-2'
+                    
+                  },
                   admin:'',
                   reload: false
 
                 },
-                fab: false
-                
+                fab: false            
             }
         },
         methods:{
@@ -450,23 +598,58 @@
             $_allDataBase(){
               this.MAINRESOURCES.table.display = false
               this.dataBaseByPostalCode.display = false
+              this.allDataBase.display = false
+              this.dataBaseByPurse.display = false
+              this.dataBaseByUserAssigned.display = false
               this.$nextTick(() => {
                 this.allDataBase.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = true //todo
                 this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
-              })
-                
-                
+                this.MAINRESOURCES.itemsButtons[2].active = false //purse
+                this.MAINRESOURCES.itemsButtons[3].active = false //user assigned
+              })  
             },
             $_dataBaseByPostalCode(){
               this.allDataBase.display = false
+              this.dataBaseByPurse.display = false
+              this.dataBaseByUserAssigned.display = false
               this.MAINRESOURCES.table.display = false
               this.$nextTick(() => {
                 this.dataBaseByPostalCode.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
                 this.MAINRESOURCES.itemsButtons[1].active = true //postalcode
+                this.MAINRESOURCES.itemsButtons[2].active = false //purse
+                this.MAINRESOURCES.itemsButtons[3].active = false //user assigned
               })
               
+            },
+            $_dataBaseByPurse(){
+              this.dataBaseByUserAssigned.display = false
+              this.allDataBase.display = false
+              this.dataBaseByPostalCode.display = false
+              this.MAINRESOURCES.table.display = false
+             
+              this.$nextTick(() => {
+                this.dataBaseByPurse.display = true
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
+                this.MAINRESOURCES.itemsButtons[2].active = true //purse
+                this.MAINRESOURCES.itemsButtons[3].active = false //user assigned
+              })
+            },
+            $_dataBaseByUserAssigned(){
+              this.dataBaseByPurse.display = false
+              this.dataBaseByUserAssigned.display = false
+              this.allDataBase.display = false
+              this.dataBaseByPostalCode.display = false
+              this.MAINRESOURCES.table.display = false
+              this.$nextTick(() => {
+                this.dataBaseByUserAssigned.display = true
+                this.MAINRESOURCES.itemsButtons[0].active = false //todo
+                this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
+                this.MAINRESOURCES.itemsButtons[2].active = false //purse
+                this.MAINRESOURCES.itemsButtons[3].active = true //user assigned
+              })
             },
             readMethodCurrent(){
              if(this.allDataBase.display){
@@ -480,6 +663,11 @@
                   this.$refs.assignment.cleanSelected()
                 })
                 
+            },
+            $_cleanFilter(){
+              if(this.$refs.setFilter && this.$refs.setFilter !== undefined){
+                this.$refs.setFilter.cleanFilter();
+              }
             },
             getAdmin(){
               if(document.getElementById("id_user_default") === null){
