@@ -39,11 +39,15 @@ class asignacionController{
         $request =  json_decode($Request);
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;
+        $condition = isset($request->condition) ? $request->condition : null ;
 
         $get = new Asignacion();
 
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countAllEquipos();
         if($count){
@@ -69,6 +73,7 @@ class asignacionController{
         $id_country = isset($Request->word->id) ? $Request->word->id : false;
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
         $limit = isset($Request->limit) ? $Request->limit : false;
+        $condition = isset($Request->condition) ? $Request->condition : null ;
 
         $get = new Asignacion();
         $get->setPostal_code_start($cp_start);
@@ -76,6 +81,9 @@ class asignacionController{
         $get->setId_country($id_country);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countEquiposByPostalCodeRangeAndCountry();
         if($count){
@@ -100,12 +108,16 @@ class asignacionController{
         $cartera = isset($Request->word) ? $Request->word: false;
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
         $limit = isset($Request->limit) ? $Request->limit : false;
+        $condition = isset($Request->condition) ? $Request->condition : null ;
 
         $get = new Asignacion();
        
         $get->setCartera($cartera);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countEquiposByPurse();
         if($count){
@@ -159,8 +171,6 @@ class asignacionController{
 
         $Request = json_decode($_GET['dataRequest']);
 
-    
-       
         $filter = isset($Request->filter) ? $Request->filter : false ; 
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
         $limit = isset($Request->limit) ? $Request->limit : false ;
@@ -202,6 +212,7 @@ class asignacionController{
         $limit = isset($Request->limit) ? $Request->limit : false ;
         $cp_start = isset($Request->numberStart) ? $Request->numberStart : false ;
         $cp_end = isset($Request->numberEnd) ? $Request->numberEnd : false ;
+        $condition = isset($Request->condition) ? $Request->condition : null ;
 
         $get = new Asignacion();
         $get->setPostal_code_start($cp_start);
@@ -210,6 +221,9 @@ class asignacionController{
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countFilterEquiposByPostalCodeRangeAndCountry();
             if($count){
@@ -234,12 +248,16 @@ class asignacionController{
         $filter = isset($Request->filter) ? $Request->filter : false ; 
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
         $limit = isset($Request->limit) ? $Request->limit : false ;
+        $condition = isset($Request->condition) ? $Request->condition : null ;
         
         $get = new Asignacion();
         $get->setCartera($cartera);
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        if($condition !==  null){
+           $get->setCondition($condition);
+        }
 
         $count = $get->countFilterEquiposByPurse();
             if($count){

@@ -7,14 +7,24 @@ Vue.component('form-all', {
         async _getData() {
             try {
                 if (this.resources.pagination) { this.$resetPagination() }
+                this.resources.condition ? this.$condition() : false;
                 this.$emit('loadingTable', true)
                 const dataRequest = {
                     fromRow: this.pagination.fromRow,
                     limit: this.pagination.limit
                 }
+
                 const url = this.resources.url.getData
-                await axios.get(url, { params: { dataRequest } })
+                var CancelToken = axios.CancelToken;
+                const source = CancelToken.source();
+                const timeout = setTimeout(() => {
+                    source.cancel();
+                    const error = { display: true, type: 'no-exist', text: 'Tiempo limite de espera', time: 4000 }
+                    this.error(error);
+                }, 20000);
+                await axios.get(url, { cancelToken: source.token, params: { dataRequest } })
                     .then(res => {
+                        clearTimeout(timeout);
                         if (res.data.error) {
                             const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
@@ -40,11 +50,9 @@ Vue.component('form-all', {
                         })
 
                     })
-
-
-                .catch(err => {
-                    console.log(err);
-                })
+                    .catch(err => {
+                        console.log(err);
+                    })
 
             } catch (err) {
                 const error = { display: true, type: 'no-exist', text: err, time: 4000 }
@@ -95,6 +103,11 @@ Vue.component('form-all', {
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
             this.$emit('showPagination', true);
 
+        },
+        $condition() {
+            if (this.resources.condition.display) {
+                this.$emit("showCondition", true)
+            } else { this.$emit("showCondition", false) }
         },
         $filter() {
 

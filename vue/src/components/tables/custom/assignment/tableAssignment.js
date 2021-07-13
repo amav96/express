@@ -102,18 +102,16 @@ Vue.component('table-assignment', {
                         </td>
                     </template>
                    
-                    
-
                         <template v-if="row.id_user_assigned && row.id_user_assigned !== '' && row.id_user_assigned !== null">
                            <td>
-                            <v-chip color="success" class="white-text">
+                            <v-chip color="blue darken-1" class="text-white">
                                 {{row.name_assigned }} {{row.name_alternative}} - {{row.id_user_assigned}}
                             </v-chip>
                            </td>
                         </template>
                         <template v-else>
                            <td>
-                           <v-chip color="error" class="white-text">
+                           <v-chip color="error" class="text-white">
                              No
                            </v-chip>
                           </td>
@@ -323,7 +321,7 @@ Vue.component('table-assignment', {
 
     },
     created() {
-        // this.isSelected();
+        this.isSelected();
     },
     watch: {
         select: {

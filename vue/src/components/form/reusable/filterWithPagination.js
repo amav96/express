@@ -34,7 +34,7 @@ Vue.component('filter-with-pagination', {
             </v-container>
         </div>
     `,
-    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select'],
+    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select', 'condition'],
     computed: {
         checkbox() {
             if (this.select && this.select.selected.length > 0) {
@@ -72,7 +72,7 @@ Vue.component('filter-with-pagination', {
         async tryFilter() {
             if (this.data !== '') {
                 this.loaderFilter = true
-                const parameters = JSON.parse(JSON.stringify(this.filter.parameters))
+                const parameters = JSON.parse(JSON.stringify(this.parametersDynamicToPaginate))
                 const buildFilter = { filter: this.data }
                 this.objectFilter = {...parameters, ...buildFilter }
                 const dataRequest = this.objectFilter
@@ -91,7 +91,6 @@ Vue.component('filter-with-pagination', {
                         this.$emit('setFlagFiltering', false)
                         const newDataResponse = res.data.data
                         this.$emit('setAfterDataResponse', newDataResponse)
-                        this.loaderFilter = false
                             //PAGINATION
                         if (this.filter.pagination) {
                             this.$pagination(res)
@@ -99,6 +98,13 @@ Vue.component('filter-with-pagination', {
                         if (this.filter.export.display) {
                             this.$exportExcel()
                         }
+                        this.$nextTick(() => {
+                            setTimeout(() => {
+                                this.loaderFilter = false
+                            }, 700);
+
+                        })
+
                     })
                     .catch(err => {
                         this.loaderFilter = false
@@ -175,6 +181,9 @@ Vue.component('filter-with-pagination', {
                     this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
                     if (this.filter.export.display) {
                         this.$oldExportExcel()
+                    }
+                    if (this.condition && this.condition.display) {
+                        this.$emit("cleanCondition")
                     }
                     // this.$emit('setFlagFiltering', true)
                 }

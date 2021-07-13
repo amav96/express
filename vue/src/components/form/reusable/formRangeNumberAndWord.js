@@ -74,11 +74,9 @@ Vue.component('form-number-and-word', {
         },
         async _getData() {
             try {
-                if (this.resources.pagination) { this.$resetPagination() }
-
-                if (this.resources.filter.display) {
-                    this.$emit("cleanFilter")
-                }
+                this.resources.pagination ? this.$resetPagination() : false;
+                this.resources.filter.display ? this.$emit("cleanFilter") : false;
+                this.resources.condition ? this.$condition() : false;
 
                 this.$emit('loadingTable', true)
 
@@ -173,6 +171,11 @@ Vue.component('form-number-and-word', {
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
             this.$emit('showPagination', true);
 
+        },
+        $condition() {
+            if (this.resources.condition.display) {
+                this.$emit("handlerCondition", true)
+            } else { this.$emit("handlerCondition", false) }
         },
         $filter() {
 

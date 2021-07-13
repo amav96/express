@@ -92,6 +92,8 @@
                         @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
                         @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
                         @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
+                        @cleanCondition="$_cleanCondition($event)"
+                        @showCondition="MAINRESOURCES.condition.display = $event"
                       />
               </template>
 
@@ -121,7 +123,9 @@
                     @setSubHeadersDataResponseDB="MAINRESOURCES.subheaders.dataResponseDB = $event"
                     @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
                     @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
-                    @cleanFilter="$_cleanFilter($event)"        
+                    @cleanFilter="$_cleanFilter($event)"  
+                    @cleanCondition="$_cleanCondition($event)"   
+                    @handlerCondition="handlerCondition($event)"   
                   />
               </template>
 
@@ -152,6 +156,8 @@
                       @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
                       @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
                       @cleanFilter="$_cleanFilter($event)"
+                      @cleanCondition="$_cleanCondition($event)"
+                      @handlerCondition="handlerCondition($event)"
                   />
               </template>
 
@@ -182,6 +188,8 @@
                       @setSubHeadersLoader="MAINRESOURCES.subheaders.loader = $event"   
                       @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event"
                       @cleanFilter="$_cleanFilter($event)"
+                      @cleanCondition="$_cleanCondition($event)"
+                      @handlerCondition="handlerCondition($event)"
                   />
               </template>
 
@@ -202,13 +210,16 @@
                   <loader-line />
                 </template>
 
-              <template>
+              <template v-if="showTableAssignment && MAINRESOURCES.condition.display">
                 <condition 
                 :resources="MAINRESOURCES"
+                @setErrorCondition="MAINRESOURCES.snackbar = $event"
                 @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                 @setPagination="MAINRESOURCES.pagination = $event"
                 @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
                 @showPagination="MAINRESOURCES.pagination.display = $event"
+                @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
+                ref="setCondition"
                 />
               </template>
 
@@ -242,6 +253,7 @@
 
                 <template v-if="showTableAssignment && MAINRESOURCES.filter.display">
                     <filter-with-pagination
+                    :condition="MAINRESOURCES.condition"
                     :pagination = "MAINRESOURCES.pagination"
                     :exportExcel ="MAINRESOURCES.exportExcel"
                     :filter="MAINRESOURCES.filter"
@@ -262,6 +274,7 @@
                     @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                     @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
                     @setOldUrlExport="MAINRESOURCES.exportExcel.url = $event"
+                    @cleanCondition="$_cleanCondition($event)"
                     ref="setFilter"
                     />
                 </template>
@@ -345,6 +358,9 @@
                       ],
                    
                     }, 
+                    condition: {
+                      display : true
+                    }
                    
                 },
                 dataBaseByPostalCode : {
@@ -374,6 +390,9 @@
                       dense: false
                     },
                     pagination:true, 
+                    condition: {
+                      display : true
+                    }
                 },
                 dataBaseByPurse : {
                     display : false,
@@ -402,6 +421,9 @@
                       dense: false
                     },
                     pagination:true, 
+                    condition: {
+                      display : true
+                    }
                 },
                 dataBaseByUserAssigned: {
 
@@ -431,6 +453,9 @@
                       dense: false
                     },
                     pagination:true, 
+                    condition: {
+                      display : false
+                    }
 
                 },
                 manualAssignment:{
@@ -480,7 +505,10 @@
                         
                       ],
                    
-                    },
+                    }, 
+                    condition: {
+                      display : true
+                    }
                    
                 },
                 MAINRESOURCES : {
@@ -581,7 +609,7 @@
                     color2:'error',
                     text1:'Ver asignados',
                     text2:'No asignados',
-                    class:'mx-2'
+                    class:'mx-2 my-2'
                     
                   },
                   admin:'',
@@ -628,7 +656,6 @@
               this.allDataBase.display = false
               this.dataBaseByPostalCode.display = false
               this.MAINRESOURCES.table.display = false
-             
               this.$nextTick(() => {
                 this.dataBaseByPurse.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
@@ -651,11 +678,6 @@
                 this.MAINRESOURCES.itemsButtons[3].active = true //user assigned
               })
             },
-            readMethodCurrent(){
-             if(this.allDataBase.display){
-                this.MAINRESOURCES.table.type = 'allEquipments'
-             }
-            },
             $_cleanSelected(){
              
                  this.MAINRESOURCES.select.selected = []
@@ -668,6 +690,23 @@
               if(this.$refs.setFilter && this.$refs.setFilter !== undefined){
                 this.$refs.setFilter.cleanFilter();
               }
+            },
+            $_cleanCondition(){
+              if(this.MAINRESOURCES.condition.display){
+                  this.$refs.setCondition.reset()
+              }
+              
+            },
+            handlerCondition(flag){
+              this.MAINRESOURCES.condition.display = flag
+              this.$nextTick(() => {
+                if(this.showTableAssignment && this.MAINRESOURCES.condition.display){
+                  this.$refs.setCondition.reset();
+                }
+              })
+              
+              
+              
             },
             getAdmin(){
               if(document.getElementById("id_user_default") === null){
@@ -694,6 +733,9 @@
         },
         created(){
           this.getAdmin();
+        },
+        watch:{
+
         }
 
     })

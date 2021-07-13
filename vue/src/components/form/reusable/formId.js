@@ -43,6 +43,7 @@ Vue.component('form-id', {
         async _getData() {
             try {
                 this.resources.pagination ? this.$resetPagination() : false;
+                this.resources.condition ? this.$condition() : false;
                 this.$emit('loadingTable', true)
                 const dataRequest = {
                     word: this.word,
@@ -124,6 +125,11 @@ Vue.component('form-id', {
             this.$emit('setParametersDynamicToPagination', parametersDynamicToPagination)
             this.$emit('showPagination', true);
 
+        },
+        $condition() {
+            if (this.resources.condition.display) {
+                this.$emit("handlerCondition", true)
+            } else { this.$emit("handlerCondition", false) }
         },
         $filter() {
 

@@ -57,6 +57,7 @@ Vue.component('pagination-custom', {
 
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
+                    console.log(res)
                     if (res.data.error) {
                         alertNegative("Ocurrio un error al paginar");
                         return
