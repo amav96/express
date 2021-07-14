@@ -12,6 +12,7 @@ Vue.component('table-assignment', {
                   :manualAssignment="manualAssignment"
                   :select="select"
                   @setUser="id_user = $event"
+                  @setDateRange="dateRange = $event"
                   @manualAssigned="_manualAssigned($event)"
                   />
                 </v-container>
@@ -145,6 +146,7 @@ Vue.component('table-assignment', {
                 selected: [],
             },
             id_user: '',
+            dateRange: '',
             btnDisabled: false,
 
         }
@@ -231,8 +233,10 @@ Vue.component('table-assignment', {
             this.select.selected.forEach((val) => {
                 value.push({ id: val.id, id_user: this.id_user })
             })
+
             const dataRequest = {
                 value: value,
+                dateRange: this.dateRange,
                 created_at: this.getDateTime(),
                 admin: this.resources.admin
             }

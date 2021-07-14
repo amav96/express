@@ -320,7 +320,11 @@ class asignacionController{
             $action->setId_user($singleElement->id_user);
             $action->setCreated_at($Request->created_at);
             $action->setId_admin($Request->admin);
-            $action = $action->automaticallyAssign();
+            if(isset($Request->dateRange) && $Request->dateRange && $Request->dateRange !== null){
+                $action->setDateRange($Request->dateRange);
+            }
+           
+            $action = $action->toAssign();
             if($action){$update= true;}
             else{$update = false;}
          
@@ -392,7 +396,7 @@ class asignacionController{
                     'digito' => $dataResponse["digito"],
                     'name_assigned' => $dataResponse["name"],
                     'name_alternative' => $dataResponse["name_alternative"],
-                    'belongs' => $this->getZoneByUserAndDigit($dataResponse["codigo_postal"],$dataResponse["digito"],$dataResponse["pais"])
+                    'belongs' => $this->getUserByZoneAndDigit($dataResponse["codigo_postal"],$dataResponse["digito"],$dataResponse["pais"])
                    
             );
            
@@ -402,6 +406,7 @@ class asignacionController{
             'count' => $arrCount,
             'data' => $arrData
         );
+        
     
          $jsonstring = json_encode($object);
          echo $jsonstring;
@@ -420,13 +425,12 @@ class asignacionController{
         }
     }
 
-    public function getZoneByUserAndDigit($zone,$digit,$pais){
+    public function getUserByZoneAndDigit($zone,$digit,$pais){
 
-    
         $get = new Asignacion();
         $get->setPostal_code($zone);
         $get->setId_country($pais);
-        $get = $get->getZoneByUserAndDigit();
+        $get = $get->getUserByZoneAndDigit();
         $usersAvailables=[];
         $belongsToTheUser='';
         $objectUserInRange = [];

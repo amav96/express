@@ -9,6 +9,7 @@ class Asignacion{
       private $id_country;
       private $digit;
       private $created_at;
+      private $dateRange;
       private $postal_code_start;
       private $postal_code_end;
       private $cartera;
@@ -39,6 +40,10 @@ class Asignacion{
 
       public function getCreated_at(){
             return $this->created_at;
+      }
+
+      public function getDateRange(){
+            return $this->dateRange;
       }
 
       public function getPostal_code_start(){
@@ -101,6 +106,10 @@ class Asignacion{
             $this->created_at = $created_at;
       }
 
+      public function setDateRange($dateRange){
+            $this->dateRange = $dateRange;
+      }
+
       public function setPostal_code_start($postal_code_start){
             $this->postal_code_start = $postal_code_start;
       }
@@ -160,7 +169,8 @@ class Asignacion{
                         'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
                         'ENTREGO-EN-SUCURSAL') OR estado IS NULL
                         )
-                  )";
+                  ) ";
+
 
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -388,7 +398,7 @@ class Asignacion{
                               'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
                         )
                   ) 
-                  order by cast(e.codigo_postal as SIGNED)   asc limit $fromRow,$limit ";
+                  order by cast(e.codigo_postal as SIGNED)   asc limit 100 ";
 
                 
                   $exe = $this->db->query($sql);
@@ -647,7 +657,7 @@ class Asignacion{
 
       // GET
 
-      public function getZoneByUserAndDigit(){
+      public function getUserByZoneAndDigit(){
 
             $postal_code = !empty($this->getPostal_code()) ? $this->getPostal_code() : false ;
             $id_country = !empty($this->getId_country()) ? $this->getId_country() : false ;
@@ -666,13 +676,20 @@ class Asignacion{
 
       // action
 
-      public function automaticallyAssign(){
+      public function toAssign(){
             $id = !empty($this->getId()) ? $this->getId() : false ;
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
             $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
+            $dateRange = $this->getDateRange();
 
-            $sql="UPDATE equipos set id_user_assigned = '$id_user',id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' where id = '$id' ";
+            $sql="UPDATE equipos set id_user_assigned = '$id_user',id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' ";
+            if(isset($dateRange) && $dateRange !== null){
+            $sql.=" ,type_assigned = 'asignado_manual'  , date_finish_assigned ='$dateRange' ";
+            }else{
+            $sql.=" ,type_assigned = 'asignado_automatico' ";
+            }
+            $sql.=" where id = '$id' ";
 
             $exe = $this->db->query($sql);
             if($exe){return true;}
@@ -685,7 +702,7 @@ class Asignacion{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
             $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
 
-            $sql="UPDATE equipos set id_user_assigned = null ,id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' where id = '$id' ";
+            $sql="UPDATE equipos set id_user_assigned = null ,id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' , type_assigned = 'removido'  where id = '$id' ";
             $exe = $this->db->query($sql);
             if($exe){return true;}
             else{return false;}

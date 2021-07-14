@@ -201,7 +201,7 @@
                 </v-alert>
               </template>
 
-                <template v-if="MAINRESOURCES.table.loading && allDataBase.display" >
+              <template v-if="MAINRESOURCES.table.loading && allDataBase.display" >
                   <v-skeleton-loader
                     type="date-picker"
                   ></v-skeleton-loader>
@@ -247,6 +247,10 @@
                     ref="pagination"
                   />
                 </template>
+
+               
+
+
               
                 <template v-if="MAINRESOURCES.loadingPaginate.display" >
                  <loader-line />
