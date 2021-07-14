@@ -2,6 +2,8 @@
 
 if (isset($_GET['asignacion'])) {
 
+    
+
 require_once '../model/asignacion.php';
 require_once '../model/usuario.php';
 require_once '../helpers/utils.php';
@@ -14,15 +16,13 @@ $asignacion = new asignacionController();
 $asignacion->$accion();
 
 } else {
-
-require_once 'model/asignacion.php';
-require_once 'model/usuario.php';
-require_once "vendor/autoload.php";
+    
+    require_once 'model/asignacion.php';
+    require_once 'model/usuario.php';
+    require_once "vendor/autoload.php";
 }
 
-
 class asignacionController{
-
 
     public function bases(){
         Utils::AuthAdmin();
@@ -33,9 +33,7 @@ class asignacionController{
     public function getAllEquipos(){
         // Utils::AuthAdmin();
 
-        
         $Request = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-
         $request =  json_decode($Request);
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;

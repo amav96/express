@@ -21,7 +21,7 @@ Vue.component('table-assignment', {
        
         <v-row class="d-flex justify-start flex-row flex-wrap my-2">
                 <div class="ma-2">
-                    <v-btn :disabled="select.selected.length<1 || btnDisabled" color="info" @click="_automaticAssigned">
+                    <v-btn :disabled="select.selected.length<1 || btnDisabled || disabledAutomaticBtn" color="info" @click="_automaticAssigned">
                         Asignar automáticamente
                     </v-btn>
                 </div>
@@ -42,6 +42,14 @@ Vue.component('table-assignment', {
                         </v-chip>
                     </div>
                 </template>
+                <div class="ma-2">
+                    <v-btn :disabled="btnDisabled || resources.loadingPaginate.display" @click="$reloadCurrentPage()" color="info">
+                     Actualizar
+                     <v-icon right>
+                     mdi-reload
+                     </v-icon>
+                    </v-btn>
+                </div>
             </v-row>
       
 
@@ -126,14 +134,19 @@ Vue.component('table-assignment', {
     </div>
     `,
     props: ['resources', 'columns', 'data', 'manualAssignment'],
-
+    computed: {
+        disabledAutomaticBtn() {
+            if (this.resources.sectionCurrent === 'user') { return true; } else { return false; }
+        }
+    },
     data() {
         return {
             select: {
                 selected: [],
             },
             id_user: '',
-            btnDisabled: false
+            btnDisabled: false,
+
         }
     },
     methods: {
@@ -158,9 +171,6 @@ Vue.component('table-assignment', {
                 })
             }
 
-        },
-        cleanSelected() {
-            this.select.selected = []
         },
         showSellectAll(data) {
             var assignable = []
@@ -199,10 +209,13 @@ Vue.component('table-assignment', {
                         return
                     }
                     this.$emit("realoadCurrentPage")
-
+                    this.resetCheckbox()
                     this.$nextTick(() => {
-                        this.$message('Realizado correctamente', 'success');
-                        this.resetCheckbox()
+
+                        setTimeout(() => {
+                            this.$message('Realizado correctamente', 'success');
+                        }, 700);
+
 
                     })
 
@@ -231,11 +244,11 @@ Vue.component('table-assignment', {
                         return
                     }
                     this.$emit("realoadCurrentPage")
+                    this.resetCheckbox()
                     this.manualAssignment.display = false
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.$message('Realizado correctamente', 'success');
-                        this.resetCheckbox()
-                    })
+                    }, 700);
 
                 })
                 .catch(err => {
@@ -266,11 +279,12 @@ Vue.component('table-assignment', {
                         return
                     }
                     this.$emit("realoadCurrentPage")
+                    this.resetCheckbox()
                     this.manualAssignment.display = false
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.$message('Realizado correctamente', 'success');
-                        this.resetCheckbox()
-                    })
+
+                    }, 700);
 
                 })
                 .catch(err => {
@@ -304,6 +318,9 @@ Vue.component('table-assignment', {
 
             return created_at
         },
+        $reloadCurrentPage() {
+            this.$emit("realoadCurrentPage")
+        },
         updatePagination() {
             if (this.select.selected.length < 1 && !this.resources.loadingPaginate.display) {
                 this.$emit("reaload", true)
@@ -316,12 +333,20 @@ Vue.component('table-assignment', {
         isSelected() {
             setInterval(() => {
                 this.updatePagination()
-            }, 30000)
+            }, 100000)
         },
-
+        cleanSelected() {
+            this.select.selected = []
+        },
+        $cleanSectionCurrent() {
+            this.$emit("cleanSectionCurrent", '')
+        }
     },
     created() {
         this.isSelected();
+    },
+    destroyed() {
+        this.$cleanSectionCurrent()
     },
     watch: {
         select: {

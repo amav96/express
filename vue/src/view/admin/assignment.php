@@ -239,6 +239,7 @@
                     @setPageCurrent= "MAINRESOURCES.pagination.pageCurrent = $event"
                     @setFromRow="MAINRESOURCES.pagination.fromRow = $event"
                     @updateDataResponseDB="MAINRESOURCES.table.dataResponseDB = $event"
+                    @updateTotalCount="MAINRESOURCES.pagination.totalCountResponse = $event"
                     @showLoaderLine="MAINRESOURCES.loadingPaginate.display =  $event"
                     :parametersDynamicToPaginate="MAINRESOURCES.parametersDynamicToPaginate"
                     @updateDynamicParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
@@ -290,6 +291,7 @@
                     @realoadCurrentPage="$_realoadCurrentPage($event)"
                     @reaload="MAINRESOURCES.reload = $event"
                     @setSnack="MAINRESOURCES.snackbar = $event"
+                    @cleanSectionCurrent="MAINRESOURCES.sectionCurrent = $event"
                     ref="assignment"
                     />
                   </template>
@@ -512,6 +514,7 @@
                    
                 },
                 MAINRESOURCES : {
+                  sectionCurrent:'',
                   url_actions : {
                       download_excel : API_BASE_EXCEL,
                       delete_excel : API_BASE_URL + 'helpers/delete.php?delete=deleteExcelFile',
@@ -587,6 +590,7 @@
                       { title: 'Recolectores', icon: 'mdi-truck-fast-outline', methods: '$_dataBaseByUserAssigned' , active : false, color :"bg-blue-custom" },
                   ],
                   error: {
+                    display:null,
                     type: null,
                     text: null,
                     time: null
@@ -624,6 +628,7 @@
                 this[function_name]()
             },
             $_allDataBase(){
+              this.$_cleanError()
               this.MAINRESOURCES.table.display = false
               this.dataBaseByPostalCode.display = false
               this.allDataBase.display = false
@@ -638,10 +643,12 @@
               })  
             },
             $_dataBaseByPostalCode(){
+              this.$_cleanError()
               this.allDataBase.display = false
               this.dataBaseByPurse.display = false
               this.dataBaseByUserAssigned.display = false
               this.MAINRESOURCES.table.display = false
+              
               this.$nextTick(() => {
                 this.dataBaseByPostalCode.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
@@ -652,6 +659,7 @@
               
             },
             $_dataBaseByPurse(){
+              this.$_cleanError()
               this.dataBaseByUserAssigned.display = false
               this.allDataBase.display = false
               this.dataBaseByPostalCode.display = false
@@ -665,6 +673,7 @@
               })
             },
             $_dataBaseByUserAssigned(){
+              this.$_cleanError()
               this.dataBaseByPurse.display = false
               this.dataBaseByUserAssigned.display = false
               this.allDataBase.display = false
@@ -672,6 +681,7 @@
               this.MAINRESOURCES.table.display = false
               this.$nextTick(() => {
                 this.dataBaseByUserAssigned.display = true
+                this.MAINRESOURCES.sectionCurrent = 'user'
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
                 this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
                 this.MAINRESOURCES.itemsButtons[2].active = false //purse
@@ -694,6 +704,15 @@
             $_cleanCondition(){
               if(this.MAINRESOURCES.condition.display){
                   this.$refs.setCondition.reset()
+              }
+              
+            },
+            $_cleanError(){
+              if(this.MAINRESOURCES.error && this.MAINRESOURCES.error.display){
+                this.MAINRESOURCES.error.type = null
+                this.MAINRESOURCES.error.text = null
+                this.MAINRESOURCES.error.time = null
+                this.MAINRESOURCES.error.display = false
               }
               
             },

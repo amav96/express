@@ -73,6 +73,10 @@ Vue.component('filter-with-pagination', {
             if (this.data !== '') {
                 this.loaderFilter = true
                 const parameters = JSON.parse(JSON.stringify(this.parametersDynamicToPaginate))
+                if (parameters.hasOwnProperty('fromRow')) {
+                    parameters.fromRow = 0
+                    console.log("entro en el beta")
+                }
                 const buildFilter = { filter: this.data }
                 this.objectFilter = {...parameters, ...buildFilter }
                 const dataRequest = this.objectFilter

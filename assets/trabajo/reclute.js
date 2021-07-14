@@ -923,6 +923,8 @@ function sendDataRegister() {
     var fecha = hoy.getFullYear() + '-' + ("0" + (hoy.getMonth() + 1)).slice(-2) + '-' +
         ("0" + hoy.getDate()).slice(-2) + ' ' + getHora + ':' + getMinutos + ':' + getSegundos;
 
+    var cleanDoc = $('#numero-documento').val().replace(/[^0-9]/, "").replace(/-/g, "")
+
     const datos = new FormData();
     datos.append("imgMonotributo", imgMonotributo);
     datos.append("imgDocumentoFrontal", imgDocumentoFrontal);
@@ -937,7 +939,7 @@ function sendDataRegister() {
     datos.append("domicilio", $('#domicilio').val());
     datos.append("monotributo", $('#monotributo').val());
     datos.append("tipo-documento", $('#tipo-documento').val());
-    datos.append("numero-documento", $('#numero-documento').val());
+    datos.append("numero-documento", cleanDoc);
     datos.append("telefono_celular", $('#telefono_celular').val());
     datos.append("via_conocimiento", $('#via_conocimiento').val());
     datos.append("fecha", fecha);

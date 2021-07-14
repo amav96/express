@@ -57,12 +57,12 @@ Vue.component('pagination-custom', {
 
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    console.log(res)
                     if (res.data.error) {
                         alertNegative("Ocurrio un error al paginar");
                         return
                     }
                     this.$emit('updateDataResponseDB', res.data.data)
+                    this.$emit("updateTotalCount", res.data.count)
                     this.setLoader(false)
                     if (this.select && this.select.display) {
                         this.$handlerSelected()

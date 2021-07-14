@@ -154,9 +154,9 @@ class Asignacion{
                   'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
                         AND 
                         (
-                        estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                        'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                        'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
+                        estado not IN('AUTORIZAR','RECUPERADO',
+                        'NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+                        'SE-MUDO','DESCONOCIDO-TIT','DESHABITADO',
                         'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
                         'ENTREGO-EN-SUCURSAL') OR estado IS NULL
                         )
@@ -184,18 +184,8 @@ class Asignacion{
             if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
             else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
             }
-            $sql.=" (
-                  e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-                  'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                 AND (
-                       e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                       'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                       'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                       'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                       'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                     )
-            ) AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')
-            order by cast(e.codigo_postal as SIGNED) ASC ";
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -217,20 +207,10 @@ class Asignacion{
             if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
             else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
             }
-            $sql.=" (
-              e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-              'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-             AND (
-                   e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                   'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                   'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                   'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                   'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                 )
-             AND e.cartera = '$cartera'
-            ) ";
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" AND e.cartera = '$cartera'";
 
-      
+
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
             else {$result = false;}
@@ -267,25 +247,17 @@ class Asignacion{
             left join users u on u.id = e.id_user_assigned
             WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado) AGAINST('$filter')
-            AND (
-               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-					  AND (
-						  e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-						  'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-						  'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-						  'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-	                 'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-						  )
-            	  ) OR e.cartera = '$filter' ";
-                     if(isset($condition) && $condition !== null){
-                        if($condition){
-                              $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
-                        }else{
-                              $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
-                        }
+            AND ";
+            $sql.=$this->sqlPurseAndStatus();
+            if(isset($condition) && $condition !== null){
+                  if($condition){
+                        $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
+                  }else{
+                        $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
                   }
-                  
+            }
+            $sql.=" OR e.cartera = '$filter' ";
+
                     
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -348,17 +320,8 @@ class Asignacion{
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') and e.cartera = '$cartera'
-            AND (
-               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                     AND (
-                           e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                           'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                           'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                           'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                     'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                           )
-                     )";
+            AND ";
+            $sql.=$this->sqlPurseAndStatus();
 
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -392,7 +355,6 @@ class Asignacion{
             else {$result = false;}
             return $result;
       }
-
       // DATA
 
       public function getAllEquipos(){
@@ -419,14 +381,16 @@ class Asignacion{
                   'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
                         AND 
                         (
-                              e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                              'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
+                              e.estado not IN('AUTORIZAR','RECUPERADO',
+                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+                              'SE-MUDO','DESCONOCIDO-TIT','DESHABITADO',
                               'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
                               'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
                         )
                   ) 
                   order by cast(e.codigo_postal as SIGNED)   asc limit $fromRow,$limit ";
+
+                
                   $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
@@ -454,20 +418,10 @@ class Asignacion{
             if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
             else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
             }
-           $sql.=" (
-                 e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-                 'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                AND (
-                      e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                      'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                      'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                      'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                      'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                    )
-           ) AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')
+           $sql.=$this->sqlPurseAndStatus(); 
+           $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')
            order by cast(e.codigo_postal as SIGNED) ASC limit $fromRow,$limit;";
 
-           
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
@@ -482,7 +436,6 @@ class Asignacion{
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
             $condition = $this->getCondition();
 
-
            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
            e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative 
@@ -494,19 +447,10 @@ class Asignacion{
             if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
             else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
             }
-            $sql.=" (
-             e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-             'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-            AND (
-                  e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                  'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                  'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                  'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                  'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                )
-            AND e.cartera = '$cartera'
-           )  ORDER BY e.codigo_postal ASC limit $fromRow,$limit;";
-           
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" AND e.cartera = '$cartera'";
+            $sql.=" ORDER BY e.codigo_postal ASC limit $fromRow,$limit;";
+
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
@@ -562,26 +506,17 @@ class Asignacion{
             WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') 
-            AND (
-               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                        AND (
-                              e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                              'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                              'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                              'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                        )
-            	  )
-                    OR e.cartera = '$filter' ";
-                     if(isset($condition) && $condition !== null){
-                        if($condition){
-                              $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
-                        }else{
-                              $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
-                        }
+            AND ";
+            $sql.=$this->sqlPurseAndStatus();
+            if(isset($condition) && $condition !== null){
+                  if($condition){
+                        $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
+                  }else{
+                        $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
                   }
-                  $sql.=" ORDER BY relevanceLocalidad DESC, relevanceEmpresa desc, relevance  DESC, e.cartera  limit $fromRow,$limit ";
+            }
+            $sql.=" OR e.cartera = '$filter' ";
+            $sql.=" ORDER BY relevanceLocalidad DESC, relevanceEmpresa desc, relevance  DESC, e.cartera  limit $fromRow,$limit ";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -668,21 +603,9 @@ class Asignacion{
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') and e.cartera = '$cartera'
-            AND (
-               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                     AND (
-                           e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                           'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                           'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
-                           'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                     'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                           )
-                     )
-            
-            ORDER BY relevance  DESC, e.codigo_postal asc, relevanceEmpresa desc,e.cartera limit $fromRow,$limit";
-
-           
+            AND ";
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" ORDER BY relevance  DESC, e.codigo_postal asc, relevanceEmpresa desc,e.cartera limit $fromRow,$limit";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -787,9 +710,9 @@ class Asignacion{
                         e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
                         'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
                         AND (
-                              e.estado not IN('AUTORIZAR','RECUPERADO','NO-TUVO-EQUIPO',
-                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO','NO-RESPONDE',
-                              'SE-MUDO','YA-RETIRADO','DESCONOCIDO-TIT','DESHABITADO',
+                              e.estado not IN('AUTORIZAR','RECUPERADO',
+                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+                              'SE-MUDO','DESCONOCIDO-TIT','DESHABITADO',
                               'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
                         'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
                               )
