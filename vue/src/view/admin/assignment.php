@@ -11,8 +11,6 @@
 
 <!-- mixin -->
 <script  src="<?=base_url?>vue/src/mixins/custom/assignment/MtableAssignment.js"></script>
-<script  src="<?=base_url?>vue/src/mixins/reusable/form/MCondition.js"></script>
-
 
 <!-- dialog -->
 <script  src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
@@ -22,10 +20,12 @@
 
 <!-- form component -->
 <script  src="<?=base_url?>vue/src/components/form/reusable/conditionBtn.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/conditionSelectRange.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formId.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteStatic.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/custom/assignment/manualAssignment.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 <script src="<?=base_url?>vue/src/store/index.js?"></script>
@@ -145,7 +145,7 @@
                       @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
                       @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
-                      @setAuxResponse="dataBaseByPurse.response.auxData = $event"
+                      @setAuxResponse="MAINRESOURCES.table.auxDataResponseDB = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @setErrorGlobal="MAINRESOURCES.error = $event"
                       @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
@@ -224,6 +224,7 @@
                       <condition-btn
                       property='assigned'
                       :resources="MAINRESOURCES"
+                      :disabledByLoading="disabledByLoading"
                       @setErrorCondition="MAINRESOURCES.snackbar = $event"
                       @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                       @setPagination="MAINRESOURCES.pagination = $event"
@@ -234,16 +235,33 @@
                       />
                     </v-col>
                     <template v-if="showTableAssignment && MAINRESOURCES.sectionCurrent === 'purse'">
-                      <v-col cols="12" xl="6" lg="6" class="py-0">
-                       
+                   
+                      <v-col cols="12" xl="5" lg="5"  class="py-0">
+                        <v-card>
+                          <v-card-title>
+                            Filtrar por rango codigo postal
+                            <v-icon right>
+                            mdi-filter
+                            </v-icon>
+                          </v-card-title>
+                        <v-card-text>
+                          <condition-select-range
+                          :section="dataBaseByPurse" 
+                          :load="MAINRESOURCES.table.auxDataResponseDB" 
+                          :resources="MAINRESOURCES" />
+                        </v-card-text>
+                          
+                        </v-card>
                       </v-col>
+                    
+                     
                     </template>
                   </v-row>
                 </v-container>
               </template>
 
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
-                  <div class="my-1 mt-3 d-flex justify-center" >
+                  <div class="my-2 mt-4 d-flex justify-center" >
                           Cerca de <strong> &nbsp;{{new Intl.NumberFormat("de-ES").format(MAINRESOURCES.pagination.totalCountResponse)}} </strong>&nbsp; resultados 
                   </div>
                 </template>
@@ -305,6 +323,7 @@
                     :resources="MAINRESOURCES" 
                     :columns="allDataBase.table.columns"
                     :manualAssignment="manualAssignment"
+                    :disabledByLoading="disabledByLoading"
                     @setLoader="MAINRESOURCES.loadingPaginate.display"
                     @setSelected="MAINRESOURCES.select.selected = $event"
                     @realoadCurrentPage="$_realoadCurrentPage($event)"
@@ -330,7 +349,12 @@
               return true
             }else {return false}
           },
-         
+          disabledByLoading(){
+            if(this.MAINRESOURCES.loadingPaginate.display || this.MAINRESOURCES.table.loading){
+              return true
+            }else {return false}
+          }
+    
         },
         data(){
             return {
@@ -444,7 +468,11 @@
                     },
                     pagination:true, 
                     condition: {
-                      display : true
+                      class:"mx-2 my-2",
+                      outlined:false,
+                      dense: true,
+                      label:'Codigo postales',
+                      display: true
                     },
                     response:{
                       data:[],
@@ -743,6 +771,7 @@
             },
             handlerCondition(flag){
               this.MAINRESOURCES.condition.display = flag
+              
               this.$nextTick(() => {
                 if(this.showTableAssignment && this.MAINRESOURCES.condition.display){
                   this.$refs.setCondition.reset();

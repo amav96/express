@@ -1,4 +1,30 @@
-var Condition = {
+Vue.component('condition-select-range', {
+    template: //html 
+        `<div class="d-flex flex-row">
+            <select-auto-complete-static 
+            :load="load"
+            title="Desde"
+            :outlined="section.condition.outlined"
+            :classCustom="section.condition.class"
+            :dense="section.condition.dense"
+            @exportVal="start = $event"
+            />
+            <select-auto-complete-static 
+            :load="load"
+            title="Hasta"
+            :outlined="section.condition.outlined"
+            :classCustom="section.condition.class"
+            :dense="section.condition.dense"
+            @exportVal="end = $event"
+            />
+            <v-btn fab x-small color="info" class="mx-2" :disabled="resources.loadingPaginate.display || resources.table.loading">
+                <v-icon >
+                    mdi-magnify
+                </v-icon>
+            </v-btn>
+        </div>
+    `,
+    props: ['section', 'load', 'resources'],
     computed: {
         loading() {
             if (this.resources.loadingPaginate.display) {
@@ -11,6 +37,8 @@ var Condition = {
             condition: undefined,
             name: undefined,
             parametersDynamic: [],
+            start: '',
+            end: ''
         }
     },
     methods: {
@@ -94,10 +122,12 @@ var Condition = {
                 this.$delete(this.resources.parametersDynamicToPaginate, 'condition')
                 this.condition = undefined
             }
-        }
+        },
     },
     destroyed() {
-        this.reset()
+        // this.reset()
     },
 
-}
+
+
+})

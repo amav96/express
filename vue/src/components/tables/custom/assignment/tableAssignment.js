@@ -23,32 +23,32 @@ Vue.component('table-assignment', {
         <v-row class="d-flex justify-start flex-row flex-wrap my-1">
                 <template v-if="!disabledAutomaticBtn">
                         <div class="mx-2 my-1">
-                            <v-btn :disabled="select.selected.length<1 || btnDisabled || disabledAutomaticBtn" color="info" @click="_automaticAssigned">
+                            <v-btn :disabled="select.selected.length<1 || disabledByLoading || disabledAutomaticBtn" color="info" @click="_automaticAssigned">
                                 Asignar seleccionados automáticamente
                             </v-btn>
                         </div>
                 </template>
                 
                 <div class="mx-2 my-1">
-                    <v-btn :disabled="select.selected.length<1 || btnDisabled" @click="manualAssignment.display = true" color="warning">
+                    <v-btn :disabled="select.selected.length<1 || disabledByLoading" @click="manualAssignment.display = true" color="warning">
                         Asignar manualmente
                     </v-btn>
                 </div>
                 <div class="mx-2 my-1">
-                    <v-btn :disabled="select.selected.length<1 || btnDisabled" color="error" @click=_removeAssigned>
+                    <v-btn :disabled="select.selected.length<1 || disabledByLoading" color="error" @click=_removeAssigned>
                         Quitar asignado
                     </v-btn>
                 </div>
                 
                 <div class="mx-2 my-1">
-                    <v-btn :disabled="btnDisabled || resources.loadingPaginate.display" @click="$reloadCurrentPage()" color="info">
+                    <v-btn :disabled="disabledByLoading" @click="$reloadCurrentPage()" color="info">
                      Actualizar
                      <v-icon right>
                      mdi-reload
                      </v-icon>
                     </v-btn>
                 </div>
-                <template v-if="select.selected.length>0 || btnDisabled">
+                <template v-if="select.selected.length>0">
                     <div class="mx-2 my-1">
                         <v-chip >
                         Seleccionados {{select.selected.length}}
@@ -135,6 +135,6 @@ Vue.component('table-assignment', {
         </v-simple-table>
     </div>
     `,
-    props: ['resources', 'columns', 'data', 'manualAssignment'],
+    props: ['resources', 'columns', 'data', 'manualAssignment', 'disabledByLoading'],
     mixins: [tableAssignment],
 })

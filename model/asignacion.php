@@ -149,11 +149,11 @@ class Asignacion{
       // COUNT
 
       public function countAllEquipos(){
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
             $sql = "SELECT count(*) as 'count' from equipos where ";
-            if(isset($condition) && $condition !== null){
-                  if($condition){
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){
                         $sql.=" (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) and ";
                   }else{
                         $sql.=" (id_usuario_asignado = '' or id_usuario_asignado IS null) and ";
@@ -182,15 +182,15 @@ class Asignacion{
             $cp_end = !empty($this->getPostal_code_end()) ? $this->getPostal_code_end() : false ;
             $id_country = !empty($this->getId_country()) ? $this->getId_country() : false ;
 
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
             
 
             $sql="SELECT count(*) as 'count'
             from equipos e
             left join users u on u.id = e.id_usuario_asignado
             WHERE ";
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=$this->sqlPurseAndStatus();
@@ -206,14 +206,14 @@ class Asignacion{
 
       public function countEquiposByPurse(){
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
             $sql="SELECT count(*) as count  
             from equipos e
             left join users u on u.id = e.id_usuario_asignado
             WHERE ";
 
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=$this->sqlPurseAndStatus();
@@ -249,7 +249,7 @@ class Asignacion{
       public function countFilterEquipos(){
 
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
             $sql="SELECT count(*) as 'count'
             from equipos e 
@@ -258,8 +258,8 @@ class Asignacion{
             e.localidad,e.codigo_postal,e.provincia,e.estado) AGAINST('$filter')
             AND ";
             $sql.=$this->sqlPurseAndStatus();
-            if(isset($condition) && $condition !== null){
-                  if($condition){
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){
                         $sql.="and (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) ";
                   }else{
                         $sql.="and (id_usuario_asignado = '' or id_usuario_asignado IS null) ";
@@ -280,7 +280,7 @@ class Asignacion{
             $cp_end = !empty($this->getPostal_code_end()) ? $this->getPostal_code_end() : false ;
             $id_country = !empty($this->getId_country()) ? $this->getId_country() : false ;
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
             $sql="SELECT count(*) as 'count'
             from equipos e 
@@ -301,8 +301,8 @@ class Asignacion{
                   AND e.pais = '$id_country')
             )
             AND ".$this->sqlPurseAndStatus()." ";
-            if(isset($condition) && $condition !== null){
-                  if($condition){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
                   else{$sql.=" and (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) ";}
             }
 
@@ -316,14 +316,14 @@ class Asignacion{
       public function countFilterEquiposByPurse(){
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
             $sql ="SELECT count(*) as 'count'
             from equipos e 
             left join users u on u.id = e.id_usuario_asignado
             WHERE ";
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
@@ -370,7 +370,7 @@ class Asignacion{
 
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
             
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
@@ -378,8 +378,8 @@ class Asignacion{
             from equipos e 
             left join users u on u.id = e.id_usuario_asignado
             where ";
-            if(isset($condition) && $condition !== null){
-                  if($condition){
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){
                         $sql.=" (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) and ";
                   }else{
                         $sql.=" (id_usuario_asignado = '' or id_usuario_asignado IS null) and ";
@@ -402,7 +402,7 @@ class Asignacion{
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
 
            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
@@ -411,8 +411,8 @@ class Asignacion{
            from equipos e
            left join users u on u.id = e.id_usuario_asignado
            WHERE ";
-           if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+           if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
            $sql.=$this->sqlPurseAndStatus(); 
@@ -430,7 +430,7 @@ class Asignacion{
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
@@ -439,8 +439,8 @@ class Asignacion{
            left join users u on u.id = e.id_usuario_asignado
            WHERE ";
 
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
 
@@ -457,15 +457,15 @@ class Asignacion{
       public function getCpByPurse(){
 
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
            
            $sql="SELECT e.codigo_postal
            from equipos e
            left join users u on u.id = e.id_usuario_asignado
            WHERE ";
 
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
 
@@ -508,7 +508,7 @@ class Asignacion{
       // DATA FILTER
 
       public function getFilterEquipos(){
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
@@ -531,8 +531,8 @@ class Asignacion{
             AGAINST('$filter') 
             AND ";
             $sql.=$this->sqlPurseAndStatus();
-            if(isset($condition) && $condition !== null){
-                  if($condition){
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){
                         $sql.="and (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) ";
                   }else{
                         $sql.="and (id_usuario_asignado = '' or id_usuario_asignado IS null) ";
@@ -555,7 +555,7 @@ class Asignacion{
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
             $sql="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,
@@ -584,8 +584,8 @@ class Asignacion{
                   AND e.pais = '$id_country')
             )
             AND ".$this->sqlPurseAndStatus()." ";
-            if(isset($condition) && $condition !== null){
-                  if($condition){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
+            if(isset($assigned) && $assigned !== null){
+                  if($assigned){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
                   else{$sql.=" and (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) ";}
             }
             $sql.=" ORDER BY relevance  DESC, e.codigo_postal asc, relevanceEmpresa desc,e.cartera limit $fromRow,$limit";
@@ -606,7 +606,7 @@ class Asignacion{
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
-            $condition = $this->getCondition();
+            $assigned = $this->getCondition();
 
             $sql ="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,
             e.serie_base,e.tarjeta,e.created_at,e.nombre_cliente,e.direccion,e.provincia,
@@ -619,8 +619,8 @@ class Asignacion{
             from equipos e 
             left join users u on u.id = e.id_usuario_asignado
             WHERE ";
-            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
             else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
