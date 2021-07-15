@@ -154,9 +154,9 @@ class Asignacion{
             $sql = "SELECT count(*) as 'count' from equipos where ";
             if(isset($condition) && $condition !== null){
                   if($condition){
-                        $sql.=" (id_user_assigned != '' and id_user_assigned IS NOT null) and ";
+                        $sql.=" (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) and ";
                   }else{
-                        $sql.=" (id_user_assigned = '' or id_user_assigned IS null) and ";
+                        $sql.=" (id_usuario_asignado = '' or id_usuario_asignado IS null) and ";
                   }
             }
             $sql.="( cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
@@ -170,7 +170,6 @@ class Asignacion{
                         'ENTREGO-EN-SUCURSAL') OR estado IS NULL
                         )
                   ) ";
-
 
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -188,11 +187,11 @@ class Asignacion{
 
             $sql="SELECT count(*) as 'count'
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE ";
             if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=$this->sqlPurseAndStatus();
             $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')";
@@ -210,12 +209,12 @@ class Asignacion{
             $condition = $this->getCondition();
             $sql="SELECT count(*) as count  
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE ";
 
             if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=$this->sqlPurseAndStatus();
             $sql.=" AND e.cartera = '$cartera'";
@@ -232,12 +231,12 @@ class Asignacion{
             $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
             $sql="SELECT count(*) as 'count'
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE 
             (
               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-             AND e.id_user_assigned = '$id_user'
+             AND e.id_usuario_asignado = '$id_user'
             )";
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -254,16 +253,16 @@ class Asignacion{
 
             $sql="SELECT count(*) as 'count'
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado) AGAINST('$filter')
             AND ";
             $sql.=$this->sqlPurseAndStatus();
             if(isset($condition) && $condition !== null){
                   if($condition){
-                        $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
+                        $sql.="and (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) ";
                   }else{
-                        $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
+                        $sql.="and (id_usuario_asignado = '' or id_usuario_asignado IS null) ";
                   }
             }
             $sql.=" OR e.cartera = '$filter' ";
@@ -285,7 +284,7 @@ class Asignacion{
 
             $sql="SELECT count(*) as 'count'
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE (cartera = '$filter' and ".$this->sqlPurseAndStatus()." ) and
             (
             cast(e.codigo_postal as SIGNED) >= '$cp_start' 
@@ -303,8 +302,8 @@ class Asignacion{
             )
             AND ".$this->sqlPurseAndStatus()." ";
             if(isset($condition) && $condition !== null){
-                  if($condition){$sql.=" and (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) ";}
-                  else{$sql.=" and (e.id_user_assigned = '' or e.id_user_assigned IS null) ";}
+                  if($condition){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
+                  else{$sql.=" and (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) ";}
             }
 
             $exe = $this->db->query($sql);
@@ -321,11 +320,11 @@ class Asignacion{
 
             $sql ="SELECT count(*) as 'count'
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE ";
             if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
@@ -346,12 +345,12 @@ class Asignacion{
            
             $sql="SELECT count(*) as 'count'
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE 
                   (
                   e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
                   'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                  AND e.id_user_assigned = '$id_user'
+                  AND e.id_usuario_asignado = '$id_user'
                   ) 
                   AND 
                   (
@@ -375,33 +374,21 @@ class Asignacion{
             
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
 
-            $sql = "SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative
+            $sql = "SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             where ";
             if(isset($condition) && $condition !== null){
                   if($condition){
-                        $sql.=" (id_user_assigned != '' and id_user_assigned IS NOT null) and ";
+                        $sql.=" (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) and ";
                   }else{
-                        $sql.=" (id_user_assigned = '' or id_user_assigned IS null) and ";
+                        $sql.=" (id_usuario_asignado = '' or id_usuario_asignado IS null) and ";
                   }
             }
-            $sql.=" (
-                  e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
-                  'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                        AND 
-                        (
-                              e.estado not IN('AUTORIZAR','RECUPERADO',
-                              'NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
-                              'SE-MUDO','DESCONOCIDO-TIT','DESHABITADO',
-                              'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
-                              'ENTREGO-EN-SUCURSAL') OR e.estado IS NULL
-                        )
-                  ) 
-                  order by cast(e.codigo_postal as SIGNED)   asc limit 100 ";
+            $sql.=$this->sqlPurseAndStatus(); 
+            $sql.=" order by cast(e.codigo_postal as SIGNED)   ASC limit $fromRow,$limit; ";
 
-                
-                  $exe = $this->db->query($sql);
+            $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
             return $result;
@@ -420,13 +407,13 @@ class Asignacion{
 
            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
-           e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative 
+           e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
            from equipos e
-           left join users u on u.id = e.id_user_assigned
+           left join users u on u.id = e.id_usuario_asignado
            WHERE ";
            if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
            $sql.=$this->sqlPurseAndStatus(); 
            $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end AND e.pais= '$id_country')
@@ -438,7 +425,6 @@ class Asignacion{
             return $result;
       }
 
-
       public function getEquiposByPurse(){
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
             $fromRow = ($this->getFromRow())?$this->getFromRow() : false ;
@@ -448,15 +434,16 @@ class Asignacion{
 
            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
-           e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative 
+           e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
            from equipos e
-           left join users u on u.id = e.id_user_assigned
+           left join users u on u.id = e.id_usuario_asignado
            WHERE ";
 
             if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
+
             $sql.=$this->sqlPurseAndStatus();
             $sql.=" AND e.cartera = '$cartera'";
             $sql.=" ORDER BY e.codigo_postal ASC limit $fromRow,$limit;";
@@ -465,6 +452,32 @@ class Asignacion{
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
             return $result;
+      }
+
+      public function getCpByPurse(){
+
+            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
+            $condition = $this->getCondition();
+           
+           $sql="SELECT e.codigo_postal
+           from equipos e
+           left join users u on u.id = e.id_usuario_asignado
+           WHERE ";
+
+            if(isset($condition) && $condition !== null){
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
+            }
+
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" AND e.cartera = '$cartera'";
+            $sql.=" GROUP BY e.codigo_postal ORDER BY e.codigo_postal ASC ";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
       }
 
       public function getEquiposByUserAssigned(){
@@ -476,15 +489,15 @@ class Asignacion{
 
             $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
             e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
-            e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative 
+            e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE 
             (
               e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
               'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-             AND e.id_user_assigned = '$id_user'
-            ) ORDER BY e.codigo_postal ASC, e.updated_at_assigned desc limit $fromRow,$limit;";
+             AND e.id_usuario_asignado = '$id_user'
+            ) ORDER BY e.codigo_postal ASC, e.fecha_asignado desc limit $fromRow,$limit;";
 
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
@@ -503,7 +516,7 @@ class Asignacion{
 
             $sql="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
             e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,
-            e.codigo_postal,e.digito,e.id_user_assigned,e.pais, u.name, u.name_alternative,
+            e.codigo_postal,e.digito,e.id_usuario_asignado,e.pais, u.name, u.name_alternative,
             MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') AS relevance,
@@ -512,7 +525,7 @@ class Asignacion{
             MATCH (e.localidad) 
             AGAINST('$filter') AS relevanceLocalidad
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') 
@@ -520,9 +533,9 @@ class Asignacion{
             $sql.=$this->sqlPurseAndStatus();
             if(isset($condition) && $condition !== null){
                   if($condition){
-                        $sql.="and (id_user_assigned != '' and id_user_assigned IS NOT null) ";
+                        $sql.="and (id_usuario_asignado != '' and id_usuario_asignado IS NOT null) ";
                   }else{
-                        $sql.="and (id_user_assigned = '' or id_user_assigned IS null) ";
+                        $sql.="and (id_usuario_asignado = '' or id_usuario_asignado IS null) ";
                   }
             }
             $sql.=" OR e.cartera = '$filter' ";
@@ -547,14 +560,14 @@ class Asignacion{
 
             $sql="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,
             e.serie_base,e.tarjeta,e.created_at,e.nombre_cliente,e.direccion,e.provincia,
-            e.codigo_postal,e.digito,e.id_user_assigned,e.pais, u.name, u.name_alternative,
+            e.codigo_postal,e.digito,e.id_usuario_asignado,e.pais, u.name, u.name_alternative,
             MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') AS relevance,
             MATCH (e.empresa) 
             AGAINST('$filter') AS relevanceEmpresa
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE (cartera = '$filter' and ".$this->sqlPurseAndStatus()." ) and
             (
             cast(e.codigo_postal as SIGNED) >= '$cp_start' 
@@ -572,8 +585,8 @@ class Asignacion{
             )
             AND ".$this->sqlPurseAndStatus()." ";
             if(isset($condition) && $condition !== null){
-                  if($condition){$sql.=" and (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) ";}
-                  else{$sql.=" and (e.id_user_assigned = '' or e.id_user_assigned IS null) ";}
+                  if($condition){$sql.=" and (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) ";}
+                  else{$sql.=" and (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) ";}
             }
             $sql.=" ORDER BY relevance  DESC, e.codigo_postal asc, relevanceEmpresa desc,e.cartera limit $fromRow,$limit";
           
@@ -597,18 +610,18 @@ class Asignacion{
 
             $sql ="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,
             e.serie_base,e.tarjeta,e.created_at,e.nombre_cliente,e.direccion,e.provincia,
-            e.codigo_postal,e.digito,e.id_user_assigned,e.pais, u.name, u.name_alternative,
+            e.codigo_postal,e.digito,e.id_usuario_asignado,e.pais, u.name, u.name_alternative,
             MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
             AGAINST('$filter') AS relevance,
             MATCH (e.empresa) 
             AGAINST('$filter') AS relevanceEmpresa
             from equipos e 
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE ";
             if(isset($condition) && $condition !== null){
-            if($condition){$sql.=" (e.id_user_assigned != '' and e.id_user_assigned IS NOT null) and ";}
-            else{$sql.=" (e.id_user_assigned = '' or e.id_user_assigned IS null) and ";}
+            if($condition){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
             }
             $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
             e.localidad,e.codigo_postal,e.provincia,e.estado)
@@ -633,19 +646,19 @@ class Asignacion{
 
             $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
             e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
-            e.digito,e.id_user_assigned,e.cartera,e.pais, u.name, u.name_alternative 
+            e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
             from equipos e
-            left join users u on u.id = e.id_user_assigned
+            left join users u on u.id = e.id_usuario_asignado
             WHERE 
                   (
                   e.cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
                   'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
-                  AND e.id_user_assigned = '$id_user'
+                  AND e.id_usuario_asignado = '$id_user'
                   ) 
                   AND (MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
 		            e.localidad,e.codigo_postal,e.provincia,e.estado)
 		            AGAINST('$filter') OR e.cartera = '$filter')
-            ORDER BY e.codigo_postal ASC, e.updated_at_assigned desc limit $fromRow,$limit;";
+            ORDER BY e.codigo_postal ASC, e.fecha_asignado desc limit $fromRow,$limit;";
 
          
             $exe = $this->db->query($sql);
@@ -683,11 +696,11 @@ class Asignacion{
             $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
             $dateRange = $this->getDateRange();
 
-            $sql="UPDATE equipos set id_user_assigned = '$id_user',id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' ";
+            $sql="UPDATE equipos set id_usuario_asignado = '$id_user',id_admin_asignador='$id_admin', fecha_asignado = '$created_at' ";
             if(isset($dateRange) && $dateRange !== null){
-            $sql.=" ,type_assigned = 'asignado_manual'  , date_finish_assigned ='$dateRange' ";
+            $sql.=" ,asignado_tipo = 'am'  , fecha_final_asignado ='$dateRange' ";
             }else{
-            $sql.=" ,type_assigned = 'asignado_automatico' ";
+            $sql.=" ,asignado_tipo = 'aa' ";
             }
             $sql.=" where id = '$id' ";
 
@@ -702,7 +715,7 @@ class Asignacion{
             $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
             $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
 
-            $sql="UPDATE equipos set id_user_assigned = null ,id_user_update_management_assigned='$id_admin', updated_at_assigned = '$created_at' , type_assigned = 'removido'  where id = '$id' ";
+            $sql="UPDATE equipos set id_usuario_asignado = null ,id_admin_asignador='$id_admin', fecha_asignado = '$created_at' , asignado_tipo = 'r'  where id = '$id' ";
             $exe = $this->db->query($sql);
             if($exe){return true;}
             else{return false;}

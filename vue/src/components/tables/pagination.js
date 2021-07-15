@@ -5,7 +5,7 @@ Vue.component('pagination-custom', {
         <v-container class="max-width">
             <v-pagination
                 v-model="page"
-                class="my-4"
+                class="my-1"
                 :length="pagination.totalPage"
                 @input="paginate()"
                 :disabled="checkbox"

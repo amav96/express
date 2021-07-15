@@ -1,13 +1,9 @@
 <?php 
-$mysqli = new mysqli("localhost", "root", "", "reality2_postalmarketing");
-if ($mysqli->connect_errno) {
-    echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-}
-
-$sql ="SELECT * from equipos limit 10";
-
-$resultado = $mysqli->query($sql);
-
+$test = "12345678";
+$sub = substr($test,-2);
 echo '<pre>';
-print_r($resultado->fetch_object());
+print_r($test);
+echo '</pre>';
+echo '<pre>';
+print_r($sub);
 echo '</pre>';

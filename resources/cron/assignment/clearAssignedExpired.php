@@ -4,14 +4,14 @@ if ($mysqli->connect_errno) {
     echo "Fallo al conectar a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 
-$sql ="UPDATE equipos SET id_user_assigned = NULL, date_finish_assigned = null , 
-type_assigned = 'pendiente'
+$sql ="UPDATE equipos SET id_usuario_asignado = NULL, fecha_final_asignado = null , 
+asignado_tipo = 'v'
 WHERE 
-(date_finish_assigned IS NOT NULL ) 
+(fecha_final_asignado IS NOT NULL ) 
 AND 
-(id_user_assigned != '' AND id_user_assigned IS NOT NULL)
+(id_usuario_asignado != '' AND id_usuario_asignado IS NOT NULL)
 AND
-DATEDIFF(date_finish_assigned,CURDATE()) < 1";
+DATEDIFF(fecha_final_asignado,CURDATE()) < 1";
 
 $exe = $mysqli->query($sql);
 if($exe){

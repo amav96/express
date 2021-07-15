@@ -10,6 +10,7 @@ Vue.component('filter-with-pagination', {
                         v-model.trim="data"
                         label="Buscar"
                         :disabled="checkbox"
+                        dense
                         >
                         </v-text-field>
                     </v-col>

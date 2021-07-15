@@ -1,42 +1,26 @@
-Vue.component('condition', {
-    template: //html 
-        `<div :class="resources.condition.class">
-            <v-btn @click="handlersCondition(true)" :color="condition ? resources.condition.color1 : 'blue-grey lighten-4'" :disabled="loading">
-            {{resources.condition.text1}}
-            </v-btn>
-            <v-btn @click="handlersCondition(false)" :color="!condition &&  condition !== undefined? resources.condition.color2 : 'blue-grey lighten-4'"  :disabled="loading">
-            {{resources.condition.text2}}
-            </v-btn>
-            <template v-if="condition != undefined">
-                <v-chip @click="handlersCondition(undefined)" color="warning" :disabled="loading">
-                    Limpiar filtro
-                    <v-icon>
-                    mdi-filter-remove
-                    </v-icon>
-                </v-chip>
-            </template>
-            
-        </div>
-    `,
-    props: ['resources'],
+var Condition = {
     computed: {
         loading() {
             if (this.resources.loadingPaginate.display) {
                 return true;
             } else { return false }
-        }
+        },
     },
     data() {
         return {
             condition: undefined,
+            name: undefined,
             parametersDynamic: [],
-            activatedFromOutside: false
         }
     },
     methods: {
-        handlersCondition(val) {
+        handlersCondition(name, val) {
+
+            this.name = name
             this.condition = val
-            this.applyCondition();
+            this.$nextTick(() => {
+                this.applyCondition();
+            })
         },
         applyCondition() {
             this.setLoader(true);
@@ -45,16 +29,21 @@ Vue.component('condition', {
             if (parametersDynamicToPaginate.hasOwnProperty('fromRow')) {
                 parametersDynamicToPaginate.fromRow = 0
             }
-            let condition = { condition: this.condition }
-            let newParameters = {...parametersDynamicToPaginate, ...condition }
-            if (this.condition === undefined) {
-                delete newParameters.condition;
+            var name = this.name
+            let condition = {
+                [name]: this.condition
             }
+            let newParameters = {...parametersDynamicToPaginate, ...condition }
+            if (this.condition === undefined || this.name === undefined) {
+                delete newParameters[name];
+            }
+
             const dataRequest = newParameters
             this.parametersDynamic = dataRequest
             axios.get(url, { params: { dataRequest } })
                 .then(res => {
                     this.setLoader(false);
+
                     if (res.data.error) {
                         const error = { display: true, color: 'error', text: 'No se encontraron datos para el filtro', time: 4000 }
                         this.error(error);
@@ -111,4 +100,4 @@ Vue.component('condition', {
         this.reset()
     },
 
-})
+}

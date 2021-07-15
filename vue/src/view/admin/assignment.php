@@ -9,6 +9,11 @@
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 <script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
 
+<!-- mixin -->
+<script  src="<?=base_url?>vue/src/mixins/custom/assignment/MtableAssignment.js"></script>
+<script  src="<?=base_url?>vue/src/mixins/reusable/form/MCondition.js"></script>
+
+
 <!-- dialog -->
 <script  src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
 <!-- table -->
@@ -16,7 +21,7 @@
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 
 <!-- form component -->
-<script  src="<?=base_url?>vue/src/components/form/reusable/condition.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/reusable/conditionBtn.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formId.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formAll.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formRangeNumberAndWord.js"></script>
@@ -140,6 +145,7 @@
                       @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
                       @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @setAuxResponse="dataBaseByPurse.response.auxData = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @setErrorGlobal="MAINRESOURCES.error = $event"
                       @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
@@ -158,6 +164,7 @@
                       @cleanFilter="$_cleanFilter($event)"
                       @cleanCondition="$_cleanCondition($event)"
                       @handlerCondition="handlerCondition($event)"
+
                   />
               </template>
 
@@ -209,18 +216,30 @@
                 <template v-if="MAINRESOURCES.table.loading && !allDataBase.display">
                   <loader-line />
                 </template>
-
+              
               <template v-if="showTableAssignment && MAINRESOURCES.condition.display">
-                <condition 
-                :resources="MAINRESOURCES"
-                @setErrorCondition="MAINRESOURCES.snackbar = $event"
-                @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
-                @setPagination="MAINRESOURCES.pagination = $event"
-                @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
-                @showPagination="MAINRESOURCES.pagination.display = $event"
-                @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
-                ref="setCondition"
-                />
+                <v-container >
+                  <v-row class="d-flex justify-start flex-row">
+                    <v-col  cols="12" xl="6" lg="6" class="py-0">
+                      <condition-btn
+                      property='assigned'
+                      :resources="MAINRESOURCES"
+                      @setErrorCondition="MAINRESOURCES.snackbar = $event"
+                      @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                      @setPagination="MAINRESOURCES.pagination = $event"
+                      @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
+                      @showPagination="MAINRESOURCES.pagination.display = $event"
+                      @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
+                      ref="setCondition"
+                      />
+                    </v-col>
+                    <template v-if="showTableAssignment && MAINRESOURCES.sectionCurrent === 'purse'">
+                      <v-col cols="12" xl="6" lg="6" class="py-0">
+                       
+                      </v-col>
+                    </template>
+                  </v-row>
+                </v-container>
               </template>
 
                 <template v-if="showTableAssignment && MAINRESOURCES.pagination.totalCountResponse>0" >
@@ -248,10 +267,6 @@
                   />
                 </template>
 
-               
-
-
-              
                 <template v-if="MAINRESOURCES.loadingPaginate.display" >
                  <loader-line />
                 </template>
@@ -285,7 +300,7 @@
                 </template>
             
                 <template v-if="showTableAssignment">
-                  <template v-if="MAINRESOURCES.table.type = 'allEquipments'">
+                  <template>
                     <table-assignment 
                     :resources="MAINRESOURCES" 
                     :columns="allDataBase.table.columns"
@@ -314,7 +329,8 @@
             if(this.MAINRESOURCES.table.display){
               return true
             }else {return false}
-          }
+          },
+         
         },
         data(){
             return {
@@ -429,6 +445,10 @@
                     pagination:true, 
                     condition: {
                       display : true
+                    },
+                    response:{
+                      data:[],
+                      auxData:[]
                     }
                 },
                 dataBaseByUserAssigned: {
@@ -585,13 +605,14 @@
                   table : {
                         display : false,
                         loading: false,
-                        dataResponseDB: []
+                        dataResponseDB: [],
+                        auxDataResponseDB:[]
                     },
                   itemsButtons:[
                       { title: 'Base completa', icon: 'mdi-database-edit', methods: '$_allDataBase' , active : true, color :"bg-blue-custom" },
                       { title: 'Codigo Postal', icon: 'mdi-flag-triangle', methods: '$_dataBaseByPostalCode' , active : false, color :"bg-blue-custom" },
                       { title: 'Carteras', icon: 'mdi-purse-outline', methods: '$_dataBaseByPurse' , active : false, color :"bg-blue-custom" },
-                      { title: 'Recolectores', icon: 'mdi-truck-fast-outline', methods: '$_dataBaseByUserAssigned' , active : false, color :"bg-blue-custom" },
+                      { title: 'Asignado Recolectores', icon: 'mdi-truck-fast-outline', methods: '$_dataBaseByUserAssigned' , active : false, color :"bg-blue-custom" },
                   ],
                   error: {
                     display:null,
@@ -618,7 +639,6 @@
                     text1:'Ver asignados',
                     text2:'No asignados',
                     class:'mx-2 my-2'
-                    
                   },
                   admin:'',
                   reload: false
@@ -669,6 +689,7 @@
               this.dataBaseByPostalCode.display = false
               this.MAINRESOURCES.table.display = false
               this.$nextTick(() => {
+                this.MAINRESOURCES.sectionCurrent = 'purse'
                 this.dataBaseByPurse.display = true
                 this.MAINRESOURCES.itemsButtons[0].active = false //todo
                 this.MAINRESOURCES.itemsButtons[1].active = false //postalcode
@@ -757,9 +778,8 @@
         created(){
           this.getAdmin();
         },
-        watch:{
-
-        }
+        
+        
 
     })
 </script>

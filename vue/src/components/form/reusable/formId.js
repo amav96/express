@@ -54,6 +54,7 @@ Vue.component('form-id', {
 
                 await axios.get(url, { params: { dataRequest } })
                     .then(res => {
+
                         if (res.data.error) {
                             const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
                             this.error(error);
@@ -75,6 +76,10 @@ Vue.component('form-id', {
 
 
                         this.$emit('response', res.data.data)
+                        if (res.data.aux !== undefined && res.data.aux && res.data.aux.length > 0) {
+                            this.$emit('setAuxResponse', res.data.aux)
+                        }
+
                         this.$emit('showTable', true)
                         this.$emit('loadingTable', false)
                     })

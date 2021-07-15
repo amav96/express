@@ -37,14 +37,14 @@ class asignacionController{
         $request =  json_decode($Request);
         $fromRow = isset($request->fromRow) ? $request->fromRow : false; 
         $limit = isset($request->limit) ? $request->limit : false;
-        $condition = isset($request->condition) ? $request->condition : null ;
+        $assigned = isset($request->assigned) ? $request->assigned : null ;
 
         $get = new Asignacion();
 
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
-        if($condition !==  null){
-           $get->setCondition($condition);
+        if($assigned !==  null){
+           $get->setCondition($assigned);
         }
 
         $count = $get->countAllEquipos();
@@ -121,7 +121,13 @@ class asignacionController{
         if($count){
             $data = $get->getEquiposByPurse();
             if($data){
-                $this->showEquipments($count,$data);
+                $cp = $get->getCpByPurse();
+                if($cp){
+                    $this->showEquipments($count,$data,$cp,'aux');
+                }else{
+                    $this->showEquipments($count,$data);
+                }
+                
             }else{
                 $object=array('error' => true);
                 $jsonstring = json_encode($object); echo $jsonstring;
@@ -137,13 +143,13 @@ class asignacionController{
 
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
         $Request =  json_decode($dataRequest);
-        $id_user_assigned = isset($Request->word) ? $Request->word: false;
+        $id_usuario_asignado = isset($Request->word) ? $Request->word: false;
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
         $limit = isset($Request->limit) ? $Request->limit : false;
 
         $get = new Asignacion();
-       
-        $get->setId_user($id_user_assigned);
+        
+        $get->setId_user($id_usuario_asignado);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
 
@@ -281,13 +287,13 @@ class asignacionController{
         $filter = isset($Request->filter) ? $Request->filter : false ; 
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
         $limit = isset($Request->limit) ? $Request->limit : false ;
-        $id_user_assigned = isset($Request->word) ? $Request->word: false;
+        $id_usuario_asignado = isset($Request->word) ? $Request->word: false;
         
         $get = new Asignacion();
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
-        $get->setId_user($id_user_assigned);
+        $get->setId_user($id_usuario_asignado);
 
         $count = $get->countFilterEquiposByUserAssigned();
             if($count){
@@ -362,11 +368,9 @@ class asignacionController{
 
     // HELPERS
 
-    public function showEquipments($count,$data){
+    public function showEquipments($count,$data,$aux = null,$name = null){
 
-       
     
-
         if($count && $data){
         
             foreach ($count as $dataCounter){
@@ -374,39 +378,53 @@ class asignacionController{
             }
 
             foreach($data as $dataResponse){
-            $arrData[]=array(
-                    'success' => true,
-                    'id' => $dataResponse["id"],
-                    'identificacion' => $dataResponse["identificacion"],
-                    'id_user_assigned' => $dataResponse["id_user_assigned"],
-                    'estado' => $dataResponse["estado"],
-                    'empresa' => $dataResponse["empresa"],
-                    'terminal' => $dataResponse["terminal"],
-                    'serie' => $dataResponse["serie"],
-                    'serie_base' => $dataResponse["serie_base"],
-                    'tarjeta' => $dataResponse["tarjeta"],
-                    'created_at' => $this->getDataTime($dataResponse["created_at"]),
-                    'nombre_cliente' => $dataResponse["nombre_cliente"],
-                    'direccion' => $dataResponse["direccion"],
-                    'provincia' => $dataResponse["provincia"],
-                    'localidad' => $dataResponse["localidad"],
-                    'cartera' => $dataResponse["cartera"],
-                    'pais' => $dataResponse["pais"],
-                    'codigo_postal' => $dataResponse["codigo_postal"],
-                    'digito' => $dataResponse["digito"],
-                    'name_assigned' => $dataResponse["name"],
-                    'name_alternative' => $dataResponse["name_alternative"],
-                    'belongs' => $this->getUserByZoneAndDigit($dataResponse["codigo_postal"],$dataResponse["digito"],$dataResponse["pais"])
-                   
-            );
-           
+                $arrData[]=array(
+                        'success' => true,
+                        'id' => $dataResponse["id"],
+                        'identificacion' => $dataResponse["identificacion"],
+                        'id_usuario_asignado' => $dataResponse["id_usuario_asignado"],
+                        'estado' => $dataResponse["estado"],
+                        'empresa' => $dataResponse["empresa"],
+                        'terminal' => $dataResponse["terminal"],
+                        'serie' => $dataResponse["serie"],
+                        'serie_base' => $dataResponse["serie_base"],
+                        'tarjeta' => $dataResponse["tarjeta"],
+                        'created_at' => $this->getDataTime($dataResponse["created_at"]),
+                        'nombre_cliente' => $dataResponse["nombre_cliente"],
+                        'direccion' => $dataResponse["direccion"],
+                        'provincia' => $dataResponse["provincia"],
+                        'localidad' => $dataResponse["localidad"],
+                        'cartera' => $dataResponse["cartera"],
+                        'pais' => $dataResponse["pais"],
+                        'codigo_postal' => $dataResponse["codigo_postal"],
+                        'name_assigned' => $dataResponse["name"],
+                        'name_alternative' => $dataResponse["name_alternative"],
+                        'belongs' => $this->getUserByZoneAndDigit($dataResponse["codigo_postal"],substr($dataResponse["identificacion"],-2),$dataResponse["pais"])
+                );
         }
 
-        $object = array(
-            'count' => $arrCount,
-            'data' => $arrData
-        );
-        
+        if($aux !== null && $name !== null){
+
+            foreach($aux as $dataResponse){
+                $arrAux[]=array(
+                    'codigo_postal' => $dataResponse["codigo_postal"]
+                );
+            }
+
+            $object = array(
+                $name => $arrAux,
+                'count' => $arrCount,
+                'data' => $arrData
+            );
+           
+        }else{
+
+            $object = array(
+                'count' => $arrCount,
+                'data' => $arrData
+            );
+
+        }
     
          $jsonstring = json_encode($object);
          echo $jsonstring;

@@ -24,6 +24,7 @@ Vue.component('form-all', {
                 }, 20000);
                 await axios.get(url, { cancelToken: source.token, params: { dataRequest } })
                     .then(res => {
+
                         clearTimeout(timeout);
                         if (res.data.error) {
                             const error = { display: true, type: 'no-exist', text: 'No hay datos para mostrar', time: 4000 }
