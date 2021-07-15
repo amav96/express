@@ -9,7 +9,7 @@ Vue.component('filter-with-pagination', {
                         <v-text-field
                         v-model.trim="data"
                         label="Buscar"
-                        :disabled="checkbox"
+                        :disabled="checkbox || disabledByLoading"
                         dense
                         >
                         </v-text-field>
@@ -35,7 +35,7 @@ Vue.component('filter-with-pagination', {
             </v-container>
         </div>
     `,
-    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select', 'condition'],
+    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select', 'condition', 'disabledByLoading'],
     computed: {
         checkbox() {
             if (this.select && this.select.selected.length > 0) {

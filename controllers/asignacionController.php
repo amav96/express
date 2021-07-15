@@ -187,6 +187,7 @@ class asignacionController{
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
+        
         if($assigned !==  null){
            $get->setCondition($assigned);
         }

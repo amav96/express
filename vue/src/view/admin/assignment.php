@@ -291,6 +291,7 @@
 
                 <template v-if="showTableAssignment && MAINRESOURCES.filter.display">
                     <filter-with-pagination
+                    :disabledByLoading="disabledByLoading"
                     :condition="MAINRESOURCES.condition"
                     :pagination = "MAINRESOURCES.pagination"
                     :exportExcel ="MAINRESOURCES.exportExcel"
