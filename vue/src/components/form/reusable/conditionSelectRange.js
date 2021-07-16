@@ -69,8 +69,6 @@ Vue.component('condition-select-range', {
     },
     methods: {
         handlersCondition(flag) {
-            console.log(flag)
-
             if (flag) this.condition = this.property
             if (flag === undefined) this.condition = flag
 

@@ -19,6 +19,7 @@
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
 
 <!-- form component -->
+
 <script  src="<?=base_url?>vue/src/components/form/reusable/conditionBtn.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/conditionSelectRange.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/formId.js"></script>
@@ -27,6 +28,7 @@
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteSimpleID.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/reusable/select/AutoCompleteStatic.js"></script>
 <script  src="<?=base_url?>vue/src/components/form/custom/assignment/manualAssignment.js"></script>
+<script  src="<?=base_url?>vue/src/components/form/custom/assignment/massivelyAssign.js"></script>
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 <script src="<?=base_url?>vue/src/store/index.js?"></script>
 
@@ -219,13 +221,17 @@
                   ></v-skeleton-loader>
                 </template>
                 <template v-if="MAINRESOURCES.table.loading && !allDataBase.display">
+                <div class="my-2">
                   <loader-line />
+                </div>
+
+                  
                 </template>
               
               <template v-if="showTableAssignment && MAINRESOURCES.condition.display">
                 <v-container >
-                  <v-row class="d-flex justify-start flex-row">
-                    <v-col  cols="12" xl="6" lg="6" class="py-0">
+                  <v-row class="d-flex justify-start flex-row ">
+                    <v-col  cols="12" xl="4" lg="4" class="py-0 my-1">
                       <condition-btn
                       property='assigned'
                       :resources="MAINRESOURCES"
@@ -241,26 +247,20 @@
                     </v-col>
                     <template v-if="showTableAssignment && MAINRESOURCES.sectionCurrent === 'purse'">
                    
-                      <v-col cols="12" xl="5" lg="5"  class="py-0">
+                      <v-col cols="12" xl="5" lg="5"  class="py-0 my-1">
                         <v-card>
-                          <v-card-title class="d-flex flex-row">
+                          <v-card-title class="d-flex flex-row justify-center">
                             Filtrar por rango codigo postal
                             <v-icon right>
                             mdi-filter
                             </v-icon>
                               <v-tooltip bottom>
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                    color="warning"
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    >
-                                    <v-icon>
-                                        mdi-alert-circle-outline
+                                   
+                                    <v-icon color="info" fab v-bind="attrs" v-on="on">
+                                        mdi-help-circle-outline
                                     </v-icon>
-                                    </v-btn>
+                                    
                                 </template>
                                 <span>Codigos postales encontrados en la cartera</span>
                               </v-tooltip>
@@ -284,7 +284,11 @@
                         </v-card-text>
                         </v-card>
                       </v-col>
-                    
+                      <v-col cols="12" xl="3" lg="3"  class=" d-flex justify-center py-0 my-1">
+                      <template v-if="IamInpPortfolioAndWithParameters">
+                        <massively-assign :resources="MAINRESOURCES"/>
+                      </template>
+                      </v-col>
                     </template>
                   </v-row>
                 </v-container>
@@ -388,13 +392,20 @@
             if(this.MAINRESOURCES.loadingPaginate.display || this.MAINRESOURCES.table.loading){
               return true
             }else {return false}
+          },
+          IamInpPortfolioAndWithParameters(){
+            if(this.showTableAssignment && this.MAINRESOURCES.sectionCurrent === 'purse'){
+              console.log(this.MAINRESOURCES.parametersDynamicToPaginate)
+              if(this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('start') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('end') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('word')){
+                  return true;
+              }else{return false;}
+            }
           }
-    
         },
         data(){
             return {
                 allDataBase:{
-                    display : true,
+                    display : false,
                     url: {
                       getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getAllEquipos',
                      
@@ -476,7 +487,7 @@
                     }
                 },
                 dataBaseByPurse : {
-                    display : false,
+                    display : true,
                     url: {
                       getData : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getEquiposByPurse',
                     },
@@ -674,7 +685,7 @@
                   itemsButtons:[
                       { title: 'Base completa', icon: 'mdi-database-edit', methods: '$_allDataBase' , active : true, color :"bg-blue-custom" },
                       { title: 'Codigo Postal', icon: 'mdi-flag-triangle', methods: '$_dataBaseByPostalCode' , active : false, color :"bg-blue-custom" },
-                      { title: 'Carteras', icon: 'mdi-purse-outline', methods: '$_dataBaseByPurse' , active : false, color :"bg-blue-custom" },
+                      { title: 'Carteras', icon: 'mdi-purse-outline', methods: '$_dataBaseByPurse' , active : true, color :"bg-blue-custom" },
                       { title: 'Asignado Recolectores', icon: 'mdi-truck-fast-outline', methods: '$_dataBaseByUserAssigned' , active : false, color :"bg-blue-custom" },
                   ],
                   error: {
@@ -701,7 +712,7 @@
                     color2:'success',
                     text1:'Ver asignados',
                     text2:'No asignados',
-                    class:'mx-2 my-2'
+                    class:'mx-2'
                   },
                   admin:'',
                   reload: false
@@ -821,8 +832,7 @@
                   }
                 }
               })
-            },
-          
+            },   
             getAdmin(){
               if(document.getElementById("id_user_default") === null){
                 alertNegative("Mensage Codigo 52")
@@ -847,6 +857,7 @@
             }
         },
         created(){
+          this.MAINRESOURCES.sectionCurrent = 'purse'
           this.getAdmin();
         },
         

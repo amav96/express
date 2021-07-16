@@ -1,14 +1,14 @@
 Vue.component('condition-btn', {
     template: //html 
         `<div :class="resources.condition.class">
-            <v-btn class="my-1" @click="handlersCondition(property,true)" :color="condition ? resources.condition.color1 : 'blue-grey lighten-4'" :disabled="disabledByLoading">
+            <v-btn  @click="handlersCondition(property,true)" :color="condition ? resources.condition.color1 : 'blue-grey lighten-4'" :disabled="disabledByLoading">
             {{resources.condition.text1}}
             </v-btn>
-            <v-btn class="my-1" @click="handlersCondition(property,false)" :color="!condition &&  condition !== undefined? resources.condition.color2 : 'blue-grey lighten-4'"  :disabled="disabledByLoading">
+            <v-btn  @click="handlersCondition(property,false)" :color="!condition &&  condition !== undefined? resources.condition.color2 : 'blue-grey lighten-4'"  :disabled="disabledByLoading">
             {{resources.condition.text2}}
             </v-btn>
             <template  v-if="condition !== undefined ">
-                <v-btn fab x-small color="error" :disabled="disabledByLoading" class="my-1" @click="handlersCondition(property,undefined)" >
+                <v-btn fab x-small color="error" :disabled="disabledByLoading"  @click="handlersCondition(property,undefined)" >
                         <v-icon >
                             mdi-filter-remove
                         </v-icon>
