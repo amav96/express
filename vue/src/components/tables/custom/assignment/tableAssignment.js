@@ -10,6 +10,7 @@ Vue.component('table-assignment', {
                 <v-container>
                   <manual-assignment
                   :manualAssignment="manualAssignment"
+                  :disabledByLoading="disabledByLoading"
                   :select="select"
                   @setUser="id_user = $event"
                   @setDateRange="dateRange = $event"

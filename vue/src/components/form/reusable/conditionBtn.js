@@ -8,12 +8,11 @@ Vue.component('condition-btn', {
             {{resources.condition.text2}}
             </v-btn>
             <template  v-if="condition !== undefined ">
-                <v-chip class="my-1" @click="handlersCondition(property,undefined)" color="warning" :disabled="disabledByLoading">
-                    Limpiar filtro
-                    <v-icon>
-                    mdi-filter-remove
-                    </v-icon>
-                </v-chip>
+                <v-btn fab x-small color="error" :disabled="disabledByLoading" class="my-1" @click="handlersCondition(property,undefined)" >
+                        <v-icon >
+                            mdi-filter-remove
+                        </v-icon>
+                </v-btn>
             </template>
             
         </div>

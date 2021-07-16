@@ -28,7 +28,7 @@ Vue.component('manual-assignment', {
                 </v-col>
                 
                 <v-col  cols="12" xl="12" lg="12" sm="12" xs="12">
-                    <v-btn color="success" @click="$manualAssigned" :disabled="btnDisabled">
+                    <v-btn color="success" @click="$manualAssigned" :disabled="btnDisabled || disabledByLoading || disableTimeOut">
                     Asignar
                     </v-btn>
                     <v-btn @click="manualAssignment.display = false" color="error">
@@ -38,7 +38,7 @@ Vue.component('manual-assignment', {
             </v-row>
     </div>
     `,
-    props: ['manualAssignment', 'select'],
+    props: ['manualAssignment', 'select', 'disabledByLoading'],
     computed: {
         minorDate() {
             if (this.dateRange !== '') {
@@ -76,6 +76,7 @@ Vue.component('manual-assignment', {
             id_user: '',
             dateRange: '',
             msgErrorDateRange: [],
+            disableTimeOut: false
         }
     },
     methods: {
@@ -84,6 +85,10 @@ Vue.component('manual-assignment', {
         },
         $manualAssigned() {
             this.$emit("manualAssigned")
+            this.disableTimeOut = true
+            setTimeout(() => {
+                this.disableTimeOut = false
+            }, 1000);
         }
     },
     watch: {

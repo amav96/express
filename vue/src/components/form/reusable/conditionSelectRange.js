@@ -1,43 +1,52 @@
 Vue.component('condition-select-range', {
     template: //html 
-        `<div class="d-flex flex-row">
-            <select-auto-complete-static 
-            :load="load"
-            title="Desde"
-            :outlined="section.condition.outlined"
-            :classCustom="section.condition.class"
-            :dense="section.condition.dense"
-            @exportVal="start = $event.id"
-            ref="setSelectRange1"
-            />
-            <select-auto-complete-static 
-            :load="load"
-            title="Hasta"
-            :outlined="section.condition.outlined"
-            :classCustom="section.condition.class"
-            :dense="section.condition.dense"
-            @exportVal="end = $event.id"
-            ref="setSelectRange2"
-            
-            />
-            <v-btn fab x-small color="info" class="mx-2" :disabled="disabledBtn" @click="handlersCondition(property)">
-                <v-icon >
-                    mdi-magnify
-                </v-icon>
-            </v-btn>
-            <template v-if="!disabledBtn && condition !== undefined" >
-                <v-btn fab x-small color="error" @click="handlersCondition(undefined)" class="mx-2" >
+        `
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row">
+                <select-auto-complete-static 
+                :load="load"
+                title="Desde"
+                :outlined="section.condition.outlined"
+                :classCustom="section.condition.class"
+                :dense="section.condition.dense"
+                @exportVal="start = $event.id"
+                ref="setSelectRange1"
+                />
+                <select-auto-complete-static 
+                :load="load"
+                title="Hasta"
+                :outlined="section.condition.outlined"
+                :classCustom="section.condition.class"
+                :dense="section.condition.dense"
+                @exportVal="end = $event.id"
+                ref="setSelectRange2"
+                
+                />
+                <v-btn fab x-small color="info" class="mx-2" :disabled="disabledBtn" @click="handlersCondition(property)">
                     <v-icon >
-                        mdi-filter-remove
+                        mdi-magnify
                     </v-icon>
                 </v-btn>
+                <template v-if="!disabledBtn && condition !== undefined" >
+                    <v-btn fab x-small color="error" @click="handlersCondition(undefined)" class="mx-2" >
+                        <v-icon >
+                            mdi-filter-remove
+                        </v-icon>
+                    </v-btn>
+                </template>
+            </div>
+            <template v-if="IsMinor">
+                <v-alert type="error" outlined dense>
+                    <strong>Desde</strong> debe ser menor que <strong>Hasta</strong>
+                </v-alert>
             </template>
+            
         </div>
     `,
     props: ['section', 'load', 'resources', 'disabledByLoading', 'property'],
     computed: {
         disabledBtn() {
-            if (this.disabledByLoading || this.start === '' || this.end === '') {
+            if (this.disabledByLoading || this.start === '' || this.end === '' || this.IsMinor) {
                 return true;
             } else { return false }
         },
@@ -45,6 +54,9 @@ Vue.component('condition-select-range', {
             if (this.resources.parametersDynamicToPaginate.hasOwnProperty('start') || this.resources.parametersDynamicToPaginate.hasOwnProperty('end')) {
                 return true
             } else { return false }
+        },
+        IsMinor() {
+            if (this.start !== '' && this.end !== '' && this.start > this.end) { return true; } else { return false }
         }
     },
     data() {

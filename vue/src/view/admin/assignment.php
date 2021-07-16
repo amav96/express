@@ -243,13 +243,29 @@
                    
                       <v-col cols="12" xl="5" lg="5"  class="py-0">
                         <v-card>
-                          <v-card-title>
+                          <v-card-title class="d-flex flex-row">
                             Filtrar por rango codigo postal
                             <v-icon right>
                             mdi-filter
                             </v-icon>
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn
+                                    color="warning"
+                                    fab
+                                    x-small
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    >
+                                    <v-icon>
+                                        mdi-alert-circle-outline
+                                    </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Codigos postales encontrados en la cartera</span>
+                              </v-tooltip>
                           </v-card-title>
-                        <v-card-text>
+                        <v-card-text >
                           <condition-select-range
                           property="postal_code"
                           :disabledByLoading="disabledByLoading"
@@ -264,7 +280,7 @@
                           @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
                           ref="setConditionSelect"
                           />
-                         
+                          
                         </v-card-text>
                         </v-card>
                       </v-col>
