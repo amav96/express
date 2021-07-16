@@ -45,6 +45,10 @@ Vue.component('select-auto-complete-static', {
         select(val) {
             val && this.returnData(val)
         },
+        load(val) {
+            this.clearCachedItems()
+            this.loadData()
+        }
     },
     methods: {
         loadData() {
@@ -79,11 +83,5 @@ Vue.component('select-auto-complete-static', {
     created() {
         this.loadData()
     },
-    watch: {
-        load(val) {
-            this.clearCachedItems()
-            this.loadData()
-        }
-    }
 
 })

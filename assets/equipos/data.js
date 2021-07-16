@@ -2637,6 +2637,12 @@ function showCredencialPost() {
     html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/creiplan.png">';
     html += '</div>';
     html += '<div class="img-dorso-cont">';
+    html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/cresupercanal.png">';
+    html += '</div>';
+    html += '<div class="img-dorso-cont">';
+    html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/claro.png">';
+    html += '</div>';
+    html += '<div class="img-dorso-cont">';
     html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/cremetrotel.png">';
     html += '</div>';
     html += '<div class="img-dorso-cont">';
@@ -2650,6 +2656,9 @@ function showCredencialPost() {
     html += '</div>';
     html += '<div class="img-dorso-cont">';
     html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/creposnet.png">';
+    html += '</div>';
+    html += '<div class="img-dorso-cont">';
+    html += '<img class="img-dorso" src="' + base_url + 'estilos/imagenes/empresas/cremovistar.png">';
     html += '</div>';
 
 

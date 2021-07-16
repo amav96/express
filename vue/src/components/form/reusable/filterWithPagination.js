@@ -34,8 +34,8 @@ Vue.component('filter-with-pagination', {
             </v-form>
             </v-container>
         </div>
-    `,
-    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select', 'condition', 'disabledByLoading'],
+        `,
+    props: ['filter', 'exportExcel', 'pagination', 'dataResponseDB', 'parametersDynamicToPaginate', 'urlTryPagination', 'select', 'condition', 'disabledByLoading', 'resources'],
     computed: {
         checkbox() {
             if (this.select && this.select.selected.length > 0) {
@@ -52,6 +52,7 @@ Vue.component('filter-with-pagination', {
             objectFilter: [],
             oldParametersToCall: [],
             oldDataResponseDB: [],
+            oldAuxDataResponseDB: [],
             oldUrl: [],
             oldUrlExport: [],
             oldPagination: [],
@@ -59,6 +60,7 @@ Vue.component('filter-with-pagination', {
             loaderFilter: false,
             activate: false,
             awaitingSearch: false,
+            cacheAux: true,
             cache: true,
         }
     },
@@ -73,10 +75,20 @@ Vue.component('filter-with-pagination', {
         async tryFilter() {
             if (this.data !== '') {
                 this.loaderFilter = true
+
+                if (this.resources && this.resources.table.auxDataResponseDB && this.resources.table.auxDataResponseDB.length > 0 && this.cacheAux) {
+                    this.oldAuxDataResponseDB = this.resources.table.auxDataResponseDB
+                    this.cacheAux = false
+                }
+                if (this.cache && this.resources && this.resources.table.dataResponseDB) {
+                    this.oldDataResponseDB = this.resources.table.dataResponseDB
+                    this.cache = false
+                }
+
+
                 const parameters = JSON.parse(JSON.stringify(this.parametersDynamicToPaginate))
                 if (parameters.hasOwnProperty('fromRow')) {
                     parameters.fromRow = 0
-                    console.log("entro en el beta")
                 }
                 const buildFilter = { filter: this.data }
                 this.objectFilter = {...parameters, ...buildFilter }
@@ -96,7 +108,12 @@ Vue.component('filter-with-pagination', {
                         this.$emit('setFlagFiltering', false)
                         const newDataResponse = res.data.data
                         this.$emit('setAfterDataResponse', newDataResponse)
-                            //PAGINATION
+                            //condition 
+                        if (res.data.aux && res.data.aux !== undefined && res.data.aux.length > 0) {
+
+                            this.$emit('setAuxResponse', res.data.aux)
+                        }
+                        //PAGINATION
                         if (this.filter.pagination) {
                             this.$pagination(res)
                         }
@@ -176,6 +193,7 @@ Vue.component('filter-with-pagination', {
             this.oldDataResponseDB = this.dataResponseDB
             this.oldUrl = this.urlTryPagination
             this.oldParametersToCall = this.parametersDynamicToPaginate
+            this.cache = false
         }
     },
     watch: {
@@ -184,11 +202,16 @@ Vue.component('filter-with-pagination', {
                 if (Object.keys(this.oldDataResponseDB).length > 0) {
                     this.$restorePagination();
                     this.$emit('restoreOldDataResponse', this.oldDataResponseDB)
+                    this.$emit('cleanFilter')
                     if (this.filter.export.display) {
                         this.$oldExportExcel()
                     }
                     if (this.condition && this.condition.display) {
                         this.$emit("cleanCondition")
+                        if (this.resources && this.resources.table.auxDataResponseDB && this.resources.table.auxDataResponseDB.length > 0) {
+                            this.$emit('restoreOldAuxDataResponse', this.oldAuxDataResponseDB)
+                            this.cacheAux = true
+                        }
                     }
                     // this.$emit('setFlagFiltering', true)
                 }

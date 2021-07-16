@@ -102,7 +102,58 @@ class asignacionController{
     public function getEquiposByPurse(){
 
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-     
+
+    
+        $Request =  json_decode($dataRequest);
+
+        $cartera = isset($Request->word) ? $Request->word: false;
+        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
+        $limit = isset($Request->limit) ? $Request->limit : false;
+        $Isassigned = isset($Request->assigned) ? $Request->assigned : null ;
+        $cp_start = isset($Request->start) ? $Request->start : null ;
+        $cp_end = isset($Request->end) ? $Request->end : null ;
+
+        $get = new Asignacion();
+       
+        $get->setCartera($cartera);
+        $get->setFromRow($fromRow);
+        $get->setLimit($limit);
+        if($Isassigned !==  null){$get->setCondition($Isassigned);}
+        if($cp_start !==  null){$get->setPostal_code_start($cp_start);}
+        if($cp_end !==  null){$get->setPostal_code_end($cp_end);}
+
+        $count = $get->countEquiposByPurse();
+        if($count){
+            $data = $get->getEquiposByPurse();
+            if($data){
+                $cp = $get->getCpByPurse();
+                if($cp){
+                    $this->showEquipments($count,$data,$cp,'aux');
+                }else{
+                    $this->showEquipments($count,$data);
+                }
+                
+            }else{
+                $object=array('error' => true);
+                $jsonstring = json_encode($object); echo $jsonstring;
+            }
+        }else{
+            $object=array('error' => true);
+            $jsonstring = json_encode($object); echo $jsonstring;
+        }
+
+    }
+
+    public function test(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+
+        echo '<pre>';
+        print_r($_GET['dataRequest']);
+        echo '</pre>';
+        die();
+
+    
         $Request =  json_decode($dataRequest);
 
         $cartera = isset($Request->word) ? $Request->word: false;
@@ -187,7 +238,7 @@ class asignacionController{
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
-        
+
         if($assigned !==  null){
            $get->setCondition($assigned);
         }
@@ -255,25 +306,28 @@ class asignacionController{
         $filter = isset($Request->filter) ? $Request->filter : false ; 
         $fromRow = isset($Request->fromRow) ? $Request->fromRow : false ; 
         $limit = isset($Request->limit) ? $Request->limit : false ;
-        $assigned = isset($Request->assigned) ? $Request->assigned : null ;
+        $Isassigned = isset($Request->assigned) ? $Request->assigned : null ;
+        $cp_start = isset($Request->start) ? $Request->start : null ;
+        $cp_end = isset($Request->end) ? $Request->end : null ;
         
         $get = new Asignacion();
         $get->setCartera($cartera);
         $get->setFilter($filter);
         $get->setFromRow($fromRow);
         $get->setLimit($limit);
-        if($assigned !==  null){
-           $get->setCondition($assigned);
-        }
+        
+        if($Isassigned !==  null){$get->setCondition($Isassigned);}
+        if($cp_start !==  null){$get->setPostal_code_start($cp_start);}
+        if($cp_end !==  null){$get->setPostal_code_end($cp_end);}
 
         $count = $get->countFilterEquiposByPurse();
             if($count){
                 $data = $get->getFilterEquiposByPurse();
-                if($data){
-                    $this->showEquipments($count,$data);
+                $cp = $get->filterCpByPurse();
+                if($cp){
+                    $this->showEquipments($count,$data,$cp,'aux');
                 }else{
-                    $object=array('error' => true);
-                    $jsonstring = json_encode($object); echo $jsonstring;
+                    $this->showEquipments($count,$data);
                 }
             }else{
                 $object=array('error' => true);

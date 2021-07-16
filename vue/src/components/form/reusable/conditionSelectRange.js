@@ -7,7 +7,8 @@ Vue.component('condition-select-range', {
             :outlined="section.condition.outlined"
             :classCustom="section.condition.class"
             :dense="section.condition.dense"
-            @exportVal="start = $event"
+            @exportVal="start = $event.id"
+            ref="setSelectRange1"
             />
             <select-auto-complete-static 
             :load="load"
@@ -15,55 +16,78 @@ Vue.component('condition-select-range', {
             :outlined="section.condition.outlined"
             :classCustom="section.condition.class"
             :dense="section.condition.dense"
-            @exportVal="end = $event"
+            @exportVal="end = $event.id"
+            ref="setSelectRange2"
+            
             />
-            <v-btn fab x-small color="info" class="mx-2" :disabled="resources.loadingPaginate.display || resources.table.loading">
+            <v-btn fab x-small color="info" class="mx-2" :disabled="disabledBtn" @click="handlersCondition(property)">
                 <v-icon >
                     mdi-magnify
                 </v-icon>
             </v-btn>
+            <template v-if="!disabledBtn && condition !== undefined" >
+                <v-btn fab x-small color="error" @click="handlersCondition(undefined)" class="mx-2" >
+                    <v-icon >
+                        mdi-filter-remove
+                    </v-icon>
+                </v-btn>
+            </template>
         </div>
     `,
-    props: ['section', 'load', 'resources'],
+    props: ['section', 'load', 'resources', 'disabledByLoading', 'property'],
     computed: {
-        loading() {
-            if (this.resources.loadingPaginate.display) {
+        disabledBtn() {
+            if (this.disabledByLoading || this.start === '' || this.end === '') {
                 return true;
             } else { return false }
         },
+        appliedCondition() {
+            if (this.resources.parametersDynamicToPaginate.hasOwnProperty('start') || this.resources.parametersDynamicToPaginate.hasOwnProperty('end')) {
+                return true
+            } else { return false }
+        }
     },
     data() {
         return {
             condition: undefined,
-            name: undefined,
             parametersDynamic: [],
             start: '',
             end: ''
         }
     },
     methods: {
-        handlersCondition(name, val) {
+        handlersCondition(flag) {
+            console.log(flag)
 
-            this.name = name
-            this.condition = val
+            if (flag) this.condition = this.property
+            if (flag === undefined) this.condition = flag
+
             this.$nextTick(() => {
-                this.applyCondition();
+                this.applyCondition()
             })
+
         },
         applyCondition() {
             this.setLoader(true);
-            const url = this.resources.urlTryPagination
+            const url = this.section.url.getData
+
             let parametersDynamicToPaginate = this.resources.parametersDynamicToPaginate
             if (parametersDynamicToPaginate.hasOwnProperty('fromRow')) {
                 parametersDynamicToPaginate.fromRow = 0
             }
-            var name = this.name
             let condition = {
-                [name]: this.condition
+                start: this.start,
+                end: this.end
             }
+
             let newParameters = {...parametersDynamicToPaginate, ...condition }
-            if (this.condition === undefined || this.name === undefined) {
-                delete newParameters[name];
+            if (this.condition === undefined) {
+                delete newParameters.start;
+                delete newParameters.end;
+                this.start = ''
+                this.end = ''
+                this.$refs.setSelectRange1.reset()
+                this.$refs.setSelectRange2.reset()
             }
 
             const dataRequest = newParameters
@@ -88,7 +112,6 @@ Vue.component('condition-select-range', {
                 .catch(res => {
                     console.log(res)
                 })
-
 
         },
         $pagination(res) {
@@ -118,15 +141,34 @@ Vue.component('condition-select-range', {
             this.$emit('showLoading', flag)
         },
         reset() {
-            if (this.resources.parametersDynamicToPaginate.hasOwnProperty('condition') || this.resources.parametersDynamicToPaginate.condition === undefined) {
-                this.$delete(this.resources.parametersDynamicToPaginate, 'condition')
+            if (this.resources.parametersDynamicToPaginate.hasOwnProperty('start') || this.resources.parametersDynamicToPaginate.hasOwnProperty('end')) {
+                this.$delete(this.resources.parametersDynamicToPaginate, 'start')
+                this.$delete(this.resources.parametersDynamicToPaginate, 'end')
                 this.condition = undefined
+                this.start = ''
+                this.end = ''
+                this.$refs.setSelectRange1.reset()
+                this.$refs.setSelectRange2.reset()
             }
         },
+        resetLocalParameterDynamic() {
+            this.start = ''
+            this.end = ''
+            if (this.parametersDynamic.hasOwnProperty('start') || this.parametersDynamic.hasOwnProperty('end')) {
+                this.$delete(this.parametersDynamic, 'start')
+                this.$delete(this.parametersDynamic, 'end')
+            }
+
+        }
     },
     destroyed() {
-        // this.reset()
+        this.reset()
     },
+    watch: {
+        load(val) {
+            this.resetLocalParameterDynamic()
+        }
+    }
 
 
 

@@ -30,6 +30,10 @@
 <script src="<?=base_url?>vue/src/components/form/reusable/filterWithPagination.js"></script>
 <script src="<?=base_url?>vue/src/store/index.js?"></script>
 
+<!-- helper -->
+<script src="<?=base_url?>vue/src/components/helpers/Tooltip.js"></script>
+
+
 
     <!-- headers component -->
 <script  src="<?=base_url?>vue/src/components/headers/reusable/headerAdmin.js"></script>
@@ -130,7 +134,8 @@
                     @setDisplayHeaders="MAINRESOURCES.subheaders.active = $event" 
                     @cleanFilter="$_cleanFilter($event)"  
                     @cleanCondition="$_cleanCondition($event)"   
-                    @handlerCondition="handlerCondition($event)"   
+                    @handlerCondition="handlerCondition($event)" 
+                    @handlerConditionSelect="handlerCondition($event)"  
                   />
               </template>
 
@@ -231,7 +236,7 @@
                       @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
                       @showPagination="MAINRESOURCES.pagination.display = $event"
                       @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
-                      ref="setCondition"
+                      ref="setConditionBtn"
                       />
                     </v-col>
                     <template v-if="showTableAssignment && MAINRESOURCES.sectionCurrent === 'purse'">
@@ -246,15 +251,24 @@
                           </v-card-title>
                         <v-card-text>
                           <condition-select-range
+                          property="postal_code"
+                          :disabledByLoading="disabledByLoading"
                           :section="dataBaseByPurse" 
                           :load="MAINRESOURCES.table.auxDataResponseDB" 
-                          :resources="MAINRESOURCES" />
+                          :resources="MAINRESOURCES"
+                          @setErrorCondition="MAINRESOURCES.snackbar = $event"
+                          @setDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                          @setPagination="MAINRESOURCES.pagination = $event"
+                          @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
+                          @showPagination="MAINRESOURCES.pagination.display = $event"
+                          @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
+                          ref="setConditionSelect"
+                          />
+                         
                         </v-card-text>
-                          
                         </v-card>
                       </v-col>
                     
-                     
                     </template>
                   </v-row>
                 </v-container>
@@ -291,6 +305,7 @@
 
                 <template v-if="showTableAssignment && MAINRESOURCES.filter.display">
                     <filter-with-pagination
+                    :resources="MAINRESOURCES"
                     :disabledByLoading="disabledByLoading"
                     :condition="MAINRESOURCES.condition"
                     :pagination = "MAINRESOURCES.pagination"
@@ -302,6 +317,7 @@
                     :urlTryPagination="MAINRESOURCES.urlTryPagination"
                     @setFlagFiltering ="MAINRESOURCES.filter.filtering = $event"
                     @setAfterDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @setAuxResponse="MAINRESOURCES.table.auxDataResponseDB = $event"
                     @setPagination="MAINRESOURCES.pagination = $event"
                     @urlTryPagination="MAINRESOURCES.urlTryPagination = $event"
                     @setParametersDynamicToPagination="MAINRESOURCES.parametersDynamicToPaginate = $event" 
@@ -310,10 +326,12 @@
                     @restoreOldPagination="MAINRESOURCES.pagination = $event"
                     @restoreOldParametersToCall="MAINRESOURCES.parametersDynamicToPaginate = $event"
                     @restoreOldDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
+                    @restoreOldAuxDataResponse="MAINRESOURCES.table.auxDataResponseDB = $event"
                     @restoreBeforeDataResponse="MAINRESOURCES.table.dataResponseDB = $event"
                     @setUrlExportByFilter="MAINRESOURCES.exportExcel.url = $event"
                     @setOldUrlExport="MAINRESOURCES.exportExcel.url = $event"
                     @cleanCondition="$_cleanCondition($event)"
+                    @cleanFilter="$_cleanFilter($event)"
                     ref="setFilter"
                     />
                 </template>
@@ -664,7 +682,7 @@
                     parameters:[],
                     url: '',
                     color1:'success',
-                    color2:'error',
+                    color2:'success',
                     text1:'Ver asignados',
                     text2:'No asignados',
                     class:'mx-2 my-2'
@@ -753,13 +771,19 @@
             $_cleanFilter(){
               if(this.$refs.setFilter && this.$refs.setFilter !== undefined){
                 this.$refs.setFilter.cleanFilter();
+                if (this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('filter')) {
+                  console.log("eliminado filter")
+                  this.$delete(this.MAINRESOURCES.parametersDynamicToPaginate, 'filter')
+                }
               }
             },
             $_cleanCondition(){
               if(this.MAINRESOURCES.condition.display){
-                  this.$refs.setCondition.reset()
+                  this.$refs.setConditionBtn.reset()
+                  if(this.MAINRESOURCES.sectionCurrent === 'purse'){
+                    this.$refs.setConditionSelect.reset();
+                  }
               }
-              
             },
             $_cleanError(){
               if(this.MAINRESOURCES.error && this.MAINRESOURCES.error.display){
@@ -775,13 +799,14 @@
               
               this.$nextTick(() => {
                 if(this.showTableAssignment && this.MAINRESOURCES.condition.display){
-                  this.$refs.setCondition.reset();
+                  this.$refs.setConditionBtn.reset();
+                  if(this.MAINRESOURCES.sectionCurrent === 'purse'){
+                    this.$refs.setConditionSelect.reset();
+                  }
                 }
               })
-              
-              
-              
             },
+          
             getAdmin(){
               if(document.getElementById("id_user_default") === null){
                 alertNegative("Mensage Codigo 52")

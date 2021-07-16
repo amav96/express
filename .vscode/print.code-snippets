@@ -5,7 +5,7 @@
 	 	"prefix": "print_r",
 	 	"body": [
 	 		"echo \"<pre>\";",
-			"print_r();",
+			"print_r($sql);",
 			"echo \"</pre>\";",
 			"die();"
 	 	],

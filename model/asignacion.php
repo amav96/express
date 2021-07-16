@@ -207,6 +207,8 @@ class Asignacion{
       public function countEquiposByPurse(){
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
             $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
             $sql="SELECT count(*) as count  
             from equipos e
             left join users u on u.id = e.id_usuario_asignado
@@ -218,7 +220,9 @@ class Asignacion{
             }
             $sql.=$this->sqlPurseAndStatus();
             $sql.=" AND e.cartera = '$cartera'";
-
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
 
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
@@ -317,6 +321,9 @@ class Asignacion{
             $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
             $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
             $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
+            
 
             $sql ="SELECT count(*) as 'count'
             from equipos e 
@@ -331,7 +338,10 @@ class Asignacion{
             AGAINST('$filter') and e.cartera = '$cartera'
             AND ";
             $sql.=$this->sqlPurseAndStatus();
-
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
+          
             $exe = $this->db->query($sql);
             if($exe && $exe->fetch_object()->count > 0){$result = $exe;}
             else {$result = false;}
@@ -431,13 +441,15 @@ class Asignacion{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
             $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
 
-           $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
-           e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
-           e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
-           from equipos e
-           left join users u on u.id = e.id_usuario_asignado
-           WHERE ";
+            $sql="SELECT e.id,e.identificacion,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,
+            e.cartera,e.created_at,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.codigo_postal,
+            e.digito,e.id_usuario_asignado,e.cartera,e.pais, u.name, u.name_alternative 
+            from equipos e
+            left join users u on u.id = e.id_usuario_asignado
+            WHERE ";
 
             if(isset($assigned) && $assigned !== null){
             if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
@@ -446,39 +458,18 @@ class Asignacion{
 
             $sql.=$this->sqlPurseAndStatus();
             $sql.=" AND e.cartera = '$cartera'";
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
+            
             $sql.=" ORDER BY e.codigo_postal ASC limit $fromRow,$limit;";
-
             $exe = $this->db->query($sql);
             if($exe && $exe->num_rows>0){$result = $exe;}
             else {$result = false;}
             return $result;
       }
 
-      public function getCpByPurse(){
-
-            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
-            $assigned = $this->getCondition();
-           
-           $sql="SELECT e.codigo_postal
-           from equipos e
-           left join users u on u.id = e.id_usuario_asignado
-           WHERE ";
-
-            if(isset($assigned) && $assigned !== null){
-            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
-            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
-            }
-
-            $sql.=$this->sqlPurseAndStatus();
-            $sql.=" AND e.cartera = '$cartera'";
-            $sql.=" GROUP BY e.codigo_postal ORDER BY e.codigo_postal ASC ";
-
-            $exe = $this->db->query($sql);
-            if($exe && $exe->num_rows>0){$result = $exe;}
-            else {$result = false;}
-            return $result;
-
-      }
+      
 
       public function getEquiposByUserAssigned(){
 
@@ -607,6 +598,8 @@ class Asignacion{
             $limit = ($this->getLimit())?$this->getLimit() : false ;
             if(gettype($fromRow) !==  'string'){$fromRow = '0';}
             $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
 
             $sql ="SELECT e.id,e.identificacion,e.localidad,e.cartera,e.estado,e.empresa,e.terminal,e.serie,
             e.serie_base,e.tarjeta,e.created_at,e.nombre_cliente,e.direccion,e.provincia,
@@ -628,6 +621,9 @@ class Asignacion{
             AGAINST('$filter') and e.cartera = '$cartera'
             AND ";
             $sql.=$this->sqlPurseAndStatus();
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
             $sql.=" ORDER BY relevance  DESC, e.codigo_postal asc, relevanceEmpresa desc,e.cartera limit $fromRow,$limit";
 
             $exe = $this->db->query($sql);
@@ -748,6 +744,72 @@ class Asignacion{
                               )
                   ) ";
             return $sql;
+
+      }
+      
+      public function getCpByPurse(){
+
+            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
+            $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
+
+           
+           $sql="SELECT e.codigo_postal
+           from equipos e
+           left join users u on u.id = e.id_usuario_asignado
+           WHERE ";
+
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
+            }
+
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" AND e.cartera = '$cartera'";
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
+            $sql.=" GROUP BY e.codigo_postal ORDER BY e.codigo_postal ASC ";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
+      }
+
+      public function filterCpByPurse(){
+
+            
+            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
+            $filter = !empty($this->getFilter()) ? $this->getFilter() : false ;
+            $assigned = $this->getCondition();
+            $cp_start = $this->getPostal_code_start();
+            $cp_end = $this->getPostal_code_end();
+
+            $sql ="SELECT e.codigo_postal
+            from equipos e 
+            left join users u on u.id = e.id_usuario_asignado
+            WHERE ";
+            if(isset($assigned) && $assigned !== null){
+            if($assigned){$sql.=" (e.id_usuario_asignado != '' and e.id_usuario_asignado IS NOT null) and ";}
+            else{$sql.=" (e.id_usuario_asignado = '' or e.id_usuario_asignado IS null) and ";}
+            }
+            $sql.=" MATCH(e.empresa,e.terminal,e.serie,e.identificacion,
+            e.localidad,e.codigo_postal,e.provincia,e.estado)
+            AGAINST('$filter') and e.cartera = '$cartera'
+            AND ";
+            $sql.=$this->sqlPurseAndStatus();
+            if(isset($cp_start) && $cp_start !== null && isset($cp_end) && $cp_end !== null){
+                  $sql.=" AND (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end ) ";
+            }
+            $sql.=" GROUP BY e.codigo_postal ORDER BY e.codigo_postal ASC";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
 
       }
 }
