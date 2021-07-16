@@ -8,7 +8,7 @@ Vue.component('condition-btn', {
             {{resources.condition.text2}}
             </v-btn>
             <template  v-if="condition !== undefined ">
-                <v-btn fab x-small color="error" :disabled="disabledByLoading"  @click="handlersCondition(property,undefined)" >
+                <v-btn  fab x-small color="error" :disabled="disabledByLoading"  @click="handlersCondition(property,undefined)" >
                         <v-icon >
                             mdi-filter-remove
                         </v-icon>

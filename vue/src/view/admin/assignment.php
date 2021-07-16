@@ -280,7 +280,6 @@
                           @showLoading="MAINRESOURCES.loadingPaginate.display = $event"
                           ref="setConditionSelect"
                           />
-                          
                         </v-card-text>
                         </v-card>
                       </v-col>
@@ -395,7 +394,6 @@
           },
           IamInpPortfolioAndWithParameters(){
             if(this.showTableAssignment && this.MAINRESOURCES.sectionCurrent === 'purse'){
-              console.log(this.MAINRESOURCES.parametersDynamicToPaginate)
               if(this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('start') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('end') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('word')){
                   return true;
               }else{return false;}
@@ -710,7 +708,7 @@
                     url: '',
                     color1:'success',
                     color2:'success',
-                    text1:'Ver asignados',
+                    text1:'Asignados',
                     text2:'No asignados',
                     class:'mx-2'
                   },
@@ -799,7 +797,7 @@
               if(this.$refs.setFilter && this.$refs.setFilter !== undefined){
                 this.$refs.setFilter.cleanFilter();
                 if (this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('filter')) {
-                  console.log("eliminado filter")
+                
                   this.$delete(this.MAINRESOURCES.parametersDynamicToPaginate, 'filter')
                 }
               }
