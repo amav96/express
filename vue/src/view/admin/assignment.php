@@ -8,12 +8,14 @@
 <script src="<?=base_url?>vue/src/components/helpers/errorGlobal.js"></script>
 <script src="<?=base_url?>vue/src/components/helpers/loaderLine.js"></script>
 <script  src="<?=base_url?>vue/src/components/helpers/messageSnack.js"></script>
+<script src="<?=base_url?>vue/src/components/helpers/VueExcelXlsx.js"></script>
 
 <!-- mixin -->
 <script  src="<?=base_url?>vue/src/mixins/custom/assignment/MtableAssignment.js"></script>
 
 <!-- dialog -->
 <script  src="<?=base_url?>vue/src/components/dialog/reusable/smallScreen.js"></script>
+<script  src="<?=base_url?>vue/src/components/dialog/reusable/mediaScreen.js"></script>
 <!-- table -->
 <script  src="<?=base_url?>vue/src/components/tables/custom/assignment/tableAssignment"></script>
 <script src="<?=base_url?>vue/src/components/tables/pagination.js"></script>
@@ -246,7 +248,6 @@
                       />
                     </v-col>
                     <template v-if="showTableAssignment && MAINRESOURCES.sectionCurrent === 'purse'">
-                   
                       <v-col cols="12" xl="5" lg="5"  class="py-0 my-1">
                         <v-card>
                           <v-card-title class="d-flex flex-row justify-center">
@@ -288,6 +289,8 @@
                         <massively-assign 
                         :automaticallyAssign="automaticallyAssign"  
                         :resources="MAINRESOURCES"
+                        @setSnack="MAINRESOURCES.snackbar = $event"
+                        @realoadPaginate="$_realoadCurrentPage($event)"
                         />
                       </template>
                       </v-col>

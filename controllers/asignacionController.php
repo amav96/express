@@ -469,7 +469,7 @@ class asignacionController{
 
         $get = $exe->prepareDataToUpdate();
         if(!$get){
-                $object[]=array('error' => 'not_data_avaible');
+                $object=array('error' => 'not_data_avaible');
                 $jsonstring = json_encode($object); echo $jsonstring; return;
             }
         else {
@@ -510,7 +510,7 @@ class asignacionController{
         if(count($prepareDataToUpdate) === count($dataToUpdateWithoutCollector)){
             $arrayEmpty = array(
                 'error' => 'records_without_collector',
-                'data' => $dataToUpdateWithoutCollector
+                'empty' => $dataToUpdateWithoutCollector,
             );
             $jsonstring = json_encode($arrayEmpty); echo $jsonstring; return;
         }
@@ -524,9 +524,10 @@ class asignacionController{
         //VER QUE SE ACTUALIZE LA HORA CORRECTAMENTES
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
-        $created_at = date('d-m-Y H:i:s');
+        $created_at = date('Y-m-d H:i:s');
         
         $success = false;
+        $countSuccess = 0;
         foreach ($data as $element){
             $update = new Asignacion();
             $update->setId($element["id"]);
@@ -534,7 +535,7 @@ class asignacionController{
             $update->setId_admin($admin);
             $update->setCreated_at($created_at);
             $update = $update->massivelyAssign();
-            if($update){$success = true;}
+            if($update){$success = true; $countSuccess++;}
             else{$success = false;}
         }
 
@@ -543,6 +544,7 @@ class asignacionController{
                 $object = array(
                     'success' =>  true,
                     'empty' => $empty,
+                    'countSuccess' => $countSuccess
                 );
             }else {$object = array('success' =>  true);}
         }else {$object = array('error' =>  'failed_update');}

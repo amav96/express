@@ -784,9 +784,9 @@ class Asignacion{
 
             $sql ="UPDATE equipos set id_usuario_asignado = '$id_user', id_admin_asignador ='$id_admin', fecha_asignado = '$created_at' , asignado_tipo = 'masivo' where id = '$id'";
 
-            $exe = $this->db->query($sql);
-            if($exe){return true;}
-            else{return false;}
+             $exe = $this->db->query($sql);
+             if($exe){return true;}
+             else{return false;}
             
       }
 

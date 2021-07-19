@@ -20,7 +20,6 @@ Vue.component('condition-select-range', {
                 :dense="section.condition.dense"
                 @exportVal="end = $event.id"
                 ref="setSelectRange2"
-                
                 />
                 <v-btn fab x-small color="info" class="mx-2" :disabled="disabledBtn" @click="handlersCondition(property)">
                     <v-icon >
