@@ -284,8 +284,11 @@
                         </v-card>
                       </v-col>
                       <v-col cols="12" xl="3" lg="3"  class=" d-flex justify-center py-0 my-1">
-                      <template v-if="IamInpPortfolioAndWithParameters">
-                        <massively-assign :resources="MAINRESOURCES"/>
+                      <template v-if="showAutomaticallyAssign">
+                        <massively-assign 
+                        :automaticallyAssign="automaticallyAssign"  
+                        :resources="MAINRESOURCES"
+                        />
                       </template>
                       </v-col>
                     </template>
@@ -392,7 +395,7 @@
               return true
             }else {return false}
           },
-          IamInpPortfolioAndWithParameters(){
+          showAutomaticallyAssign(){
             if(this.showTableAssignment && this.MAINRESOURCES.sectionCurrent === 'purse'){
               if(this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('start') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('end') && this.MAINRESOURCES.parametersDynamicToPaginate.hasOwnProperty('word')){
                   return true;
@@ -607,7 +610,37 @@
                     condition: {
                       display : true
                     }
+                },
+                automaticallyAssign:{
+                    url: {
+                      getData: API_BASE_CONTROLLER + 'asignacionController.php?asignacion=getAssignedInTheZone',
+                     save : API_BASE_CONTROLLER + 'asignacionController.php?asignacion=prepareDataToUpdate',
+                    },
+                    export : {
+                      display : true,
+                      url: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportAllCoverage',
+                      url_filter: API_BASE_CONTROLLER + 'coberturaController.php?cobertura=exportFilterCoverage',
+                    },
+                    pagination:true,
+                    table: {
+                      columns: [
+                        { text: '',icon : 'mdi-select-multiple',alt_icon:'mdi-selection-off' , method: '$_selectAll'},
+                        { text: 'Codigo postsal'},
+                        { text: 'Localidad'},
+                        { text: 'Provincia'},
+                        { text: 'Direccion'},
+                        { text: 'Identificacion'},
+                        { text: 'Pertenece a'},
+                        { text: 'Asignado'},
+                        { text: 'Cartera'},
+                        { text: 'Estado'},
+                        { text: 'Nombre C.'},
+                        { text: 'Empresa'},
+                       
+                        
+                      ],
                    
+                    }, 
                 },
                 MAINRESOURCES : {
                   sectionCurrent:'',

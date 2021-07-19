@@ -115,7 +115,7 @@ Vue.component('condition-btn', {
             }
         }
     },
-    destroyed() {
+    beforedestroyed() {
         this.reset()
-    },
+    }
 })

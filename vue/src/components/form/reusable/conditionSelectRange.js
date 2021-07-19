@@ -57,7 +57,7 @@ Vue.component('condition-select-range', {
         },
         IsMinor() {
             if (this.start !== '' && this.end !== '' && this.start > this.end) { return true; } else { return false }
-        }
+        },
     },
     data() {
         return {
@@ -171,7 +171,7 @@ Vue.component('condition-select-range', {
 
         }
     },
-    destroyed() {
+    beforeDestroyed() {
         this.reset()
     },
     watch: {

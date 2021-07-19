@@ -7,6 +7,7 @@ class Asignacion{
       private $id_user;
       private $postal_code;
       private $id_country;
+      private $purse;
       private $digit;
       private $created_at;
       private $dateRange;
@@ -683,6 +684,62 @@ class Asignacion{
 
       }
 
+      public function getAssignedInTheZone(){
+
+            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
+            $cp_start = !empty($this->getPostal_code_start()) ? $this->getPostal_code_start() : false ;
+            $cp_end = !empty($this->getPostal_code_end()) ? $this->getPostal_code_end() : false ;
+
+            $sql ="SELECT id_usuario_asignado from equipos where ";
+            $sql.="( cartera not in('AUTORIZADO T','AUTORIZADOS','ESPECIAL',
+            'PEDIDOS ESPECIALES','AUTORIZADO','AUTORIZAR') 
+                  AND 
+                  (
+                  estado not IN('AUTORIZAR','RECUPERADO',
+                  'NO-COINCIDE-SERIE','RECHAZADA','EN-USO',
+                  'SE-MUDO','DESCONOCIDO-TIT','DESHABITADO',
+                  'EXTRAVIADO','FALLECIO','FALTAN-DATOS','RECONECTADO','ROBADO',
+                  'ENTREGO-EN-SUCURSAL') OR estado IS NULL
+                  )
+            ) ";
+            $sql.=" and (cast(codigo_postal as SIGNED) >= $cp_start AND cast(codigo_postal as SIGNED) <=$cp_end and cartera = '$cartera' ) ";
+            $sql.=" AND (id_usuario_asignado != '' AND id_usuario_asignado IS NOT null) ";
+
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+     
+      }
+
+      public function prepareDataToUpdate(){
+
+            $not_assigned = $this->getCondition();
+            $cartera = !empty($this->getCartera()) ? $this->getCartera() : false ;
+            $cp_start = !empty($this->getPostal_code_start()) ? $this->getPostal_code_start() : false ;
+            $cp_end = !empty($this->getPostal_code_end()) ? $this->getPostal_code_end() : false ;
+
+            $sql ="SELECT e.id,e.identificacion,e.id_usuario_asignado,e.estado,e.empresa,e.terminal,e.serie,e.serie_base,e.tarjeta,e.nombre_cliente,e.direccion,e.provincia,e.localidad,e.cartera,e.pais,e.codigo_postal,u.name,u.name_alternative
+            from equipos e "; 
+            $sql.="left join users u on u.id = e.id_usuario_asignado where ";
+            $sql.=$this->sqlPurseAndStatus();
+            $sql.=" and (cast(e.codigo_postal as SIGNED) >= $cp_start AND cast(e.codigo_postal as SIGNED) <=$cp_end and e.cartera = '$cartera' ) ";
+
+            if($not_assigned){
+                  $sql.=" and (e.id_usuario_asignado = '' or e.id_usuario_asignado is null) ";
+            }
+            $sql.=" order by cast(e.codigo_postal as SIGNED) ASC";
+
+    
+            $exe = $this->db->query($sql);
+            if($exe && $exe->num_rows>0){$result = $exe;}
+            else {$result = false;}
+            return $result;
+
+
+
+      }
+
       // action
 
       public function toAssign(){
@@ -717,6 +774,23 @@ class Asignacion{
             else{return false;}
 
       }
+
+      public function massivelyAssign(){
+
+            $id = !empty($this->getId()) ? $this->getId() : false ;
+            $id_user = !empty($this->getId_user()) ? $this->getId_user() : false ;
+            $id_admin = !empty($this->getId_admin()) ? $this->getId_admin() : false ;
+            $created_at = !empty($this->getCreated_at()) ? $this->getCreated_at() : false ;
+
+            $sql ="UPDATE equipos set id_usuario_asignado = '$id_user', id_admin_asignador ='$id_admin', fecha_asignado = '$created_at' , asignado_tipo = 'masivo' where id = '$id'";
+
+            $exe = $this->db->query($sql);
+            if($exe){return true;}
+            else{return false;}
+            
+      }
+
+      
 
       // HELPERS
 

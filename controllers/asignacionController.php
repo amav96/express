@@ -368,6 +368,28 @@ class asignacionController{
 
     }
 
+    public function getAssignedInTheZone(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+        $cartera = isset($Request->purse) ? $Request->purse: false;
+        $cp_start = isset($Request->start) ? $Request->start : false ;
+        $cp_end = isset($Request->end) ? $Request->end : false ;
+
+        $get = new Asignacion();
+        $get->setCartera($cartera);
+        $get->setPostal_code_start($cp_start);
+        $get->setPostal_code_end($cp_end);
+        $get = $get->getAssignedInTheZone();
+
+        if($get){$object = array('success' => true);}
+        else{$object = array('error' => true);}
+
+        $jsonstring = json_encode($object);
+        echo $jsonstring;
+    }
+
     // ACTION
 
     public function toAssign(){
@@ -421,6 +443,112 @@ class asignacionController{
 
           $jsonstring = json_encode($object);
           echo $jsonstring;
+    }
+
+    public function prepareDataToUpdate(){
+
+        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+        $Request =  json_decode($dataRequest);
+
+        $cartera = isset($Request->purse) ? $Request->purse: false;
+        $cp_start = isset($Request->start) ? $Request->start : false ;
+        $cp_end = isset($Request->end) ? $Request->end : false ;
+        $allRecords = isset($Request->condition) ? false : true ;
+        //al records en falso quiere decir los registros que no esten asignados
+
+        $exe = new Asignacion();
+        $exe->setCartera($cartera);
+        $exe->setPostal_code_start($cp_start);
+        $exe->setPostal_code_end($cp_end);
+        $prepareDataToUpdate = [];
+        $dataReadyToUpdate = [];
+        $dataToUpdateWithoutCollector = [];
+        if(!$allRecords){
+            $exe->setCondition(true);   
+        }
+
+        $get = $exe->prepareDataToUpdate();
+        if(!$get){
+                $object[]=array('error' => 'not_data_avaible');
+                $jsonstring = json_encode($object); echo $jsonstring; return;
+            }
+        else {
+            foreach($get as $element){
+                    $prepareDataToUpdate[] = array(
+                        'id' => $element["id"],
+                        'identificacion' => $element["identificacion"],
+                        'id_usuario_asignado' => $element["id_usuario_asignado"],
+                        'estado' => $element["estado"],
+                        'empresa' => $element["empresa"],
+                        'terminal' => $element["terminal"],
+                        'serie' => $element["serie"],
+                        'serie_base' => $element["serie_base"],
+                        'tarjeta' => $element["tarjeta"],
+                        'nombre_cliente' => $element["nombre_cliente"],
+                        'direccion' => $element["direccion"],
+                        'provincia' => $element["provincia"],
+                        'localidad' => $element["localidad"],
+                        'cartera' => $element["cartera"],
+                        'pais' => $element["pais"],
+                        'codigo_postal' => $element["codigo_postal"],
+                        'name_assigned' => $element["name"],
+                        'name_alternative' => $element["name_alternative"],
+                        'belongs' => $this->getUserByZoneAndDigit($element["codigo_postal"],substr($element["identificacion"],-2),$element["pais"])
+                    );
+            }
+        }
+
+        foreach($prepareDataToUpdate as $element){
+            if(!$element["belongs"]){
+                $dataToUpdateWithoutCollector[] = $element;
+                // esto es lo que no se actualiza porque no pertenece a algun recolector
+            }else{
+                $dataReadyToUpdate[] = $element;
+            }
+        }
+
+        if(count($prepareDataToUpdate) === count($dataToUpdateWithoutCollector)){
+            $arrayEmpty = array(
+                'error' => 'records_without_collector',
+                'data' => $dataToUpdateWithoutCollector
+            );
+            $jsonstring = json_encode($arrayEmpty); echo $jsonstring; return;
+        }
+
+        $admin = isset($Request->admin) ? $Request->admin : false ;
+        $this->massivelyAssign($dataToUpdateWithoutCollector,$dataReadyToUpdate,$admin);
+    }
+
+    public function massivelyAssign($empty,$data,$admin){
+        //si hay data en empty mostrar los datos que no se actualizaron
+        //VER QUE SE ACTUALIZE LA HORA CORRECTAMENTES
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $created_at = date('d-m-Y H:i:s');
+        
+        $success = false;
+        foreach ($data as $element){
+            $update = new Asignacion();
+            $update->setId($element["id"]);
+            $update->setId_user($element["belongs"]["id_user"]);
+            $update->setId_admin($admin);
+            $update->setCreated_at($created_at);
+            $update = $update->massivelyAssign();
+            if($update){$success = true;}
+            else{$success = false;}
+        }
+
+        if($success){
+            if(isset($empty) && is_array($empty) && count($empty) > 0){
+                $object = array(
+                    'success' =>  true,
+                    'empty' => $empty,
+                );
+            }else {$object = array('success' =>  true);}
+        }else {$object = array('error' =>  'failed_update');}
+
+        $jsonstring = json_encode($object); echo $jsonstring; 
+
     }
 
     // HELPERS
