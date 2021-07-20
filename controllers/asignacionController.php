@@ -128,55 +128,7 @@ class asignacionController{
             if($data){
                 $cp = $get->getCpByPurse();
                 if($cp){
-                    $this->showEquipments($count,$data,$cp,'aux');
-                }else{
-                    $this->showEquipments($count,$data);
-                }
-                
-            }else{
-                $object=array('error' => true);
-                $jsonstring = json_encode($object); echo $jsonstring;
-            }
-        }else{
-            $object=array('error' => true);
-            $jsonstring = json_encode($object); echo $jsonstring;
-        }
-
-    }
-
-    public function test(){
-
-        $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
-
-        echo '<pre>';
-        print_r($_GET['dataRequest']);
-        echo '</pre>';
-        die();
-
-    
-        $Request =  json_decode($dataRequest);
-
-        $cartera = isset($Request->word) ? $Request->word: false;
-        $fromRow = isset($Request->fromRow) ? $Request->fromRow : false; 
-        $limit = isset($Request->limit) ? $Request->limit : false;
-        $assigned = isset($Request->assigned) ? $Request->assigned : null ;
-
-        $get = new Asignacion();
-       
-        $get->setCartera($cartera);
-        $get->setFromRow($fromRow);
-        $get->setLimit($limit);
-        if($assigned !==  null){
-           $get->setCondition($assigned);
-        }
-
-        $count = $get->countEquiposByPurse();
-        if($count){
-            $data = $get->getEquiposByPurse();
-            if($data){
-                $cp = $get->getCpByPurse();
-                if($cp){
-                    $this->showEquipments($count,$data,$cp,'aux');
+                    $this->showEquipments($count,$data,$cp,'aux','cp');
                 }else{
                     $this->showEquipments($count,$data);
                 }
@@ -209,8 +161,9 @@ class asignacionController{
         $count = $get->countEquiposByUserAssigned();
         if($count){
             $data = $get->getEquiposByUserAssigned();
+            $status = $get->countStatusByUserAssigned();
             if($data){
-                $this->showEquipments($count,$data);
+                $this->showEquipments($count,$data,$status,'aux','user');
             }else{
                 $object=array('error' => true);
                 $jsonstring = json_encode($object); echo $jsonstring;
@@ -325,7 +278,7 @@ class asignacionController{
                 $data = $get->getFilterEquiposByPurse();
                 $cp = $get->filterCpByPurse();
                 if($cp){
-                    $this->showEquipments($count,$data,$cp,'aux');
+                    $this->showEquipments($count,$data,$cp,'aux','cp');
                 }else{
                     $this->showEquipments($count,$data);
                 }
@@ -371,6 +324,7 @@ class asignacionController{
     public function getAssignedInTheZone(){
 
         $dataRequest = isset($_GET['dataRequest']) ? $_GET['dataRequest'] : false ;
+
         $Request =  json_decode($dataRequest);
 
         $cartera = isset($Request->purse) ? $Request->purse: false;
@@ -381,14 +335,31 @@ class asignacionController{
         $get->setCartera($cartera);
         $get->setPostal_code_start($cp_start);
         $get->setPostal_code_end($cp_end);
+        $getCountTotal = $get->getCountAllRecordsInTheZone();
         $get = $get->getAssignedInTheZone();
 
-        if($get){$object = array('success' => true);}
+        if($get && $getCountTotal){
+            foreach ($get as $element){
+                $countAssigned = $element["count"];
+            }    
+
+            foreach($getCountTotal as $element){
+                $countTotal = $element["count"];
+            }
+
+            $object = array(
+               'success' => true,
+                'countAssigned' => $countAssigned,
+                'countTotal' => $countTotal
+            );
+        }
+
         else{$object = array('error' => true);}
 
         $jsonstring = json_encode($object);
         echo $jsonstring;
     }
+
 
     // ACTION
 
@@ -520,8 +491,7 @@ class asignacionController{
     }
 
     public function massivelyAssign($empty,$data,$admin){
-        //si hay data en empty mostrar los datos que no se actualizaron
-        //VER QUE SE ACTUALIZE LA HORA CORRECTAMENTES
+    
 
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $created_at = date('Y-m-d H:i:s');
@@ -555,9 +525,8 @@ class asignacionController{
 
     // HELPERS
 
-    public function showEquipments($count,$data,$aux = null,$name = null){
+    public function showEquipments($count,$data,$aux = null,$name = null,$flag = null){
 
-    
         if($count && $data){
         
             foreach ($count as $dataCounter){
@@ -590,8 +559,7 @@ class asignacionController{
                 );
         }
 
-        if($aux !== null && $name !== null){
-
+        if($aux !== null && $name !== null && $flag === 'cp'){
             foreach($aux as $dataResponse){
                 $arrAux[]=array(
                     'id'    => $dataResponse["codigo_postal"],
@@ -605,15 +573,29 @@ class asignacionController{
                 'data' => $arrData
             );
            
-        }else{
+        }else if($aux !== null && $name !== null && $flag === 'user'){
 
-            $object = array(
+                foreach ($aux as $element){
+                    $arrAux[]=array(
+                            'estado' => $element["estado"],
+                            'cantidadEstado' => $element["cantidadEstado"]
+                    ); 
+                }
+
+
+             $object = array(
+                $name => $arrAux,
                 'count' => $arrCount,
                 'data' => $arrData
             );
 
+        }else{
+            $object = array(
+                'count' => $arrCount,
+                'data' => $arrData
+            );
         }
-    
+
          $jsonstring = json_encode($object);
          echo $jsonstring;
         }

@@ -76,9 +76,15 @@ Vue.component('form-id', {
 
 
                         this.$emit('response', res.data.data)
-                        if (res.data.aux !== undefined && res.data.aux && res.data.aux.length > 0) {
-                            this.$emit('setAuxResponse', res.data.aux)
+                        if (res.data.aux !== undefined && res.data.aux) {
+                            if (res.data.aux.length > 0) {
+                                this.$emit('setAuxResponse', res.data.aux)
+                            } else {
+                                this.$emit('setAuxResponse', [])
+                            }
+
                         }
+
 
                         this.$emit('showTable', true)
                         this.$emit('loadingTable', false)

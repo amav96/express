@@ -20,7 +20,6 @@ Vue.component('table-assignment', {
             </d-small-screen>
         </template>
 
-       
         <v-row class="d-flex justify-start flex-row flex-wrap my-1">
                 <template v-if="!disabledAutomaticBtn">
                         <div class="mx-2 my-1">
@@ -42,7 +41,7 @@ Vue.component('table-assignment', {
                 </div>
                 
                 <div class="mx-2 my-1">
-                    <v-btn :disabled="disabledByLoading" @click="$reloadCurrentPage()" color="info">
+                    <v-btn :disabled="disabledByLoading" @click="reloadUpdate()" color="info">
                      Actualizar
                      <v-icon right>
                      mdi-reload
@@ -57,7 +56,15 @@ Vue.component('table-assignment', {
                     </div>
                 </template>
                 
+        </v-row>
+        <template v-if="resources.sectionCurrent === 'user'">
+            <v-row class="d-flex justify-center flex-row">
+                <v-chip class="ma-1" v-for="(item,i) in resources.table.auxDataResponseDB" :key="i">
+                    {{item.estado }}  {{item.cantidadEstado}} 
+                </v-chip>
             </v-row>
+        </template>
+     
 
     </v-container>
         <v-simple-table class="mt-2" >
@@ -138,4 +145,5 @@ Vue.component('table-assignment', {
     `,
     props: ['resources', 'columns', 'data', 'manualAssignment', 'disabledByLoading'],
     mixins: [tableAssignment],
+
 })

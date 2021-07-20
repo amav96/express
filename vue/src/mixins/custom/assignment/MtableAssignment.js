@@ -27,8 +27,6 @@ var tableAssignment = {
                         const value = { id: val.id, id_user: val.belongs.id_user }
                         this.select.selected.push(value)
                     }
-
-
                 })
             } else {
                 this.select.selected = []
@@ -185,6 +183,17 @@ var tableAssignment = {
                 ("0" + today.getDate()).slice(-2) + ' ' + getHours + ':' + getMin + ':' + getSeconds;
 
             return created_at
+        },
+        reloadUpdate() {
+
+            if (this.select.selected && this.select.selected.length > 0) {
+                this.$_selectAll()
+            }
+            this.$nextTick(() => {
+                this.$reloadCurrentPage()
+            })
+
+
         },
         $reloadCurrentPage() {
             this.$emit("realoadCurrentPage")

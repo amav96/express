@@ -66,15 +66,15 @@
             right
             color="info"
             @click="toTop"
-          >
+            >
             <v-icon>mdi-chevron-up</v-icon>
           </v-btn>
 
            <header-admin 
-           title="Asignación de bases"
-           :loading="MAINRESOURCES.table.loading || MAINRESOURCES.loadingPaginate.display"
-           :MAINRESOURCES="MAINRESOURCES"
-           @handle_function_call="handle_function_call($event)"
+            title="Asignación de bases"
+            :loading="MAINRESOURCES.table.loading || MAINRESOURCES.loadingPaginate.display"
+            :MAINRESOURCES="MAINRESOURCES"
+            @handle_function_call="handle_function_call($event)"
             />
            
             <div class="d-flex justify-center align-center align-self-center flex-row my-2" >
@@ -188,6 +188,7 @@
                       @TotalPage = "MAINRESOURCES.pagination.totalPage = $event"
                       @setParametersDynamicToPagination ="MAINRESOURCES.parametersDynamicToPaginate = $event"
                       @response="MAINRESOURCES.table.dataResponseDB = $event"
+                      @setAuxResponse="MAINRESOURCES.table.auxDataResponseDB = $event"
                       @showTable="MAINRESOURCES.table.display = $event"
                       @setErrorGlobal="MAINRESOURCES.error = $event"
                       @setExportDisplay="MAINRESOURCES.exportExcel.display = $event"
@@ -208,7 +209,6 @@
                       @handlerCondition="handlerCondition($event)"
                   />
               </template>
-
             </div>
 
               <template v-if="MAINRESOURCES.error.display && !MAINRESOURCES.table.display">
@@ -877,6 +877,9 @@
                 this.MAINRESOURCES.admin = admin
               }
             },
+            getAllOperator(){
+              console.log("hihihi")
+            },
             $_realoadCurrentPage(){
               this.$refs.pagination.paginate()
             },
@@ -893,6 +896,7 @@
         created(){
           this.MAINRESOURCES.sectionCurrent = 'purse'
           this.getAdmin();
+          this.getAllOperator()
         },
         
         

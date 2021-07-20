@@ -13,7 +13,8 @@ Vue.component('massively-assign', {
                             </v-col>
                             <v-col cols="12" xl="10" lg="10" sm="10" xs="10" >
                                 <span class="text-sm-body-1 mt-0">
-                                    En el rango de <strong>{{resources.parametersDynamicToPaginate.start}} </strong> hasta el <strong>{{resources.parametersDynamicToPaginate.end}} </strong> hay clientes ya asignados. ¿Deseas aplicar esta asignación a todos los registros?
+                                    En el rango de <strong>{{resources.parametersDynamicToPaginate.start}} </strong> hasta el <strong>{{resources.parametersDynamicToPaginate.end}} </strong> hay <strong>
+                                    {{askForUpdate.countTotal}}</strong> registros de los cuales <strong>{{askForUpdate.countAssigned}}</strong> estan asignados. ¿Deseas aplicar esta asignación a todos los registros?
                                 </span>
                             </v-col>  
                         </v-row>
@@ -93,7 +94,13 @@ Vue.component('massively-assign', {
                             </VueExcelXlsx>
                         </v-col>
                     </v-row>
-                  
+                    <template v-if="recordsWithoutCollector.dataGroup.length > 0">
+                        <div class="mx-2 my-2">
+                            <v-chip @click="recordsWithoutCollector.search = item" class="mx-1 my-1" v-for="(item,index) in recordsWithoutCollector.dataGroup" :key="index" >
+                            {{item}}
+                            </v-chip>
+                        </div>
+                    </template>
                     <div>
                         <v-card class="mx-auto">
                             <v-card-title>
@@ -152,6 +159,9 @@ Vue.component('massively-assign', {
         return {
             askForUpdate: {
                 display: false,
+                countAssigned: 0,
+                countTotal: 0,
+
             },
             loading: false,
             snackbarInfo: {
@@ -192,7 +202,12 @@ Vue.component('massively-assign', {
             await axios.get(url, { params: { dataRequest } })
                 .then(res => {
                     this.loading = false
-                    if (res.data.success) { this.askForUpdate.display = true; return; }
+                    if (res.data.success) {
+                        this.askForUpdate.display = true;
+                        this.askForUpdate.countAssigned = res.data.countAssigned
+                        this.askForUpdate.countTotal = res.data.countTotal
+                        return;
+                    }
                     this._toAssign(false);
                 })
                 .catch(err => {
@@ -213,39 +228,54 @@ Vue.component('massively-assign', {
             if (condition) { dataRequest['condition'] = true }
             await axios.get(url, { params: { dataRequest } })
                 .then(res => {
-                    setTimeout(() => {
-                        this.loading = false
-                        this.askForUpdate.display = false
-                        if (res.data.error && res.data.error === "not_data_avaible") {
-                            this.$message('No hay registros disponibles para asignar', 'error', 10000);
-                            return
-                        }
-                        if (res.data.error && res.data.error === "records_without_collector") {
-                            this.$message('Los registros a actualizar no tienen recolectores asignados en su codigo postal', 'error', 10000);
-                            this.recordsWithoutCollector.data = res.data.empty
-                            this.snackbarInfo.display = true
-                            this.snackbarInfo.text = res.data.empty.length + ' Registros sin recolectores asignados en zona '
-                            return
-                        }
-                        if (res.data.error && res.data.error === "failed_update") {
-                            this.$message('La actualizacion no se realizo correctamente', 'error', 10000);
-                            return
-                        }
 
-                        if (res.data.success) {
-                            this.$message(res.data.countSuccess + ' Registros asignados correctamente', 'success', 10000);
-                            this.$emit("realoadPaginate")
+                    this.loading = false
+                    this.askForUpdate.display = false
+                    if (res.data.error && res.data.error === "not_data_avaible") {
+                        this.$message('No hay registros disponibles para asignar', 'error', 10000);
+                        return
+                    }
+                    if (res.data.error && res.data.error === "records_without_collector") {
+                        this.$message('Los registros a actualizar no tienen recolectores asignados en su codigo postal', 'error', 10000);
+                        const grouped = this.groupBy(res.data.empty, data => data.codigo_postal);
+                        const postal_codes = []
+                        grouped.forEach((val) => {
+                            postal_codes.push(val[0].codigo_postal)
+                        })
+                        if (postal_codes && postal_codes.length > 0) {
+                            this.recordsWithoutCollector.dataGroup = postal_codes
+                        }
+                        this.recordsWithoutCollector.data = res.data.empty
+                        this.snackbarInfo.display = true
+                        this.snackbarInfo.text = res.data.empty.length + ' Registros sin recolectores asignados en zona '
+                        return
+                    }
+                    if (res.data.error && res.data.error === "failed_update") {
+                        this.$message('La actualizacion no se realizo correctamente', 'error', 10000);
+                        return
+                    }
 
-                            if (res.data.empty && res.data.empty.length > 0) {
-                                this.groupByData(res.data.empty)
-                                this.recordsWithoutCollector.data = res.data.empty
-                                this.snackbarInfo.display = true
-                                this.snackbarInfo.text = res.data.empty.length + ' Registros sin asignar por falta de recolector en zona';
+                    if (res.data.success) {
+                        this.$message(res.data.countSuccess + ' Registros asignados correctamente', 'success', 10000);
+                        this.$emit("realoadPaginate")
+
+                        if (res.data.empty && res.data.empty.length > 0) {
+
+                            const grouped = this.groupBy(res.data.empty, data => data.codigo_postal);
+                            const postal_codes = []
+                            grouped.forEach((val) => {
+                                postal_codes.push(val[0].codigo_postal)
+                            })
+                            if (postal_codes && postal_codes.length > 0) {
+                                this.recordsWithoutCollector.dataGroup = postal_codes
                             }
 
+                            this.recordsWithoutCollector.data = res.data.empty
+                            this.snackbarInfo.display = true
+                            this.snackbarInfo.text = 'Quedaron ' + res.data.empty.length + ' registros sin asignar porque no tienen recolector asignado en zona';
                         }
 
-                    }, 2000);
+                    }
 
                 })
                 .catch(err => {
@@ -254,7 +284,6 @@ Vue.component('massively-assign', {
                     console.log(err)
                 })
         },
-
         $message(msg, color, time) {
             const snack = { display: true, timeout: time, text: msg, color: color }
             this.$emit("setSnack", snack)
@@ -263,10 +292,27 @@ Vue.component('massively-assign', {
             var url = API_BASE_URL + 'cobertura/admin'
             window.open(url, '_blank');
         },
-        groupByData(data) {
+        groupBy(list, keyGetter) {
+            const map = new Map();
+            list.forEach((item) => {
+                const key = keyGetter(item);
+                const collection = map.get(key);
+                if (!collection) {
+                    map.set(key, [item]);
+                } else {
+                    collection.push(item);
+                }
+            });
+            return map;
+        },
+        group(list, key) {
+            const arr = []
+            list.forEach((item) => {
+                arr.push(item.key)
+                if (item.key) {
 
-            var resultData = Object.values(groupBy(data, 'codigo_postal'));
-            console.log(resultData)
+                }
+            })
 
         }
     }
