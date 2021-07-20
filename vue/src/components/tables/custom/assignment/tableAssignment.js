@@ -57,13 +57,18 @@ Vue.component('table-assignment', {
                 </template>
                 
         </v-row>
-        <template v-if="resources.sectionCurrent === 'user'">
-            <v-row class="d-flex justify-center flex-row">
-                <v-chip class="ma-1" v-for="(item,i) in resources.table.auxDataResponseDB" :key="i">
-                    {{item.estado }}  {{item.cantidadEstado}} 
-                </v-chip>
-            </v-row>
+        <template v-if="resources.sectionCurrent === 'user' || resources.table.auxDataResponseDB.length>0">
+            <div v-for="(item,i) in resources.table.auxDataResponseDB" :key="i">
+                <template v-if="item.estado && item.cantidadEstado" >
+                    <v-row class="d-flex justify-center flex-row">
+                        <v-chip class="ma-1" >
+                            {{item.estado }}  {{item.cantidadEstado}} 
+                        </v-chip>
+                    </v-row>
+                </template>  
+            </div>
         </template>
+        
      
 
     </v-container>
